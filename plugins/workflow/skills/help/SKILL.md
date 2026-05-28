@@ -25,6 +25,12 @@ allowed-tools:
                        └────────────────┘    parcours, règles transverses, backlog priorisé MVP/V2/V3)
                                            Lu par feature-pitch pour situer chaque feature.
 
+                       PHASE 0 TECHNIQUE — CARTOGRAPHIE DE LA STACK
+                       ┌───────┐
+                       │ stack │──▶ docs/stack.md (langages, backend, frontend, données,
+                       └───────┘    ops, CI — chaque techno prouvée par un fichier source)
+                                    Lu par feature/refactor/tech/review.
+
                         TRACK FEATURE (valeur utilisateur, structurante)
  ┌──────────────┐   ┌──────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
  │feature-pitch │──▶│ feature-plan │──▶│ feature│──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
@@ -107,6 +113,16 @@ Une fois la vision validée, traduire la vision en **carte des capacités foncti
 | 0.5 | `/product-backlog` | Atelier fonctionnel : domaines → capacités → parcours → règles transverses → backlog MVP/V2/V3       | `docs/product-backlog.md`    |
 
 `docs/product-backlog.md` est document **vivant** : on le révise quand le périmètre fonctionnel évolue (nouvelle capacité identifiée, repriorisation, pivot). `/feature-pitch` le lit pour reprendre le pitch initial d'une ligne de backlog, ses capacités couvertes et ses dépendances. Ce skill est facultatif (on peut aller direct vision → feature-pitch), mais recommandé dès qu'on a plus de 3-4 features pressenties.
+
+## Phase 0 technique — Cartographie de la stack
+
+En parallèle des phases vision/backlog, cartographier **une fois** la stack technique du projet : sur quoi on marche avant de cadrer la moindre évolution. Indispensable sur un legacy non documenté, utile sur un projet neuf dès que la stack se stabilise.
+
+| #  | Skill    | Rôle                                                                          | Produit         |
+|----|----------|-------------------------------------------------------------------------------|-----------------|
+| 0t | `/stack` | Scanne tous les manifestes (langages, backend, frontend, données, ops, CI), interroge pour combler les trous, prouve chaque techno par un fichier source | `docs/stack.md` |
+
+`docs/stack.md` est un document **vivant** (mêmes 4 modes que vision/backlog : Création / Enrichir / Éditer / Pivot, avec changelog). Il est lu **en priorité par les tracks techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il constate l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
 
 ## Choisir son track
 
