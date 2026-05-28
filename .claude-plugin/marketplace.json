@@ -1,0 +1,20 @@
+{
+  "name": "forge",
+  "owner": {
+    "name": "Gabriel Mustiere"
+  },
+  "metadata": {
+    "description": "Forge — pipeline de développement Claude Code stack-agnostique",
+    "pluginRoot": "./plugins",
+    "license": "Apache-2.0"
+  },
+  "plugins": [
+    {
+      "name": "workflow",
+      "source": "./plugins/workflow",
+      "description": "Skills pour les différentes étapes de mon workflow de développement ",
+      "version": "1.4.0",
+      "category": "development"
+    }
+  ]
+}

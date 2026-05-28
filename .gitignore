@@ -1,0 +1,5 @@
+.DS_Store
+*.log
+.idea/
+plugins/*/evals/
+plugins/*-workspace/
