@@ -2,7 +2,16 @@
 
 Procédure partagée par `/feature-pitch`, `/feature-plan`, `/feature`, `/refactor-plan`, `/refactor`, `/tech-plan`, `/tech`, `/review` pour identifier le framework en usage et charger les bonnes règles. À faire **au démarrage** de ces skills, avant toute proposition technique.
 
-## Étapes
+## Raccourci : `docs/stack.md` (source riche prioritaire)
+
+**Avant la détection légère ci-dessous, vérifie la présence de `docs/stack.md`** (produit par `/stack`). S'il existe, lis-le : c'est la cartographie complète et validée par l'utilisateur (langages, backend, frontend, données, ops, devops), bien plus riche que la détection inline. Tu y trouves directement le framework, les versions, les services et l'outillage réel.
+
+- Si `docs/stack.md` existe → utilise-le comme source principale. Tu peux sauter le scan `composer.json`/`package.json` (le fichier le résume déjà), sauf si tu as besoin de vérifier un détail absent ou de t'assurer qu'il n'est pas périmé (mtime/changelog très ancien vs deps récentes → suggérer `/stack` en mode Éditer/Enrichir).
+- Si `docs/stack.md` n'existe pas → applique la détection légère ci-dessous. Tu peux suggérer à l'utilisateur de lancer `/stack` une fois pour cartographier durablement le projet.
+
+La détection légère qui suit reste le **fallback** quand `docs/stack.md` est absent.
+
+## Étapes (fallback sans `docs/stack.md`)
 
 1. **Lire `composer.json`** (`Read` à la racine du projet) s'il existe.
 2. **Lire `package.json`** (`Read` à la racine du projet) s'il existe.

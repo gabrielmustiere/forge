@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-05-28
+
+### Added
+- Skill `stack` (phase 0 technique) : détecte la stack complète d'un projet (langages, backend, frontend, données, ops, devops/CI) et produit `docs/stack.md`. Document vivant à 4 modes (Création, Enrichir, Éditer, Pivot) avec changelog, sur le modèle de `vision`/`product-backlog`. Chaque techno est prouvée par un fichier source ; les couches non détectables (hébergement, monitoring, secrets) sont comblées par questions ciblées ou marquées `_non renseigné_`. Câblé dans `_detection.md` : `feature`/`refactor`/`tech`/`review` lisent `docs/stack.md` en priorité, avec fallback sur la détection légère.
+
 ## [2.0.1] - 2026-05-28
 
 ### Fixed
@@ -17,6 +22,7 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v2.0.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/gabrielmustiere/forge/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/gabrielmustiere/forge/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/gabrielmustiere/forge/releases/tag/v2.0.0

@@ -1,12 +1,13 @@
 # Inventaire — plugin `workflow`
 
-Pipeline de développement stack-agnostique (22 skills).
+Pipeline de développement stack-agnostique (23 skills).
 
 | Skill | Rôle |
 | --- | --- |
 | [`help`](../plugins/workflow/skills/help/SKILL.md) | Sommaire du workflow, tracks, skills et artifacts |
 | [`vision`](../plugins/workflow/skills/vision/SKILL.md) | **Phase 0** — atelier de cadrage de la vision projet (problème, audience, valeur, North Star, principes, anti-objectifs) → `docs/vision.md`. Document vivant, 4 modes (Création / Enrichir / Éditer / Pivot) avec changelog. |
 | [`product-backlog`](../plugins/workflow/skills/product-backlog/SKILL.md) | **Phase 0.5** — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3 → `docs/product-backlog.md`. Document vivant, 4 modes (Création / Enrichir / Éditer / Pivot) avec changelog. |
+| [`stack`](../plugins/workflow/skills/stack/SKILL.md) | **Phase 0 technique** — cartographie la stack complète (langages, backend, frontend, données, ops, devops/CI) → `docs/stack.md`. Chaque techno prouvée par un fichier source, trous comblés par questions ou marqués `_non renseigné_`. Document vivant, 4 modes avec changelog, lu en priorité par les tracks technique (`feature`/`refactor`/`tech`/`review`). |
 | [`feature-pitch`](../plugins/workflow/skills/feature-pitch/SKILL.md) | Atelier de cadrage d'une idée de feature → `pitch.md` |
 | [`feature-plan`](../plugins/workflow/skills/feature-plan/SKILL.md) | Plan technique d'une feature cadrée → `plan.md` |
 | [`feature`](../plugins/workflow/skills/feature/SKILL.md) | Implémentation guidée à partir du plan |
