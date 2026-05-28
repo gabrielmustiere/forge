@@ -10,7 +10,7 @@ Généralisables quel que soit le framework si le projet utilise Playwright pour
 - **Sélecteurs `data-test-*`** plutôt que sélecteurs CSS fragiles.
 - **Configuration** : ajouter le projet Playwright dans `playwright.config.ts` et le script npm dans `package.json`.
 
-Les patterns spécifiques au framework (par exemple la suppression via modale Bootstrap en admin Sylius) sont documentés dans `references/stacks/<stack>.md`.
+Les patterns spécifiques au framework (par exemple la suppression via modale Bootstrap en admin Sylius) sont documentés dans la référence stack `<stack>.md` (déjà chargée via la détection).
 
 ## Mapping code → niveau de test
 

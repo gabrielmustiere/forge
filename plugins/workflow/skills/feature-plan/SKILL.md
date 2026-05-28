@@ -59,7 +59,7 @@ Lis aussi le `CLAUDE.md` à la racine du projet s'il existe — il contient les 
 - Templates et composants UI (avec attention aux thèmes/overrides si applicable)
 - Tests existants dans le domaine
 
-Pour un projet Sylius, les conventions d'arborescence et les points d'extension spécifiques (Resources, Twig Hooks, StateMachine, FormTypeExtension…) sont détaillés dans `references/stacks/sylius.md` — les consulter avant d'explorer.
+Pour un projet Sylius, les conventions d'arborescence et les points d'extension spécifiques (Resources, Twig Hooks, StateMachine, FormTypeExtension…) sont détaillés dans `${CLAUDE_SKILL_DIR}/../../references/stacks/sylius.md` — les consulter avant d'explorer.
 
 Présente un résumé : "Voilà l'existant pertinent pour cette feature : …" — cite chaque fichier avec son chemin.
 

@@ -1,6 +1,6 @@
 # Phase 0bis — Cibler l'évolution (modes Enrichir et Éditer)
 
-À utiliser **uniquement** en mode Enrichir ou Éditer. En mode Création ou Pivot, ignorer ce fichier et charger `references/phases-creation.md`.
+À utiliser **uniquement** en mode Enrichir ou Éditer. En mode Création ou Pivot, ignorer ce fichier et charger `phases-creation.md` (dans le même dossier que ce fichier).
 
 L'utilisateur ne re-déroule pas tout l'atelier : on cible l'élément concerné.
 

@@ -19,7 +19,9 @@ Traitées dans l'ordre — la première qui matche gagne.
 | `composer.json` → dépendance `symfony/framework-bundle` sans `sylius/...` | **symfony** | `symfony.md`                                          |
 | Aucun des deux signaux                                                    | **inconnu** | Demander à l'utilisateur quel stack, ou continuer sans référence spécifique |
 
-Les références sont dans le même dossier que ce fichier : `plugins/workflow/references/stacks/`. Chaque skill utilisant la détection les lit via `Read` une fois le stack identifié.
+Les références (`symfony.md`, `sylius.md`) sont dans le **même dossier que ce fichier `_detection.md`**. Une fois le stack identifié, lis-les via `Read` en réutilisant le **chemin absolu du dossier d'où tu viens de lire `_detection.md`** (la skill te l'a passé via `${CLAUDE_SKILL_DIR}/../../references/stacks/`).
+
+⚠️ **Ne lis jamais un chemin relatif au projet** comme `plugins/workflow/references/stacks/symfony.md` : ce chemin n'existe que dans le repo source de la marketplace. Chez l'utilisateur, le plugin est installé **hors du projet** (`~/.claude/plugins/...`) — seul le chemin dérivé de `${CLAUDE_SKILL_DIR}` est correct.
 
 ## Skills dédiés disponibles (stack Symfony / Sylius)
 

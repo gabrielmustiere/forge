@@ -35,4 +35,4 @@ Le wrapper te donne un point d'entrée slash explicite et préserve l'isolation 
 
 ## Référence
 
-Spécification complète de l'agent : `plugins/workflow/agents/report-and-sync.md`.
+La spécification complète (enchaînement REPORT → SYNC, architecture inline) vit dans la définition du subagent `workflow:report-and-sync`, que tu invoques par son nom — tu n'as aucun fichier à lire manuellement.

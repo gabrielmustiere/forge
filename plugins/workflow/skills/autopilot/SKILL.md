@@ -34,4 +34,4 @@ L'intérêt de ce wrapper est double :
 
 ## Référence
 
-Spécification complète de l'agent (phases, stop-points, reprise) : `plugins/workflow/agents/autopilot.md`.
+La spécification complète (phases, stop-points, reprise via `.autopilot.json`) vit dans la définition du subagent `workflow:autopilot`, que tu invoques par son nom — tu n'as aucun fichier à lire manuellement.

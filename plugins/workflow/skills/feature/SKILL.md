@@ -93,7 +93,7 @@ Avant d'écrire quoi que ce soit, lire les fichiers qui vont être modifiés ou 
 
 Coder en respectant :
 
-- Les règles du stack détecté (voir `references/stacks/<stack>.md`).
+- Les règles du stack détecté (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md`, déjà chargé via la détection).
 - Les conventions projet du `CLAUDE.md` quand elles précisent ou surchargent les règles stack.
 - L'ordre de développement au sein d'une sous-tâche :
   1. Modèle (entité / mapping / migration)

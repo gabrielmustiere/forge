@@ -34,13 +34,13 @@ C'est une opération d'import, pas un pont bidirectionnel. L'objectif : récupé
 
 ## Sources supportées
 
-Trois références détaillées dans `references/` — lis celle qui correspond à la source détectée :
+Trois références détaillées, **bundlées avec la skill** — lis celle qui correspond à la source détectée via `Read` sur `${CLAUDE_SKILL_DIR}/references/<fichier>` (jamais un chemin relatif au projet) :
 
 | Source | Référence | Indice de détection |
 |--------|-----------|---------------------|
-| Spec Kit (GitHub) | `references/spec-kit.md` | `specs/NNN-<slug>/` avec `spec.md`+`plan.md` ; ou `.specify/` à la racine |
-| BMAD-METHOD | `references/bmad.md` | `docs/stories/<epic>.<story>*.md` ; ou `docs/prd.md`+`docs/architecture.md` |
-| GSD (get-shit-done) | `references/gsd.md` | `.plans/<id>-<slug>.md` (fichiers plats) ; ou `.gsd/` |
+| Spec Kit (GitHub) | `spec-kit.md` | `specs/NNN-<slug>/` avec `spec.md`+`plan.md` ; ou `.specify/` à la racine |
+| BMAD-METHOD | `bmad.md` | `docs/stories/<epic>.<story>*.md` ; ou `docs/prd.md`+`docs/architecture.md` |
+| GSD (get-shit-done) | `gsd.md` | `.plans/<id>-<slug>.md` (fichiers plats) ; ou `.gsd/` |
 
 Si la source ne matche aucune des trois : « Je ne reconnais pas le format source. Décris-moi la structure (`tree -L 3 docs/ specs/ .plans/ 2>/dev/null`) et on improvise un mapping manuel. »
 
@@ -68,7 +68,7 @@ Si la source ne matche aucune des trois : « Je ne reconnais pas le format sourc
 
 Annonce ce que tu as trouvé : « Source détectée : **Spec Kit** (8 dossiers sous `specs/`). Tu confirmes que c'est bien ça qu'on importe ? »
 
-Charge la référence correspondante (`references/<source>.md`) et **suis-la** pour le mapping fichiers.
+Charge la référence correspondante (`${CLAUDE_SKILL_DIR}/references/<source>.md`) et **suis-la** pour le mapping fichiers.
 
 ### Phase 2 — Inventaire et tagging
 
@@ -132,7 +132,7 @@ Pour chaque story :
 2. Déplace les fichiers mappés via `git mv` (préserve l'historique).
 3. Renomme selon le mapping (ex: `git mv specs/003-x/spec.md docs/story/003-f-x/pitch.md`).
 4. Archive les fichiers non mappés : `git mv <fichier> _archive/<source>/<NNN>-<slug>/<fichier>`.
-5. Si la source était un fichier plat (GSD `.plans/<id>-<slug>.md`), le contenu va dans `pitch.md` ou `plan.md` selon le tag — voir `references/gsd.md`.
+5. Si la source était un fichier plat (GSD `.plans/<id>-<slug>.md`), le contenu va dans `pitch.md` ou `plan.md` selon le tag — voir `${CLAUDE_SKILL_DIR}/references/gsd.md`.
 
 À la fin :
 

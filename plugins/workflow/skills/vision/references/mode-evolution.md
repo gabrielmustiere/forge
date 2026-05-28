@@ -1,6 +1,6 @@
 # Phase 1bis — Cibler l'évolution (modes Enrichir et Éditer)
 
-À utiliser **uniquement** en mode Enrichir ou Éditer. En mode Création ou Pivot, **ignorer ce fichier** et passer aux axes de challenge (`references/axes-challenge.md`).
+À utiliser **uniquement** en mode Enrichir ou Éditer. En mode Création ou Pivot, **ignorer ce fichier** et passer aux axes de challenge (`axes-challenge.md`, dans le même dossier que ce fichier).
 
 L'utilisateur ne re-déroule pas tout l'atelier : on cible l'axe (ou les axes) concerné(s).
 

@@ -1,6 +1,6 @@
 # Checklists spécifiques Sylius
 
-Si le stack détecté est **sylius**, activer en plus les axes multi-channel et multi-thème documentés dans `references/stacks/sylius.md` :
+Si le stack détecté est **sylius**, activer en plus les axes multi-channel et multi-thème documentés dans la référence stack `sylius.md` (déjà chargée via la détection) :
 
 - **Cloisonnement channel** : entités, repositories, fixtures, grids admin filtrent-ils bien par channel courant ?
 - **Overrides de thèmes** : chercher via `Glob` dans `themes/*/templates/` avant de clôturer une sous-tâche qui touche un template shop de base — un override existant doit être mis à jour symétriquement.

@@ -1,6 +1,6 @@
 # Phases 1 à 5 — modes Création et Pivot
 
-À utiliser **uniquement** en mode Création ou Pivot. En mode Enrichir ou Éditer, ignorer ce fichier et charger `references/mode-evolution.md`.
+À utiliser **uniquement** en mode Création ou Pivot. En mode Enrichir ou Éditer, ignorer ce fichier et charger `mode-evolution.md` (dans le même dossier que ce fichier).
 
 ## Phase 1 — Domaines fonctionnels
 

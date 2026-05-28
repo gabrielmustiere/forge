@@ -233,10 +233,10 @@ ou demander en langage naturel : *"Lance l'agent autopilot sur `checkout-express
 
 ## Règles framework
 
-Le workflow détecte automatiquement le stack du projet (Symfony, Sylius) via `composer.json` / `package.json` et charge les règles correspondantes. Voir :
+Le workflow détecte automatiquement le stack du projet (Symfony, Sylius) via `composer.json` / `package.json` et charge les références correspondantes, **bundlées avec le plugin** :
 
-- `plugins/workflow/references/stacks/_detection.md` — procédure de détection
-- `plugins/workflow/references/stacks/symfony.md` — règles Symfony (Doctrine, services, forms, Twig, QA, sécu, perf)
-- `plugins/workflow/references/stacks/sylius.md` — delta e-commerce Sylius (Resources, channels, thèmes, Twig Hooks…)
+- procédure de détection du stack
+- règles Symfony — Doctrine, services, forms, Twig, QA, sécu, perf
+- delta e-commerce Sylius — Resources, channels, thèmes, Twig Hooks…
 
-Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans le `CLAUDE.md` à la racine du projet — les skills le lisent en complément des références stack.
+Les skills concernées chargent ces références automatiquement après détection — rien à lire manuellement. Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans le `CLAUDE.md` à la racine du projet — les skills le lisent en complément des références stack.

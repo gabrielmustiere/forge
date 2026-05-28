@@ -42,8 +42,8 @@ Ce skill est **hors pipeline** (pas de spec → design → implem). Son rôle es
 Avant toute exploration, identifie le stack du projet pour adapter le vocabulaire et les sections du document. Lis dans cet ordre :
 
 1. `composer.json` à la racine — clés `require` :
-   - `sylius/sylius` ou `sylius/*-bundle` → **stack Sylius**, charger `references/sylius.md`
-   - `symfony/framework-bundle` (sans Sylius) → **stack Symfony**, charger `references/symfony.md`
+   - `sylius/sylius` ou `sylius/*-bundle` → **stack Sylius**, charger `${CLAUDE_SKILL_DIR}/references/sylius.md`
+   - `symfony/framework-bundle` (sans Sylius) → **stack Symfony**, charger `${CLAUDE_SKILL_DIR}/references/symfony.md`
    - Autre PHP → **stack PHP générique**
 2. `package.json` à la racine — clés `dependencies` / `devDependencies` :
    - `next`, `react`, `vue`, `@nestjs/*`, `express`, etc. → noter le framework JS

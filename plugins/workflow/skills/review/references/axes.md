@@ -49,8 +49,8 @@ Pour les stacks Doctrine (Symfony / Sylius) — voir `symfony.md` :
 
 Appliquer les règles du stack détecté. Les violations typiques qui cassent silencieusement sont documentées dans les références :
 
-- **Symfony** (`references/stacks/symfony.md`) : snake_case en BDD pour colonnes camelCase, DQL/SQL dans repositories uniquement, injection par constructeur, décoration plutôt que monkey-patching.
-- **Sylius** (`references/stacks/sylius.md`) : pas de modification vendor, validation `groups: ['Default', 'sylius']`, FormTypeExtension + Twig Hooks symétriques (piège 422 silencieux), composants Twig namespacés (`Media:MonComposant`), transitions StateMachine plutôt que setState direct.
+- **Symfony** (référence stack `symfony.md`) : snake_case en BDD pour colonnes camelCase, DQL/SQL dans repositories uniquement, injection par constructeur, décoration plutôt que monkey-patching.
+- **Sylius** (référence stack `sylius.md`) : pas de modification vendor, validation `groups: ['Default', 'sylius']`, FormTypeExtension + Twig Hooks symétriques (piège 422 silencieux), composants Twig namespacés (`Media:MonComposant`), transitions StateMachine plutôt que setState direct.
 
 Pour chaque modification, vérifier qu'elle respecte le mécanisme d'extension du framework plutôt qu'un contournement.
 

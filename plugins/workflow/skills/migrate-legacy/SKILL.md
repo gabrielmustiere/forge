@@ -26,7 +26,7 @@ Le plugin `workflow` a évolué trois fois sur le format des stories :
    - track feature : `feature.md` → `pitch.md`, `design.md` → `plan.md`
    - track refacto / tech : déjà `plan.md`, rien à changer
    - cartographie rétro (`docs/feature-map/NNN-slug/feature.md`) → `overview.md`
-3. **v1.1.0 (workflow plugin)** — gabarit unifié pour chaque artifact (`pitch.md`, `plan.md`, `report.md`, `review.md`) avec squelette de sections, guides `> _Skill : ..._` et commentaires HTML retirables, table de changelog en pied. Les templates de référence vivent dans `references/template.md` de chaque skill (`feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `report`, `review`).
+3. **v1.1.0 (workflow plugin)** — gabarit unifié pour chaque artifact (`pitch.md`, `plan.md`, `report.md`, `review.md`) avec squelette de sections, guides `> _Skill : ..._` et commentaires HTML retirables, table de changelog en pied. Les templates de référence sont fournis par chaque skill de cadrage (`feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `report`, `review`) — voir la table de mapping ci-dessous pour les chemins exacts.
 
 Ce skill détecte les trois types de legacy. Étapes 1 et 2 : migration via `git mv` (préserve l'historique), aucune modif de contenu. Étape 3 : reformatage **interactif fichier par fichier** du contenu vers le gabarit unifié (l'utilisateur valide chaque proposition).
 

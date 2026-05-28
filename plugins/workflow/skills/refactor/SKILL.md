@@ -137,7 +137,7 @@ Avant d'écrire quoi que ce soit, lire les fichiers qui vont être modifiés **e
 
 Appliquer la restructuration en respectant :
 
-- Les règles du stack détecté (voir `references/stacks/<stack>.md`).
+- Les règles du stack détecté (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md`, déjà chargé via la détection).
 - Les conventions projet du `CLAUDE.md`.
 - Le périmètre strict de l'étape — pas de "tant qu'on y est" qui sortirait du plan.
 - **Si un Strangler Fig est prévu** : conserver l'ancien code en place, introduire le nouveau en parallèle, basculer les clients indiqués pour cette étape.
@@ -145,7 +145,7 @@ Appliquer la restructuration en respectant :
 
 #### 3.4 — QA + non-régression (obligatoire)
 
-Exécuter les checks du stack (voir `references/stacks/<stack>.md` et `CLAUDE.md`). Pattern typique stacks PHP :
+Exécuter les checks du stack (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md` et `CLAUDE.md`). Pattern typique stacks PHP :
 
 ```bash
 vendor/bin/ecs check --fix                   # style

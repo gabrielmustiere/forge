@@ -56,10 +56,10 @@ Lis aussi `${STORY_DIR}/review.md` s'il existe — les findings bloquants/import
 Charge le template de référence :
 
 ```
-plugins/workflow/skills/report/references/template.md
+${CLAUDE_PLUGIN_ROOT}/skills/report/references/template.md
 ```
 
-(Tu lis ce fichier directement avec `Read` — pas de substitution `${CLAUDE_SKILL_DIR}`, le chemin est en clair depuis la racine du repo, c'est ton chemin de travail.)
+(Tu lis ce fichier directement avec `Read`. `${CLAUDE_PLUGIN_ROOT}` pointe vers le répertoire d'installation du plugin — substitution disponible dans le contenu des agents. **N'utilise pas** un chemin relatif au projet comme `plugins/workflow/...` : il n'existe que dans le repo source de la marketplace, pas chez l'utilisateur où le plugin est installé hors du projet.)
 
 ### 1.2 — Analyser le code livré
 
