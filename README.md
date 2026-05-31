@@ -90,6 +90,7 @@ Perdu en cours de route ? `/workflow:help` est le GPS du pipeline.
 | Skill | Rôle |
 | --- | --- |
 | `/workflow:help` | Sommaire du pipeline, tracks, skills et artifacts |
+| `/workflow:claude-md` | Génère ou met à jour le `CLAUDE.md` à la racine : analyse du codebase (prouvée par fichier) + principes comportementaux Karpathy. Réutilise `docs/stack.md` / `docs/vision.md` |
 | `/workflow:test-scenario` | Joue un scénario utilisateur en live via Playwright MCP |
 | `/workflow:adr` | Rédige un Architecture Decision Record MADR léger → `docs/adr/NNNN-slug.md` |
 | `/workflow:doc-feature` | Cartographie une feature existante (legacy) → `docs/feature-map/NNN-slug/overview.md` |
