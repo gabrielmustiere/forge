@@ -7,15 +7,15 @@ Pipeline de développement stack-agnostique (24 skills).
 | [`help`](../plugins/workflow/skills/help/SKILL.md) | Sommaire du workflow, tracks, skills et artifacts |
 | [`vision`](../plugins/workflow/skills/vision/SKILL.md) | **Phase 0** — atelier de cadrage de la vision projet (problème, audience, valeur, North Star, principes, anti-objectifs) → `docs/vision.md`. Document vivant, 4 modes (Création / Enrichir / Éditer / Pivot) avec changelog. |
 | [`product-backlog`](../plugins/workflow/skills/product-backlog/SKILL.md) | **Phase 0.5** — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3 → `docs/product-backlog.md`. Document vivant, 4 modes (Création / Enrichir / Éditer / Pivot) avec changelog. |
-| [`stack`](../plugins/workflow/skills/stack/SKILL.md) | **Phase 0 technique** — cartographie la stack complète (langages, backend, frontend, données, ops, devops/CI) → `docs/stack.md`. Chaque techno prouvée par un fichier source, trous comblés par questions ou marqués `_non renseigné_`. Document vivant, 4 modes avec changelog, lu en priorité par les tracks technique (`feature`/`refactor`/`tech`/`review`). |
+| [`stack`](../plugins/workflow/skills/stack/SKILL.md) | **Phase 0 technique** — cartographie la stack complète (langages, backend, frontend, données, ops, devops/CI) → `docs/stack.md`. Chaque techno prouvée par un fichier source, trous comblés par questions ou marqués `_non renseigné_`. Document vivant, 4 modes avec changelog, lu en priorité par les tracks technique (`feature-implem`/`refactor-implem`/`tech-implem`/`review`). |
 | [`claude-md`](../plugins/workflow/skills/claude-md/SKILL.md) | Génère ou met à jour le `CLAUDE.md` à la racine : analyse du codebase (nature, stack, architecture, commandes, conventions) prouvée par fichier — aucune commande inventée — et injection des 4 principes comportementaux Karpathy (réflexion, simplicité, changements chirurgicaux, objectif vérifiable). Réutilise `docs/stack.md` et `docs/vision.md` s'ils existent. Modes Création / Mise à jour, validation avant écriture. |
 | [`feature-pitch`](../plugins/workflow/skills/feature-pitch/SKILL.md) | Atelier de cadrage d'une idée de feature → `pitch.md` |
 | [`feature-plan`](../plugins/workflow/skills/feature-plan/SKILL.md) | Plan technique d'une feature cadrée → `plan.md` |
-| [`feature`](../plugins/workflow/skills/feature/SKILL.md) | Implémentation guidée à partir du plan |
+| [`feature-implem`](../plugins/workflow/skills/feature-implem/SKILL.md) | Implémentation guidée à partir du plan |
 | [`refactor-plan`](../plugins/workflow/skills/refactor-plan/SKILL.md) | Cadrage refacto + tests de caractérisation → `plan.md` |
-| [`refactor`](../plugins/workflow/skills/refactor/SKILL.md) | Exécution guidée d'un refacto avec verrou tests |
+| [`refactor-implem`](../plugins/workflow/skills/refactor-implem/SKILL.md) | Exécution guidée d'un refacto avec verrou tests |
 | [`tech-plan`](../plugins/workflow/skills/tech-plan/SKILL.md) | Cadrage évolution technique (perf, résilience, sécu) → `plan.md` |
-| [`tech`](../plugins/workflow/skills/tech/SKILL.md) | Exécution d'une évolution technique avec baseline/kill switch |
+| [`tech-implem`](../plugins/workflow/skills/tech-implem/SKILL.md) | Exécution d'une évolution technique avec baseline/kill switch |
 | [`review`](../plugins/workflow/skills/review/SKILL.md) | Code review du diff (sécurité, qualité, conformité) |
 | [`commit`](../plugins/workflow/skills/commit/SKILL.md) | Génère un Conventional Commit FR et push |
 | [`report`](../plugins/workflow/skills/report/SKILL.md) | Compte rendu intention vs code réel |

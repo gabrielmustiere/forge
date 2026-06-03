@@ -1,5 +1,5 @@
 ---
-name: refactor
+name: refactor-implem
 description: Exécute un refacto cadré — verrou bloquant sur tests de caractérisation présents et passants, puis applique le plan étape par étape avec non-régression. Prérequis un `plan.md` sous `docs/story/<NNN>-r-<slug>/`. Argument optionnel : slug à reprendre.
 user_invocable: true
 disable-model-invocation: true

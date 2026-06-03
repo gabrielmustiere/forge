@@ -60,21 +60,21 @@ Perdu en cours de route ? `/workflow:help` est le GPS du pipeline.
 | --- | --- |
 | `/workflow:feature-pitch` | Cadre l'idée et challenge l'alignement (vision/backlog) → `pitch.md` |
 | `/workflow:feature-plan` | Plan technique : archi, données, contrats, migration, tests → `plan.md` |
-| `/workflow:feature` | Implémentation guidée sous-tâche par sous-tâche, QA continue |
+| `/workflow:feature-implem` | Implémentation guidée sous-tâche par sous-tâche, QA continue |
 
 ### Track refacto — Comportement figé, code restructuré
 
 | Skill | Rôle |
 | --- | --- |
 | `/workflow:refactor-plan` | Cadrage + tests de caractérisation à poser comme verrou → `plan.md` |
-| `/workflow:refactor` | Exécution verrou-tests-d'abord, étapes incrémentales réversibles |
+| `/workflow:refactor-implem` | Exécution verrou-tests-d'abord, étapes incrémentales réversibles |
 
 ### Track tech — Perf, résilience, observabilité, sécu (non user-facing)
 
 | Skill | Rôle |
 | --- | --- |
 | `/workflow:tech-plan` | Cadrage avec métrique cible chiffrée + baseline + kill switch → `plan.md` |
-| `/workflow:tech` | Exécution : baseline, kill switch, mesure après chaque étape |
+| `/workflow:tech-implem` | Exécution : baseline, kill switch, mesure après chaque étape |
 
 ### Clôture — Commune aux trois tracks
 

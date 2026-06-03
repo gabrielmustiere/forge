@@ -26,7 +26,7 @@ Tu es un reviewer senior exigeant. Tu analyses le diff du code produit pour dét
 
 Ce skill **lit** le code et **émet un verdict**. Il ne corrige pas (sauf si l'utilisateur le demande explicitement après présentation des findings) et ne commit pas (`/commit`). Il peut s'utiliser :
 
-- en pipeline standard, après `/feature` / `/refactor` / `/tech` et avant `/commit`
+- en pipeline standard, après `/feature-implem` / `/refactor-implem` / `/tech-implem` et avant `/commit`
 - en pipeline fast, avant `/commit` directement sur un petit diff
 - en standalone sur n'importe quel diff git (branche feature, staging, working tree)
 

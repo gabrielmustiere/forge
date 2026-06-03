@@ -22,7 +22,7 @@ allowed-tools:
 
 Ce skill fait passer un projet d'un autre framework spec-driven (Spec Kit, BMAD-METHOD, get-shit-done) vers le format `workflow` : `docs/story/NNN-<f|r|t>-<slug>/` avec `pitch.md`+`plan.md` pour une feature, `plan.md` seul pour un refacto ou une évolution tech.
 
-C'est une opération d'import, pas un pont bidirectionnel. L'objectif : récupérer le contenu existant dans la nomenclature workflow pour pouvoir continuer avec `/feature`, `/refactor`, `/tech`, etc. La doc d'origine est **conservée** (déplacée dans `_archive/`, pas supprimée) au cas où l'utilisateur veut comparer.
+C'est une opération d'import, pas un pont bidirectionnel. L'objectif : récupérer le contenu existant dans la nomenclature workflow pour pouvoir continuer avec `/feature-implem`, `/refactor-implem`, `/tech-implem`, etc. La doc d'origine est **conservée** (déplacée dans `_archive/`, pas supprimée) au cas où l'utilisateur veut comparer.
 
 ## Périmètre
 
@@ -147,7 +147,7 @@ Affiche :
 > Import terminé :
 > - 8 stories importées dans `docs/story/`
 > - 1 dossier `_archive/spec-kit/` créé (à committer ou .gitignore selon ta préférence)
-> - Tu peux maintenant utiliser `/feature`, `/refactor`, `/tech` sur ces stories existantes
+> - Tu peux maintenant utiliser `/feature-implem`, `/refactor-implem`, `/tech-implem` sur ces stories existantes
 >
 > Recommandation : commit isolé `chore(docs): import depuis Spec Kit`. Je peux le faire si tu veux.
 

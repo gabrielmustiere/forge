@@ -4,7 +4,7 @@
 
 <!--
 guide: Ce fichier décrit l'INTENTION métier d'une feature. Aucune solution technique.
-Il est consommé par `/workflow:feature` (étape plan) et par `/workflow:sync` (réalignement post-livraison).
+Il est consommé par `/workflow:feature-implem` (étape plan) et par `/workflow:sync` (réalignement post-livraison).
 Toutes les sections marquées « optionnelle » peuvent être retirées si elles ne s'appliquent pas.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
@@ -63,7 +63,7 @@ Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 
 ## Notes pour le plan technique
 
-> _Skill : pistes brutes à explorer en `/workflow:feature` plan — entités candidates, services à toucher, patterns projet à mobiliser (OrganizationAwareInterface, Live Component, EventSubscriber, etc.). Ne PAS concevoir ici, ne PAS trancher._
+> _Skill : pistes brutes à explorer en `/workflow:feature-implem` plan — entités candidates, services à toucher, patterns projet à mobiliser (OrganizationAwareInterface, Live Component, EventSubscriber, etc.). Ne PAS concevoir ici, ne PAS trancher._
 
 - <Piste 1 : entité X candidate avec champs Y et Z, à confirmer>.
 - <Piste 2 : service A à modifier pour …>.

@@ -4,7 +4,7 @@
 > Stack : symfony
 
 <!--
-guide: Plan d'une évolution technique (préfixe `-t-`). Consommé par `/workflow:tech` (étape build) et `/workflow:sync`.
+guide: Plan d'une évolution technique (préfixe `-t-`). Consommé par `/workflow:tech-implem` (étape build) et `/workflow:sync`.
 Une évolution tech change l'infrastructure ou un composant technique transverse sans impact métier visible
 (montée de version, paramétrage env-driven, bibliothèque remplacée, déploiement). Si du métier change, c'est une feature ;
 si la structure du code seule change, c'est un refacto.

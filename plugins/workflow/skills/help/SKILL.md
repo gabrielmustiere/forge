@@ -29,32 +29,32 @@ allowed-tools:
                        ┌───────┐
                        │ stack │──▶ docs/stack.md (langages, backend, frontend, données,
                        └───────┘    ops, CI — chaque techno prouvée par un fichier source)
-                                    Lu par feature/refactor/tech/review.
+                                    Lu par feature-implem/refactor-implem/tech-implem/review.
 
                         TRACK FEATURE (valeur utilisateur, structurante)
- ┌──────────────┐   ┌──────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
- │feature-pitch │──▶│ feature-plan │──▶│ feature│──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
- └──────┬───────┘   └──────┬───────┘   └───┬────┘   └───┬────┘   └───┬────┘   └───┬────┘   └──┬───┘
-        │                   │              │            │            │            │           │
-        pitch.md          plan.md    code+migrations review.md    commit       report.md   doc sync
-                                     +nouveaux tests              +push                   +changelog
+ ┌───────────────┐   ┌──────────────┐   ┌────────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
+ │ feature-pitch │──▶│ feature-plan │──▶│ feature-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
+ └───────┬───────┘   └───────┬──────┘   └────────┬───────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
+         │                   │                   │                │            │            │           │
+     pitch.md             plan.md         code+migrations     review.md     commit      report.md   doc sync
+                                          +nouveaux tests                    +push                 +changelog
 
                     TRACK REFACTO (comportement figé, code restructuré)
- ┌──────────────┐   ┌─────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
- │refactor-plan │──▶│ refactor│──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
- └──────┬───────┘   └────┬────┘   └───┬────┘   └───┬────┘   └───┬────┘   └──┬───┘
-        │                │             │            │            │           │
-        plan.md     verrou tests    review.md    commit        report.md   doc sync
-                    + étapes                     +push
-                    incrémentales
+ ┌───────────────┐   ┌─────────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
+ │ refactor-plan │──▶│ refactor-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
+ └───────┬───────┘   └────────┬────────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
+         │                    │                 │            │            │           │
+      plan.md           verrou tests        review.md     commit      report.md   doc sync
+                          + étapes                         +push
+                        incrémentales
 
                TRACK TECH (perf, résilience, observabilité, sécu — non user-facing)
- ┌──────────┐   ┌─────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
- │ tech-plan│──▶│tech │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
- └────┬─────┘   └──┬──┘   └───┬────┘   └───┬────┘   └───┬────┘   └──┬───┘
-      │            │           │            │            │           │
-      plan.md   baseline    review.md   commit       report.md   doc sync
-                + kill switch           +push
+ ┌───────────┐   ┌─────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
+ │ tech-plan │──▶│ tech-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
+ └─────┬─────┘   └──────┬──────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
+       │                │               │            │            │           │
+    plan.md         baseline        review.md     commit      report.md   doc sync
+                  + kill switch                    +push
                 + étapes mesurées
 
                        UTILITAIRES (hors pipeline, à la demande)
@@ -143,7 +143,7 @@ Pour tout changement qui introduit une nouvelle fonctionnalité ou modifie un co
 |----|--------------------|--------------------------------------------------------------|----------------------------------------------|
 | 1  | `/feature-pitch`   | Cadrer et challenger une fonctionnalité                      | `docs/story/NNN-f-slug/pitch.md`             |
 | 2  | `/feature-plan`    | Concevoir la solution technique à partir du pitch            | `docs/story/NNN-f-slug/plan.md`              |
-| 3  | `/feature`         | Implémenter sous-tâche par sous-tâche avec QA continue       | Code + migrations + tests                    |
+| 3  | `/feature-implem`  | Implémenter sous-tâche par sous-tâche avec QA continue       | Code + migrations + tests                    |
 | 4  | `/review`          | Code review (sécu, perf, qualité, conformité plan)           | `docs/story/NNN-f-slug/review.md`            |
 | 5  | `/commit`          | Commit Conventional Commits en français + push               | Commit                                       |
 | 6  | `/report`          | Documenter ce qui a été fait vs ce qui était prévu           | `docs/story/NNN-f-slug/report.md`            |
@@ -158,7 +158,7 @@ Pour restructurer du code sans toucher au comportement externe (dette, couplage,
 | #  | Skill             | Rôle                                                              | Produit                           |
 |----|-------------------|-------------------------------------------------------------------|-----------------------------------|
 | 1  | `/refactor-plan`  | Cadrer un refacto (motivation, cible, caractérisation, étapes)   | `docs/story/NNN-r-slug/plan.md`   |
-| 2  | `/refactor`       | Exécuter : verrou tests puis étapes incrémentales, non-régression | Code restructuré + tests          |
+| 2  | `/refactor-implem`| Exécuter : verrou tests puis étapes incrémentales, non-régression | Code restructuré + tests          |
 | 3  | `/review`         | Code review focus non-régression                                  | `docs/story/NNN-r-slug/review.md` |
 | 4  | `/commit`         | Commit + push (souvent un commit par étape)                       | Commits                           |
 | 5  | `/report`         | Documenter l'exécution vs le plan                                 | `docs/story/NNN-r-slug/report.md` |
@@ -173,7 +173,7 @@ Pour ajouter ou modifier une brique technique observable (latence, taux d'erreur
 | #  | Skill          | Rôle                                                               | Produit                           |
 |----|----------------|--------------------------------------------------------------------|-----------------------------------|
 | 1  | `/tech-plan`   | Cadrer l'évolution (problème, brique, métriques cibles, rollback) | `docs/story/NNN-t-slug/plan.md`   |
-| 2  | `/tech`        | Exécuter : baseline, kill switch, étapes mesurées, validation      | Code + config + observabilité     |
+| 2  | `/tech-implem` | Exécuter : baseline, kill switch, étapes mesurées, validation      | Code + config + observabilité     |
 | 3  | `/review`      | Code review (kill switch, compatibilité, non-régression)          | `docs/story/NNN-t-slug/review.md` |
 | 4  | `/commit`      | Commit + push                                                      | Commits                           |
 | 5  | `/report`      | Documenter les critères atteints / non atteints vs le plan         | `docs/story/NNN-t-slug/report.md` |
@@ -233,7 +233,7 @@ Les **agents** sont des orchestrateurs invocables via le tool `Agent` (pas via `
 | Agent              | Rôle                                                                                                  | Quand l'utiliser                                                                                  |
 |--------------------|-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
 | `report-and-sync`  | Enchaîne `/workflow:report` puis `/workflow:sync` pour une story livrée                              | Après livraison d'une feature/refacto/tech, pour produire le compte rendu **et** réaligner la doc d'intention en une seule passe |
-| `autopilot`        | Pilote autonome des skills `/workflow:feature`, `/workflow:refactor`, `/workflow:tech` — délègue chaque sous-tâche à un sous-agent isolé, trace l'avancement dans `.autopilot.json` (reprise possible), ne s'arrête qu'aux stop-points stratégiques (verrou caractérisation, baseline, écart majeur, tests finaux) | Quand l'implémentation est longue et que tu veux laisser tourner sans valider chaque sous-tâche — typiquement features structurées en 5+ sous-tâches, gros refactos Strangler Fig multi-étapes, évolutions tech avec mesure post-étape |
+| `autopilot`        | Pilote autonome des skills `/workflow:feature-implem`, `/workflow:refactor-implem`, `/workflow:tech-implem` — délègue chaque sous-tâche à un sous-agent isolé, trace l'avancement dans `.autopilot.json` (reprise possible), ne s'arrête qu'aux stop-points stratégiques (verrou caractérisation, baseline, écart majeur, tests finaux) | Quand l'implémentation est longue et que tu veux laisser tourner sans valider chaque sous-tâche — typiquement features structurées en 5+ sous-tâches, gros refactos Strangler Fig multi-étapes, évolutions tech avec mesure post-étape |
 
 **Invocation type** :
 

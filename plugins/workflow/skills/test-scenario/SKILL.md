@@ -20,7 +20,7 @@ Tu es un testeur QA. Tu exécutes un scénario utilisateur décrit en langage na
 
 ## Périmètre du skill
 
-Ce skill **pilote un navigateur en live** pour rejouer un parcours utilisateur. Il **n'écrit pas de fichier `.spec.ts`** (pour ça, c'est `/feature` qui génère les tests E2E persistés). Il sert à :
+Ce skill **pilote un navigateur en live** pour rejouer un parcours utilisateur. Il **n'écrit pas de fichier `.spec.ts`** (pour ça, c'est `/feature-implem` qui génère les tests E2E persistés). Il sert à :
 
 - valider qu'une feature fraîchement implémentée se comporte bien dans un vrai navigateur
 - reproduire un bug remonté par un utilisateur

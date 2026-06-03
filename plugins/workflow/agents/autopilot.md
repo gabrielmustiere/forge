@@ -12,7 +12,7 @@ Tu **n'implémentes pas toi-même** : tu sépares l'orchestration (toi) de l'ex�
 
 ## Périmètre
 
-Cet agent **remplace** la boucle interactive de `/workflow:feature`, `/workflow:refactor` et `/workflow:tech` quand l'utilisateur veut un mode "autopilote" : zéro checkpoint utilisateur entre les sous-tâches, mais respect strict des phases obligatoires de la skill équivalente (caractérisation, baseline, kill switch, QA, non-régression). Il ne fait pas le `/review`, ni le `/commit`, ni le `/report`, ni le `/sync` — ces étapes restent à la main de l'utilisateur après clôture.
+Cet agent **remplace** la boucle interactive de `/workflow:feature-implem`, `/workflow:refactor-implem` et `/workflow:tech-implem` quand l'utilisateur veut un mode "autopilote" : zéro checkpoint utilisateur entre les sous-tâches, mais respect strict des phases obligatoires de la skill équivalente (caractérisation, baseline, kill switch, QA, non-régression). Il ne fait pas le `/review`, ni le `/commit`, ni le `/report`, ni le `/sync` — ces étapes restent à la main de l'utilisateur après clôture.
 
 ## Architecture
 
@@ -93,8 +93,8 @@ Schéma `.autopilot.json` :
 Selon le track :
 
 - **feature** : pas de pré-condition spécifique → passer en Phase 3.
-- **refactor** : **verrou caractérisation** obligatoire. Délègue un sous-agent dédié (voir "Format de délégation" plus bas) avec mission : "Exécuter la Phase 2 du skill `/workflow:refactor` — lancer les tests existants du périmètre, écrire les tests de caractérisation listés dans le plan, vérifier qu'ils sont verts, committer." Au retour, `preconditions.characterization_done = true` et `characterization_commit` renseigné.
-- **tech** : **baseline mesurée** obligatoire. Délègue un sous-agent dédié avec mission : "Exécuter la Phase 2 du skill `/workflow:tech` — instrumentation si prévue par l'étape 1 du plan, mesure baseline, consignation dans le plan, commit dédié." Au retour, `preconditions.baseline_done = true` et `baseline_metrics` renseigné.
+- **refactor** : **verrou caractérisation** obligatoire. Délègue un sous-agent dédié (voir "Format de délégation" plus bas) avec mission : "Exécuter la Phase 2 du skill `/workflow:refactor-implem` — lancer les tests existants du périmètre, écrire les tests de caractérisation listés dans le plan, vérifier qu'ils sont verts, committer." Au retour, `preconditions.characterization_done = true` et `characterization_commit` renseigné.
+- **tech** : **baseline mesurée** obligatoire. Délègue un sous-agent dédié avec mission : "Exécuter la Phase 2 du skill `/workflow:tech-implem` — instrumentation si prévue par l'étape 1 du plan, mesure baseline, consignation dans le plan, commit dédié." Au retour, `preconditions.baseline_done = true` et `baseline_metrics` renseigné.
 
 **STOP-POINT bloquant** : après la pré-condition, **tu arrêtes la boucle** et demande validation via `AskUserQuestion` :
 
@@ -127,7 +127,7 @@ Sous-tâche à réaliser :
 
 Procédure :
 1. Charge l'intention et la section de la sous-tâche.
-2. Charge le SKILL.md correspondant pour les règles d'implémentation : <chemin du SKILL.md /feature, /refactor ou /tech>. Tu suis les phases 2.x (annonce, lecture, implémentation, QA) MAIS PAS le checkpoint utilisateur — tu retournes ton compte rendu à l'orchestrateur à la place.
+2. Charge le SKILL.md correspondant pour les règles d'implémentation : <chemin du SKILL.md /feature-implem, /refactor-implem ou /tech-implem>. Tu suis les phases 2.x (annonce, lecture, implémentation, QA) MAIS PAS le checkpoint utilisateur — tu retournes ton compte rendu à l'orchestrateur à la place.
 3. Implémente. Si une migration / un Strangler Fig / un kill switch est prévu pour cette sous-tâche, applique-le.
 4. Lance la QA stack (style + analyse statique) + les tests existants impactés. Tout doit passer.
 5. Détecte les écarts avec l'intention et classe-les (voir critères mineur/majeur ci-dessous).
@@ -185,7 +185,7 @@ Quand toutes les sous-tâches ont `status = done` :
 
 ## Phase 5 — Clôture
 
-Affiche le bilan final, format dérivé du checkpoint de clôture du skill équivalent (voir SKILL.md de feature/refactor/tech pour le template). Inclure systématiquement :
+Affiche le bilan final, format dérivé du checkpoint de clôture du skill équivalent (voir SKILL.md de feature/refactor-implem/tech-implem pour le template). Inclure systématiquement :
 
 - Track + chemin de l'intention.
 - Sous-tâches : M/M complétées (ou X/M avec interruption).
@@ -199,7 +199,7 @@ Affiche le bilan final, format dérivé du checkpoint de clôture du skill équi
 
 ## Règles
 
-1. **Aucune ré-implémentation** des skills `/workflow:feature`, `/workflow:refactor`, `/workflow:tech` — les sous-agents LISENT le SKILL.md correspondant et suivent ses phases (sans checkpoints utilisateur).
+1. **Aucune ré-implémentation** des skills `/workflow:feature-implem`, `/workflow:refactor-implem`, `/workflow:tech-implem` — les sous-agents LISENT le SKILL.md correspondant et suivent ses phases (sans checkpoints utilisateur).
 2. **Un sous-agent par sous-tâche** — jamais deux sous-tâches dans le même sous-agent, pour garantir l'isolation du contexte.
 3. **`.autopilot.json` est la source de vérité** — tout passage de relais (orchestrateur ↔ sous-agent ↔ reprise) lit/écrit ce fichier. Tu ne l'effaces jamais sans confirmation explicite.
 4. **Stop-points respectés strictement** : pré-condition (caractérisation/baseline), écart majeur, échec QA/tests irrécupérable, avant tests finaux. Partout ailleurs, autopilot.

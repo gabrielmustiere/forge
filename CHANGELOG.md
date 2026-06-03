@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-06-03
+
+### Changed
+- **BREAKING** — Renommage des trois skills d'exécution terminaux pour rétablir la symétrie verbale avec les skills de cadrage (`*-plan`) : `feature` → `feature-implem`, `refactor` → `refactor-implem`, `tech` → `tech-implem`. Les invocations changent en conséquence : `/workflow:feature` → `/workflow:feature-implem`, `/workflow:refactor` → `/workflow:refactor-implem`, `/workflow:tech` → `/workflow:tech-implem`. Mise à jour propagée aux agents (`autopilot`, `report-and-sync`), au sommaire `/workflow:help` (diagrammes ASCII redessinés, tableaux de tracks), aux templates de cadrage, à `_detection.md`, aux skills `import-external` / `test-scenario` / `review`, au README et à `documentation/workflow.md`. **Action requise** : les utilisateurs qui invoquaient `/workflow:feature`, `/workflow:refactor` ou `/workflow:tech` doivent utiliser les nouveaux noms suffixés `-implem`.
+
 ## [2.2.0] - 2026-05-31
 
 ### Added

@@ -5,7 +5,7 @@
 > ADR : `docs/adr/<NNNN>-<slug>.md` <!-- guide: optionnel, supprimer la ligne si pas d'ADR associée -->
 
 <!--
-guide: Plan d'un refacto (préfixe `-r-`). Consommé par `/workflow:refactor` (étape build) et `/workflow:sync`.
+guide: Plan d'un refacto (préfixe `-r-`). Consommé par `/workflow:refactor-implem` (étape build) et `/workflow:sync`.
 Un refacto ne change PAS le comportement externe. Si du métier change, c'est une feature.
 Le pitch n'existe pas pour un refacto : ce plan porte à la fois la motivation et le détail.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.

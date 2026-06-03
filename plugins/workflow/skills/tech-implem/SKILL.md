@@ -1,5 +1,5 @@
 ---
-name: tech
+name: tech-implem
 description: Exécute une évolution technique cadrée — capture la baseline AVANT, kill switch à chaud, applique le plan étape par étape avec mesure d'impact et non-régression. Prérequis un `plan.md` sous `docs/story/<NNN>-t-<slug>/`.
 user_invocable: true
 disable-model-invocation: true

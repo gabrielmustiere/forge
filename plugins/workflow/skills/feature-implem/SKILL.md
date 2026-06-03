@@ -1,5 +1,5 @@
 ---
-name: feature
+name: feature-implem
 description: Implémente une feature depuis un plan technique validé — sous-tâches trackées, qualité continue (lint, types, tests), checkpoints humains avant choix structurants. Prérequis un `plan.md` sous `docs/story/<NNN>-f-<slug>/`.
 user_invocable: true
 disable-model-invocation: true

@@ -4,7 +4,7 @@
 > Stack : symfony
 
 <!--
-guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Consommé par `/workflow:feature` (étape build) et `/workflow:sync`.
+guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Consommé par `/workflow:feature-implem` (étape build) et `/workflow:sync`.
 Le pitch décrit l'intention métier ; ce fichier décrit le COMMENT. Tout ce qui touche au code, aux entités, aux services, aux migrations.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
@@ -133,7 +133,7 @@ Attributs au niveau classe :
 
 ## Questions ouvertes
 
-> _Skill : décisions techniques non tranchées au moment du plan. À trancher en `/workflow:feature` build ou à l'implémentation. Annoter `→ tranché : <choix>` après coup. Reproduire la même question dans le pitch si elle a une dimension métier._
+> _Skill : décisions techniques non tranchées au moment du plan. À trancher en `/workflow:feature-implem` build ou à l'implémentation. Annoter `→ tranché : <choix>` après coup. Reproduire la même question dans le pitch si elle a une dimension métier._
 
 - **<Question 1>** : <énoncé + options techniques>.
 - **<Question 2>** : <…>.

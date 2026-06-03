@@ -1,6 +1,6 @@
 # Détection du stack projet
 
-Procédure partagée par `/feature-pitch`, `/feature-plan`, `/feature`, `/refactor-plan`, `/refactor`, `/tech-plan`, `/tech`, `/review` pour identifier le framework en usage et charger les bonnes règles. À faire **au démarrage** de ces skills, avant toute proposition technique.
+Procédure partagée par `/feature-pitch`, `/feature-plan`, `/feature-implem`, `/refactor-plan`, `/refactor-implem`, `/tech-plan`, `/tech-implem`, `/review` pour identifier le framework en usage et charger les bonnes règles. À faire **au démarrage** de ces skills, avant toute proposition technique.
 
 ## Raccourci : `docs/stack.md` (source riche prioritaire)
 
@@ -34,7 +34,7 @@ Les références (`symfony.md`, `sylius.md`) sont dans le **même dossier que ce
 
 ## Skills dédiés disponibles (stack Symfony / Sylius)
 
-Quand le stack détecté est `symfony` ou `sylius`, les skills du plugin `symfony` sont disponibles pour approfondir les opérations Doctrine. Les skills du workflow (`/feature`, `/refactor`, `/tech`, `/review`) peuvent y **rediriger** l'utilisateur plutôt que de détailler ces opérations inline — elles restent focalisées sur le pipeline :
+Quand le stack détecté est `symfony` ou `sylius`, les skills du plugin `symfony` sont disponibles pour approfondir les opérations Doctrine. Les skills du workflow (`/feature-implem`, `/refactor-implem`, `/tech-implem`, `/review`) peuvent y **rediriger** l'utilisateur plutôt que de détailler ces opérations inline — elles restent focalisées sur le pipeline :
 
 | Besoin pendant une sous-tâche                               | Skill à suggérer                 |
 |-------------------------------------------------------------|----------------------------------|
@@ -42,7 +42,7 @@ Quand le stack détecté est `symfony` ou `sylius`, les skills du plugin `symfon
 | Écrire/réviser une requête repository (DQL, QueryBuilder)    | `/symfony:doctrine-query`        |
 | Générer, relire, exécuter ou annuler une migration           | `/symfony:doctrine-migration`    |
 
-Règle : quand une sous-tâche de `/feature` ou `/refactor` touche principalement un de ces trois domaines, proposer à l'utilisateur d'invoquer la skill dédiée (« Cette sous-tâche est centrée sur le mapping — tu veux enchaîner via `/symfony:doctrine-entity` ? ») plutôt que de tout dérouler en ligne. Les skills du pipeline gardent leur orchestration (checkpoints, QA, report), les skills `symfony` fournissent la procédure précise.
+Règle : quand une sous-tâche de `/feature-implem` ou `/refactor-implem` touche principalement un de ces trois domaines, proposer à l'utilisateur d'invoquer la skill dédiée (« Cette sous-tâche est centrée sur le mapping — tu veux enchaîner via `/symfony:doctrine-entity` ? ») plutôt que de tout dérouler en ligne. Les skills du pipeline gardent leur orchestration (checkpoints, QA, report), les skills `symfony` fournissent la procédure précise.
 
 ## Résumé à afficher
 

@@ -25,7 +25,7 @@ specs/003-checkout-express/
 |------------------|----------------------------------------|------|
 | `spec.md`        | `pitch.md`                              | Renommer simplement, garder le contenu intégral. La structure « User Story / Acceptance Scenarios » de Spec Kit est compatible avec le `pitch.md` du workflow. |
 | `plan.md`        | `plan.md`                               | Conserver le nom. Les sections « Technical Context », « Architecture », « Phases » deviennent les sections du plan technique. |
-| `tasks.md`       | `_archive/spec-kit/<NNN>-<slug>/tasks.md` | Pas d'équivalent direct dans le workflow (qui exécute les tâches via `/feature`). On archive pour référence. |
+| `tasks.md`       | `_archive/spec-kit/<NNN>-<slug>/tasks.md` | Pas d'équivalent direct dans le workflow (qui exécute les tâches via `/feature-implem`). On archive pour référence. |
 | `checklist.md`   | `_archive/spec-kit/<NNN>-<slug>/checklist.md` | Idem — archive. |
 | `research.md`    | `_archive/spec-kit/<NNN>-<slug>/research.md` | Idem. |
 
