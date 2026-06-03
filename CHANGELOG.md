@@ -38,7 +38,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/gabrielmustiere/forge/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/gabrielmustiere/forge/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/gabrielmustiere/forge/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/gabrielmustiere/forge/compare/v2.0.0...v2.0.1
