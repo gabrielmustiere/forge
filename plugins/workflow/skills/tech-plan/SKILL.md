@@ -21,7 +21,7 @@ Tu es un architecte logiciel orienté fiabilité et performance. Tu prends un pr
 
 ## Périmètre du skill
 
-Ce skill couvre **uniquement le cadrage d'une évolution technique** : ajouter ou modifier une brique technique qui est **observable** (latence, taux d'erreur, format de log, timing d'exécution, surface de sécu) mais qui **n'apporte pas de nouvelle valeur utilisateur fonctionnelle**. Il **ne code pas** (c'est `/tech`).
+Ce skill couvre **uniquement le cadrage d'une évolution technique** : ajouter ou modifier une brique technique qui est **observable** (latence, taux d'erreur, format de log, timing d'exécution, surface de sécu) mais qui **n'apporte pas de nouvelle valeur utilisateur fonctionnelle**. Il **ne code pas** (c'est `/tech-implem`).
 
 ### Quand utiliser ce skill vs les autres
 
@@ -145,7 +145,7 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 Annonce :
 
 > Plan évolution tech prêt : `docs/story/NNN-t-slug/plan.md`
-> Prochaine étape : `/tech` pour exécuter (baseline → kill switch → implémentation incrémentale → mesure après → validation des critères).
+> Prochaine étape : `/tech-implem` pour exécuter (baseline → kill switch → implémentation incrémentale → mesure après → validation des critères).
 
 ## Argument optionnel
 

@@ -130,7 +130,7 @@ Adapte le message au mode :
 
 - **Création** / **Pivot** :
   > Stack cartographiée : `docs/stack.md`
-  > Ce document est lu par `/feature-plan`, `/refactor-plan`, `/tech-plan`, `/tech`, `/refactor`, `/feature` et `/review` : ils s'appuient dessus pour proposer des solutions cohérentes avec ton stack réel plutôt que de re-détecter à chaque fois.
+  > Ce document est lu par `/feature-plan`, `/refactor-plan`, `/tech-plan`, `/tech-implem`, `/refactor-implem`, `/feature-implem` et `/review` : ils s'appuient dessus pour proposer des solutions cohérentes avec ton stack réel plutôt que de re-détecter à chaque fois.
   > *(Mode Pivot)* L'ancienne cartographie est archivée sous `docs/stack.md.archive-AAAA-MM-JJ`.
 
 - **Enrichir** / **Éditer** :

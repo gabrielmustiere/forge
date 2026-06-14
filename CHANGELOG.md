@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-06-14
+
+### Fixed
+- Correction des références résiduelles aux anciens noms de tracks (`/feature`, `/refactor`, `/tech`) oubliées lors du renommage `-implem` de la v3.0.0 : les `SKILL.md` des skills de cadrage `feature-plan`, `refactor-plan` et `tech-plan` (mentions « il ne code pas », « prochaine étape », verrou caractérisation) pointaient encore vers les anciennes invocations, ainsi que `adr`, `stack` et la référence `references/stacks/symfony.md`. Toutes les invocations terminales pointent désormais vers `/feature-implem`, `/refactor-implem` et `/tech-implem`.
+
 ## [3.0.0] - 2026-06-03
 
 ### Changed

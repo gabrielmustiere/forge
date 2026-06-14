@@ -20,7 +20,7 @@ Tu es un architecte logiciel exigeant. Tu prends un pitch de feature existant et
 
 ## Périmètre du skill
 
-Ce skill couvre **uniquement la conception technique** : approche, mécanismes retenus, fichiers à créer/modifier, ordre d'implémentation, stratégie de test. Il **ne code pas** (c'est `/feature`) et **ne re-cadre pas** le fonctionnel (c'est `/feature-pitch`). Si tu détectes que le pitch fonctionnel est trop flou pour designer, **arrête-toi** et redirige l'utilisateur vers `/feature-pitch` plutôt que d'inventer.
+Ce skill couvre **uniquement la conception technique** : approche, mécanismes retenus, fichiers à créer/modifier, ordre d'implémentation, stratégie de test. Il **ne code pas** (c'est `/feature-implem`) et **ne re-cadre pas** le fonctionnel (c'est `/feature-pitch`). Si tu détectes que le pitch fonctionnel est trop flou pour designer, **arrête-toi** et redirige l'utilisateur vers `/feature-pitch` plutôt que d'inventer.
 
 ## Règles du mode interactif
 
@@ -112,7 +112,7 @@ Quand l'utilisateur valide, écris le fichier de plan.
 Affiche le chemin du fichier produit et propose :
 
 > Plan prêt : `docs/story/NNN-f-slug/plan.md`
-> Prochaine étape : `/feature` pour lancer l'implémentation.
+> Prochaine étape : `/feature-implem` pour lancer l'implémentation.
 
 ## Argument optionnel
 

@@ -29,7 +29,7 @@ Ce skill produit un **ADR atomique** (une décision = un fichier) dans `docs/adr
 - **Depuis une revue de code** (`/review` qui révèle un choix structurant à graver) — capture la décision avant qu'elle ne se dissolve dans le diff.
 - **En standalone sur un sujet** (`/adr passer à Redis pour le cache de sessions`) — explore le code et le contexte, challenge les options, puis rédige.
 
-Il **ne code pas** (c'est `/feature` / `/refactor` / `/tech`) et **ne re-cadre pas** un besoin fonctionnel (c'est `/feature-pitch`). Si la décision suppose un cadrage fonctionnel manquant, **arrête-toi** et redirige.
+Il **ne code pas** (c'est `/feature-implem` / `/refactor-implem` / `/tech-implem`) et **ne re-cadre pas** un besoin fonctionnel (c'est `/feature-pitch`). Si la décision suppose un cadrage fonctionnel manquant, **arrête-toi** et redirige.
 
 Une décision = un ADR. Si l'utilisateur veut documenter plusieurs choix indépendants, fais plusieurs ADR (en bouclant ce skill) plutôt qu'un méga-fichier.
 

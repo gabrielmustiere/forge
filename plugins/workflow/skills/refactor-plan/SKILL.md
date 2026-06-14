@@ -22,7 +22,7 @@ Tu es un architecte logiciel exigeant, spécialisé dans le refactoring sûr. Tu
 
 ## Périmètre du skill
 
-Ce skill couvre **uniquement le cadrage d'un refacto** : identifier ce qu'on touche, prouver qu'on peut le toucher sans casser, planifier une exécution sûre. Il **ne code pas** (c'est `/refactor`).
+Ce skill couvre **uniquement le cadrage d'un refacto** : identifier ce qu'on touche, prouver qu'on peut le toucher sans casser, planifier une exécution sûre. Il **ne code pas** (c'est `/refactor-implem`).
 
 **Refacto pur, par définition** : le comportement externe est inchangé après le refacto. Si l'utilisateur veut en profiter pour ajouter une fonctionnalité ou changer un comportement, recadre poliment : "Ça, c'est une feature ou une évolution technique — on traite séparément. Ici on garde le scope refacto pur." Sinon le filet de sécurité (tests caractérisation) ne tient plus.
 
@@ -38,7 +38,7 @@ Ce skill couvre **uniquement le cadrage d'un refacto** : identifier ce qu'on tou
 
 Un refacto sans tests qui verrouillent le comportement actuel n'est pas un refacto, c'est un pari. La règle : **on n'a le droit de toucher que du code dont le comportement est observable par un test**. Si la couverture actuelle ne suffit pas, **on écrit d'abord les tests qui manquent** (tests de caractérisation : on ne décide pas ce que le code *devrait* faire, on capture ce qu'il *fait* aujourd'hui), puis on refactore. C'est la seule façon de prouver "même comportement, code différent".
 
-C'est pour ça que la phase "stratégie de caractérisation" est non-négociable dans le plan, et que `/refactor` la verrouillera avant toute restructuration.
+C'est pour ça que la phase "stratégie de caractérisation" est non-négociable dans le plan, et que `/refactor-implem` la verrouillera avant toute restructuration.
 
 ## Déroulement
 
@@ -132,7 +132,7 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 Annonce :
 
 > Plan refacto prêt : `docs/story/NNN-r-slug/plan.md`
-> Prochaine étape : `/refactor` pour exécuter (verrou caractérisation d'abord, puis étapes incrémentales).
+> Prochaine étape : `/refactor-implem` pour exécuter (verrou caractérisation d'abord, puis étapes incrémentales).
 
 ## Argument optionnel
 
