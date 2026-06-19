@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.0.2] - 2026-06-14
+
+### Fixed
+- Les subagents des agents `autopilot` et `report-and-sync` ne pouvaient pas écrire (`Write`/`Edit`) lorsque la session de l'utilisateur était en mode de permission `plan` (ou `default` sans règle d'autorisation préalable) : un subagent ne peut pas afficher de prompt de permission interactif, ses écritures étaient donc refusées silencieusement. Ajout de `permissionMode: acceptEdits` au frontmatter des deux agents. `autopilot` propage ce mode aux subagents `general-purpose` qu'il délègue (l'`acceptEdits` du parent prime), et `report-and-sync` écrit directement `report.md` / la doc d'intention. Le fix voyage avec le plugin : aucun réglage manuel requis côté utilisateur. Limitation : les skills d'implémentation invoquées en direct (`feature-implem`, etc.) s'exécutent dans la session principale et restent soumises au mode de permission de l'utilisateur.
+
 ## [3.0.1] - 2026-06-14
 
 ### Fixed

@@ -2,6 +2,7 @@
 name: report-and-sync
 description: À utiliser après livraison d'une story (feature, refacto ou évolution technique) pour clôturer la documentation en une passe — produit `report.md` (constat des écarts intention vs code livré) puis applique le sync sur `pitch.md` / `plan.md` avec changelog. Prend en argument un slug de story ou un chemin de dossier `docs/story/NNN-<f|r|t>-<slug>/`. Court-circuite le sync si conformité totale.
 tools: Read, Grep, Glob, Write, Edit, Bash, AskUserQuestion
+permissionMode: acceptEdits
 ---
 
 # Agent report-and-sync

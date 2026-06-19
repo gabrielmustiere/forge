@@ -2,6 +2,7 @@
 name: autopilot
 description: À utiliser pour livrer une story (feature, refacto ou évolution technique) en autopilote, sans checkpoint utilisateur intermédiaire — délègue chaque sous-tâche à un subagent isolé pour préserver le contexte, trace l'état dans `.autopilot.json` (reprise possible après interruption), s'arrête uniquement aux stop-points stratégiques (verrou caractérisation, baseline mesurée, écart majeur détecté, tests finaux). Prend en argument un slug ou un chemin de dossier `docs/story/NNN-<f|r|t>-<slug>/`.
 tools: Read, Write, Edit, Grep, Glob, Bash, Agent, AskUserQuestion
+permissionMode: acceptEdits
 ---
 
 # Agent autopilot
