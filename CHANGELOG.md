@@ -7,7 +7,7 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-## [3.0.2] - 2026-06-14
+## [3.1.0] - 2026-06-19
 
 ### Fixed
 - Les subagents des agents `autopilot` et `report-and-sync` ne pouvaient pas écrire (`Write`/`Edit`) lorsque la session de l'utilisateur était en mode de permission `plan` (ou `default` sans règle d'autorisation préalable) : un subagent ne peut pas afficher de prompt de permission interactif, ses écritures étaient donc refusées silencieusement. Ajout de `permissionMode: acceptEdits` au frontmatter des deux agents. `autopilot` propage ce mode aux subagents `general-purpose` qu'il délègue (l'`acceptEdits` du parent prime), et `report-and-sync` écrit directement `report.md` / la doc d'intention. Le fix voyage avec le plugin : aucun réglage manuel requis côté utilisateur. Limitation : les skills d'implémentation invoquées en direct (`feature-implem`, etc.) s'exécutent dans la session principale et restent soumises au mode de permission de l'utilisateur.
@@ -48,7 +48,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/gabrielmustiere/forge/compare/v3.0.1...v3.1.0
+[3.0.1]: https://github.com/gabrielmustiere/forge/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/gabrielmustiere/forge/compare/v2.2.0...v3.0.0
 [2.2.0]: https://github.com/gabrielmustiere/forge/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/gabrielmustiere/forge/compare/v2.0.1...v2.1.0
