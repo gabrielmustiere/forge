@@ -44,9 +44,11 @@ Si le pitch est trop vague (ex : "améliorer les commandes", "moderniser l'admin
 
 Demande à l'utilisateur de pitcher sa fonctionnalité en une phrase. S'il l'a déjà fait dans son message ou via l'argument optionnel, passe directement à la validation de phase 0 puis au challenge.
 
+**Détection d'un brief amont (`/feature-interview`)** : si l'argument est un slug/numéro de story et qu'un `brief.md` existe dans le dossier correspondant — ou plus largement si `docs/story/*-f-*/` contient un `brief.md` sans `pitch.md` que l'utilisateur désigne — lis-le. Ce brief est un besoin déjà dégrossi par interview (irritant, qui, résultat attendu, reconnaissance du code, zones de flou). Utilise-le comme **pitch initial riche** : tu peux sauter le refus de Phase 0 (le besoin est déjà concret) et attaquer directement le challenge sur les zones de flou que le brief a listées. À la rédaction (Phase 4), **écris `pitch.md` dans CE dossier** (le même que `brief.md`) — n'alloue pas un nouveau numéro, brief et pitch cohabitent dans `NNN-f-<slug>/`.
+
 ### Phase 2 — Détection du stack (contexte pour le challenge)
 
-Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Le pitch produit reste **fonctionnel**, pas technique — mais connaître le stack permet d'orienter les questions de transverses (ex: un projet Sylius suggère de challenger sur multi-channel / multi-thème, un projet Symfony sans e-commerce n'a pas ces axes).
+Si un brief amont a été détecté en Phase 1 et qu'il renseigne un **stack** (section « Reconnaissance du code »), reprends-le directement — `/feature-interview` l'a déjà détecté, inutile de refaire le travail. Sinon, lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Le pitch produit reste **fonctionnel**, pas technique — mais connaître le stack permet d'orienter les questions de transverses (ex: un projet Sylius suggère de challenger sur multi-channel / multi-thème, un projet Symfony sans e-commerce n'a pas ces axes).
 
 Lis aussi le `CLAUDE.md` du projet s'il existe — il contient les conventions et contraintes métier du projet user (découpage en modules, contraintes réglementaires, stakeholders).
 
@@ -113,6 +115,7 @@ Quand l'utilisateur valide, rédige le pitch dans `docs/story/`.
 
 **Choix du dossier** :
 
+- **Brief amont déjà détecté (Phase 1)** : si un `brief.md` produit par `/feature-interview` a été repéré, **réutilise son dossier tel quel** — n'applique PAS l'allocation ci-dessous, le numéro est déjà attribué. Écris simplement `pitch.md` à côté du `brief.md`.
 - Format : `docs/story/NNN-f-slug-de-la-feature/` (préfixe `f-` pour *feature*, NNN = prochain numéro sur 3 chiffres, slug en kebab-case).
 - **Compteur global partagé** avec les refactos (`r-`) et évolutions techniques (`t-`) pour obtenir une timeline unique : scanner `docs/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
 - **Collision de slug** : si le slug proposé existe déjà sous un autre numéro (tous préfixes confondus), demande à l'utilisateur s'il veut **étendre** le dossier existant (et basculer sur ce pitch) ou choisir un slug distinct. Ne jamais écraser un pitch existant sans validation.

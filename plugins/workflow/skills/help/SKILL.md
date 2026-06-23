@@ -32,6 +32,11 @@ allowed-tools:
                                     Lu par feature-implem/refactor-implem/tech-implem/review.
 
                         TRACK FEATURE (valeur utilisateur, structurante)
+ (optionnel : besoin flou)
+ ┌───────────────────┐
+ │ feature-interview │┄┐
+ └─────────┬─────────┘ ┊ brief.md
+           ▼           ▼
  ┌───────────────┐   ┌──────────────┐   ┌────────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
  │ feature-pitch │──▶│ feature-plan │──▶│ feature-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
  └───────┬───────┘   └───────┬──────┘   └────────┬───────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
@@ -139,15 +144,16 @@ En parallèle des phases vision/backlog, cartographier **une fois** la stack tec
 
 Pour tout changement qui introduit une nouvelle fonctionnalité ou modifie un comportement observable par l'utilisateur.
 
-| #  | Skill              | Rôle                                                         | Produit                                      |
-|----|--------------------|--------------------------------------------------------------|----------------------------------------------|
-| 1  | `/feature-pitch`   | Cadrer et challenger une fonctionnalité                      | `docs/story/NNN-f-slug/pitch.md`             |
-| 2  | `/feature-plan`    | Concevoir la solution technique à partir du pitch            | `docs/story/NNN-f-slug/plan.md`              |
-| 3  | `/feature-implem`  | Implémenter sous-tâche par sous-tâche avec QA continue       | Code + migrations + tests                    |
-| 4  | `/review`          | Code review (sécu, perf, qualité, conformité plan)           | `docs/story/NNN-f-slug/review.md`            |
-| 5  | `/commit`          | Commit Conventional Commits en français + push               | Commit                                       |
-| 6  | `/report`          | Documenter ce qui a été fait vs ce qui était prévu           | `docs/story/NNN-f-slug/report.md`            |
-| 7  | `/sync`            | Réaligner pitch et plan avec la réalité du code              | Mise à jour `pitch.md` + `plan.md`           |
+| #  | Skill                | Rôle                                                                             | Produit                            |
+|----|----------------------|----------------------------------------------------------------------------------|------------------------------------|
+| 0* | `/feature-interview` | *(optionnel)* Découvrir un besoin flou par interview avant de pouvoir le pitcher | `docs/story/NNN-f-slug/brief.md`   |
+| 1  | `/feature-pitch`     | Cadrer et challenger une fonctionnalité (lit le `brief.md` amont s'il existe)    | `docs/story/NNN-f-slug/pitch.md`   |
+| 2  | `/feature-plan`      | Concevoir la solution technique à partir du pitch                                | `docs/story/NNN-f-slug/plan.md`    |
+| 3  | `/feature-implem`    | Implémenter sous-tâche par sous-tâche avec QA continue                           | Code + migrations + tests          |
+| 4  | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | `docs/story/NNN-f-slug/review.md`  |
+| 5  | `/commit`            | Commit Conventional Commits en français + push                                   | Commit                             |
+| 6  | `/report`            | Documenter ce qui a été fait vs ce qui était prévu                               | `docs/story/NNN-f-slug/report.md`  |
+| 7  | `/sync`              | Réaligner pitch et plan avec la réalité du code                                  | Mise à jour `pitch.md` + `plan.md` |
 
 ## Track refacto — Comportement figé, code restructuré
 

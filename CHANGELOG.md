@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-06-23
+
+### Added
+- Skill `feature-interview` (amont **optionnel** du track feature) : interview de découverte pour les besoins trop flous pour être pitchés directement — exactement les cas que `/feature-pitch` refuse aujourd'hui en Phase 0 (« améliorer les commandes », « il manque un truc côté relances »). Posture inverse du pitch : bienveillante, sans jargon, ne refuse jamais le vague (c'est la matière de départ). Déroule une interview guidée (exemple récent concret, 5 pourquoi, baguette magique, contraste, reformulation-miroir — détaillée dans `references/techniques.md`) ancrée sur une **reconnaissance ciblée du code existant** (détection stack + grep/glob autour du vocabulaire métier) pour éviter de réinventer une brique native. Produit `docs/story/NNN-f-<slug>/brief.md` (besoin en une phrase, irritant, qui, résultat attendu, reconnaissance code, hors-sujet entrevu, zones de flou). Le brief alimente `/feature-pitch`, qui le détecte et le reprend comme pitch initial riche (sautant son refus de Phase 0) en écrivant `pitch.md` dans le même dossier `NNN-f-<slug>/`. Compteur global partagé avec features/refactos/évolutions techniques. Câblage propagé à `/feature-pitch` (détection du brief amont), au sommaire `/workflow:help` (diagramme du track feature + tableau) et à `documentation/workflow.md`.
+
 ## [3.1.0] - 2026-06-19
 
 ### Fixed

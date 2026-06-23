@@ -1,6 +1,6 @@
 # Inventaire — plugin `workflow`
 
-Pipeline de développement stack-agnostique (24 skills).
+Pipeline de développement stack-agnostique (25 skills).
 
 | Skill | Rôle |
 | --- | --- |
@@ -9,7 +9,8 @@ Pipeline de développement stack-agnostique (24 skills).
 | [`product-backlog`](../plugins/workflow/skills/product-backlog/SKILL.md) | **Phase 0.5** — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3 → `docs/product-backlog.md`. Document vivant, 4 modes (Création / Enrichir / Éditer / Pivot) avec changelog. |
 | [`stack`](../plugins/workflow/skills/stack/SKILL.md) | **Phase 0 technique** — cartographie la stack complète (langages, backend, frontend, données, ops, devops/CI) → `docs/stack.md`. Chaque techno prouvée par un fichier source, trous comblés par questions ou marqués `_non renseigné_`. Document vivant, 4 modes avec changelog, lu en priorité par les tracks technique (`feature-implem`/`refactor-implem`/`tech-implem`/`review`). |
 | [`claude-md`](../plugins/workflow/skills/claude-md/SKILL.md) | Génère ou met à jour le `CLAUDE.md` à la racine : analyse du codebase (nature, stack, architecture, commandes, conventions) prouvée par fichier — aucune commande inventée — et injection des 4 principes comportementaux Karpathy (réflexion, simplicité, changements chirurgicaux, objectif vérifiable). Réutilise `docs/stack.md` et `docs/vision.md` s'ils existent. Modes Création / Mise à jour, validation avant écriture. |
-| [`feature-pitch`](../plugins/workflow/skills/feature-pitch/SKILL.md) | Atelier de cadrage d'une idée de feature → `pitch.md` |
+| [`feature-interview`](../plugins/workflow/skills/feature-interview/SKILL.md) | **Amont optionnel du track feature** — interview de découverte d'un besoin flou (irritant, qui, résultat attendu) ancrée sur une reconnaissance ciblée du code existant → `brief.md`. Alimente `feature-pitch`. |
+| [`feature-pitch`](../plugins/workflow/skills/feature-pitch/SKILL.md) | Atelier de cadrage d'une idée de feature → `pitch.md` (lit le `brief.md` amont s'il existe) |
 | [`feature-plan`](../plugins/workflow/skills/feature-plan/SKILL.md) | Plan technique d'une feature cadrée → `plan.md` |
 | [`feature-implem`](../plugins/workflow/skills/feature-implem/SKILL.md) | Implémentation guidée à partir du plan |
 | [`refactor-plan`](../plugins/workflow/skills/refactor-plan/SKILL.md) | Cadrage refacto + tests de caractérisation → `plan.md` |
