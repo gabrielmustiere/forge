@@ -37,6 +37,20 @@ Ce skill couvre **uniquement la découverte du besoin** : faire émerger le prob
 
 Tu dégrossis, tu ne tranches pas. Le brief reste une **proposition à challenger**, pas une décision.
 
+## Règle d'or — le brief est 100% fonctionnel
+
+Tu **t'appuies sur le code** pour comprendre le produit et poser de bonnes questions, mais **rien de technique n'entre dans le brief**. Le brief décrit un *besoin* et un *produit vu par son utilisateur*, jamais une implémentation.
+
+Le brief ne contient **jamais** : nom d'entité ou de classe, nom de service, chemin de fichier, nom de framework ou de bundle, nom de table — ni même le stack. Tout ça reste dans ta tête (ça t'aide à questionner) ou ira plus tard dans `/feature-plan` (la conception technique, deux étapes plus loin).
+
+**La règle de traduction** : chaque fois que la reconnaissance du code te révèle une mécanique technique, traduis-la en **capacité vécue par l'utilisateur** avant qu'elle approche le brief.
+
+- Le code dit `class Cart` + `CheckoutController` → le brief dit « le client peut déjà remplir un panier et passer commande ».
+- Le code dit un cron `SendReminders` + une table `email_log` → le brief dit « le produit envoie déjà des emails automatiques, mais aucune relance de panier abandonné ».
+- Le code dit `composer.json: sylius/sylius` → le brief n'en dit **rien** ; ça te sert juste à savoir que tu parles d'un e-commerce et à orienter tes questions.
+
+Pourquoi : le brief est lu par un humain qui cadre un besoin et par `/feature-pitch` qui raisonne fonctionnel. Un nom d'entité au milieu du besoin parasite les deux — il pré-tranche une solution avant même que le problème soit posé.
+
 ## Posture — la grande différence avec `/feature-pitch`
 
 `/feature-pitch` est exigeant : il challenge, il refuse le flou, il assume que l'utilisateur sait articuler son idée. **Ici, c'est l'inverse.** L'utilisateur ne sait pas articuler — c'est le point de départ normal, pas un défaut. Donc :
@@ -64,15 +78,15 @@ Capte le besoin brut, **tel qu'il vient**, même réduit à un mot ou un agaceme
 
 Ne juge pas, ne reformule pas encore en feature. Accuse réception et passe à la reconnaissance.
 
-### Phase 1 — Reconnaissance ciblée du code
+### Phase 1 — Reconnaissance ciblée du code (pour comprendre, pas pour documenter)
 
-Avant de questionner, ancre-toi dans l'existant pour que tes questions soient pertinentes et pour ne pas faire réinventer une brique qui existe déjà.
+Avant de questionner, lis le code pour **comprendre le produit** : tes questions seront plus justes, et tu éviteras de faire imaginer un besoin que le produit couvre déjà. Tout ce que tu apprends ici est de la **connaissance de fond** — tu la traduis en fonctionnel avant qu'elle entre dans le brief (cf. règle d'or).
 
-1. **Stack + conventions** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis le `CLAUDE.md` racine s'il existe. **Note le stack détecté et sa source** : il sera consigné dans le brief (section « Reconnaissance du code ») pour que `/feature-pitch` le réutilise sans re-détecter.
-2. **Recherche autour du besoin** : à partir des mots du besoin brut, lance une reconnaissance **ciblée** (pas un audit exhaustif). Repère le vocabulaire métier (ex: besoin « relances panier » → cherche `Cart`, `Checkout`, `Order`, templates de tunnel, services/cron liés via `Grep`/`Glob`). Objectif : savoir si une brique proche existe déjà, ce qu'elle fait, et où le besoin se rattacherait.
+1. **Comprendre le type de produit** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis le `CLAUDE.md` racine s'il existe. But : savoir **à quel genre de produit** tu as affaire (e-commerce, back-office, SaaS multi-tenant…) pour adapter ton vocabulaire et tes questions. Ces informations techniques **n'entrent pas dans le brief**.
+2. **Repérer ce que le produit fait déjà autour du besoin** : à partir des mots du besoin brut, lance une reconnaissance **ciblée** (pas un audit). Cherche le vocabulaire métier dans le code pour découvrir les **capacités déjà offertes** (ex: besoin « relances panier » → explore ce que le code fait autour de panier / commande / email pour savoir si le produit gère déjà un panier, un tunnel de commande, des emails automatiques). **Traduis chaque trouvaille en capacité utilisateur** — c'est cette version fonctionnelle qui nourrit tes questions et le brief, jamais les noms de classes, services ou fichiers.
 3. **Vision / backlog si présents** : si `docs/vision.md` ou `docs/product-backlog.md` existent, survole-les pour situer le besoin dans le périmètre connu (sans en faire un challenge d'alignement — ça, c'est le job du pitch).
 
-Garde tes trouvailles en tête : elles nourrissent les questions de l'interview (« j'ai vu qu'il y a déjà un système de X — c'est de ça que tu parles, ou d'autre chose ? ») et alimentent la section « reconnaissance du code » du brief. Reste léger : si le besoin est encore trop flou pour cibler quoi que ce soit, note-le et avance — tu reviendras chercher après l'interview.
+Garde tes trouvailles en tête, **déjà traduites en fonctionnel** : elles nourrissent les questions de l'interview (« j'ai vu que le produit gère déjà X — c'est de ça que tu parles, ou d'autre chose ? ») et alimentent la section « Ce que le produit fait déjà » du brief. Reste léger : si le besoin est encore trop flou pour cibler quoi que ce soit, note-le et avance — tu reviendras chercher après l'interview.
 
 ### Phase 2 — Interview guidée
 
@@ -91,7 +105,7 @@ Itère par petits tours. Après chaque tour, reformule-miroir et laisse corriger
 
 Avant d'écrire quoi que ce soit, restitue à l'oral ta compréhension complète, en clair :
 
-> Voilà ce que j'ai compris : **<besoin en une phrase>**. Ça touche **<qui>**, le déclencheur c'est **<irritant>**, et la situation résolue ressemblerait à **<résultat>**. J'ai aussi repéré dans le code que **<reconnaissance>**. C'est fidèle, ou il y a des choses à corriger ?
+> Voilà ce que j'ai compris : **<besoin en une phrase>**. Ça touche **<qui>**, le déclencheur c'est **<irritant>**, et la situation résolue ressemblerait à **<résultat>**. J'ai aussi vu que le produit te permet déjà de **<capacité déjà en place, en clair>**. C'est fidèle, ou il y a des choses à corriger ?
 
 Laisse l'utilisateur amender. Boucle jusqu'à validation explicite. **Ne pas écrire le fichier avant ce « oui ».**
 

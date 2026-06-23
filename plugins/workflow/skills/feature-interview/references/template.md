@@ -4,6 +4,7 @@
 
 <!--
 guide: Ce fichier capture un besoin flou dégrossi par interview. Pas de solution technique, pas de cadrage formel (ni user stories rigoureuses, ni règles métier, ni critères d'acceptation — c'est le job de /feature-pitch).
+RÈGLE D'OR — ce brief est 100% fonctionnel : AUCUN nom d'entité/classe, de service, de fichier, de framework/bundle, de table, ni de stack. Toute trouvaille technique de la reconnaissance du code se traduit en capacité vécue par l'utilisateur avant d'entrer ici (« class Cart » → « le client peut remplir un panier »).
 Il est consommé par `/feature-pitch` comme pitch initial riche.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
@@ -34,14 +35,13 @@ Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 
 <Description de la situation résolue, du point de vue de l'utilisateur.>
 
-## Reconnaissance du code existant
+## Ce que le produit fait déjà
 
-> _Skill : ce que la phase 1 a trouvé. Briques proches déjà présentes, ce qu'elles font, où le besoin se rattacherait. Surtout : faut-il étendre quelque chose d'existant plutôt que réinventer ? Renseigne le plus factuellement possible (fichiers/services repérés)._
+> _Skill : la phase 1 a lu le code, mais on ne note ici que des **capacités vues par l'utilisateur** — ce que le produit permet déjà de faire autour du besoin, en clair. Jamais de nom d'entité, de service, de fichier ni de stack (cf. règle d'or). Sert à `/feature-pitch` pour reformuler le besoin en extension de l'existant plutôt qu'en réinvention._
 
-- **Stack** : <symfony / sylius / inconnu — et la source : `docs/stack.md`, `composer.json`, etc.>. _Renseigner toujours : `/feature-pitch` le réutilise au lieu de re-détecter._
-- **Briques proches repérées** : <entité / service / écran / brique native du framework — fichier si connu>.
-- **Piste extension vs réinvention** : <le besoin semble une extension de X / rien d'existant ne couvre>.
-- _Mettre `_rien de probant trouvé_` si la reconnaissance n'a rien donné (besoin trop neuf ou trop flou à ce stade)._
+- **Déjà possible aujourd'hui** : <capacité offerte, du point de vue utilisateur — ex: « le client peut remplir un panier et passer commande »>.
+- **Pas encore couvert** : <ce qui manque et que le besoin viserait — ex: « aucune relance quand un panier est abandonné »>.
+- _Mettre `_rien de probant trouvé_` si la reconnaissance n'a rien donné (besoin trop neuf, ou trop flou à ce stade)._
 
 ## Ce que ce n'est PAS
 

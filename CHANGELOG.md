@@ -7,6 +7,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Changed
+- `feature-interview` : le `brief.md` produit est désormais explicitement **100% fonctionnel**. La reconnaissance du code reste (elle informe les questions et la compréhension du produit), mais toute trouvaille technique est traduite en capacité vécue par l'utilisateur avant d'entrer dans le brief — plus aucun nom d'entité, de service, de fichier, de framework ni de stack. Ajout d'une « règle d'or » au `SKILL.md` (règle de traduction technique→fonctionnel + exemples), recadrage de la Phase 1 (« comprendre le produit » plutôt que « documenter la technique »), et remplacement de la section « Reconnaissance du code existant » du template par « Ce que le produit fait déjà » (capacités vues par l'utilisateur). Conséquence : le stack n'est plus transporté par le brief — l'optimisation de réutilisation par `/feature-pitch` introduite en 3.2.0 est retirée, le pitch re-détecte le stack lui-même.
+
 ## [3.2.0] - 2026-06-23
 
 ### Added
