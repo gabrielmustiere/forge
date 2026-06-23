@@ -32,9 +32,9 @@ PHASE 0 (une fois, documents vivants)
   stack            → docs/stack.md             (langages, infra, CI — phase 0 technique)
 
 TRACK selon le changement
-  Feature (user-facing)        : feature-pitch → feature-plan → feature
-  Refacto (comportement figé)  : refactor-plan → refactor
-  Tech (perf/sécu/observabilité) : tech-plan → tech
+  Feature (user-facing)        : (feature-interview) → feature-pitch → feature-plan → feature-implem
+  Refacto (comportement figé)  : refactor-plan → refactor-implem
+  Tech (perf/sécu/observabilité) : tech-plan → tech-implem
 
 CLÔTURE (commune aux 3 tracks)
   review → commit → report → sync
@@ -58,6 +58,7 @@ Perdu en cours de route ? `/workflow:help` est le GPS du pipeline.
 
 | Skill | Rôle |
 | --- | --- |
+| `/workflow:feature-interview` | *(optionnel, amont)* Découvre un besoin flou par interview guidée, ancrée sur le code existant → `brief.md` (alimente `feature-pitch`) |
 | `/workflow:feature-pitch` | Cadre l'idée et challenge l'alignement (vision/backlog) → `pitch.md` |
 | `/workflow:feature-plan` | Plan technique : archi, données, contrats, migration, tests → `plan.md` |
 | `/workflow:feature-implem` | Implémentation guidée sous-tâche par sous-tâche, QA continue |

@@ -10,7 +10,10 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [3.2.0] - 2026-06-23
 
 ### Added
-- Skill `feature-interview` (amont **optionnel** du track feature) : interview de découverte pour les besoins trop flous pour être pitchés directement — exactement les cas que `/feature-pitch` refuse aujourd'hui en Phase 0 (« améliorer les commandes », « il manque un truc côté relances »). Posture inverse du pitch : bienveillante, sans jargon, ne refuse jamais le vague (c'est la matière de départ). Déroule une interview guidée (exemple récent concret, 5 pourquoi, baguette magique, contraste, reformulation-miroir — détaillée dans `references/techniques.md`) ancrée sur une **reconnaissance ciblée du code existant** (détection stack + grep/glob autour du vocabulaire métier) pour éviter de réinventer une brique native. Produit `docs/story/NNN-f-<slug>/brief.md` (besoin en une phrase, irritant, qui, résultat attendu, reconnaissance code, hors-sujet entrevu, zones de flou). Le brief alimente `/feature-pitch`, qui le détecte et le reprend comme pitch initial riche (sautant son refus de Phase 0) en écrivant `pitch.md` dans le même dossier `NNN-f-<slug>/`. Compteur global partagé avec features/refactos/évolutions techniques. Câblage propagé à `/feature-pitch` (détection du brief amont), au sommaire `/workflow:help` (diagramme du track feature + tableau) et à `documentation/workflow.md`.
+- Skill `feature-interview` (amont **optionnel** du track feature) : interview de découverte pour les besoins trop flous pour être pitchés directement — exactement les cas que `/feature-pitch` refuse aujourd'hui en Phase 0 (« améliorer les commandes », « il manque un truc côté relances »). Posture inverse du pitch : bienveillante, sans jargon, ne refuse jamais le vague (c'est la matière de départ). Déroule une interview guidée (exemple récent concret, 5 pourquoi, baguette magique, contraste, reformulation-miroir — détaillée dans `references/techniques.md`) ancrée sur une **reconnaissance ciblée du code existant** (détection stack + grep/glob autour du vocabulaire métier) pour éviter de réinventer une brique native. Produit `docs/story/NNN-f-<slug>/brief.md` (besoin en une phrase, irritant, qui, résultat attendu, reconnaissance code, hors-sujet entrevu, zones de flou). Le brief alimente `/feature-pitch`, qui le détecte et le reprend comme pitch initial riche (sautant son refus de Phase 0) en écrivant `pitch.md` dans le même dossier `NNN-f-<slug>/`. Compteur global partagé avec features/refactos/évolutions techniques. Câblage propagé à `/feature-pitch` (détection du brief amont), au sommaire `/workflow:help` (diagramme du track feature + tableau), à `documentation/workflow.md` et au README.
+
+### Fixed
+- README : le diagramme de flux des tracks portait encore les anciens noms d'exécution (`feature`, `refactor`, `tech`), oubliés lors du renommage `-implem` de la v3.0.0 alors que le tableau juste en dessous était déjà à jour. Corrigés en `feature-implem` / `refactor-implem` / `tech-implem`.
 
 ## [3.1.0] - 2026-06-19
 
@@ -53,7 +56,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.1.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/gabrielmustiere/forge/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/gabrielmustiere/forge/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/gabrielmustiere/forge/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/gabrielmustiere/forge/compare/v2.2.0...v3.0.0
