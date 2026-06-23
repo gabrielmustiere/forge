@@ -7,6 +7,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.2.1] - 2026-06-23
+
 ### Changed
 - `feature-interview` : le `brief.md` produit est désormais explicitement **100% fonctionnel**. La reconnaissance du code reste (elle informe les questions et la compréhension du produit), mais toute trouvaille technique est traduite en capacité vécue par l'utilisateur avant d'entrer dans le brief — plus aucun nom d'entité, de service, de fichier, de framework ni de stack. Ajout d'une « règle d'or » au `SKILL.md` (règle de traduction technique→fonctionnel + exemples), recadrage de la Phase 1 (« comprendre le produit » plutôt que « documenter la technique »), et remplacement de la section « Reconnaissance du code existant » du template par « Ce que le produit fait déjà » (capacités vues par l'utilisateur). Conséquence : le stack n'est plus transporté par le brief — l'optimisation de réutilisation par `/feature-pitch` introduite en 3.2.0 est retirée, le pitch re-détecte le stack lui-même.
 
@@ -59,7 +61,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.2.1...HEAD
+[3.2.1]: https://github.com/gabrielmustiere/forge/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/gabrielmustiere/forge/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/gabrielmustiere/forge/compare/v3.0.1...v3.1.0
 [3.0.1]: https://github.com/gabrielmustiere/forge/compare/v3.0.0...v3.0.1
