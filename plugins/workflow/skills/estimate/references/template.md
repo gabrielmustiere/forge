@@ -19,7 +19,7 @@ Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 > _Skill : le résultat en deux lignes, lisible d'un coup d'œil. Somme des phases (le plus probable, hors aléa — médiane, pas borne haute) puis total avec marge. Pour une incertitude élevée, donner une fourchette basse/haute plutôt qu'un point._
 
 - **Somme des phases** — référence (sans IA) : <X> h · avec assistant IA : <Xia> h
-- **Marge d'incertitude** : <faible +15 % | moyenne +30 % | élevée +50 %> — <raison en une phrase>
+- **Marge d'incertitude** : <faible +10 % | moyenne +20 % | élevée +35 %> — <raison en une phrase>
 - **Total à retenir** — sans IA : **<Y> h** · avec IA : **<Yia> h** _(fourchette **<bas>–<haut> h** si incertitude élevée)_
 - **Écart (marge potentielle)** : <Y − Yia> h — la différence entre les deux totaux avec marge.
 

@@ -99,9 +99,9 @@ On applique ensuite **un seul pourcentage global** au total, choisi selon le niv
 
 | Niveau | Marge indicative | Quand l'appliquer |
 |--------|:---:|---|
-| **Faible** | **+15 %** | `plan.md` détaillé, stack et domaine maîtrisés, peu ou pas de transverse, zone de code couverte par des tests, aucune question ouverte majeure. |
-| **Moyenne** | **+30 %** | Pitch clair mais pas encore de plan, **ou** plan avec quelques inconnues ; transverse modéré ; une ou deux questions ouvertes ; zone partiellement testée. |
-| **Élevée** | **+50 % et plus** | `brief.md` seul, zones de flou non tranchées, domaine ou stack peu connus, fort impact transverse, legacy non testé, dépendance externe non maîtrisée. À ce niveau, présenter plutôt une **fourchette** (basse / haute) qu'un point unique. |
+| **Faible** | **+10 %** | `plan.md` détaillé, stack et domaine maîtrisés, peu ou pas de transverse, zone de code couverte par des tests, aucune question ouverte majeure. |
+| **Moyenne** | **+20 %** | Pitch clair mais pas encore de plan, **ou** plan avec quelques inconnues ; transverse modéré ; une ou deux questions ouvertes ; zone partiellement testée. |
+| **Élevée** | **+35 % et plus** | `brief.md` seul, zones de flou non tranchées, domaine ou stack peu connus, fort impact transverse, legacy non testé, dépendance externe non maîtrisée. À ce niveau, présenter plutôt une **fourchette** (basse / haute) qu'un point unique. |
 
 Règles d'usage :
 
