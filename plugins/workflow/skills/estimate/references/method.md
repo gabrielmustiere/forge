@@ -22,10 +22,10 @@ Le principe « tout compris » : on facture la chaîne de livraison entière, pa
 | **Implémentation** | ✅ | ✅ | ✅ | Code, migrations, config. Pour tech : baseline + kill switch. |
 | **Tests** | ✅ | ✅ | ✅ | Tests automatisés + QA manuelle. Refacto : **tests de caractérisation en amont** (poste lourd, souvent oublié). |
 | **Review & corrections** | ✅ | ✅ | ✅ | La review **et** la reprise des remarques. |
-| **Intégration** | ✅ | ✅ | ✅ | Commits, merge, conflits, CI qui repasse. |
 | **Documentation de clôture** | ✅ | ✅ | ✅ | Report + sync, mise à jour de doc. |
-| **Release & déploiement** | ✅ | ✅ | ✅ | Part imputable à la story : changelog, tag, mise en prod, vérif post-déploiement. |
-| **Coordination & échanges** | ✅ | ✅ | ✅ | Réunions, démo, recette client, allers-retours. Le temps le plus invisible. |
+| **Release & déploiement** | ✅ | ✅ | ✅ | **Forfait fixe : 0,5 h (30 min)**, quel que soit le track — changelog, tag, mise en prod, vérif. Ne pas ré-estimer. |
+
+**Contexte solo** : ce workflow est mono-développeur. Pas de phase « Intégration » dédiée (pas de merge multi-contributeurs ni de coordination de CI partagée à facturer comme poste distinct) ni de phase « Coordination & échanges » (réunions/recette ne sont pas suivies comme un poste séparé). La phase **Release & déploiement** est un **forfait fixe de 30 min** : c'est une routine de durée constante, on ne la ré-estime pas et l'IA ne l'accélère pas.
 
 **Spécificités par track à ne pas rater :**
 
@@ -39,7 +39,7 @@ Le principe « tout compris » : on facture la chaîne de livraison entière, pa
 
 Le chiffrage produit **deux colonnes** : le temps de référence (réalisation classique, à la main) et le temps réel quand un assistant de code (type Claude Code) fait le gros de la production. Le second est toujours inférieur ou égal au premier.
 
-Principe directeur : **l'IA accélère ce qui se produit, pas ce qui est humain incompressible.** Le code, les tests, la doc et l'exploration de codebase sont massivement accélérés ; les réunions, la recette client, les arbitrages métier et les validations sont incompressibles. Un facteur d'accélération s'applique donc **par phase**, jamais en bloc sur le total.
+Principe directeur : **l'IA accélère ce qui se produit, pas ce qui est humain incompressible.** Le code, les tests, la doc et l'exploration de codebase sont massivement accélérés ; les arbitrages métier, les validations et la mise en production (forfait fixe) sont incompressibles. Un facteur d'accélération s'applique donc **par phase**, jamais en bloc sur le total.
 
 Barème indicatif — le facteur est le temps *avec IA* rapporté au temps de référence (0,3× = trois fois plus rapide, 1× = aucun gain) :
 
@@ -50,14 +50,12 @@ Barème indicatif — le facteur est le temps *avec IA* rapporté au temps de r�
 | Implémentation | ~0,3–0,4× | Génération de code massive, l'humain pilote et valide. Le plus gros gain. |
 | Tests (auto + QA) | ~0,3–0,4× | Tests générés vite ; la QA exploratoire manuelle reste partiellement humaine. |
 | Review & corrections | ~0,6× | Pré-revue automatique utile, mais la décision et les reprises restent pilotées. |
-| Intégration | ~0,8× | Merge, conflits, CI : peu compressibles. |
 | Documentation de clôture | ~0,3× | Report et sync quasi automatisables. |
-| Release & déploiement | ~0,7× | Changelog automatisable ; mise en prod et vérifs restent manuelles. |
-| Coordination & échanges | ~1× | Réunions, démos, recette client : **aucune accélération**, c'est du temps humain pur. |
+| Release & déploiement | forfait fixe | **0,5 h dans les deux colonnes** — durée constante, aucune accélération. |
 
 Conséquences à garder en tête :
 
-- **Le ratio global n'est jamais celui de l'implémentation seule.** Plus une story est lourde en coordination et recette, moins l'IA déplace l'aiguille sur le total — les phases à ~1× plafonnent le gain.
+- **Le ratio global n'est jamais celui de l'implémentation seule.** Les phases peu accélérables (review, conception) et le forfait release fixe plafonnent le gain sur le total.
 - Le facteur dépend de la **maîtrise de l'outil** par l'utilisateur : un usage rodé tire plus de gain. Demander et ajuster si besoin (surtout sur implem / tests / doc).
 - Ces deux estimations **éclairent une décision de facturation**, elles ne la prennent pas : l'utilisateur choisit la base, et l'écart représente sa marge (ou sa capacité à prendre plus de travail).
 
@@ -113,11 +111,8 @@ Règles d'usage :
 
 Les erreurs qui transforment un devis en perte. Les avoir en tête, c'est la moitié du travail.
 
-- **Ne chiffrer que le code.** L'implémentation est souvent moins de la moitié du temps total une fois cadrage, tests, review, doc, déploiement et échanges comptés. C'est l'erreur n°1.
+- **Ne chiffrer que le code.** L'implémentation est souvent moins de la moitié du temps total une fois cadrage, tests, review, doc et release comptés. C'est l'erreur n°1.
 - **Estimer optimiste.** Le « si tout va bien » n'arrive jamais pour toutes les phases à la fois. On chiffre le réaliste, pas le meilleur cas.
-- **Oublier l'intégration.** Merge, conflits, CI qui casse et qu'on relance : invisible sur le papier, bien réel dans la semaine.
-- **Oublier la recette client et les allers-retours.** Les validations, les « ah mais en fait il faudrait aussi… », les démos : du temps facturable presque toujours absent des devis.
-- **Oublier le déploiement et la vérif post-prod.** La story n'est pas finie quand le code est mergé — elle est finie quand elle tourne en prod et que c'est vérifié.
 - **Ignorer le coût d'apprentissage.** Un mécanisme/lib/zone inconnu se paie en temps d'exploration avant même la première ligne utile.
 - **Confondre estimation et engagement.** Une estimation sans marge devient, aux yeux du client, une promesse. La marge protège la relation autant que la trésorerie.
 

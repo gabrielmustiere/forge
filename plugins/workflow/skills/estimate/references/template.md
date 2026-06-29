@@ -6,8 +6,8 @@
 
 <!--
 guide: Estimation du temps facturable d'une story, toutes phases comprises (pas seulement le code).
-RÈGLE D'OR — tout compris : compter cadrage, implem, tests, review, intégration, doc, release, coordination. Voir method.md.
-DEUX COLONNES : temps de référence (sans IA) et temps réel avec assistant IA — facteur d'accélération PAR PHASE (method.md §2). L'IA n'accélère pas les phases humaines (coordination, recette → ~1×).
+RÈGLE D'OR — tout compris : compter cadrage, implem, tests, review, doc, release. Voir method.md. (Workflow solo : pas de phase intégration ni coordination ; release = forfait fixe 30 min.)
+DEUX COLONNES : temps de référence (sans IA) et temps réel avec assistant IA — facteur d'accélération PAR PHASE (method.md §2). L'IA n'accélère pas la release (forfait fixe 0,5 h) ; review et conception peu accélérées.
 UNITÉ : heures (fractions 0,5 / 0,25). Pas de montant en euros.
 Une estimation sur brief ou pitch seul est à RECONFIRMER après le plan — le signaler dans l'en-tête.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
@@ -33,13 +33,11 @@ Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 | Implémentation | <h> | <h·IA> | reste | <ex: 6 fichiers à créer dont 1 migration + backfill, impact multi-channel> |
 | Tests (auto + QA) | <h> | <h·IA> | reste | <ex: 3 niveaux de test prévus ; refacto → caractérisation amont> |
 | Review & corrections | <h> | <h·IA> | reste | <ex: zone sensible, 1 passe de review + reprises> |
-| Intégration | <h> | <h·IA> | reste | <ex: merge + CI lente> |
 | Documentation de clôture | <h> | <h·IA> | reste | <ex: report + sync> |
-| Release & déploiement | <h> | <h·IA> | reste | <ex: changelog + mise en prod + vérif> |
-| Coordination & échanges | <h> | <h·IA> | reste | <ex: 1 démo + recette + allers-retours (IA ≈ réf., temps humain)> |
+| Release & déploiement | 0,5 | 0,5 | reste | forfait fixe 30 min (changelog + mise en prod + vérif) |
 | **Somme** | **<X> h** | **<Xia> h** | | |
 
-> _Skill : retirer les lignes des phases non pertinentes pour le track (ex: pas de « cadrage fonctionnel » sur une refacto ou une story tech). Ne jamais retirer une phase juste parce qu'elle paraît gratuite — c'est exactement celles-là qu'on sous-facture. La colonne « Avec IA » applique le facteur d'accélération par phase (method.md §2) : fort sur implem/tests/doc, nul (~réf.) sur coordination/recette._
+> _Skill : retirer les lignes des phases non pertinentes pour le track (ex: pas de « cadrage fonctionnel » sur une refacto ou une story tech). Ne jamais retirer une phase juste parce qu'elle paraît gratuite — c'est exactement celles-là qu'on sous-facture. La colonne « Avec IA » applique le facteur d'accélération par phase (method.md §2) : fort sur implem/tests/doc ; la release est un forfait fixe de 30 min, identique dans les deux colonnes._
 
 ## Signaux de complexité relevés
 

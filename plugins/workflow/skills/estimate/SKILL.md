@@ -1,6 +1,6 @@
 ---
 name: estimate
-description: Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release, échanges. Lit brief/pitch/plan. Réaliste + marge. Produit `docs/story/NNN-<f|r|t>-<slug>/estimate.md`.
+description: Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release. Lit brief/pitch/plan. Réaliste + marge, en heures. Produit `docs/story/NNN-<f|r|t>-<slug>/estimate.md`.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug de story ou chemin du dossier]"
@@ -46,10 +46,8 @@ La façon n°1 de se planter dans un devis, c'est de chiffrer le code et d'oubli
 2. **Implémentation** — code, migrations, config.
 3. **Tests** — écriture des tests automatisés **et** QA manuelle.
 4. **Review & corrections** — la review elle-même **et** la reprise des remarques.
-5. **Intégration** — commits, merge, résolution de conflits, CI qui repasse.
-6. **Documentation de clôture** — report, sync, mise à jour de doc.
-7. **Release & déploiement** — la part imputable à la story (changelog, tag, mise en prod, vérif post-déploiement).
-8. **Coordination & échanges** — réunions, démos, recette client, allers-retours de validation. **C'est le temps le plus invisible et le plus sous-facturé.**
+5. **Documentation de clôture** — report, sync, mise à jour de doc.
+6. **Release & déploiement** — **forfait fixe de 30 min** (changelog, tag, mise en prod, vérif post-déploiement) : opération routinière de durée constante, on ne la ré-estime pas et l'IA ne l'accélère pas.
 
 Puis tu ajoutes une **marge d'incertitude** : une estimation sans marge n'est pas une estimation, c'est un pari qui devient un engagement.
 
@@ -62,7 +60,7 @@ Tu chiffres **chaque phase deux fois**, côte à côte :
 - **Temps de référence (sans IA)** : la charge telle qu'on la réaliserait classiquement, à la main. C'est le repère historique, lisible par un client, et celui que l'utilisateur connaît de son expérience passée.
 - **Temps réel avec assistant IA** : ce que la phase prend réellement quand un assistant de code (type Claude Code) fait le gros de la production. Toujours inférieur ou égal au temps de référence.
 
-L'écart entre les deux **n'est pas uniforme** : l'IA accélère ce qui se *produit*, pas ce qui est *humain incompressible*. Écrire du code, des tests, de la doc, explorer un codebase va beaucoup plus vite ; une réunion, une recette client, un arbitrage métier, une validation prennent le même temps qu'avant. Un facteur d'accélération s'applique donc **par phase**, jamais en bloc sur le total — c'est pourquoi le gain global est toujours plus modeste que sur la seule implémentation, les phases humaines tirant le total vers le haut.
+L'écart entre les deux **n'est pas uniforme** : l'IA accélère ce qui se *produit*, pas ce qui est *humain incompressible*. Écrire du code, des tests, de la doc, explorer un codebase va beaucoup plus vite ; un arbitrage métier, une validation, une mise en production prennent le même temps qu'avant (la release est d'ailleurs un forfait fixe de 30 min, identique avec ou sans IA). Un facteur d'accélération s'applique donc **par phase**, jamais en bloc sur le total — c'est pourquoi le gain global reste plus modeste que sur la seule implémentation, les phases peu accélérables tirant le total vers le haut.
 
 Le barème d'accélération par phase est dans `method.md`. Ces deux chiffrages **éclairent** une décision de facturation, ils ne la prennent pas : l'utilisateur choisit sur quelle base il facture, et l'écart représente sa marge (ou sa capacité à prendre plus de travail).
 
@@ -97,7 +95,7 @@ Affiche en 2-3 lignes ce que tu as lu et **avec quel niveau de fiabilité** tu v
 
 Le même volume fonctionnel ne coûte pas le même temps selon le terrain. Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis le `CLAUDE.md` racine s'il existe — il révèle les contraintes qui pèsent sur la charge : commandes QA obligatoires, multi-thème, conventions de test exigeantes, étapes de déploiement particulières.
 
-Repère les amplificateurs de charge propres au terrain : un projet multi-channel/multi-thème (typiquement Sylius) multiplie le coût UI et test ; un legacy peu testé alourdit chaque modification ; une CI lente gonfle le temps d'intégration.
+Repère les amplificateurs de charge propres au terrain : un projet multi-channel/multi-thème (typiquement Sylius) multiplie le coût UI et test ; un legacy peu testé alourdit chaque modification ; une CI lente alourdit chaque itération de tests.
 
 ### Phase 3 — Analyse de complexité
 
@@ -115,7 +113,7 @@ Propose une première décomposition phase par phase (les phases pertinentes sel
 
 1. **Ancre sur du vécu.** Demande un point de comparaison : « Une story comparable t'a pris combien de temps, tout compris ? » ou « Pour toi, l'implémentation seule, c'est plutôt 15 ou 40 heures ? ». La meilleure calibration n'est pas dans le code, elle est dans la mémoire de l'utilisateur. Si des `estimate.md` passés existent dans d'autres stories, tu peux t'y référer pour rester cohérent d'un devis à l'autre.
 2. **Ajuste phase par phase.** L'utilisateur corrige, tu recalcules. Garde la justification visible à chaque tour.
-3. **Ajuste le facteur IA si besoin.** Le barème de `method.md` est indicatif ; le gain réel dépend de la maîtrise de l'outil par l'utilisateur. Demande s'il se sent rodé ou non sur l'usage d'un assistant de code, et corrige les facteurs des phases productives (implem, tests, doc) en conséquence. Ne touche pas aux phases humaines incompressibles (coordination, recette).
+3. **Ajuste le facteur IA si besoin.** Le barème de `method.md` est indicatif ; le gain réel dépend de la maîtrise de l'outil par l'utilisateur. Demande s'il se sent rodé ou non sur l'usage d'un assistant de code, et corrige les facteurs des phases productives (implem, tests, doc) en conséquence. Ne touche pas à la phase release (forfait fixe de 30 min, identique avec ou sans IA) ni aux parts humaines de la review et de la conception.
 4. **Fixe le niveau de marge ensemble** (faible / moyenne / élevée → barème dans `method.md`), en l'argumentant par le flou réellement constaté : artifact disponible (brief seul = forte incertitude), zones de flou non tranchées, domaine/stack peu connu, ampleur du transverse.
 
 Itère jusqu'à ce que l'utilisateur soit d'accord avec les chiffres par phase (dans les deux colonnes), le facteur IA et la marge. Le total se lit alors en **deux totaux parallèles** — référence et avec IA — chacun décliné `somme des phases` puis `total avec marge`.
