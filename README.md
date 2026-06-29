@@ -94,6 +94,7 @@ Perdu en cours de route ? `/workflow:help` est le GPS du pipeline.
 | `/workflow:claude-md` | Génère ou met à jour le `CLAUDE.md` à la racine : analyse du codebase (prouvée par fichier) + principes comportementaux Karpathy. Réutilise `docs/stack.md` / `docs/vision.md` |
 | `/workflow:test-scenario` | Joue un scénario utilisateur en live via Playwright MCP |
 | `/workflow:adr` | Rédige un Architecture Decision Record MADR léger → `docs/adr/NNNN-slug.md` |
+| `/workflow:estimate` | Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release, échanges → `estimate.md` (en heures, marge incluse, deux colonnes réf./avec IA) |
 | `/workflow:doc-feature` | Cartographie une feature existante (legacy) → `docs/feature-map/NNN-slug/overview.md` |
 | `/workflow:migrate-legacy` | Migre les anciens formats workflow via `git mv` (historique préservé) |
 | `/workflow:import-external` | Importe une doc Spec Kit / BMAD-METHOD / GSD vers le format workflow |
