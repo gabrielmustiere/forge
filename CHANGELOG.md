@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.3.3] - 2026-06-29
+
+### Changed
+- `estimate` : le **barème de marge d'incertitude** descend de **+15 / +30 / +50 %** à **+10 / +20 / +35 %** (faible / moyenne / élevée). Dans le prolongement du fix v3.3.2 (base = médiane réaliste), ça allège encore le haut de fourchette : une story « moyenne » passe d'un total `base × 1,30` à `base × 1,20`, sur une base déjà dégonflée. Mis à jour dans `references/method.md` §4 et `references/template.md`.
+
 ## [3.3.2] - 2026-06-29
 
 ### Changed
@@ -76,7 +81,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.2...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.3...HEAD
+[3.3.3]: https://github.com/gabrielmustiere/forge/compare/v3.3.2...v3.3.3
 [3.3.2]: https://github.com/gabrielmustiere/forge/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/gabrielmustiere/forge/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/gabrielmustiere/forge/compare/v3.2.1...v3.3.0
