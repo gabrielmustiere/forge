@@ -9,13 +9,14 @@ guide: Estimation du temps facturable d'une story, toutes phases comprises (pas 
 RÈGLE D'OR — tout compris : compter cadrage, implem, tests, review, doc, release. Voir method.md. (Workflow solo : pas de phase intégration ni coordination ; release = forfait fixe 30 min.)
 DEUX COLONNES : temps de référence (sans IA) et temps réel avec assistant IA — facteur d'accélération PAR PHASE (method.md §2). L'IA n'accélère pas la release (forfait fixe 0,5 h) ; review et conception peu accélérées.
 UNITÉ : heures (fractions 0,5 / 0,25). Pas de montant en euros.
+BASE = médiane réaliste (le plus probable), pas une borne haute. L'aléa est porté UNE SEULE FOIS, par la marge — padder la base en plus, c'est ~30 % de trop (method.md §4).
 Une estimation sur brief ou pitch seul est à RECONFIRMER après le plan — le signaler dans l'en-tête.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
 ## Synthèse
 
-> _Skill : le résultat en deux lignes, lisible d'un coup d'œil. Somme des phases (réaliste, hors aléa) puis total avec marge. Pour une incertitude élevée, donner une fourchette basse/haute plutôt qu'un point._
+> _Skill : le résultat en deux lignes, lisible d'un coup d'œil. Somme des phases (le plus probable, hors aléa — médiane, pas borne haute) puis total avec marge. Pour une incertitude élevée, donner une fourchette basse/haute plutôt qu'un point._
 
 - **Somme des phases** — référence (sans IA) : <X> h · avec assistant IA : <Xia> h
 - **Marge d'incertitude** : <faible +15 % | moyenne +30 % | élevée +50 %> — <raison en une phrase>

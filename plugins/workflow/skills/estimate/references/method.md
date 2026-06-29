@@ -93,7 +93,9 @@ Peu de signaux exploitables : on chiffre à la louche, sur la surface fonctionne
 
 ## 4. Barème de marge d'incertitude
 
-L'estimation par phase donne une valeur réaliste ; la marge encaisse ce qu'on ne sait pas encore. On applique **un seul pourcentage global** au total, choisi selon le niveau de flou réel.
+**Principe directeur — ne jamais compter l'incertitude deux fois.** La durée de base de chaque phase est la **médiane réaliste** : le temps le plus probable si le déroulé est normal, pas la durée « au cas où ». L'aléa, l'imprévu, ce qu'on ne sait pas encore — tout ça est porté **uniquement par la marge**. Si on padde la base (« je mets un peu plus pour être tranquille ») *et* qu'on ajoute une marge par-dessus, l'incertitude est comptée deux fois : c'est la cause n°1 d'un devis ~30 % trop haut. La base se cale au plus probable ; la marge, et elle seule, encaisse le reste.
+
+On applique ensuite **un seul pourcentage global** au total, choisi selon le niveau de flou réel.
 
 | Niveau | Marge indicative | Quand l'appliquer |
 |--------|:---:|---|
@@ -112,7 +114,8 @@ Règles d'usage :
 Les erreurs qui transforment un devis en perte. Les avoir en tête, c'est la moitié du travail.
 
 - **Ne chiffrer que le code.** L'implémentation est souvent moins de la moitié du temps total une fois cadrage, tests, review, doc et release comptés. C'est l'erreur n°1.
-- **Estimer optimiste.** Le « si tout va bien » n'arrive jamais pour toutes les phases à la fois. On chiffre le réaliste, pas le meilleur cas.
+- **Estimer optimiste.** Le « si tout va bien » n'arrive jamais pour toutes les phases à la fois. On chiffre le réaliste (la médiane), pas le meilleur cas.
+- **Doubler le matelas (sur-chiffrer par réflexe défensif).** Le miroir du piège optimiste, et tout aussi coûteux. Mettre un coussin dans la base *puis* ajouter une marge compte l'incertitude deux fois — le devis sort ~30 % trop haut, se perd à l'appel d'offres ou érode la confiance quand le réalisé tombe loin en dessous. La base = médiane réaliste ; la marge = le seul matelas. **Test du miroir** : si chaque ligne de base te paraît déjà « safe », elle est trop haute — le safe vit dans la marge, pas dans la base.
 - **Ignorer le coût d'apprentissage.** Un mécanisme/lib/zone inconnu se paie en temps d'exploration avant même la première ligne utile.
 - **Confondre estimation et engagement.** Une estimation sans marge devient, aux yeux du client, une promesse. La marge protège la relation autant que la trésorerie.
 
@@ -120,7 +123,7 @@ Les erreurs qui transforment un devis en perte. Les avoir en tête, c'est la moi
 
 Le total se calcule **pour chacune des deux colonnes** (référence sans IA, puis temps réel avec IA), et chacune se lit en deux temps, jamais en un seul chiffre nu :
 
-1. **Somme des phases** (le réaliste, hors aléa) — la décomposition rend l'estimation auditable et négociable phase par phase.
+1. **Somme des phases** (le plus probable, hors aléa — la médiane, pas la borne haute ; l'aléa vit dans la marge, pas ici) — la décomposition rend l'estimation auditable et négociable phase par phase.
 2. **Total avec marge** = somme × (1 + marge) — le chiffre à retenir pour s'engager.
 
 La marge d'incertitude s'applique aux deux colonnes ; le facteur IA joue, lui, **avant** la marge (sur la somme des phases). On obtient donc quatre repères : référence (somme / avec marge) et avec IA (somme / avec marge). L'écart entre les deux totaux avec marge, c'est la marge de l'utilisateur.

@@ -51,6 +51,8 @@ La façon n°1 de se planter dans un devis, c'est de chiffrer le code et d'oubli
 
 Puis tu ajoutes une **marge d'incertitude** : une estimation sans marge n'est pas une estimation, c'est un pari qui devient un engagement.
 
+⚠️ « Tout compris » porte sur le **périmètre** (compter chaque phase), pas sur la **magnitude**. Chaque phase reste chiffrée à sa durée **la plus probable** (sa médiane), jamais gonflée « pour être tranquille ». Le surplus d'incertitude est porté **une seule fois**, par la marge. Padder la base *et* ajouter la marge, c'est compter l'incertitude deux fois — la cause typique d'un devis ~30 % trop haut.
+
 La liste détaillée des phases par track, les signaux de complexité et le barème de marge sont dans `${CLAUDE_SKILL_DIR}/references/method.md` — **charge-le avant de chiffrer.**
 
 ## Deux estimations : la charge de référence et le temps réel avec IA
@@ -70,7 +72,7 @@ Le barème d'accélération par phase est dans `method.md`. Ces deux chiffrages 
 2. **L'utilisateur connaît sa vélocité, pas toi.** Tu n'as aucune idée de la vitesse réelle de l'utilisateur sur son code. Tes chiffres sont une **proposition ancrée sur des signaux de complexité visibles** (nombre de fichiers, d'impacts transverses, de cas limites). C'est à l'utilisateur de les caler sur sa réalité — d'où la demande d'un point de comparaison (Phase 4).
 3. **Privilégier `AskUserQuestion`** pour les ajustements structurés. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`. Maximum 3 questions par tour.
 4. **Toujours justifier un chiffre par un signal.** Jamais « implem : 30 h » seul, mais « implem : 30 h — 6 fichiers à créer dont une migration avec backfill, et un impact multi-channel ». Un chiffre sans justification n'est pas négociable, donc inutile.
-5. **Être lucide, pas optimiste.** Ton rôle n'est pas de faire plaisir avec un petit chiffre. Un devis sous-estimé se paie deux fois : en marge perdue et en confiance client entamée.
+5. **Viser juste — ni optimiste, ni défensif.** Chaque durée de base est la **médiane réaliste** : le temps le plus probable si le déroulé est normal, pas le « au cas où » (ça, c'est le rôle de la marge). Sous-estimer coûte de la marge ; mais **sur-estimer par réflexe défensif coûte aussi** — un devis trop haut se perd à l'appel d'offres ou s'use en confiance quand le réalisé tombe loin en dessous. Et padder la base *en plus* de la marge compte l'incertitude deux fois (cause typique d'un devis ~30 % trop haut). **Test du miroir** : si une ligne de base te paraît déjà « safe », elle est trop haute — le safe vit dans la marge, pas dans la base. Dans le doute entre deux valeurs, prends la basse.
 
 ## Déroulement
 
@@ -109,9 +111,9 @@ Restitue les signaux que tu as relevés, classés par phase de charge. C'est la 
 
 ### Phase 4 — Chiffrage (boucle interactive)
 
-Propose une première décomposition phase par phase (les phases pertinentes selon le track — voir `method.md`), **chaque ligne justifiée par un signal** et **dans ses deux versions** (référence sans IA / temps réel avec IA, via le barème d'accélération de `method.md`). Puis cale-la avec l'utilisateur :
+Propose une première décomposition phase par phase (les phases pertinentes selon le track — voir `method.md`), **chaque ligne justifiée par un signal** et **dans ses deux versions** (référence sans IA / temps réel avec IA, via le barème d'accélération de `method.md`). Tes durées brutes sont des **médianes, pas des bornes hautes** : le plus probable, sans coussin caché (le coussin, c'est la marge, ajoutée à la toute fin). Puis cale-la avec l'utilisateur :
 
-1. **Ancre sur du vécu.** Demande un point de comparaison : « Une story comparable t'a pris combien de temps, tout compris ? » ou « Pour toi, l'implémentation seule, c'est plutôt 15 ou 40 heures ? ». La meilleure calibration n'est pas dans le code, elle est dans la mémoire de l'utilisateur. Si des `estimate.md` passés existent dans d'autres stories, tu peux t'y référer pour rester cohérent d'un devis à l'autre.
+1. **Ancre sur du vécu — et recalibre toute la proposition dessus.** Demande un point de comparaison *avant* de défendre tes chiffres : « Une story comparable t'a pris combien de temps, tout compris ? » ou « Pour toi, l'implémentation seule, c'est plutôt 15 ou 40 heures ? ». La meilleure calibration n'est pas dans le code, elle est dans la mémoire de l'utilisateur — et tes chiffres a priori tendent à courir trop haut. Dès que l'utilisateur donne un réalisé passé, **réajuste l'ensemble de la décomposition à cette ancre** (au prorata), ne garde pas tes valeurs initiales en attendant qu'il rogne ligne par ligne. Si des `estimate.md` passés existent dans d'autres stories, t'y référer pour rester cohérent d'un devis à l'autre.
 2. **Ajuste phase par phase.** L'utilisateur corrige, tu recalcules. Garde la justification visible à chaque tour.
 3. **Ajuste le facteur IA si besoin.** Le barème de `method.md` est indicatif ; le gain réel dépend de la maîtrise de l'outil par l'utilisateur. Demande s'il se sent rodé ou non sur l'usage d'un assistant de code, et corrige les facteurs des phases productives (implem, tests, doc) en conséquence. Ne touche pas à la phase release (forfait fixe de 30 min, identique avec ou sans IA) ni aux parts humaines de la review et de la conception.
 4. **Fixe le niveau de marge ensemble** (faible / moyenne / élevée → barème dans `method.md`), en l'argumentant par le flou réellement constaté : artifact disponible (brief seul = forte incertitude), zones de flou non tranchées, domaine/stack peu connu, ampleur du transverse.
