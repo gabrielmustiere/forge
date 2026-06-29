@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.3.1] - 2026-06-29
+
+### Changed
+- `estimate` : adaptation au **workflow solo**. Les phases **Intégration** et **Coordination & échanges** sont retirées de la décomposition (un développeur seul ne suit ni le merge multi-contributeurs ni les réunions/recette comme postes facturables distincts), et **Release & déploiement** devient un **forfait fixe de 30 min** (0,5 h) — opération routinière de durée constante, qu'on ne ré-estime pas et que l'IA n'accélère pas (identique dans les deux colonnes). La décomposition « tout compris » passe ainsi à six phases : cadrage, implémentation, tests, review, documentation, release. Propagé à `SKILL.md`, `references/method.md` (table des phases + note contexte solo, barème d'accélération IA, pièges du sous-chiffrage) et `references/template.md`, ainsi qu'aux descriptions (`/workflow:help`, `documentation/workflow.md`, README, `plugin.json`).
+
 ## [3.3.0] - 2026-06-29
 
 ### Added
@@ -66,7 +71,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/gabrielmustiere/forge/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/gabrielmustiere/forge/compare/v3.2.1...v3.3.0
 [3.2.1]: https://github.com/gabrielmustiere/forge/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/gabrielmustiere/forge/compare/v3.1.0...v3.2.0
