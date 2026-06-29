@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.3.2] - 2026-06-29
+
+### Changed
+- `estimate` : correction d'un **biais systématique de sur-chiffrage** (~30 % trop haut, constaté sur des stories réelles). La cause : le skill gonflait les **durées de base** par réflexe défensif *puis* ajoutait la marge d'incertitude par-dessus — l'aléa était donc compté deux fois. Introduction du principe directeur **« ne jamais compter l'incertitude deux fois »** : la durée de base de chaque phase est désormais la **médiane réaliste** (le temps le plus probable si le déroulé est normal), et l'aléa est porté **uniquement par la marge**. Concrètement : nouveau principe en tête de `references/method.md` §4, nouveau piège « Doubler le matelas » + **test du miroir** en §5, somme des phases recadrée en « médiane, pas borne haute » en §6 ; dans `SKILL.md`, la règle d'or distingue **périmètre** (« tout compris » = compter chaque phase) et **magnitude** (chiffrer au plus probable, sans coussin), la règle #5 passe de « être lucide, pas optimiste » à **« viser juste, ni optimiste ni défensif »** (sur-estimer coûte aussi ; dans le doute, prendre la valeur basse), et la Phase 4 demande de **recalibrer toute la décomposition sur le réalisé passé de l'utilisateur** dès qu'il le donne, au lieu de tenir des chiffres hauts rognés ligne à ligne ; `references/template.md` aligné (bloc-guide + synthèse). Les facteurs d'accélération IA et le barème de marge sont inchangés : corriger la base dégonfle mécaniquement les deux colonnes (réf. et avec IA).
+
 ## [3.3.1] - 2026-06-29
 
 ### Changed
@@ -71,7 +76,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.2...HEAD
+[3.3.2]: https://github.com/gabrielmustiere/forge/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/gabrielmustiere/forge/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/gabrielmustiere/forge/compare/v3.2.1...v3.3.0
 [3.2.1]: https://github.com/gabrielmustiere/forge/compare/v3.2.0...v3.2.1
