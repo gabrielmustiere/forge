@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-06-29
+
+### Added
+- Skill `estimate` (transversal **optionnel**, applicable à n'importe quelle story — feature `f-`, refacto `r-`, évolution technique `t-`) : chiffre le temps **« tout compris »** d'une story à facturer, pas seulement le code. Compte les huit phases que les devs sous-estiment systématiquement (cadrage, implémentation, tests, review & corrections, intégration, documentation de clôture, release & déploiement, coordination & échanges) plus une **marge d'incertitude** assumée (barème +15 / +30 / +50 % selon le flou réel). Entrée **flexible** : lit `brief.md`, `pitch.md` et/ou `plan.md` selon ce qui existe dans le dossier de story — plus la matière est riche, plus l'estimation est fiable (brief seul → fourchette large à reconfirmer ; plan détaillé → estimation affinée par les fichiers/migrations/tests listés). Chaque chiffre est **justifié par un signal** lu dans les artifacts ou le code, et calé sur le **vécu de l'utilisateur** (point de comparaison demandé — la vélocité réelle n'est pas dans le code). Spécificités par track prises en compte (tests de caractérisation amont en refacto, baseline/kill switch en tech, phases `déjà fait`/`reste` quand le pitch ou le plan existent déjà). Produit `docs/story/NNN-<f|r|t>-<slug>/estimate.md` **en heures** (facturation horaire), sans jamais convertir en montant — la conversion par le taux horaire reste à la charge de l'utilisateur. **Double chiffrage** : chaque phase est estimée dans deux colonnes — temps de référence (réalisation classique, à la main) et temps réel avec un **assistant IA** (type Claude Code) — via un facteur d'accélération **par phase** (fort sur implem/tests/doc, nul sur les phases humaines incompressibles comme la coordination et la recette client). L'écart entre les deux totaux éclaire la marge. Méthode complète (phases par track, accélération IA, signaux de complexité, barème de marge, pièges du sous-chiffrage) dans `references/method.md`. Câblé au sommaire `/workflow:help`, à `documentation/workflow.md` et au README.
+
 ## [3.2.1] - 2026-06-23
 
 ### Changed
@@ -61,7 +66,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.2.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.0...HEAD
+[3.3.0]: https://github.com/gabrielmustiere/forge/compare/v3.2.1...v3.3.0
 [3.2.1]: https://github.com/gabrielmustiere/forge/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/gabrielmustiere/forge/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/gabrielmustiere/forge/compare/v3.0.1...v3.1.0
