@@ -7,6 +7,14 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-07-04
+
+### Added
+- **Forge Board** — application Symfony 8 (kanban de suivi des stories du workflow forge) instanciée à la racine du dépôt. Le repo héberge désormais deux sujets : la marketplace `forge` (`plugins/`) et l'app Forge Board (racine). Stack : Symfony 8 / PHP 8.5, Doctrine + SQLite, Symfony UX (Live Component, Turbo, Stimulus), Tailwind 4 + Flowbite 4, PHPUnit 13 + Playwright. Docs : `docs/vision.md`, `docs/stack.md`, `docs/adr/0001`.
+
+### Changed
+- Levée du doublon documentaire `documentation/` ↔ `docs/` : l'inventaire des skills passe de `documentation/forge.md` à `plugins/forge/SKILLS.md` (au plus près du plugin), le banner à `.github/banner.png`. README réorganisé (skills en tête, puis section Forge Board), `CLAUDE.md` scindé en deux parties (marketplace / app Symfony).
+
 ## [4.0.0] - 2026-07-04
 
 ### Changed
@@ -86,7 +94,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v3.3.3...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/gabrielmustiere/forge/compare/v4.0.0...v4.1.0
+[4.0.0]: https://github.com/gabrielmustiere/forge/compare/v3.3.3...v4.0.0
 [3.3.3]: https://github.com/gabrielmustiere/forge/compare/v3.3.2...v3.3.3
 [3.3.2]: https://github.com/gabrielmustiere/forge/compare/v3.3.1...v3.3.2
 [3.3.1]: https://github.com/gabrielmustiere/forge/compare/v3.3.0...v3.3.1
