@@ -1,0 +1,41 @@
+{% set flash_styles = {
+    'success': { icon: 'tabler:circle-check',    iconClass: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-400', title: 'Succès !' },
+    'error':   { icon: 'tabler:circle-x',        iconClass: 'text-rose-600 bg-rose-50 dark:bg-rose-900/30 dark:text-rose-400',           title: 'Erreur' },
+    'warning': { icon: 'tabler:alert-triangle',  iconClass: 'text-orange-600 bg-orange-50 dark:bg-orange-900/30 dark:text-orange-400',   title: 'Attention' },
+    'info':    { icon: 'tabler:info-circle',     iconClass: 'text-violet-600 bg-violet-50 dark:bg-violet-900/30 dark:text-violet-400',   title: 'Information' },
+    'notice':  { icon: 'tabler:info-circle',     iconClass: 'text-violet-600 bg-violet-50 dark:bg-violet-900/30 dark:text-violet-400',   title: 'Information' }
+} %}
+
+<div aria-live="assertive"
+     class="pointer-events-none fixed inset-0 z-50 flex items-end px-4 py-6 sm:items-start sm:p-6">
+    <div class="flex w-full flex-col items-center space-y-3 sm:items-end">
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                {% set style = flash_styles[type] ?? flash_styles['info'] %}
+
+                {# Flowbite-style toast #}
+                <div data-controller="flash-messages"
+                     data-flash-messages-type-value="{{ type }}"
+                     data-flash-messages-auto-close-value="true"
+                     data-flash-messages-delay-value="5000"
+                     data-action="mouseenter->flash-messages#pauseAutoClose mouseleave->flash-messages#resumeAutoClose"
+                     role="alert"
+                     class="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-lg transition duration-300 ease-out opacity-100 translate-y-0 sm:translate-x-0 starting:opacity-0 starting:translate-y-2 starting:sm:translate-x-2 starting:sm:translate-y-0 dark:border-gray-800 dark:bg-gray-900">
+                    <span class="grid size-9 shrink-0 place-items-center rounded-md {{ style.iconClass }}">
+                        <twig:ux:icon name="{{ style.icon }}" class="size-5"/>
+                    </span>
+                    <div class="min-w-0 flex-1">
+                        <p class="font-display text-sm font-semibold text-gray-900 dark:text-white">{{ style.title }}</p>
+                        <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">{{ message }}</p>
+                    </div>
+                    <button type="button"
+                            data-action="flash-messages#close"
+                            aria-label="Fermer"
+                            class="-mr-1 -mt-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-200 dark:hover:bg-gray-800 dark:hover:text-gray-200">
+                        <twig:ux:icon name="tabler:x" class="size-4"/>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</div>

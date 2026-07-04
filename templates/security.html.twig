@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-white dark:bg-gray-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Connexion · Forge Board{% endblock %}</title>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2224%22 fill=%22%23111111%22/><text y=%221.05em%22 x=%220.5em%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2272%22 font-weight=%22700%22 fill=%22%238B5CF6%22>sf</text></svg>">
+    {% block stylesheets %}{% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="h-full bg-white font-body text-gray-800 antialiased dark:bg-gray-950 dark:text-gray-200">
+
+{% include 'common/flash-messages.html.twig' %}
+
+{% block body %}{% endblock %}
+
+</body>
+</html>

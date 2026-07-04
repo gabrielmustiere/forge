@@ -1,0 +1,34 @@
+# Normalisation des fins de ligne
+*               text=auto eol=lf
+*.bat           text eol=crlf
+*.sh            text eol=lf
+
+# Binaires
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.ico           binary
+*.webp          binary
+*.woff          binary
+*.woff2         binary
+*.pdf           binary
+
+# Fichiers exclus des archives de release (composer archive / GitHub tarball)
+/.github            export-ignore
+/tests              export-ignore
+/e2e                export-ignore
+/.editorconfig      export-ignore
+/.gitattributes     export-ignore
+/.gitignore         export-ignore
+/.mcp.json          export-ignore
+/.php-cs-fixer.dist.php export-ignore
+/.symfony.local.yaml export-ignore
+/phpstan.dist.neon  export-ignore
+/phpunit.dist.xml   export-ignore
+/playwright.config.ts export-ignore
+/CLAUDE.md          export-ignore
+/Makefile           export-ignore
+/compose.yaml       export-ignore
+/package.json       export-ignore
+/package-lock.json  export-ignore

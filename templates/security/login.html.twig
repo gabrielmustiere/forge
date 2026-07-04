@@ -1,0 +1,114 @@
+{% extends 'security.html.twig' %}
+
+{% block title %}Connexion · Forge Board{% endblock %}
+
+{% block body %}
+    <div class="grid min-h-screen grid-cols-1 lg:grid-cols-2">
+
+        {# Form column #}
+        <div class="flex flex-col justify-between px-6 py-10 sm:px-12 lg:px-16">
+
+            <div class="flex items-center gap-2.5">
+                <span class="grid size-9 place-items-center rounded-lg bg-gray-900 font-display text-sm font-bold text-violet-400 dark:bg-violet-500 dark:text-gray-900">sf</span>
+                <div class="leading-tight">
+                    <div class="font-display text-base font-semibold tracking-tight text-gray-900 dark:text-white">Paper</div>
+                    <div class="text-2xs uppercase tracking-wider text-gray-500">Symfony 8 · Flowbite 4</div>
+                </div>
+            </div>
+
+            <div class="mx-auto w-full max-w-sm">
+                <h1 class="font-display text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Se connecter</h1>
+                <p class="mt-2 text-sm text-gray-500">
+                    Identifiez-vous pour accéder à l'espace de travail.
+                </p>
+
+                <form method="post" class="mt-8 space-y-5">
+                    {% if error %}
+                        <div role="alert" class="flex items-start gap-3 rounded-md border border-rose-200 bg-rose-50 p-3 dark:border-rose-900/50 dark:bg-rose-900/30">
+                            <twig:ux:icon name="tabler:alert-circle" class="mt-0.5 size-5 shrink-0 text-rose-600 dark:text-rose-400"/>
+                            <div class="text-sm text-rose-800 dark:text-rose-200">
+                                {{ error.messageKey|trans(error.messageData, 'security') }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="flex items-start gap-3 rounded-md border border-violet-200 bg-violet-50 p-3 dark:border-violet-500/40 dark:bg-violet-500/10">
+                            <twig:ux:icon name="tabler:user-check" class="mt-0.5 size-5 shrink-0 text-violet-600 dark:text-violet-300"/>
+                            <div class="text-sm text-violet-900 dark:text-violet-200">
+                                Connecté en tant que <span class="font-medium">{{ app.user.userIdentifier }}</span>.
+                                <a href="{{ logout_path() }}" class="ml-1 font-medium underline hover:no-underline">Se déconnecter</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div>
+                        <label for="username" class="mb-1.5 block text-sm font-medium text-gray-900 dark:text-gray-100">Email</label>
+                        <input id="username" type="email" name="_username" value="{{ last_username }}"
+                               required autocomplete="email" autofocus
+                               placeholder="vous@exemple.com"
+                               class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-violet-500 dark:focus:ring-violet-900/50"/>
+                    </div>
+
+                    <div>
+                        <label for="password" class="mb-1.5 block text-sm font-medium text-gray-900 dark:text-gray-100">Mot de passe</label>
+                        <input id="password" type="password" name="_password" required
+                               autocomplete="current-password"
+                               placeholder="••••••••"
+                               class="block w-full rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 focus:outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-violet-500 dark:focus:ring-violet-900/50"/>
+                    </div>
+
+                    <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                           value="{{ csrf_token('authenticate') }}">
+
+                    <div class="flex items-center justify-between">
+                        <label class="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                            <input id="_remember_me" type="checkbox" name="_remember_me"
+                                   class="size-4 rounded border-gray-300 text-violet-600 focus:ring-2 focus:ring-violet-200 dark:border-gray-700 dark:bg-gray-900 dark:focus:ring-violet-900/50"/>
+                            Se souvenir de moi
+                        </label>
+                        <a href="#" class="text-sm font-medium text-violet-600 hover:text-violet-500 dark:text-violet-400">Mot de passe oublié ?</a>
+                    </div>
+
+                    <button type="submit"
+                            class="flex w-full items-center justify-center gap-2 rounded-md bg-gray-900 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 dark:bg-violet-500 dark:hover:bg-violet-400 dark:focus:ring-violet-500 dark:focus:ring-offset-gray-950">
+                        Se connecter
+                        <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
+                    </button>
+                </form>
+
+                <p class="mt-8 text-center text-xs text-gray-500">
+                    Identifiants de test : <span class="font-mono text-gray-700 dark:text-gray-300">admin@example.com</span> / <span class="font-mono text-gray-700 dark:text-gray-300">password</span>
+                </p>
+            </div>
+
+            <p class="text-center text-xs text-gray-400">© {{ "now"|date("Y") }} Forge Board — Paper.</p>
+        </div>
+
+        {# Decorative column — Paper feel #}
+        <div class="relative hidden overflow-hidden bg-gray-900 lg:block dark:bg-gray-950">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(139,92,246,0.25),transparent_55%)]"></div>
+            <div class="absolute inset-0 bg-[linear-gradient(135deg,transparent_60%,rgba(255,255,255,0.04)_60.5%,rgba(255,255,255,0.04)_61%,transparent_61.5%)]"></div>
+
+            <div class="relative flex h-full flex-col justify-between p-12 text-white">
+                <div class="font-mono text-xs uppercase tracking-[0.2em] text-violet-300">Design system · Paper</div>
+
+                <div class="max-w-md">
+                    <h2 class="font-display text-4xl font-bold leading-tight tracking-tight">
+                        Un tableau minimaliste,<br/>
+                        <span class="text-violet-400">prêt pour le print.</span>
+                    </h2>
+                    <p class="mt-4 text-sm text-gray-300">
+                        Tailwind CSS 4, Flowbite 4 et Symfony UX assemblés autour d'une palette monochrome et d'un accent violet.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-6 text-xs font-mono text-gray-400">
+                    <span>14 / 16 / 18 / 24 / 32 / 40</span>
+                    <span class="size-1 rounded-full bg-gray-600"></span>
+                    <span>Montserrat · Roboto · Mono</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

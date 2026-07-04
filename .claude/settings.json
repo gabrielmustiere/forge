@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "forge": {
+      "source": {
+        "source": "github",
+        "repo": "gabrielmustiere/forge"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "workflow@forge": true
+  }
+}

@@ -1,5 +1,56 @@
+# === Marketplace forge (plugins Claude Code) ===
 .DS_Store
 *.log
 .idea/
 plugins/*/evals/
 plugins/*-workspace/
+
+# === Application Forge Board (Symfony) ===
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+.castor.stub.php
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+# Outils QA isolés (deps incompatibles avec le composer.json racine)
+/tools/phpinsights/vendor/
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
+
+###> node/node ###
+node_modules
+###< node/node ###
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+.playwright-mcp
+
+# Binaire chromedriver hérité du squelette (15 Mo, re-téléchargeable — hors versioning)
+/drivers/

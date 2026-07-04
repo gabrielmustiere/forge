@@ -1,0 +1,12 @@
+{
+    "description": "Dépendances isolées de PHP Insights (conflit sebastian/diff avec PHPUnit 13 du projet racine).",
+    "require": {
+        "php": ">=8.5",
+        "nunomaduro/phpinsights": "^2.14"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

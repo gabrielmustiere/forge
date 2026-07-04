@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "flowbite": "^4.0.2",
+    "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1"
+  },
+  "scripts": {
+    "test:e2e": "npx playwright test"
+  }
+}

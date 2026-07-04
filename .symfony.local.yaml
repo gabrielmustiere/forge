@@ -1,0 +1,10 @@
+proxy:
+    domains:
+        - forge-board
+
+workers:
+    docker_compose: ~
+    messenger_consume_async:
+        cmd: [ 'symfony', 'console', 'messenger:consume', 'async', '--silent' ]
+    tailwind:
+        cmd: [ 'symfony', 'console', 'tailwind:build', '--watch' ]
