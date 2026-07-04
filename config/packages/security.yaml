@@ -24,16 +24,14 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 default_target_path: app_page
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 semaine — cochée via la case « rester connecté »
+            login_throttling:
+                max_attempts: 5 # anti-brute-force : blocage temporaire au-delà (par IP + identifiant)
             logout:
                 path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
-
-            # Activate different ways to authenticate:
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+                target: app_login
 
     # Note: Only the *first* matching rule is applied
     access_control:

@@ -82,7 +82,7 @@
                     {{ app.user.userIdentifier|first|upper }}
                 </span>
                 <span class="min-w-0 flex-1 truncate text-[12.5px] text-ink-soft">{{ app.user.userIdentifier }}</span>
-                <a href="{{ path('app_logout') }}" title="Déconnexion"
+                <a href="{{ path('app_logout') }}" title="Déconnexion" data-test="logout"
                    class="grid size-6 place-items-center rounded-md text-ink-faint hover:bg-raised hover:text-ink-dim">
                     <twig:ux:icon name="tabler:logout" class="size-4"/>
                 </a>

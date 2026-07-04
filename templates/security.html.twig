@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full bg-white dark:bg-gray-950">
+<html lang="fr" class="dark h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Connexion · Forge Board{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2224%22 fill=%22%23111111%22/><text y=%221.05em%22 x=%220.5em%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2272%22 font-weight=%22700%22 fill=%22%238B5CF6%22>sf</text></svg>">
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><defs><linearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22><stop offset=%220%22 stop-color=%22%238b7bf5%22/><stop offset=%221%22 stop-color=%22%235b4bd6%22/></linearGradient></defs><rect width=%22128%22 height=%22128%22 rx=%2230%22 fill=%22url(%23g)%22/><text y=%221.02em%22 x=%220.5em%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2280%22 font-weight=%22700%22 fill=%22%23ffffff%22>F</text></svg>">
     {% block stylesheets %}{% endblock %}
 
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body class="h-full bg-white font-body text-gray-800 antialiased dark:bg-gray-950 dark:text-gray-200">
+<body class="antialiased bg-canvas text-ink font-sans h-full">
 
 {% include 'common/flash-messages.html.twig' %}
 
-{% block body %}{% endblock %}
+<main class="flex min-h-screen items-center justify-center px-4 py-10">
+    {% block body %}{% endblock %}
+</main>
 
 </body>
 </html>
