@@ -11,6 +11,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | Date | Nature | Éléments | Motif |
 |------|--------|----------|-------|
 | 2026-07-04 | Création | — | Backlog initial dérivé de la vision |
+| 2026-07-04 | Édition | Renommage slug MVP `acces-local` → `login` | Aligner le backlog sur le dossier de story `001-f-login` |
 
 ## Domaines fonctionnels
 
@@ -117,8 +118,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 | Slug | Pitch | Capacités | Parcours | Dépendances | Justification vision |
 |------|-------|-----------|----------|-------------|----------------------|
-| `acces-local` | Se connecter/déconnecter localement pour protéger l'app et les tokens stockés | C1.1, C1.2 | P1, P2, P3, P4 | — | Anti-objectif « outil personnel » + sécurité des tokens |
-| `declaration-projet` | Déclarer un projet via URL de repo + token de lecture, nom déduit du repo | C2.1, C2.2 | P2 | `acces-local` | Horizon 3-6 mois « Déclaration de projet » ; principe « zéro friction d'ouverture » |
+| `login` | Se connecter/déconnecter localement pour protéger l'app et les tokens stockés | C1.1, C1.2 | P1, P2, P3, P4 | — | Anti-objectif « outil personnel » + sécurité des tokens |
+| `declaration-projet` | Déclarer un projet via URL de repo + token de lecture, nom déduit du repo | C2.1, C2.2 | P2 | `login` | Horizon 3-6 mois « Déclaration de projet » ; principe « zéro friction d'ouverture » |
 | `connecteur-github-lecture` | Lire l'arborescence et le contenu de `docs/story/` d'un repo GitHub | C3.1 | P2, P3 | `declaration-projet` | Horizon 3-6 mois « Connecteur de lecture repo » ; hypothèse critique #3 |
 | `verification-forge` | Vérifier la présence de `docs/story/` et refuser un repo non-forge | C2.3 | P2 | `connecteur-github-lecture` | Unfair advantage (convention forge) ; hypothèse critique #1 |
 | `mapping-etapes` | Déduire la colonne de chaque story depuis les fichiers présents (3 tracks) | C3.2 | P1, P2, P3 | `connecteur-github-lecture` | Unfair advantage « moteur de mapping » ; principe #2 ; hypothèses #1 et #4 |
@@ -166,6 +167,6 @@ Pointeurs bruts pour aider le cadrage détaillé. **Ne pas concevoir ici** — j
 - **`connecteur-github-lecture`** : trancher API GitHub REST/GraphQL vs serveur MCP (cf. `docs/stack.md` « décisions à trancher » et hypothèse vision #3). Abstraire l'accès repo derrière une interface pour préparer GitLab (V2) et un éventuel fallback — candidat `/adr`.
 - **`mapping-etapes`** : c'est le cœur métier et le principal risque (hypothèse #1). Définir la table fichiers → colonne pour les 3 tracks, et le comportement sur story ambiguë (règle Fidélité). Prévoir un scan de plusieurs stories réelles pour valider le déterminisme avant de figer.
 - **`declaration-projet`** : déduction du nom à préciser (nom du repo ? `owner/repo` ? titre lu dans un fichier ?). Gérer les URL GitHub sous plusieurs formes (https, ssh, avec/sans `.git`).
-- **Sécurité tokens** (`acces-local` + `declaration-projet`) : stockage chiffré au repos, secret d'app pour la clé — sensibilité à cadrer dans les specs concernées, pas seulement en règle transverse.
+- **Sécurité tokens** (`login` + `declaration-projet`) : stockage chiffré au repos, secret d'app pour la clé — sensibilité à cadrer dans les specs concernées, pas seulement en règle transverse.
 - **`sync-manuelle`** : décider si l'état scanné est persisté (SQLite) ou recalculé à la volée à chaque ouverture (cf. `docs/stack.md` « persistance de l'état scanné à trancher »).
 - **`kanban-projet`** : la DA « Paper » actuelle est le socle ; une DA plus moderne est un chantier design à part (hors backlog fonctionnel, cf. `docs/stack.md`).
