@@ -3,133 +3,128 @@
 {% block title %}Tableau de bord · Forge Board{% endblock %}
 
 {% block body %}
-    {# Header #}
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-            <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
-                Tableau de bord{% if app.user %} · <span class="text-violet-600 dark:text-violet-400">{{ app.user.userIdentifier|split('@')[0] }}</span>{% endif %}
+    {# Header de page #}
+    <header class="flex h-12 items-center justify-between border-b border-line bg-surface px-5">
+        <div class="flex items-center gap-2 text-[13px]">
+            <span class="text-ink-muted">Forge Board</span>
+            <span class="text-divider">/</span>
+            <span class="font-medium text-ink">Tableau de bord</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button type="button"
+                    class="flex h-7 items-center gap-1.5 rounded-md border border-line-strong bg-transparent px-2.5 text-[12.5px] text-ink-dim hover:bg-raised">
+                <twig:ux:icon name="tabler:filter" class="size-3.5"/> Filtrer
+            </button>
+            <button type="button"
+                    class="flex h-7 items-center gap-1 rounded-md bg-iris px-3 text-[12.5px] font-semibold text-white hover:bg-iris-bright">
+                <twig:ux:icon name="tabler:plus" class="size-3.5"/> Nouveau
+            </button>
+        </div>
+    </header>
+
+    <div class="p-6">
+        {# Intro #}
+        <div class="mb-6">
+            <h1 class="text-[22px] font-bold tracking-tight text-ink-bright">
+                Tableau de bord{% if app.user %} <span class="text-iris-text">· {{ app.user.userIdentifier|split('@')[0] }}</span>{% endif %}
             </h1>
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            <p class="mt-1 text-sm text-ink-dim">
                 Suivi des stories du workflow forge — un coup d'œil pour savoir où en est chaque projet.
             </p>
         </div>
-        <div class="flex flex-wrap gap-2">
-            <twig:Button variant="brand">
-                <twig:ux:icon name="tabler:plus" class="size-4 me-1.5"/>
-                Nouveau document
-            </twig:Button>
-        </div>
-    </div>
 
-    {# Stat cards #}
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
-        {% set stats = [
-            { label: 'Utilisateurs', value: '1 248', delta: '+12,4 %', trend: 'up', icon: 'tabler:users' },
-            { label: 'Sessions', value: '8 902', delta: '+3,1 %', trend: 'up', icon: 'tabler:activity' },
-            { label: 'Documents', value: '342', delta: '-1,8 %', trend: 'down', icon: 'tabler:files' },
-            { label: 'Latence p95', value: '128 ms', delta: 'stable', trend: 'flat', icon: 'tabler:bolt' }
-        ] %}
-        {% for stat in stats %}
-            <div class="rounded-lg border border-gray-200 bg-white p-5 transition hover:border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600">
-                <div class="mb-3 flex items-start justify-between">
-                    <span class="grid size-9 place-items-center rounded-md bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                        <twig:ux:icon name="{{ stat.icon }}" class="size-5"/>
-                    </span>
-                    {% if stat.trend == 'up' %}
-                        <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-                            <twig:ux:icon name="tabler:trending-up" class="size-3"/>{{ stat.delta }}
-                        </span>
-                    {% elseif stat.trend == 'down' %}
-                        <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300">
-                            <twig:ux:icon name="tabler:trending-down" class="size-3"/>{{ stat.delta }}
-                        </span>
-                    {% else %}
-                        <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600 dark:bg-gray-700 dark:text-gray-400">
-                            <twig:ux:icon name="tabler:minus" class="size-3"/>{{ stat.delta }}
-                        </span>
-                    {% endif %}
+        {# Stat cards #}
+        <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {% set stats = [
+                { label: 'Projets actifs', value: '0', accent: 'ink' },
+                { label: 'Stories ouvertes', value: '0', accent: 'ink' },
+                { label: 'À livrer cette semaine', value: '0', accent: 'urgent' },
+                { label: 'Progression moy.', value: '—', accent: 'iris' }
+            ] %}
+            {% for stat in stats %}
+                <div class="rounded-xl border border-frame bg-stat px-[18px] py-4 transition hover:border-line-hover">
+                    <div class="mb-1.5 text-xs text-ink-muted">{{ stat.label }}</div>
+                    <div class="font-mono text-[26px] font-bold {{ stat.accent == 'urgent' ? 'text-urgent' : (stat.accent == 'iris' ? 'text-iris-text' : 'text-ink') }}">{{ stat.value }}</div>
                 </div>
-                <div class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ stat.value }}</div>
-                <div class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ stat.label }}</div>
-            </div>
-        {% endfor %}
-    </div>
-
-    {# Two-column: stack + quick actions #}
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-
-        {# Stack technique #}
-        <div class="rounded-lg border border-gray-200 bg-white p-6 lg:col-span-2 dark:border-gray-700 dark:bg-gray-800">
-            <div class="mb-4 flex items-center justify-between">
-                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Stack technique</h2>
-                <span class="rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-500/10 dark:text-violet-300">v1.5</span>
-            </div>
-            <ul class="divide-y divide-gray-100 dark:divide-gray-700">
-                {% set stack = [
-                    { name: 'PHP', version: '8.5+', desc: 'strict_types, typed properties, readonly classes', icon: 'tabler:brand-php' },
-                    { name: 'Symfony', version: '8.0', desc: 'Framework HTTP + Messenger (Doctrine transport)', icon: 'tabler:brand-symfony' },
-                    { name: 'Doctrine + SQLite', version: 'var/data.db', desc: 'ORM + base embarquée (zéro infra)', icon: 'tabler:database' },
-                    { name: 'Tailwind CSS', version: '4.3', desc: '@source AssetMapper · variables @theme', icon: 'tabler:brand-tailwind' },
-                    { name: 'Flowbite', version: '4.0', desc: 'Composants UI · drawer · dropdown · toast', icon: 'tabler:components' },
-                    { name: 'Stimulus + Turbo', version: 'Symfony UX', desc: 'Live components, hotwire-style', icon: 'tabler:bolt' }
-                ] %}
-                {% for item in stack %}
-                    <li class="flex items-center gap-4 py-3">
-                        <span class="grid size-9 shrink-0 place-items-center rounded-md border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                            <twig:ux:icon name="{{ item.icon }}" class="size-5"/>
-                        </span>
-                        <div class="min-w-0 flex-1">
-                            <div class="flex items-baseline gap-2">
-                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.name }}</span>
-                                <span class="font-mono text-xs text-gray-500">{{ item.version }}</span>
-                            </div>
-                            <p class="truncate text-sm text-gray-500 dark:text-gray-400">{{ item.desc }}</p>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+            {% endfor %}
         </div>
 
-        {# Quick actions #}
-        <div class="space-y-6">
-            <div class="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-                <h2 class="mb-4 font-display text-lg font-semibold text-gray-900 dark:text-white">Démarrer</h2>
-                <div class="space-y-2">
-                    {% set actions = [
-                        { label: 'make start', desc: 'Démarrer Symfony + Mailpit', icon: 'tabler:player-play' },
-                        { label: 'make test', desc: 'Lancer PHPUnit', icon: 'tabler:test-pipe' },
-                        { label: 'make quality', desc: 'CS-Fixer + PHPStan', icon: 'tabler:checkbox' },
-                        { label: 'make db-reset', desc: 'Reset DB + fixtures', icon: 'tabler:refresh' }
+        {# Deux colonnes : stack + démarrage #}
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+
+            {# Stack technique #}
+            <div class="rounded-xl border border-line-strong bg-raised p-6 lg:col-span-2">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-ink-bright">Stack technique</h2>
+                    <span class="rounded-md bg-iris/15 px-2 py-0.5 text-xs font-medium text-iris-tint">Symfony 8</span>
+                </div>
+                <ul class="divide-y divide-line">
+                    {% set stack = [
+                        { name: 'PHP', version: '8.5+', desc: 'strict_types, typed properties, readonly classes', icon: 'tabler:brand-php' },
+                        { name: 'Symfony', version: '8.0', desc: 'Framework HTTP + Messenger (Doctrine transport)', icon: 'tabler:brand-symfony' },
+                        { name: 'Doctrine + SQLite', version: 'var/data.db', desc: 'ORM + base embarquée (zéro infra)', icon: 'tabler:database' },
+                        { name: 'Tailwind CSS', version: '4.3', desc: '@source AssetMapper · tokens @theme Nova', icon: 'tabler:brand-tailwind' },
+                        { name: 'Flowbite', version: '4.0', desc: 'Composants UI · drawer · dropdown · toast', icon: 'tabler:components' },
+                        { name: 'Stimulus + Turbo', version: 'Symfony UX', desc: 'Live components, hotwire-style', icon: 'tabler:bolt' }
                     ] %}
-                    {% for action in actions %}
-                        <button type="button"
-                                class="flex w-full items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2 text-left transition hover:border-violet-300 hover:bg-violet-50 dark:border-gray-600 dark:bg-gray-800 dark:hover:border-violet-500 dark:hover:bg-violet-500/10">
-                            <span class="text-gray-500 dark:text-gray-400">
-                                <twig:ux:icon name="{{ action.icon }}" class="size-4"/>
+                    {% for item in stack %}
+                        <li class="flex items-center gap-4 py-3">
+                            <span class="grid size-9 shrink-0 place-items-center rounded-md border border-line-strong bg-input text-ink-dim">
+                                <twig:ux:icon name="{{ item.icon }}" class="size-5"/>
                             </span>
-                            <span class="min-w-0 flex-1">
-                                <span class="block font-mono text-sm text-gray-900 dark:text-white">{{ action.label }}</span>
-                                <span class="block text-xs text-gray-500 dark:text-gray-400">{{ action.desc }}</span>
-                            </span>
-                        </button>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-sm font-semibold text-ink">{{ item.name }}</span>
+                                    <span class="font-mono text-xs text-ink-muted">{{ item.version }}</span>
+                                </div>
+                                <p class="truncate text-sm text-ink-muted">{{ item.desc }}</p>
+                            </div>
+                        </li>
                     {% endfor %}
+                </ul>
+            </div>
+
+            {# Démarrer + design system #}
+            <div class="space-y-4">
+                <div class="rounded-xl border border-line-strong bg-raised p-6">
+                    <h2 class="mb-4 text-lg font-semibold text-ink-bright">Démarrer</h2>
+                    <div class="space-y-2">
+                        {% set actions = [
+                            { label: 'make serve', desc: 'Démarrer Symfony + Mailpit', icon: 'tabler:player-play' },
+                            { label: 'make phpunit', desc: 'Lancer PHPUnit', icon: 'tabler:test-pipe' },
+                            { label: 'make quality', desc: 'CS-Fixer + PHPStan', icon: 'tabler:checkbox' },
+                            { label: 'make db-reset', desc: 'Reset DB + fixtures', icon: 'tabler:refresh' }
+                        ] %}
+                        {% for action in actions %}
+                            <button type="button"
+                                    class="flex w-full items-center gap-3 rounded-md border border-line-strong bg-input px-3 py-2 text-left transition hover:border-iris/40 hover:bg-iris/8">
+                                <span class="text-ink-muted">
+                                    <twig:ux:icon name="{{ action.icon }}" class="size-4"/>
+                                </span>
+                                <span class="min-w-0 flex-1">
+                                    <span class="block font-mono text-sm text-ink">{{ action.label }}</span>
+                                    <span class="block text-xs text-ink-muted">{{ action.desc }}</span>
+                                </span>
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="rounded-xl border border-iris/30 bg-iris/8 p-6">
+                    <div class="mb-2 flex items-center gap-2">
+                        <twig:ux:icon name="tabler:sparkles" class="size-5 text-iris-text"/>
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-ink-bright">Design system</h3>
+                    </div>
+                    <p class="mb-4 text-sm text-ink-soft">
+                        DA <span class="font-mono text-iris-text">Nova · Midnight</span> — documentée dans <span class="font-mono text-iris-text">DESIGN.md</span>, elle pilote toutes les interfaces.
+                    </p>
+                    <a href="{{ path('app_design_system') }}" class="inline-flex items-center gap-1 text-sm font-medium text-iris-text hover:text-iris-tint">
+                        Voir le design system
+                        <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
+                    </a>
                 </div>
             </div>
 
-            <div class="rounded-lg border border-gray-700 bg-gray-800 p-6 dark:border-violet-500/30 dark:bg-violet-950/40">
-                <div class="mb-2 flex items-center gap-2">
-                    <twig:ux:icon name="tabler:sparkles" class="size-5 text-violet-400"/>
-                    <h3 class="font-display text-sm font-semibold uppercase tracking-wider text-white">Design system</h3>
-                </div>
-                <p class="mb-4 text-sm text-gray-300">
-                    Skill <span class="font-mono text-violet-400">Paper</span> ouvert dans <span class="font-mono text-violet-400">DESIGN.md</span> — pilote les futures interfaces.
-                </p>
-                <a href="#" class="inline-flex items-center gap-1 text-sm font-medium text-violet-300 hover:text-violet-200">
-                    Voir DESIGN.md
-                    <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
-                </a>
-            </div>
         </div>
-
     </div>
 {% endblock %}
