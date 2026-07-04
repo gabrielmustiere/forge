@@ -1,9 +1,11 @@
-![Forge](documentation/banner.png)
+![Forge](.github/banner.png)
 
 **Forge** est une marketplace de plugins Claude Code. Elle publie un plugin : `forge`, un pipeline de développement stack-agnostique qui pilote tout le cycle — de la vision projet jusqu'au commit — en étapes courtes, validées une à une.
 
 - **Marketplace** : `forge`
 - **Source** : `gabrielmustiere/forge`
+
+> Ce dépôt héberge aussi **Forge Board**, l'application Symfony qui visualise le workflow forge en kanban — voir la [section dédiée](#forge-board--lapplication) plus bas.
 
 > Les skills Symfony, Sylius et éditoriales vivent dans une marketplace séparée : [`gabrielmustiere/skills`](https://github.com/gabrielmustiere/skills).
 
@@ -115,11 +117,73 @@ Pour les modifs qui cochent **toutes** ces cases : moins de 3 fichiers, pas de m
 
 Le workflow détecte le stack (Symfony, Sylius…) via `composer.json` / `package.json` et charge les bonnes conventions de QA, sécu et perf au bon moment. Les conventions propres au projet (commandes QA exactes, credentials de test, branches…) vivent dans le `CLAUDE.md` à la racine.
 
-## En savoir plus
+## En savoir plus (plugin)
 
-- Inventaire complet et détaillé : [`documentation/forge.md`](documentation/forge.md)
+- Inventaire complet et détaillé : [`plugins/forge/SKILLS.md`](plugins/forge/SKILLS.md)
 - Sommaire interactif dans Claude Code : `/forge:help`
+
+---
+
+# Forge Board — l'application
+
+**Forge Board** est l'application Symfony hébergée à la **racine de ce dépôt**. C'est un tableau kanban **lecture seule** qui scanne les documents produits par le workflow forge (`docs/story/NNN-<f|r|t>-<slug>/`) et projette chaque story en carte le long d'un pipeline visuel — pour répondre en quelques secondes à « où en est le projet X ? ». Vision complète : [`docs/vision.md`](docs/vision.md). Stack détaillée : [`docs/stack.md`](docs/stack.md).
+
+> L'app et la marketplace cohabitent dans le même repo : les fichiers Symfony sont à la racine, la marketplace vit sous `plugins/`.
+
+## Stack
+
+- **Framework** : Symfony 8.0 / PHP 8.5+ — serveur local via Symfony CLI (proxy HTTPS `*.wip`)
+- **Base de données** : SQLite (fichier local, zéro infra)
+- **Design system** : « Paper » (voir [`DESIGN.md`](DESIGN.md)) — Tailwind CSS 4, Flowbite 4, Symfony UX Toolkit. *Une direction artistique plus moderne est un chantier à venir.*
+- **Front** : Symfony UX (Stimulus, Icons, Live Component, Turbo) + AssetMapper
+- **Tests** : PHPUnit 13 (Unit + Functional) + Playwright (E2E)
+- **Qualité** : PHPStan level 9 + PHP-CS-Fixer
+- **Async** : Symfony Messenger (transport Doctrine)
+- **E-mails (dev)** : Mailpit
+
+## Prérequis
+
+- [PHP 8.5+](https://www.php.net/), [Composer](https://getcomposer.org/), [Symfony CLI](https://symfony.com/download)
+- [Docker](https://www.docker.com/) (uniquement pour Mailpit)
+- [Node.js 22+](https://nodejs.org/) (Playwright et Tailwind)
+
+## Démarrer
+
+```bash
+make init              # Installation complète (deps PHP/JS + DB + fixtures)
+docker compose up -d   # Mailpit (capture des e-mails)
+make serve             # Serveur Symfony
+```
+
+L'application est accessible sur `https://forge-board.wip` (domaine configurable dans `.symfony.local.yaml` et `.env`).
+
+## Workflow Makefile
+
+| Commande          | Description                                                |
+|-------------------|------------------------------------------------------------|
+| `make init`       | Installation complète (deps + DB + fixtures)               |
+| `make serve`      | Lance le serveur Symfony (arrière-plan)                    |
+| `make stop`       | Arrête le serveur Symfony                                  |
+| `make db-reset`   | Recrée la base from scratch (drop + migrate + fixtures)    |
+| `make migration`  | Génère une migration depuis le diff d'entités              |
+| `make phpunit`    | Tests PHPUnit (Unit + Functional)                          |
+| `make playwright` | Tests E2E Playwright                                       |
+| `make quality`    | CS-Fixer + PHPStan + build                                 |
+| `make ci`         | Lint + tests unitaires (reproduit la CI)                   |
+
+`make help` liste toutes les cibles.
+
+## Accès aux services
+
+- **Application** : `https://forge-board.wip`
+- **Mailpit (UI web)** : http://localhost:8027
+- **Base SQLite (dev)** : `var/data.db` (via `sqlite3 var/data.db`)
+- **Identifiants de test** : `admin@example.com` / `password`
+
+## Serveurs MCP (Claude Code)
+
+`.mcp.json` configure trois serveurs MCP pour l'assistance IA : **symfony-ai-mate** (profiler, logs, container), **playwright** (automatisation navigateur), **chrome-devtools**.
 
 ## Licence
 
-Distribué sous licence [Apache 2.0](LICENSE). © 2026 Gabriel Mustiere.
+Marketplace `forge` et application Forge Board distribuées sous licence [Apache 2.0](LICENSE). © 2026 Gabriel Mustiere.
