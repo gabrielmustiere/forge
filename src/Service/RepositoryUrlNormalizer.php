@@ -60,8 +60,10 @@ final class RepositoryUrlNormalizer
             }
         }
 
-        $owner = $segments[0];
-        $repo = implode('/', \array_slice($segments, 1));
+        // Casse ignorée pour l'unicité : GitHub/GitLab résolvent les chemins sans distinction de casse,
+        // donc `Acme/Repo` et `acme/repo` désignent le même dépôt.
+        $owner = strtolower($segments[0]);
+        $repo = strtolower(implode('/', \array_slice($segments, 1)));
 
         return new RepositoryUrl(
             $provider,

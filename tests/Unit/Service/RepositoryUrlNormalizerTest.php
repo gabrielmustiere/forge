@@ -43,6 +43,7 @@ final class RepositoryUrlNormalizerTest extends TestCase
         yield 'ssh scp' => ['git@github.com:symfony/symfony.git', Provider::GitHub, 'symfony', 'symfony', 'https://github.com/symfony/symfony'];
         yield 'ssh url' => ['ssh://git@github.com/symfony/symfony.git', Provider::GitHub, 'symfony', 'symfony', 'https://github.com/symfony/symfony'];
         yield 'uppercase host' => ['https://GitHub.com/symfony/symfony', Provider::GitHub, 'symfony', 'symfony', 'https://github.com/symfony/symfony'];
+        yield 'mixed case owner/repo folded' => ['https://github.com/Symfony/Console', Provider::GitHub, 'symfony', 'console', 'https://github.com/symfony/console'];
         yield 'surrounding spaces' => ['  https://github.com/symfony/symfony  ', Provider::GitHub, 'symfony', 'symfony', 'https://github.com/symfony/symfony'];
         yield 'gitlab' => ['https://gitlab.com/gitlab-org/gitlab', Provider::GitLab, 'gitlab-org', 'gitlab', 'https://gitlab.com/gitlab-org/gitlab'];
         yield 'gitlab subgroup' => ['https://gitlab.com/group/sub/project.git', Provider::GitLab, 'group', 'sub/project', 'https://gitlab.com/group/sub/project'];

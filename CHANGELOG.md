@@ -7,6 +7,13 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [4.2.0] - 2026-07-04
+
+### Added
+- **Gestion des projets forge** (Forge Board) — déclarer un dépôt à suivre (provider GitHub/GitLab, URL, token de lecture chiffré au repos), consulter la liste, ouvrir un projet, éditer l'URL / renouveler le token et retirer un projet derrière confirmation. Le token n'est jamais réaffiché ni renvoyé au navigateur. Liste en Live Component (suppression sans rechargement) et sélecteur de provider aux couleurs de marque.
+- **Connexion locale mono-utilisateur** (Forge Board) — l'application est protégée derrière une authentification : formulaire de login, option « rester connecté », déconnexion.
+- **Direction artistique « Nova · Midnight »** (Forge Board) — design system sombre de référence (tokens de thème, kit de composants Flowbite remappés) pilotant toutes les interfaces.
+
 ## [4.1.0] - 2026-07-04
 
 ### Added
@@ -94,7 +101,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.2.0...HEAD
+[4.2.0]: https://github.com/gabrielmustiere/forge/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/gabrielmustiere/forge/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/gabrielmustiere/forge/compare/v3.3.3...v4.0.0
 [3.3.3]: https://github.com/gabrielmustiere/forge/compare/v3.3.2...v3.3.3

@@ -71,7 +71,7 @@ final class ProjectControllerTest extends WebTestCase
         $form = $crawler->filter('form[data-test="project-form"]')->form();
         $this->client->submit($form, [
             'project[provider]' => 'github',
-            'project[url]' => 'git@github.com:acme/dup.git',
+            'project[url]' => 'git@github.com:Acme/Dup.git',
             'project[plainToken]' => 'ghp_token',
         ]);
 
