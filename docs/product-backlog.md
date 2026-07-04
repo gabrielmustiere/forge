@@ -2,7 +2,7 @@
 
 > Carte des capacités fonctionnelles et backlog priorisé dérivé de `docs/vision.md`.
 
-_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-07-04._
+_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-07-05._
 
 ## Changelog
 
@@ -14,6 +14,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-07-04 | Édition | Renommage slug MVP `acces-local` → `login` | Aligner le backlog sur le dossier de story `001-f-login` |
 | 2026-07-04 | Cadrage | Regroupement D2 en une story `002-f-gestion-projets` (fusion `declaration-projet` + `projets-liste` + remontée V2→MVP de `projets-edition`) | Cadrage `/feature-pitch` : CRUD projets livré en un lot autonome (sans lecture repo) |
 | 2026-07-04 | Cadrage | Regroupement D3 amont en une story `003-f-connecteur-github-lecture` (fusion `connecteur-github-lecture` C3.1 + `verification-forge` C2.3) | Cadrage `/feature-pitch` : lecture d'arborescence distante + vérification d'éligibilité forge livrées en un lot démontrable |
+| 2026-07-05 | Cadrage | Story `004-f-mapping-etapes` (ligne MVP `mapping-etapes`, C3.2) | Cadrage `/feature-pitch` : moteur de mapping fichiers → colonne, pipeline unifié 4 colonnes (Cadrage / Planifié / Review / Livré) + voie « À vérifier », déterministe, le plus avancé l'emporte |
 
 ## Domaines fonctionnels
 
