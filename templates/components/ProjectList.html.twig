@@ -1,0 +1,100 @@
+<div {{ attributes }} data-test="project-list">
+
+    {% if this.projects is empty %}
+        {# État vide #}
+        <div class="rounded-xl border border-dashed border-line-strong bg-stat p-12 text-center" data-test="project-empty">
+            <div class="mx-auto mb-3 grid size-11 place-items-center rounded-lg border border-line-strong bg-input text-ink-muted">
+                <twig:ux:icon name="tabler:folder-open" class="size-6"/>
+            </div>
+            <h2 class="text-sm font-semibold text-ink">Aucun projet déclaré</h2>
+            <p class="mx-auto mt-1 max-w-sm text-[13px] text-ink-muted">Déclarez un dépôt forge pour commencer à suivre ses stories.</p>
+            <a href="{{ path('app_project_new') }}"
+               class="mt-4 inline-flex items-center gap-1.5 rounded-md bg-iris px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-iris-bright">
+                <twig:ux:icon name="tabler:plus" class="size-4"/> Déclarer un projet
+            </a>
+        </div>
+    {% else %}
+        <div class="overflow-hidden rounded-xl border border-line-strong">
+            <table class="w-full text-left text-sm">
+                <thead class="border-b border-line bg-surface text-[11px] font-semibold uppercase tracking-wide text-ink-faint">
+                    <tr>
+                        <th class="px-4 py-2.5">Nom</th>
+                        <th class="px-4 py-2.5">Provider</th>
+                        <th class="hidden px-4 py-2.5 md:table-cell">URL</th>
+                        <th class="px-4 py-2.5">Ajouté le</th>
+                        <th class="px-4 py-2.5 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-line">
+                    {% for project in this.projects %}
+                        <tr class="bg-raised transition-colors hover:bg-raised-hover" data-test="project-row">
+                            <td class="px-4 py-3">
+                                <a href="{{ path('app_project_show', { id: project.id }) }}" data-test="project-open"
+                                   class="font-mono text-[13px] font-medium text-ink hover:text-iris-text">{{ project.name }}</a>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex items-center gap-1.5 text-[12.5px] text-ink-dim">
+                                    <twig:ux:icon name="{{ project.provider.icon }}" class="size-4"/> {{ project.provider.label }}
+                                </span>
+                            </td>
+                            <td class="hidden px-4 py-3 md:table-cell">
+                                <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center gap-1 font-mono text-[12.5px] text-ink-muted hover:text-iris-text">
+                                    {{ project.url|replace({'https://': ''}) }} <twig:ux:icon name="tabler:external-link" class="size-3"/>
+                                </a>
+                            </td>
+                            <td class="px-4 py-3 font-mono text-[12.5px] text-ink-muted">{{ project.createdAt|date('d/m/Y') }}</td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-1">
+                                    <a href="{{ path('app_project_edit', { id: project.id }) }}" title="Modifier"
+                                       class="grid size-7 place-items-center rounded-md text-ink-faint hover:bg-input hover:text-ink-dim">
+                                        <twig:ux:icon name="tabler:edit" class="size-4"/>
+                                    </a>
+                                    <button type="button" title="Supprimer" data-test="project-delete"
+                                            data-action="live#action"
+                                            data-live-action-param="confirmDelete"
+                                            data-live-id-param="{{ project.id }}"
+                                            class="grid size-7 place-items-center rounded-md text-ink-faint hover:bg-danger-soft hover:text-fg-danger-strong">
+                                        <twig:ux:icon name="tabler:trash" class="size-4"/>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {# Confirmation de suppression — overlay piloté par l'état Live #}
+    {% if this.confirming is not null %}
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+             data-test="project-delete-modal">
+            <div class="w-full max-w-sm rounded-xl border border-line-strong bg-overlay p-5 shadow-2xl shadow-black/40">
+                <div class="mb-3 flex items-center gap-2.5">
+                    <span class="grid size-9 place-items-center rounded-lg bg-danger-soft text-fg-danger-strong">
+                        <twig:ux:icon name="tabler:trash" class="size-5"/>
+                    </span>
+                    <h2 class="text-sm font-semibold text-ink-bright">Retirer ce projet ?</h2>
+                </div>
+                <p class="text-[13px] leading-relaxed text-ink-dim">
+                    <span class="font-mono text-ink">{{ this.confirming.name }}</span> sera définitivement retiré de votre liste. Cette action est irréversible.
+                </p>
+                <div class="mt-5 flex items-center justify-end gap-2.5">
+                    <button type="button"
+                            data-action="live#action"
+                            data-live-action-param="cancelDelete"
+                            class="rounded-lg border border-line-strong px-3.5 py-2 text-[13px] text-ink-dim hover:bg-raised hover:text-ink">
+                        Annuler
+                    </button>
+                    <button type="button" data-test="project-delete-confirm"
+                            data-action="live#action"
+                            data-live-action-param="delete"
+                            class="flex items-center gap-1.5 rounded-lg bg-danger px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-danger/90">
+                        <twig:ux:icon name="tabler:trash" class="size-4"/> Retirer
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

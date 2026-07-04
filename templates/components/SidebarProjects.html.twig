@@ -1,0 +1,28 @@
+<div class="flex min-h-0 flex-col">
+    <div class="flex items-center justify-between px-4 pb-2 pt-5">
+        <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Projets</span>
+        <a href="{{ path('app_project_new') }}" title="Déclarer un projet" data-test="sidebar-project-new"
+           class="grid size-5 place-items-center rounded text-ink-faint hover:bg-raised hover:text-ink">
+            <twig:ux:icon name="tabler:plus" class="size-3.5"/>
+        </a>
+    </div>
+
+    {% set projects = this.projects %}
+    {% if projects is empty %}
+        <a href="{{ path('app_project_new') }}"
+           class="mx-2 flex items-center gap-2 rounded-md border border-dashed border-line-strong px-2.5 py-2 text-[12px] text-ink-muted hover:border-iris/40 hover:text-ink-dim">
+            <twig:ux:icon name="tabler:plus" class="size-3.5"/> Déclarer un projet
+        </a>
+    {% else %}
+        <nav class="flex min-h-0 flex-col gap-px overflow-y-auto px-2">
+            {% for project in projects %}
+                {% set active = app.request.attributes.get('_route') starts with 'app_project' and app.request.attributes.get('id') == project.id %}
+                <a href="{{ path('app_project_show', { id: project.id }) }}"
+                   class="group flex items-center gap-2 rounded-md px-2 py-1.5 text-[12.5px] {{ active ? 'bg-iris/12 text-ink' : 'text-ink-dim hover:bg-raised hover:text-ink' }}">
+                    <twig:ux:icon name="{{ project.provider.icon }}" class="size-[15px] shrink-0 {{ active ? 'text-iris-bright' : 'text-ink-subtle group-hover:text-ink-dim' }}"/>
+                    <span class="min-w-0 flex-1 truncate font-mono">{{ project.name }}</span>
+                </a>
+            {% endfor %}
+        </nav>
+    {% endif %}
+</div>

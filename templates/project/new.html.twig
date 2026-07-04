@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Déclarer un projet · Forge Board{% endblock %}
+
+{% block body %}
+    <header class="flex h-12 items-center justify-between border-b border-line bg-surface px-5">
+        <div class="flex items-center gap-2 text-[13px]">
+            <span class="text-ink-muted">Forge Board</span>
+            <span class="text-divider">/</span>
+            <a href="{{ path('app_project_index') }}" class="text-ink-muted hover:text-ink">Projets</a>
+            <span class="text-divider">/</span>
+            <span class="font-medium text-ink">Déclarer</span>
+        </div>
+    </header>
+
+    <div class="p-6">
+        <div class="mx-auto max-w-xl">
+            <div class="mb-6">
+                <h1 class="text-[22px] font-bold tracking-tight text-ink-bright">Déclarer un projet</h1>
+                <p class="mt-1 text-sm text-ink-dim">Choisissez le provider, collez l'URL du dépôt et fournissez un token de lecture.</p>
+            </div>
+
+            <div class="rounded-xl border border-line-strong bg-surface p-6 shadow-xl shadow-black/20">
+                {% include 'project/_form.html.twig' with { submit_label: 'Déclarer le projet' } %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

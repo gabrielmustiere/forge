@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projets · Forge Board{% endblock %}
+
+{% block body %}
+    <header class="flex h-12 items-center justify-between border-b border-line bg-surface px-5">
+        <div class="flex items-center gap-2 text-[13px]">
+            <span class="text-ink-muted">Forge Board</span>
+            <span class="text-divider">/</span>
+            <span class="font-medium text-ink">Projets</span>
+        </div>
+        <a href="{{ path('app_project_new') }}" data-test="project-new"
+           class="flex h-7 items-center gap-1 rounded-md bg-iris px-3 text-[12.5px] font-semibold text-white hover:bg-iris-bright">
+            <twig:ux:icon name="tabler:plus" class="size-3.5"/> Déclarer un projet
+        </a>
+    </header>
+
+    <div class="p-6">
+        <div class="mb-6">
+            <h1 class="text-[22px] font-bold tracking-tight text-ink-bright">Projets</h1>
+            <p class="mt-1 text-sm text-ink-dim">Les dépôts forge que vous suivez. Déclarez-en un pour le projeter en kanban.</p>
+        </div>
+
+        <twig:ProjectList/>
+    </div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% set input_class = 'block w-full rounded-lg border border-line-strong bg-input px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-iris focus:outline-none focus:ring-1 focus:ring-iris' %}
+{% set label_class = 'mb-1.5 block text-[13px] font-medium text-ink-soft' %}
+{% set provider_icons = { 'github': 'tabler:brand-github', 'gitlab': 'tabler:brand-gitlab' } %}
+{% set provider_checked = {
+    'github': 'group-has-[:checked]:border-white/60 group-has-[:checked]:bg-white/10 group-has-[:checked]:text-white',
+    'gitlab': 'group-has-[:checked]:border-[#fc6d26] group-has-[:checked]:bg-[#fc6d26]/15 group-has-[:checked]:text-[#fc6d26]',
+} %}
+
+{{ form_start(form, { attr: { 'data-test': 'project-form', novalidate: 'novalidate' } }) }}
+    <div class="space-y-5">
+
+        {# Provider — sélecteur radio « button group » #}
+        <div>
+            <span class="{{ label_class }}">{{ form_label(form.provider) }}</span>
+            <div class="flex gap-2" role="group">
+                {% for choice in form.provider %}
+                    <label class="group flex-1 cursor-pointer" data-test="provider-{{ choice.vars.value }}">
+                        {# group-has-[:checked] (et non peer-checked) car le thème Flowbite enveloppe l'input dans un <div> :
+                           l'input n'est pas sibling direct du span, mais reste descendant du label (.group).
+                           Le widget (input + label du thème) est masqué visuellement, la « face » ci-dessous sert d'UI. #}
+                        <span class="sr-only">{{ form_widget(choice) }}</span>
+                        <span class="flex items-center justify-center gap-2 rounded-lg border border-line-strong bg-input px-3 py-2.5 text-sm text-ink-dim transition-colors hover:bg-raised {{ provider_checked[choice.vars.value] ?? 'group-has-[:checked]:border-iris group-has-[:checked]:bg-iris/12 group-has-[:checked]:text-ink' }}">
+                            <twig:ux:icon name="{{ provider_icons[choice.vars.value] ?? 'tabler:brand-git' }}" class="size-4"/>
+                            {{ choice.vars.label }}
+                        </span>
+                    </label>
+                {% endfor %}
+            </div>
+            {% for error in form.provider.vars.errors %}
+                <p class="mt-1.5 flex items-center gap-1.5 text-[12.5px] text-fg-danger-strong"><twig:ux:icon name="tabler:alert-triangle" class="size-3.5"/> {{ error.message }}</p>
+            {% endfor %}
+        </div>
+
+        {# URL + nom (pré-remplissage via Stimulus) #}
+        <div data-controller="url-name-suggest" class="space-y-5">
+            <div>
+                <label class="{{ label_class }}" for="{{ form.url.vars.id }}">{{ form.url.vars.label }}</label>
+                {{ form_widget(form.url, { attr: {
+                    class: input_class ~ ' font-mono',
+                    'data-test': 'project-url',
+                    'data-url-name-suggest-target': 'url',
+                    'data-action': 'input->url-name-suggest#suggest',
+                    placeholder: 'https://github.com/owner/repo',
+                } }) }}
+                {% for error in form.url.vars.errors %}
+                    <p class="mt-1.5 flex items-center gap-1.5 text-[12.5px] text-fg-danger-strong"><twig:ux:icon name="tabler:alert-triangle" class="size-3.5"/> {{ error.message }}</p>
+                {% endfor %}
+            </div>
+
+            <div>
+                <label class="{{ label_class }}" for="{{ form.name.vars.id }}">{{ form.name.vars.label }}</label>
+                {{ form_widget(form.name, { attr: {
+                    class: input_class ~ ' font-mono',
+                    'data-test': 'project-name',
+                    'data-url-name-suggest-target': 'name',
+                    'data-action': 'input->url-name-suggest#markTouched',
+                    placeholder: 'owner/repo',
+                } }) }}
+                <p class="mt-1.5 text-[12px] text-ink-muted">Déduit de l'URL si laissé vide.</p>
+            </div>
+        </div>
+
+        {# Token de lecture #}
+        <div>
+            <label class="{{ label_class }}" for="{{ form.plainToken.vars.id }}">{{ form.plainToken.vars.label }}</label>
+            {{ form_widget(form.plainToken, { attr: {
+                class: input_class,
+                'data-test': 'project-token',
+                placeholder: token_placeholder|default('ghp_••••••••••••••••'),
+                autocomplete: 'off',
+            } }) }}
+            {% for error in form.plainToken.vars.errors %}
+                <p class="mt-1.5 flex items-center gap-1.5 text-[12.5px] text-fg-danger-strong"><twig:ux:icon name="tabler:alert-triangle" class="size-3.5"/> {{ error.message }}</p>
+            {% endfor %}
+            {% if token_hint is defined %}
+                <p class="mt-1.5 text-[12px] text-ink-muted">{{ token_hint }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div class="mt-7 flex items-center gap-2.5">
+        <button type="submit" data-test="project-submit"
+                class="flex items-center justify-center gap-2 rounded-lg bg-iris px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-iris-bright focus:outline-none focus:ring-2 focus:ring-iris/50">
+            <twig:ux:icon name="tabler:check" class="size-4"/> {{ submit_label|default('Enregistrer') }}
+        </button>
+        <a href="{{ path('app_project_index') }}"
+           class="rounded-lg border border-line-strong px-4 py-2.5 text-sm text-ink-dim transition-colors hover:bg-raised hover:text-ink">
+            Annuler
+        </a>
+    </div>
+{{ form_end(form) }}

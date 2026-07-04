@@ -55,6 +55,7 @@
     {# Navigation principale #}
     {% set nav = [
         { route: 'app_page', label: 'Tableau de bord', icon: 'tabler:layout-dashboard' },
+        { route: 'app_project_index', label: 'Projets', icon: 'tabler:folders' },
         { route: 'app_design_system', label: 'Design System', icon: 'tabler:palette' }
     ] %}
     <nav class="flex flex-col gap-px px-2">
@@ -68,11 +69,10 @@
         {% endfor %}
     </nav>
 
-    {# Projets (scan docs/story/ — à venir) #}
-    <div class="px-4 pb-2 pt-5 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Projets</div>
-    <div class="px-3 text-[12px] leading-relaxed text-ink-muted">
-        <span class="font-mono text-ink-subtle">docs/story/</span> — scan à venir.
-    </div>
+    {# Projets déclarés #}
+    {% if app.user %}
+        <twig:SidebarProjects/>
+    {% endif %}
 
     {# Footer utilisateur #}
     <div class="mt-auto border-t border-line px-3.5 pb-1 pt-2.5">
