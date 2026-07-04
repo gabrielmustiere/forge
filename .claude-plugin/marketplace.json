@@ -10,10 +10,10 @@
   },
   "plugins": [
     {
-      "name": "workflow",
-      "source": "./plugins/workflow",
+      "name": "forge",
+      "source": "./plugins/forge",
       "description": "Skills pour les différentes étapes de mon workflow de développement ",
-      "version": "3.3.3",
+      "version": "4.0.0",
       "category": "development"
     }
   ]
