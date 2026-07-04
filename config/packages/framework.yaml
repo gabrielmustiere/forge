@@ -5,6 +5,18 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    # Client dédié à l'API GitHub (lecture de l'arborescence docs/story/).
+    # Le token n'est PAS ici : il est par-projet, passé en auth_bearer à chaque requête.
+    http_client:
+        scoped_clients:
+            github.client:
+                base_uri: 'https://api.github.com'
+                headers:
+                    Accept: 'application/vnd.github+json'
+                    X-GitHub-Api-Version: '2022-11-28'
+                timeout: 5
+                max_duration: 10
+
     #esi: true
     #fragments: true
 

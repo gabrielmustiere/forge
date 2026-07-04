@@ -1,0 +1,11 @@
+{# Badge de statut de vérification. Attend `status` (App\Enum\Type\VerificationStatus). #}
+{% set tones = {
+    ok: 'bg-success-soft text-fg-success-strong border-success-subtle',
+    warning: 'bg-warning-soft text-fg-warning border-warning-subtle',
+    danger: 'bg-danger-soft text-fg-danger-strong border-danger-subtle',
+    neutral: 'bg-raised text-ink-dim border-line-strong',
+} %}
+<span data-test="project-status" data-status="{{ status.value }}"
+      class="inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-[12px] font-medium {{ tones[status.badgeTone] }}">
+    <twig:ux:icon name="{{ status.icon }}" class="size-3.5"/> {{ status.label }}
+</span>

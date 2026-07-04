@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Enum\Type\Provider;
+use App\Enum\Type\VerificationStatus;
 use App\Repository\ProjectRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,6 +23,14 @@ class Project
     #[ORM\Column(name: 'created_at')]
     private readonly \DateTimeImmutable $createdAt;
 
+    /** Résultat de la dernière vérification d'accès ; `Unverified` tant qu'aucune n'a eu lieu. */
+    #[ORM\Column(name: 'verification_status', enumType: VerificationStatus::class, options: ['default' => 'unverified'])]
+    private VerificationStatus $verificationStatus;
+
+    /** Horodatage de la dernière vérification ; `null` tant qu'aucune n'a eu lieu. */
+    #[ORM\Column(name: 'verified_at', nullable: true)]
+    private ?\DateTimeImmutable $verifiedAt = null;
+
     public function __construct(
         #[ORM\Column(enumType: Provider::class)]
         private Provider $provider,
@@ -33,6 +42,7 @@ class Project
         private string $token,
     ) {
         $this->createdAt = new \DateTimeImmutable();
+        $this->verificationStatus = VerificationStatus::Unverified;
     }
 
     public function getId(): ?int
@@ -91,5 +101,26 @@ class Project
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getVerificationStatus(): VerificationStatus
+    {
+        return $this->verificationStatus;
+    }
+
+    public function getVerifiedAt(): ?\DateTimeImmutable
+    {
+        return $this->verifiedAt;
+    }
+
+    /**
+     * Pose le statut et son horodatage de façon cohérente (jamais l'un sans l'autre).
+     */
+    public function applyVerification(VerificationStatus $status, \DateTimeImmutable $at): static
+    {
+        $this->verificationStatus = $status;
+        $this->verifiedAt = $at;
+
+        return $this;
     }
 }

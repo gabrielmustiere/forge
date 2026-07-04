@@ -5,6 +5,7 @@ namespace DataFixtures;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Enum\Type\Provider;
+use App\Enum\Type\VerificationStatus;
 use App\Service\TokenCipher;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -26,18 +27,25 @@ class AppFixtures extends Fixture
         $user->setRoles(['ROLE_USER']);
         $manager->persist($user);
 
+        // Statuts posés en dur (aucun appel réseau en fixtures) pour illustrer les badges.
         $projects = [
-            [Provider::GitHub, 'https://github.com/symfony/symfony', 'symfony/symfony'],
-            [Provider::GitLab, 'https://gitlab.com/gitlab-org/gitlab', 'gitlab-org/gitlab'],
+            [Provider::GitHub, 'https://github.com/symfony/symfony', 'symfony/symfony', VerificationStatus::Unverified],
+            [Provider::GitLab, 'https://gitlab.com/gitlab-org/gitlab', 'gitlab-org/gitlab', VerificationStatus::UnsupportedProvider],
         ];
 
-        foreach ($projects as [$provider, $url, $name]) {
-            $manager->persist(new Project(
+        foreach ($projects as [$provider, $url, $name, $status]) {
+            $project = new Project(
                 $provider,
                 $url,
                 $name,
                 $this->tokenCipher->encrypt('example-read-only-token'),
-            ));
+            );
+
+            if (VerificationStatus::Unverified !== $status) {
+                $project->applyVerification($status, new \DateTimeImmutable());
+            }
+
+            $manager->persist($project);
         }
 
         $manager->flush();

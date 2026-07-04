@@ -64,4 +64,17 @@ final class ProjectList
 
         $this->confirmingId = null;
     }
+
+    /**
+     * Re-vérifie l'accès du projet et rafraîchit son badge sans rechargement de page.
+     */
+    #[LiveAction]
+    public function verify(#[LiveArg] int $id): void
+    {
+        $project = $this->projects->find($id);
+
+        if (null !== $project) {
+            $this->manager->reverify($project);
+        }
+    }
 }

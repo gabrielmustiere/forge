@@ -21,6 +21,7 @@
                         <th class="px-4 py-2.5">Nom</th>
                         <th class="px-4 py-2.5">Provider</th>
                         <th class="hidden px-4 py-2.5 md:table-cell">URL</th>
+                        <th class="px-4 py-2.5">Statut</th>
                         <th class="px-4 py-2.5">Ajouté le</th>
                         <th class="px-4 py-2.5 text-right">Actions</th>
                     </tr>
@@ -43,9 +44,19 @@
                                     {{ project.url|replace({'https://': ''}) }} <twig:ux:icon name="tabler:external-link" class="size-3"/>
                                 </a>
                             </td>
+                            <td class="px-4 py-3">
+                                {{ include('project/_status_badge.html.twig', { status: project.verificationStatus }) }}
+                            </td>
                             <td class="px-4 py-3 font-mono text-[12.5px] text-ink-muted">{{ project.createdAt|date('d/m/Y') }}</td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center justify-end gap-1">
+                                    <button type="button" title="Vérifier l'accès" data-test="project-verify"
+                                            data-action="live#action"
+                                            data-live-action-param="verify"
+                                            data-live-id-param="{{ project.id }}"
+                                            class="grid size-7 place-items-center rounded-md text-ink-faint hover:bg-input hover:text-ink-dim">
+                                        <twig:ux:icon name="tabler:refresh" class="size-4"/>
+                                    </button>
                                     <a href="{{ path('app_project_edit', { id: project.id }) }}" title="Modifier"
                                        class="grid size-7 place-items-center rounded-md text-ink-faint hover:bg-input hover:text-ink-dim">
                                         <twig:ux:icon name="tabler:edit" class="size-4"/>

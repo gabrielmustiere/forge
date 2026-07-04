@@ -24,6 +24,8 @@ test('declare then delete a project', async ({ page }) => {
   await expect(page).toHaveURL(/\/projects$/);
   const row = page.locator('[data-test="project-row"]', { hasText: name });
   await expect(row).toBeVisible();
+  // La déclaration déclenche la vérification : un badge de statut est présent sur la ligne.
+  await expect(row.locator('[data-test="project-status"]')).toBeVisible();
 
   await row.locator('[data-test="project-delete"]').click();
   await expect(page.locator('[data-test="project-delete-modal"]')).toBeVisible();

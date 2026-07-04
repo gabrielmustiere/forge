@@ -11,10 +11,19 @@
             <span class="text-divider">/</span>
             <span class="font-medium text-ink">{{ project.name }}</span>
         </div>
-        <a href="{{ path('app_project_edit', { id: project.id }) }}" data-test="project-edit"
-           class="flex h-7 items-center gap-1.5 rounded-md border border-line-strong px-2.5 text-[12.5px] text-ink-dim hover:bg-raised hover:text-ink">
-            <twig:ux:icon name="tabler:edit" class="size-3.5"/> Modifier
-        </a>
+        <div class="flex items-center gap-2">
+            <form method="post" action="{{ path('app_project_verify', { id: project.id }) }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('verify' ~ project.id) }}">
+                <button type="submit" data-test="project-verify"
+                        class="flex h-7 items-center gap-1.5 rounded-md border border-line-strong px-2.5 text-[12.5px] text-ink-dim hover:bg-raised hover:text-ink">
+                    <twig:ux:icon name="tabler:refresh" class="size-3.5"/> Vérifier l'accès
+                </button>
+            </form>
+            <a href="{{ path('app_project_edit', { id: project.id }) }}" data-test="project-edit"
+               class="flex h-7 items-center gap-1.5 rounded-md border border-line-strong px-2.5 text-[12.5px] text-ink-dim hover:bg-raised hover:text-ink">
+                <twig:ux:icon name="tabler:edit" class="size-3.5"/> Modifier
+            </a>
+        </div>
     </header>
 
     <div class="p-6">
@@ -27,9 +36,7 @@
                         <span class="inline-flex items-center gap-1.5 rounded-md bg-raised px-2 py-0.5 text-[12px] font-medium text-ink-dim">
                             <twig:ux:icon name="{{ project.provider.icon }}" class="size-3.5"/> {{ project.provider.label }}
                         </span>
-                        <span class="inline-flex items-center gap-1.5 rounded-md bg-iris/15 px-2 py-0.5 text-[12px] font-medium text-iris-tint">
-                            <twig:ux:icon name="tabler:circle-dot" class="size-3"/> Déclaré
-                        </span>
+                        {{ include('project/_status_badge.html.twig', { status: project.verificationStatus }) }}
                     </div>
                     <h1 class="truncate font-mono text-[22px] font-bold tracking-tight text-ink-bright">{{ project.name }}</h1>
                 </div>
@@ -47,6 +54,12 @@
                 <div class="rounded-xl border border-line-strong bg-raised p-4">
                     <div class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Déclaré le</div>
                     <div class="font-mono text-[13px] text-ink">{{ project.createdAt|date('d/m/Y') }}</div>
+                </div>
+                <div class="rounded-xl border border-line-strong bg-raised p-4">
+                    <div class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Dernière vérification</div>
+                    <div class="font-mono text-[13px] text-ink" data-test="project-verified-at">
+                        {{ project.verifiedAt ? project.verifiedAt|date('d/m/Y à H:i') : 'Jamais' }}
+                    </div>
                 </div>
             </div>
 

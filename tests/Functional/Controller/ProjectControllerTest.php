@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Controller;
 use App\Entity\Project;
 use App\Entity\User;
 use App\Enum\Type\Provider;
+use App\Enum\Type\VerificationStatus;
 use App\Repository\ProjectRepository;
 use App\Service\TokenCipher;
 use Doctrine\ORM\EntityManagerInterface;
@@ -151,6 +152,43 @@ final class ProjectControllerTest extends WebTestCase
         $this->client->request('GET', '/projects/new');
         $newHtml = (string) $this->client->getResponse()->getContent();
         self::assertStringNotContainsString($plain, $newHtml);
+    }
+
+    public function testVerifyButtonUpdatesStatusAndTimestamp(): void
+    {
+        // Reader neutralisé en env test : le nom `eligible-app` force le statut Eligible.
+        $project = $this->persistProject('https://github.com/acme/eligible-app', 'acme/eligible-app');
+        $id = $project->getId();
+        self::assertSame(VerificationStatus::Unverified, $project->getVerificationStatus());
+
+        $crawler = $this->client->request('GET', '/projects/' . $id);
+        self::assertResponseIsSuccessful();
+        $this->client->submit($crawler->selectButton("Vérifier l'accès")->form());
+
+        self::assertResponseRedirects('/projects/' . $id);
+
+        $this->em->clear();
+        $updated = $this->projects->find($id);
+        self::assertNotNull($updated);
+        self::assertSame(VerificationStatus::Eligible, $updated->getVerificationStatus());
+        self::assertNotNull($updated->getVerifiedAt());
+    }
+
+    public function testVerifyIsRejectedWithoutAValidCsrfToken(): void
+    {
+        $project = $this->persistProject('https://github.com/acme/eligible-app', 'acme/eligible-app');
+        $id = $project->getId();
+
+        $this->client->request('POST', '/projects/' . $id . '/verify', ['_token' => 'forged']);
+
+        self::assertResponseRedirects('/projects/' . $id);
+
+        $this->em->clear();
+        $reloaded = $this->projects->find($id);
+        self::assertNotNull($reloaded);
+        // Token CSRF invalide → aucune vérification déclenchée, statut inchangé.
+        self::assertSame(VerificationStatus::Unverified, $reloaded->getVerificationStatus());
+        self::assertNull($reloaded->getVerifiedAt());
     }
 
     private function persistProject(string $url, string $name, string $plainToken = 'token'): Project

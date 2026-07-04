@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+# Surcharges de services propres à l'environnement de test.
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Neutralise l'accès réseau GitHub : le reader réel est remplacé par un double
+    # déterministe (aucun appel HTTP réel n'est jamais émis pendant les tests).
+    App\Service\Github\GitHubRepositoryReader:
+        class: App\Tests\Double\StubRepositoryReader
