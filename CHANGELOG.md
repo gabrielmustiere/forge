@@ -7,6 +7,15 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [4.6.0] - 2026-07-05
+
+### Added
+- **Colonne « Idée » sur le board** (Forge Board) — une story qui n'a qu'un `brief.md` (idée dégrossie par interview) s'affiche désormais en première colonne du pipeline au lieu d'atterrir en « À vérifier ».
+
+### Changed
+- **Colonnes du board alignées sur le cycle de vie** (Forge Board) — le pipeline passe de « Cadrage / Planifié / Review » à cinq colonnes de cycle de vie : **Idée → Besoin → Cadré → Implémenté → Livré**. « À vérifier » ne contient plus que les dossiers réellement non reconnus et gagne une couleur d'anomalie distincte.
+- **Filtre par tag en popover recherchable** (Forge Board) — le mur de chips laisse place à un popover recherchable multi-sélection (OR), tags actifs en pills retirables. Les colonnes vidées par le filtre se rétrécissent, et les libellés de colonne se clampent si besoin.
+
 ## [4.5.0] - 2026-07-05
 
 ### Added
@@ -123,7 +132,10 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/gabrielmustiere/forge/compare/v4.5.0...v4.6.0
+[4.5.0]: https://github.com/gabrielmustiere/forge/compare/v4.4.0...v4.5.0
+[4.4.0]: https://github.com/gabrielmustiere/forge/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/gabrielmustiere/forge/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/gabrielmustiere/forge/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/gabrielmustiere/forge/compare/v4.0.0...v4.1.0
