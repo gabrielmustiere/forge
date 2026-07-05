@@ -13,7 +13,7 @@
       "name": "forge",
       "source": "./plugins/forge",
       "description": "Skills pour les différentes étapes de mon workflow de développement ",
-      "version": "4.2.0",
+      "version": "4.3.0",
       "category": "development"
     }
   ]

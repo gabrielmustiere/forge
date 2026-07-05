@@ -7,6 +7,13 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [4.3.0] - 2026-07-05
+
+### Added
+- **Kanban d'un projet forge** (Forge Board) — à l'ouverture d'un projet, ses stories sont scannées en direct dans le dépôt et projetées en tableau lecture seule à quatre colonnes ordonnées par étape du pipeline, triées par numéro décroissant, avec un bandeau « À vérifier ». Un drawer permet de consulter les documents markdown de chaque story (pitch, plan…), rendus sanitizés. Aucun état persisté : le tableau est recalculé à chaque affichage.
+- **Déduction de l'étape d'une story depuis ses fichiers** (Forge Board) — l'étape de chaque story (pitch → plan → livraison → vérification) est déduite automatiquement des fichiers présents dans son dossier `docs/story/`, sans aucune saisie manuelle.
+- **Vérification d'accès et d'éligibilité d'un dépôt** (Forge Board) — à la déclaration ou l'édition d'un projet, l'application teste l'accès GitHub (token valide, dépôt atteignable) et confirme que le dépôt suit le workflow forge avant de l'accepter.
+
 ## [4.2.0] - 2026-07-04
 
 ### Added
@@ -101,7 +108,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.3.0...HEAD
+[4.3.0]: https://github.com/gabrielmustiere/forge/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/gabrielmustiere/forge/compare/v4.1.0...v4.2.0
 [4.1.0]: https://github.com/gabrielmustiere/forge/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/gabrielmustiere/forge/compare/v3.3.3...v4.0.0
