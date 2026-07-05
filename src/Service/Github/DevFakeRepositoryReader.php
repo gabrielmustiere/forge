@@ -52,4 +52,11 @@ final readonly class DevFakeRepositoryReader implements RepositoryReaderInterfac
             ? FakeRepositoryCatalog::fileContent($url, $path)
             : $this->inner->readFile($url, $plainToken, $path);
     }
+
+    public function readStoryMetadata(RepositoryUrl $url, string $plainToken, array $storyIds): array
+    {
+        return $this->fake
+            ? FakeRepositoryCatalog::metadataFor($url, $storyIds)
+            : $this->inner->readStoryMetadata($url, $plainToken, $storyIds);
+    }
 }

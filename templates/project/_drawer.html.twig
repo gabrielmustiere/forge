@@ -28,6 +28,16 @@
     <nav data-story-drawer-target="docList" data-test="drawer-doc-list"
          class="flex flex-wrap gap-1.5 border-b border-line bg-stat px-4 py-2.5"></nav>
 
+    {# Changelog consolidé de la story (timeline unique du metadata), peuplé par Stimulus.
+       Masqué quand la story n'a pas d'historique. #}
+    <details data-story-drawer-target="changelog" data-test="drawer-changelog"
+             class="hidden border-b border-line bg-canvas px-4 py-2">
+        <summary class="cursor-pointer select-none text-[11.5px] font-semibold text-ink-muted hover:text-ink">
+            Historique
+        </summary>
+        <ol data-story-drawer-target="changelogList" class="mt-2 flex flex-col gap-1.5"></ol>
+    </details>
+
     {# Contenu du document choisi, chargé à la demande via Turbo #}
     <div class="min-h-0 flex-1 overflow-y-auto px-5 py-4">
         <turbo-frame id="story-doc" loading="lazy" data-story-drawer-target="frame">

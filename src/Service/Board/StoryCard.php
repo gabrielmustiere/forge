@@ -12,8 +12,9 @@ use App\Enum\Type\PipelineStage;
  * Value object immuable produit par {@see ProjectBoardBuilder}. L'identité vient de
  * {@see StoryId} (numéro, track, slug, titre humanisé) ; la colonne vient du moteur
  * de mapping (`004`) ; {@see documents} liste les documents présents ordonnés pour le
- * drawer (`report` > `review` > `plan` > `pitch`, puis les transversaux), sans lecture
- * de contenu — le titre réel `# H1` n'est lu qu'à l'ouverture d'un document.
+ * drawer (`report` > `review` > `plan` > `pitch`, puis les transversaux). {@see metadata}
+ * porte les métadonnées lues dans le `metadata.json` de la story — `null` quand le fichier
+ * est absent ou invalide, auquel cas la carte dégrade vers le slug humanisé (règle 9).
  */
 final readonly class StoryCard
 {
@@ -24,6 +25,16 @@ final readonly class StoryCard
         public StoryId $id,
         public PipelineStage $stage,
         public array $documents,
+        public ?StoryMetadata $metadata = null,
     ) {
+    }
+
+    /**
+     * Le titre à afficher : le vrai `title` du metadata s'il existe, sinon le slug humanisé
+     * (dégradation gracieuse, règle 9).
+     */
+    public function title(): string
+    {
+        return null !== $this->metadata ? $this->metadata->title : $this->id->humanizedTitle();
     }
 }

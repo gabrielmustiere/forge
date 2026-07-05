@@ -57,6 +57,47 @@ final class FakeRepositoryCatalog
     }
 
     /**
+     * `metadata.json` factices déterministes, servis en un seul lot ({@see readStoryMetadata}).
+     *
+     * Chaque story fixture porte un vrai titre, des tags et une date de mise à jour distincts
+     * (filtre + tri testables) ; deux stories sont livrées (badge). `002-f-mystere` n'a **pas**
+     * de metadata → prouve la dégradation gracieuse (règle 9). Les scénarios d'erreur du dépôt
+     * restent cohérents avec {@see treeFor}.
+     *
+     * @param list<string> $storyIds
+     *
+     * @return array<string, ?string>
+     *
+     * @throws RepositoryAccessDeniedException
+     * @throws RepositoryUnreachableException
+     */
+    public static function metadataFor(RepositoryUrl $url, array $storyIds): array
+    {
+        return match (true) {
+            str_contains($url->repo, 'denied') => throw new RepositoryAccessDeniedException('fake: accès refusé'),
+            str_contains($url->repo, 'offline') => throw new RepositoryUnreachableException('fake: injoignable'),
+            default => array_combine(
+                $storyIds,
+                array_map(static fn (string $id): ?string => self::FAKE_METADATA[$id] ?? null, $storyIds),
+            ),
+        };
+    }
+
+    /**
+     * `metadata.json` factices indexés par identifiant de story (JSON brut, comme le renverrait
+     * le transport réel). Absent de la table → `null` (dégradation).
+     *
+     * @var array<string, string>
+     */
+    private const array FAKE_METADATA = [
+        '001-f-cadrage' => '{"version":1,"title":"Cadrer la connexion GitHub","created":"2026-06-01","updated":"2026-06-10","tags":["connecteur","auth"],"changelog":[{"date":"2026-06-01","type":"Création","description":"Pitch initial."}]}',
+        '010-f-planifie' => '{"version":1,"title":"Planifier le mapping des étapes","created":"2026-06-05","updated":"2026-06-20","tags":["mapping"],"changelog":[{"date":"2026-06-05","type":"Création","description":"Pitch."},{"date":"2026-06-20","type":"Planification","description":"Plan validé."}]}',
+        '005-r-review' => '{"version":1,"title":"Revue du normaliseur d\'URL","created":"2026-06-02","updated":"2026-06-25","tags":["dette","url"],"changelog":[{"date":"2026-06-25","type":"Review","description":"Revue faite."}]}',
+        '007-t-livre' => '{"version":1,"title":"Durcir le client HTTP","created":"2026-05-20","updated":"2026-06-28","tags":["http","dette"],"changelog":[{"date":"2026-06-28","type":"Livraison","description":"Livré."}],"delivery":{"release":"v4.2.0","commit":"abc1234"}}',
+        '003-f-livre-complet' => '{"version":1,"title":"Afficher le kanban d\'un projet","created":"2026-05-25","updated":"2026-06-30","tags":["board","kanban"],"changelog":[{"date":"2026-06-30","type":"Livraison","description":"Livré."}],"delivery":{"release":"v4.3.0","commit":"b7964b4"}}',
+    ];
+
+    /**
      * Arbre riche : les quatre colonnes peuplées, deux cartes en Livré (tri par numéro
      * décroissant) et une story « À vérifier ».
      */

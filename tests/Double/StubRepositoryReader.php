@@ -34,4 +34,9 @@ final class StubRepositoryReader implements RepositoryReaderInterface
     {
         return FakeRepositoryCatalog::fileContent($url, $path);
     }
+
+    public function readStoryMetadata(RepositoryUrl $url, string $plainToken, array $storyIds): array
+    {
+        return FakeRepositoryCatalog::metadataFor($url, $storyIds);
+    }
 }

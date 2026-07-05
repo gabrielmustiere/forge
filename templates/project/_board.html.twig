@@ -46,40 +46,65 @@
         'livre':    'bg-st-report',
     } %}
 
-    {# Colonnes à largeur fixe, séparées par un simple trait, scroll horizontal discret #}
-    <div data-test="board" class="flex min-h-0 flex-1 overflow-x-auto">
+    {# Le contrôleur `board-filter` opère sur les cartes déjà rendues : filtre par tag et tri
+       par activité, côté client, sans round-trip (règles 10 & 11). #}
+    <div data-controller="board-filter" class="flex min-h-0 flex-1 flex-col">
 
-        {# À vérifier — première colonne : stories hors pipeline reconnu #}
-        {% if board.bannerCount > 0 %}
-            <section data-test="board-banner" class="flex w-80 shrink-0 flex-col border-r border-line-strong">
-                <header class="flex h-11 shrink-0 items-center gap-2 px-4">
-                    <span class="size-2 rounded-full bg-st-brief"></span>
-                    <span class="text-[12.5px] font-semibold text-ink">À vérifier</span>
-                    <span data-test="banner-count" class="font-mono text-[11px] font-medium text-st-brief">{{ board.bannerCount }}</span>
-                </header>
-                <div class="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-4">
-                    {% for card in board.banner %}
-                        {{ include('project/_card.html.twig', { card: card, project: project }) }}
-                    {% endfor %}
-                </div>
-            </section>
-        {% endif %}
+        {# Barre d'outils : chips de tags (injectés par Stimulus) + bascule de tri #}
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line-strong px-4 py-2">
+            <div class="flex items-center gap-2">
+                <span class="text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">Tags</span>
+                <div data-board-filter-target="tags" data-test="board-tag-filters"
+                     class="flex flex-wrap items-center gap-1"></div>
+            </div>
+            <div class="ml-auto flex items-center gap-1.5">
+                <span class="text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">Trier</span>
+                {# Classes de repli = état inactif/actif attendu après connexion Stimulus (N° trié par défaut),
+                   pour éviter tout flash de bouton non stylé avant `updateSortButtons`. #}
+                <button type="button" data-test="sort-number"
+                        data-action="board-filter#sortByNumber" data-board-filter-target="sortNumber"
+                        class="rounded-md border border-iris bg-iris/12 px-2 py-0.5 text-[11px] font-medium text-iris-text transition">N°</button>
+                <button type="button" data-test="sort-updated"
+                        data-action="board-filter#sortByUpdated" data-board-filter-target="sortUpdated"
+                        class="rounded-md border border-line-strong bg-raised px-2 py-0.5 text-[11px] font-medium text-ink-dim transition hover:bg-raised-hover hover:text-ink">Activité</button>
+            </div>
+        </div>
 
-        {% for stage in board.columns %}
-            <section data-test="board-column" data-stage="{{ stage.value }}"
-                     class="flex w-80 shrink-0 flex-col border-r border-line-strong">
-                <header class="flex h-11 shrink-0 items-center gap-2 px-4">
-                    <span class="size-2 rounded-full {{ stageBar[stage.value] }}"></span>
-                    <span class="text-[12.5px] font-semibold text-ink">{{ stage.label }}</span>
-                    <span data-test="column-count"
-                          class="font-mono text-[11px] font-medium {{ stageAccent[stage.value] }}">{{ board.countFor(stage) }}</span>
-                </header>
-                <div class="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-4">
-                    {% for card in board.cardsFor(stage) %}
-                        {{ include('project/_card.html.twig', { card: card, project: project }) }}
-                    {% endfor %}
-                </div>
-            </section>
-        {% endfor %}
+        {# Colonnes à largeur fixe, séparées par un simple trait, scroll horizontal discret #}
+        <div data-test="board" class="flex min-h-0 flex-1 overflow-x-auto">
+
+            {# À vérifier — première colonne : stories hors pipeline reconnu #}
+            {% if board.bannerCount > 0 %}
+                <section data-test="board-banner" class="flex w-80 shrink-0 flex-col border-r border-line-strong">
+                    <header class="flex h-11 shrink-0 items-center gap-2 px-4">
+                        <span class="size-2 rounded-full bg-st-brief"></span>
+                        <span class="text-[12.5px] font-semibold text-ink">À vérifier</span>
+                        <span data-test="banner-count" class="font-mono text-[11px] font-medium text-st-brief">{{ board.bannerCount }}</span>
+                    </header>
+                    <div data-board-filter-target="column" class="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-4">
+                        {% for card in board.banner %}
+                            {{ include('project/_card.html.twig', { card: card, project: project }) }}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endif %}
+
+            {% for stage in board.columns %}
+                <section data-test="board-column" data-stage="{{ stage.value }}"
+                         class="flex w-80 shrink-0 flex-col border-r border-line-strong">
+                    <header class="flex h-11 shrink-0 items-center gap-2 px-4">
+                        <span class="size-2 rounded-full {{ stageBar[stage.value] }}"></span>
+                        <span class="text-[12.5px] font-semibold text-ink">{{ stage.label }}</span>
+                        <span data-test="column-count"
+                              class="font-mono text-[11px] font-medium {{ stageAccent[stage.value] }}">{{ board.countFor(stage) }}</span>
+                    </header>
+                    <div data-board-filter-target="column" class="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-4">
+                        {% for card in board.cardsFor(stage) %}
+                            {{ include('project/_card.html.twig', { card: card, project: project }) }}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        </div>
     </div>
 {% endif %}

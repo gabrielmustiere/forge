@@ -41,4 +41,19 @@ interface RepositoryReaderInterface
      * @throws RepositoryAccessDeniedException accès refusé (401/403)
      */
     public function readFile(RepositoryUrl $url, string $plainToken, string $path): string;
+
+    /**
+     * Lit en **un seul appel groupé** le `metadata.json` de plusieurs stories (règle 10 :
+     * chargement instantané, nombre d'appels indépendant du nombre de stories). Pur transport :
+     * renvoie le JSON brut ou `null` par story ; le décodage/validation revient au parser.
+     *
+     * @param string       $plainToken token en clair, utilisé le temps de l'appel puis oublié
+     * @param list<string> $storyIds   identifiants `NNN-<f|r|t>-<slug>` des stories à lire
+     *
+     * @return array<string, ?string> map storyId → contenu brut du `metadata.json`, `null` si absent
+     *
+     * @throws RepositoryUnreachableException  dépôt injoignable, réseau, timeout, quota
+     * @throws RepositoryAccessDeniedException accès refusé (401/403)
+     */
+    public function readStoryMetadata(RepositoryUrl $url, string $plainToken, array $storyIds): array;
 }

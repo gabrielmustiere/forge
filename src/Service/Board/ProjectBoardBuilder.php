@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace App\Service\Board;
 
 use App\Entity\Project;
+use App\Service\Github\StoryFolder;
+use App\Service\Github\StoryTree;
 use App\Service\InvalidRepositoryUrlException;
 use App\Service\Mapping\StoryStageMapper;
 use App\Service\Repository\RepositoryAccessDeniedException;
+use App\Service\Repository\RepositoryReaderInterface;
 use App\Service\Repository\RepositoryReaderRegistry;
 use App\Service\Repository\RepositoryUnreachableException;
+use App\Service\RepositoryUrl;
 use App\Service\RepositoryUrlNormalizer;
 use App\Service\TokenCipher;
 
@@ -40,6 +44,7 @@ final readonly class ProjectBoardBuilder
         private RepositoryUrlNormalizer $normalizer,
         private TokenCipher $cipher,
         private StoryStageMapper $mapper,
+        private StoryMetadataParser $metadataParser,
     ) {
     }
 
@@ -53,12 +58,16 @@ final readonly class ProjectBoardBuilder
 
         try {
             $url = $this->normalizer->normalize($project->getUrl());
-            $tree = $reader->readStoryTree($url, $this->cipher->decrypt($project->getToken()));
+            $token = $this->cipher->decrypt($project->getToken());
+            $tree = $reader->readStoryTree($url, $token);
         } catch (RepositoryAccessDeniedException) {
             return BoardResult::failure('Accès au dépôt refusé (token invalide ou insuffisant).');
         } catch (RepositoryUnreachableException|InvalidRepositoryUrlException) {
             return BoardResult::failure('Dépôt injoignable — impossible de charger le tableau.');
         }
+
+        // Lecture groupée du metadata de toutes les stories (règle 10 : un seul appel).
+        $metadata = $this->readMetadata($reader, $url, $token, $tree);
 
         /** @var array<string, list<StoryCard>> $columns */
         $columns = [];
@@ -67,7 +76,12 @@ final readonly class ProjectBoardBuilder
 
         foreach ($tree->stories as $folder) {
             $stage = $this->mapper->stageFor($folder);
-            $card = new StoryCard(StoryId::parse($folder->id), $stage, $this->documentsFor($folder->files()));
+            $card = new StoryCard(
+                StoryId::parse($folder->id),
+                $stage,
+                $this->documentsFor($folder->files()),
+                $metadata[$folder->id] ?? null,
+            );
 
             if ($stage->isOnPipeline()) {
                 $columns[$stage->value][] = $card;
@@ -81,6 +95,37 @@ final readonly class ProjectBoardBuilder
         }
 
         return BoardResult::success(new Board($columns, $this->sortByNumberDesc($banner)));
+    }
+
+    /**
+     * Lit et parse en un seul appel groupé le metadata de toutes les stories de l'arbre.
+     *
+     * L'enrichissement ne doit jamais faire échouer un board déjà lisible : un échec de la
+     * lecture groupée (réseau, quota…) dégrade toutes les cartes vers leur slug, sans casser
+     * le tableau (règle 9). Chaque JSON est confié au parser tolérant (`null` si invalide).
+     *
+     * @return array<string, ?StoryMetadata> map storyId → métadonnées, `null` si absent/invalide
+     */
+    private function readMetadata(RepositoryReaderInterface $reader, RepositoryUrl $url, string $token, StoryTree $tree): array
+    {
+        $storyIds = array_map(static fn (StoryFolder $folder): string => $folder->id, $tree->stories);
+
+        if ([] === $storyIds) {
+            return [];
+        }
+
+        try {
+            $raw = $reader->readStoryMetadata($url, $token, $storyIds);
+        } catch (RepositoryAccessDeniedException|RepositoryUnreachableException) {
+            return [];
+        }
+
+        $parsed = [];
+        foreach ($raw as $storyId => $json) {
+            $parsed[$storyId] = $this->metadataParser->parse($json);
+        }
+
+        return $parsed;
     }
 
     /**

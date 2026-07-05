@@ -9,6 +9,7 @@ use App\Enum\Type\PipelineStage;
 use App\Enum\Type\Provider;
 use App\Enum\Type\Track;
 use App\Service\Board\ProjectBoardBuilder;
+use App\Service\Board\StoryMetadataParser;
 use App\Service\Github\StoryFolder;
 use App\Service\Github\StoryTree;
 use App\Service\Mapping\StoryStageMapper;
@@ -108,6 +109,54 @@ final class ProjectBoardBuilderTest extends TestCase
         );
     }
 
+    public function testHydratesCardsFromGroupedMetadata(): void
+    {
+        $reader = $this->createStub(RepositoryReaderInterface::class);
+        $reader->method('supports')->willReturn(true);
+        $reader->method('readStoryTree')->willReturn(new StoryTree([
+            new StoryFolder('001-f-titled', ['pitch.md']),
+            new StoryFolder('002-f-bare', ['pitch.md']),
+        ]));
+        $reader->method('readStoryMetadata')->willReturn([
+            '001-f-titled' => '{"version":1,"title":"Vrai titre","created":"2026-06-01","updated":"2026-06-10","tags":["board"]}',
+            '002-f-bare' => null,
+        ]);
+
+        $board = $this->builderWith($reader)->build($this->project())->board;
+        self::assertNotNull($board);
+
+        $byId = [];
+        foreach ($board->cardsFor(PipelineStage::Cadrage) as $card) {
+            $byId[$card->id->value] = $card;
+        }
+
+        // Story avec metadata → vrai titre + tags hydratés.
+        self::assertSame('Vrai titre', $byId['001-f-titled']->title());
+        self::assertNotNull($byId['001-f-titled']->metadata);
+        self::assertSame(['board'], $byId['001-f-titled']->metadata->tags);
+
+        // Story sans metadata → dégradation vers le slug humanisé.
+        self::assertNull($byId['002-f-bare']->metadata);
+        self::assertSame('Bare', $byId['002-f-bare']->title());
+    }
+
+    public function testMetadataReadFailureDoesNotBreakTheBoard(): void
+    {
+        // L'enrichissement échoue mais le board reste lisible (dégradation, règle 9).
+        $reader = $this->createStub(RepositoryReaderInterface::class);
+        $reader->method('supports')->willReturn(true);
+        $reader->method('readStoryTree')->willReturn(new StoryTree([new StoryFolder('001-f-x', ['pitch.md'])]));
+        $reader->method('readStoryMetadata')->willThrowException(new RepositoryUnreachableException('metadata offline'));
+
+        $result = $this->builderWith($reader)->build($this->project());
+
+        self::assertTrue($result->isSuccess());
+        self::assertNotNull($result->board);
+        $card = $result->board->cardsFor(PipelineStage::Cadrage)[0];
+        self::assertNull($card->metadata);
+        self::assertSame('X', $card->title());
+    }
+
     public function testEmptyTreeYieldsAnEmptyBoard(): void
     {
         $result = $this->buildFrom(new StoryTree([]));
@@ -159,6 +208,7 @@ final class ProjectBoardBuilderTest extends TestCase
             new RepositoryUrlNormalizer(),
             $this->cipher,
             new StoryStageMapper(),
+            new StoryMetadataParser(),
         );
     }
 

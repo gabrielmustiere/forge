@@ -9,7 +9,7 @@ import { Controller } from '@hotwired/stimulus';
  * le fragment de la route dédiée. Lecture seule stricte — aucune écriture.
  */
 export default class extends Controller {
-    static targets = ['panel', 'backdrop', 'title', 'storyId', 'docList', 'frame'];
+    static targets = ['panel', 'backdrop', 'title', 'storyId', 'docList', 'frame', 'changelog', 'changelogList'];
 
     connect() {
         this.onKeydown = (event) => {
@@ -25,12 +25,46 @@ export default class extends Controller {
     }
 
     open(event) {
-        const { storyId, title, documents } = event.params;
+        const { storyId, title, documents, changelog } = event.params;
 
         this.storyIdTarget.textContent = storyId;
         this.titleTarget.textContent = title;
         this.renderDocuments(documents || []);
+        this.renderChangelog(changelog || []);
         this.show();
+    }
+
+    renderChangelog(entries) {
+        if (!this.hasChangelogTarget) {
+            return;
+        }
+
+        this.changelogListTarget.replaceChildren();
+
+        if (entries.length === 0) {
+            this.changelogTarget.classList.add('hidden');
+            this.changelogTarget.removeAttribute('open');
+            return;
+        }
+
+        entries.forEach((entry) => {
+            const item = document.createElement('li');
+            item.dataset.test = 'changelog-entry';
+            item.className = 'flex gap-2 text-[11.5px] leading-snug';
+
+            const meta = document.createElement('span');
+            meta.className = 'shrink-0 font-mono text-ink-faint';
+            meta.textContent = `${entry.date} · ${entry.type}`;
+
+            const description = document.createElement('span');
+            description.className = 'text-ink-dim';
+            description.textContent = entry.description;
+
+            item.append(meta, description);
+            this.changelogListTarget.appendChild(item);
+        });
+
+        this.changelogTarget.classList.remove('hidden');
     }
 
     renderDocuments(documents) {

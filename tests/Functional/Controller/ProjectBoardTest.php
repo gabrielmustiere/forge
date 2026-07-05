@@ -87,6 +87,33 @@ final class ProjectBoardTest extends WebTestCase
         self::assertSame(['007-t-livre', '003-f-livre-complet'], $ids);
     }
 
+    public function testCardsShowRealTitleTagsAndDeliveryFromMetadata(): void
+    {
+        $project = $this->persistProject('https://github.com/acme/board-app', 'acme/board-app');
+
+        $crawler = $this->client->request('GET', '/projects/' . $project->getId());
+        self::assertResponseIsSuccessful();
+
+        $html = (string) $this->client->getResponse()->getContent();
+
+        // Vrais titres issus du metadata fixture (pas les slugs). L'apostrophe étant
+        // HTML-échappée par Twig, on assert sur une sous-chaîne sans caractère spécial.
+        self::assertStringContainsString('Afficher le kanban', $html);
+        self::assertStringContainsString('Cadrer la connexion GitHub', $html);
+
+        // Tags rendus, y compris un tag partagé à travers le pipeline (« dette »).
+        $tags = $crawler->filter('[data-test="card-tag"]')->each(static fn ($node): string => trim($node->text()));
+        self::assertContains('kanban', $tags);
+        self::assertContains('dette', $tags);
+
+        // Badge de livraison avec la release sur la story livrée.
+        self::assertSelectorExists('[data-test="card-delivery"]');
+        self::assertStringContainsString('v4.3.0', $html);
+
+        // Story sans metadata → dégradation gracieuse vers le slug humanisé.
+        self::assertStringContainsString('Mystere', $html);
+    }
+
     public function testEmptyEligibleProjectShowsEmptyState(): void
     {
         $project = $this->persistProject('https://github.com/acme/quiet-repo', 'acme/quiet-repo');

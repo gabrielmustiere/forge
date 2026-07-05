@@ -224,6 +224,106 @@ final class GitHubRepositoryReaderTest extends TestCase
         $this->readFile(new MockHttpClient(static fn (): never => throw new TransportException('timeout')));
     }
 
+    public function testReadStoryMetadataMapsEachStoryInASingleGraphqlCall(): void
+    {
+        $client = new MockHttpClient([
+            new JsonMockResponse(['data' => ['repository' => [
+                's0' => ['text' => '{"version":1,"title":"A"}'],
+                's1' => null, // story sans metadata.json → null
+                's2' => ['text' => '{"version":1,"title":"C"}'],
+            ]]]),
+        ], 'https://api.github.com');
+
+        $reader = new GitHubRepositoryReader($client);
+        $metadata = $reader->readStoryMetadata($this->url(), 'ghp_token', ['001-f-a', '002-f-b', '003-f-c']);
+
+        // Un seul appel réseau, quel que soit le nombre de stories (règle 10).
+        self::assertSame(1, $client->getRequestsCount());
+        self::assertSame('{"version":1,"title":"A"}', $metadata['001-f-a']);
+        self::assertNull($metadata['002-f-b']);
+        self::assertSame('{"version":1,"title":"C"}', $metadata['003-f-c']);
+    }
+
+    public function testReadStoryMetadataWithoutStoriesMakesNoCall(): void
+    {
+        $client = new MockHttpClient([], 'https://api.github.com');
+        $reader = new GitHubRepositoryReader($client);
+
+        self::assertSame([], $reader->readStoryMetadata($this->url(), 'ghp_token', []));
+        self::assertSame(0, $client->getRequestsCount());
+    }
+
+    public function testReadStoryMetadataPostsGraphqlWithBearerNeverInUrl(): void
+    {
+        $response = new JsonMockResponse(['data' => ['repository' => ['s0' => null]]]);
+        $reader = new GitHubRepositoryReader(new MockHttpClient([$response], 'https://api.github.com'));
+        $reader->readStoryMetadata($this->url(), 'ghp_gql_secret', ['001-f-a']);
+
+        self::assertSame('POST', $response->getRequestMethod());
+        self::assertStringEndsWith('/graphql', $response->getRequestUrl());
+
+        $rawHeaders = $response->getRequestOptions()['headers'] ?? [];
+        self::assertIsArray($rawHeaders);
+        $headers = implode("\n", array_filter($rawHeaders, 'is_string'));
+        self::assertStringContainsString('Authorization: Bearer ghp_gql_secret', $headers);
+        self::assertStringNotContainsString('ghp_gql_secret', $response->getRequestUrl());
+    }
+
+    public function testReadStoryMetadataUnauthorizedThrowsAccessDenied(): void
+    {
+        $this->expectException(RepositoryAccessDeniedException::class);
+
+        $reader = new GitHubRepositoryReader(new MockHttpClient([
+            new MockResponse('', ['http_code' => 401]),
+        ], 'https://api.github.com'));
+        $reader->readStoryMetadata($this->url(), 'ghp_token', ['001-f-a']);
+    }
+
+    public function testReadStoryMetadataTransportErrorIsUnreachable(): void
+    {
+        $this->expectException(RepositoryUnreachableException::class);
+
+        $reader = new GitHubRepositoryReader(new MockHttpClient(static fn (): never => throw new TransportException('timeout')));
+        $reader->readStoryMetadata($this->url(), 'ghp_token', ['001-f-a']);
+    }
+
+    public function testReadStoryMetadataGraphqlRateLimitIsUnreachable(): void
+    {
+        // GraphQL signale le quota par un HTTP 200 + errors[].type = RATE_LIMITED (pas un 403).
+        $this->expectException(RepositoryUnreachableException::class);
+        $this->expectExceptionMessage('Quota GitHub dépassé.');
+
+        $reader = new GitHubRepositoryReader(new MockHttpClient([
+            new JsonMockResponse([
+                'data' => null,
+                'errors' => [['type' => 'RATE_LIMITED', 'message' => 'API rate limit exceeded']],
+            ]),
+        ], 'https://api.github.com'));
+        $reader->readStoryMetadata($this->url(), 'ghp_token', ['001-f-a']);
+    }
+
+    public function testReadStoryMetadataToleratesPartialGraphqlErrors(): void
+    {
+        // Une erreur GraphQL non-quota (ex. NOT_FOUND sur un alias) ne casse pas la lecture :
+        // le champ concerné vaut null, la carte dégrade (fidélité, règle 9).
+        $reader = new GitHubRepositoryReader(new MockHttpClient([
+            new JsonMockResponse([
+                'data' => ['repository' => ['s0' => ['text' => '{"version":1,"title":"A"}'], 's1' => null]],
+                'errors' => [['type' => 'NOT_FOUND', 'message' => 'Could not resolve']],
+            ]),
+        ], 'https://api.github.com'));
+
+        $metadata = $reader->readStoryMetadata($this->url(), 'ghp_token', ['001-f-a', '002-f-b']);
+
+        self::assertSame('{"version":1,"title":"A"}', $metadata['001-f-a']);
+        self::assertNull($metadata['002-f-b']);
+    }
+
+    private function url(): RepositoryUrl
+    {
+        return new RepositoryUrl(Provider::GitHub, self::OWNER, self::REPO, 'https://github.com/' . self::OWNER . '/' . self::REPO);
+    }
+
     private function read(MockHttpClient $client, string $token = 'ghp_token'): \App\Service\Github\StoryTree
     {
         $reader = new GitHubRepositoryReader($client);

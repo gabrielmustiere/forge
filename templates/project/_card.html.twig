@@ -3,10 +3,15 @@
       - card    (App\Service\Board\StoryCard)
       - project (App\Entity\Project)
 
-    Cliquer la carte ouvre le drawer (contrôleur `story-drawer`) : l'identifiant, le titre
-    humanisé et la liste des documents (avec leur URL de lecture) sont passés en paramètres
-    Stimulus — aucun appel réseau au chargement (règle 4). Le titre réel `# H1` n'apparaît
-    que dans le drawer, au rendu du document.
+    Le titre affiché est le vrai `title` du metadata si présent, sinon le slug humanisé
+    (dégradation, règle 9). Dates, tags et badge de livraison viennent du metadata déjà lu
+    en un seul appel groupé au chargement du board — aucun appel réseau par carte (règle 10).
+    Cliquer la carte ouvre le drawer (contrôleur `story-drawer`) : identifiant, titre, liste
+    des documents et changelog consolidé sont passés en paramètres Stimulus. Le contenu réel
+    d'un document n'est chargé qu'à son ouverture dans le drawer.
+
+    Attributs `data-filter-*` / `data-sort-*` : consommés par le contrôleur `board-filter`
+    (filtre par tag + tri par activité), côté client, sur des cartes déjà rendues.
 #}
 {% set trackChip = {
     'feature': 'bg-iris/12 text-iris-text',
@@ -22,21 +27,62 @@
     }]) %}
 {% endfor %}
 
+{% set changelog = [] %}
+{% for entry in card.metadata ? card.metadata.changelog : [] %}
+    {% set changelog = changelog|merge([{
+        date: entry.date|date('Y-m-d'),
+        type: entry.type,
+        description: entry.description,
+    }]) %}
+{% endfor %}
+
 <button type="button" data-test="story-card" data-story-id="{{ card.id.value }}"
         data-action="story-drawer#open"
         data-story-drawer-story-id-param="{{ card.id.value }}"
-        data-story-drawer-title-param="{{ card.id.humanizedTitle }}"
+        data-story-drawer-title-param="{{ card.title }}"
         data-story-drawer-documents-param="{{ documents|json_encode }}"
+        data-story-drawer-changelog-param="{{ changelog|json_encode }}"
+        data-board-filter-target="card"
+        data-filter-tags="{{ card.metadata ? card.metadata.tags|join(' ') : '' }}"
+        data-sort-number="{{ card.id.number }}"
+        data-sort-updated="{{ card.metadata ? card.metadata.updated|date('Y-m-d') : '' }}"
         class="group w-full rounded-lg border border-line-strong bg-raised p-2.5 text-left transition hover:border-line-hover hover:bg-raised-hover">
     <div class="mb-1.5 flex items-center gap-1.5">
         <span class="inline-flex items-center rounded px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-wide {{ trackChip }}">
             {{ card.id.track.label }}
         </span>
         <span class="truncate font-mono text-[11px] text-ink-faint">{{ card.id.value }}</span>
+        {% if card.metadata and card.metadata.isDelivered %}
+            <span data-test="card-delivery"
+                  class="ml-auto inline-flex items-center gap-1 rounded bg-st-report/15 px-1.5 py-0.5 text-[10px] font-semibold text-st-report"
+                  {% if card.metadata.delivery.commit %}title="commit {{ card.metadata.delivery.commit }}"{% endif %}>
+                <twig:ux:icon name="tabler:rocket" class="size-3"/>
+                {{ card.metadata.delivery.release ?? 'livré' }}
+            </span>
+        {% endif %}
     </div>
-    <div class="truncate text-[13px] font-medium text-ink group-hover:text-ink-bright">{{ card.id.humanizedTitle }}</div>
-    <div class="mt-1.5 flex items-center gap-1 text-[11px] text-ink-faint">
-        <twig:ux:icon name="tabler:file-text" class="size-3.5"/>
-        {{ card.documents|length }} document{{ card.documents|length > 1 ? 's' : '' }}
+    <div class="truncate text-[13px] font-medium text-ink group-hover:text-ink-bright">{{ card.title }}</div>
+
+    {% if card.metadata and card.metadata.hasTags %}
+        <div class="mt-1.5 flex flex-wrap gap-1">
+            {% for tag in card.metadata.tags %}
+                <span data-test="card-tag"
+                      class="inline-flex items-center rounded bg-stat px-1.5 py-0.5 font-mono text-[10px] text-ink-dim">{{ tag }}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="mt-1.5 flex items-center gap-3 text-[11px] text-ink-faint">
+        <span class="inline-flex items-center gap-1">
+            <twig:ux:icon name="tabler:file-text" class="size-3.5"/>
+            {{ card.documents|length }} document{{ card.documents|length > 1 ? 's' : '' }}
+        </span>
+        {% if card.metadata %}
+            <span data-test="card-updated" class="inline-flex items-center gap-1"
+                  title="Dernière activité le {{ card.metadata.updated|date('d/m/Y') }}">
+                <twig:ux:icon name="tabler:clock" class="size-3.5"/>
+                {{ card.metadata.updated|date('d/m/Y') }}
+            </span>
+        {% endif %}
     </div>
 </button>
