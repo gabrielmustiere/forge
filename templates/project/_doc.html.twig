@@ -1,0 +1,37 @@
+{#
+    Fragment chargé par la route `app_project_story_doc` dans le drawer. Attend :
+      - filename (string)      : nom du document, pour l'en-tête.
+      - markdown (string|null) : contenu brut du document, ou null si illisible (garde-fou).
+
+    Le contenu vient d'un repo tiers : `markdown_to_html` s'appuie sur un converter GFM
+    configuré en mode sûr (`html_input: strip`, `allow_unsafe_links: false`) — la sortie est
+    déjà assainie, aucun `|raw` supplémentaire. Le turbo-frame doit garder l'id `story-doc`
+    pour que Turbo remplace bien le cadre du drawer.
+#}
+<turbo-frame id="story-doc">
+    {% if markdown is not null %}
+        <div class="mb-3 flex items-center gap-1.5 font-mono text-[11px] text-ink-faint">
+            <twig:ux:icon name="tabler:file-text" class="size-3.5"/> {{ filename }}
+        </div>
+        <article data-test="doc-content"
+                 class="text-[13.5px] leading-relaxed text-ink-soft
+                        [&_a]:text-iris-text [&_a]:underline
+                        [&_code]:rounded [&_code]:bg-raised [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[12px] [&_code]:text-ink
+                        [&_pre]:my-3 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:border-line [&_pre]:bg-canvas [&_pre]:p-3 [&_pre]:text-[12px]
+                        [&_h1]:mb-2 [&_h1]:mt-1 [&_h1]:text-lg [&_h1]:font-bold [&_h1]:text-ink-bright
+                        [&_h2]:mb-2 [&_h2]:mt-4 [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-ink
+                        [&_h3]:mb-1.5 [&_h3]:mt-3 [&_h3]:text-sm [&_h3]:font-semibold [&_h3]:text-ink
+                        [&_p]:my-2
+                        [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-0.5
+                        [&_blockquote]:my-2 [&_blockquote]:border-l-2 [&_blockquote]:border-line-strong [&_blockquote]:pl-3 [&_blockquote]:text-ink-muted
+                        [&_table]:my-3 [&_table]:w-full [&_table]:text-left [&_th]:border-b [&_th]:border-line-strong [&_th]:py-1 [&_th]:pr-3 [&_th]:font-semibold [&_td]:border-b [&_td]:border-line [&_td]:py-1 [&_td]:pr-3
+                        [&_hr]:my-4 [&_hr]:border-line">
+            {{ markdown|markdown_to_html }}
+        </article>
+    {% else %}
+        <div data-test="doc-error" class="rounded-lg border border-dashed border-line-strong bg-stat px-4 py-6 text-center">
+            <twig:ux:icon name="tabler:file-alert" class="mx-auto mb-2 size-6 text-ink-muted"/>
+            <p class="text-[13px] text-ink-muted">Ce document n'a pas pu être chargé.</p>
+        </div>
+    {% endif %}
+</turbo-frame>

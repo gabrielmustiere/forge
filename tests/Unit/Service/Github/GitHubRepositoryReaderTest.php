@@ -154,11 +154,89 @@ final class GitHubRepositoryReaderTest extends TestCase
         self::assertTrue($tree->hasStories());
     }
 
+    public function testReadFileReturnsRawContent(): void
+    {
+        $raw = "# Titre\n\nCorps du document.\n";
+        $content = $this->readFile(new MockHttpClient([
+            new MockResponse($raw),
+        ], 'https://api.github.com'));
+
+        self::assertSame($raw, $content);
+    }
+
+    public function testReadFileRequestsRawAcceptAndBearerNeverInUrl(): void
+    {
+        $response = new MockResponse('body');
+        $this->readFile(new MockHttpClient([$response], 'https://api.github.com'), 'ghp_raw_secret');
+
+        $rawHeaders = $response->getRequestOptions()['headers'] ?? [];
+        self::assertIsArray($rawHeaders);
+        $headers = implode("\n", array_filter($rawHeaders, 'is_string'));
+
+        self::assertStringContainsString('Accept: application/vnd.github.raw', $headers);
+        self::assertStringContainsString('Authorization: Bearer ghp_raw_secret', $headers);
+        self::assertStringNotContainsString('ghp_raw_secret', $response->getRequestUrl());
+    }
+
+    public function testReadFileMissingIsUnreachable(): void
+    {
+        $this->expectException(RepositoryUnreachableException::class);
+
+        $this->readFile(new MockHttpClient([
+            new MockResponse('', ['http_code' => 404]),
+        ], 'https://api.github.com'));
+    }
+
+    public function testReadFileUnauthorizedThrowsAccessDenied(): void
+    {
+        $this->expectException(RepositoryAccessDeniedException::class);
+
+        $this->readFile(new MockHttpClient([
+            new MockResponse('', ['http_code' => 401]),
+        ], 'https://api.github.com'));
+    }
+
+    public function testReadFileForbiddenThrowsAccessDenied(): void
+    {
+        $this->expectException(RepositoryAccessDeniedException::class);
+
+        $this->readFile(new MockHttpClient([
+            new MockResponse('', ['http_code' => 403]),
+        ], 'https://api.github.com'));
+    }
+
+    public function testReadFileRateLimitedIsUnreachable(): void
+    {
+        $this->expectException(RepositoryUnreachableException::class);
+
+        $this->readFile(new MockHttpClient([
+            new MockResponse('', [
+                'http_code' => 403,
+                'response_headers' => ['x-ratelimit-remaining' => '0'],
+            ]),
+        ], 'https://api.github.com'));
+    }
+
+    public function testReadFileTransportErrorIsUnreachable(): void
+    {
+        $this->expectException(RepositoryUnreachableException::class);
+
+        $this->readFile(new MockHttpClient(static fn (): never => throw new TransportException('timeout')));
+    }
+
     private function read(MockHttpClient $client, string $token = 'ghp_token'): \App\Service\Github\StoryTree
     {
         $reader = new GitHubRepositoryReader($client);
         $url = new RepositoryUrl(Provider::GitHub, self::OWNER, self::REPO, 'https://github.com/' . self::OWNER . '/' . self::REPO);
 
         return $reader->readStoryTree($url, $token);
+    }
+
+    private function readFile(MockHttpClient $client, string $token = 'ghp_token'): string
+    {
+        $reader = new GitHubRepositoryReader($client);
+        $url = new RepositoryUrl(Provider::GitHub, self::OWNER, self::REPO, 'https://github.com/' . self::OWNER . '/' . self::REPO);
+
+        return $reader->readFile($url, $token, 'docs/story/005-f-kanban-projet/pitch.md');
     }
 }

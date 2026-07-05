@@ -63,6 +63,43 @@ final readonly class GitHubRepositoryReader implements RepositoryReaderInterface
         return StoryTree::fromTreeEntries($this->normalizeTreeEntries($treeData['tree'] ?? null));
     }
 
+    public function readFile(RepositoryUrl $url, string $plainToken, string $path): string
+    {
+        $repo = $url->owner . '/' . $url->repo;
+
+        try {
+            // `Accept: raw` renvoie le contenu du fichier tel quel, jamais le wrapper JSON base64.
+            $response = $this->client->request('GET', '/repos/' . $repo . '/contents/' . $path, [
+                'auth_bearer' => $plainToken,
+                'headers' => ['Accept' => 'application/vnd.github.raw'],
+            ]);
+
+            $status = $response->getStatusCode();
+
+            if (404 === $status) {
+                throw new RepositoryUnreachableException(sprintf('Fichier GitHub « %s » introuvable dans « %s ».', $path, $repo));
+            }
+
+            if (401 === $status || 403 === $status) {
+                if (403 === $status && $this->isRateLimited($response->getHeaders(false))) {
+                    throw new RepositoryUnreachableException('Quota GitHub dépassé.');
+                }
+
+                throw new RepositoryAccessDeniedException('Accès GitHub refusé (token invalide ou insuffisant).');
+            }
+
+            if ($status < 200 || $status >= 300) {
+                throw new RepositoryUnreachableException(sprintf('Réponse GitHub inattendue (HTTP %d).', $status));
+            }
+
+            return $response->getContent();
+        } catch (TransportExceptionInterface $e) {
+            throw new RepositoryUnreachableException('Dépôt GitHub injoignable (réseau ou timeout).', 0, $e);
+        } catch (ExceptionInterface $e) {
+            throw new RepositoryUnreachableException('Réponse GitHub illisible.', 0, $e);
+        }
+    }
+
     /**
      * @return ?non-empty-string SHA du sous-arbre `docs/story`, ou null si `docs` ou `story` est absent
      */

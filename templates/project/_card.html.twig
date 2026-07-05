@@ -1,0 +1,42 @@
+{#
+    Carte d'une story. Attend :
+      - card    (App\Service\Board\StoryCard)
+      - project (App\Entity\Project)
+
+    Cliquer la carte ouvre le drawer (contrôleur `story-drawer`) : l'identifiant, le titre
+    humanisé et la liste des documents (avec leur URL de lecture) sont passés en paramètres
+    Stimulus — aucun appel réseau au chargement (règle 4). Le titre réel `# H1` n'apparaît
+    que dans le drawer, au rendu du document.
+#}
+{% set trackChip = {
+    'feature': 'bg-iris/12 text-iris-text',
+    'refacto': 'bg-warning-soft text-fg-warning',
+    'tech':    'bg-st-report/15 text-st-report',
+}[card.id.track.value] %}
+
+{% set documents = [] %}
+{% for name in card.documents %}
+    {% set documents = documents|merge([{
+        name: name,
+        url: path('app_project_story_doc', { id: project.id, storyId: card.id.value, filename: name }),
+    }]) %}
+{% endfor %}
+
+<button type="button" data-test="story-card" data-story-id="{{ card.id.value }}"
+        data-action="story-drawer#open"
+        data-story-drawer-story-id-param="{{ card.id.value }}"
+        data-story-drawer-title-param="{{ card.id.humanizedTitle }}"
+        data-story-drawer-documents-param="{{ documents|json_encode }}"
+        class="group w-full rounded-lg border border-line-strong bg-raised p-2.5 text-left transition hover:border-line-hover hover:bg-raised-hover">
+    <div class="mb-1.5 flex items-center gap-1.5">
+        <span class="inline-flex items-center rounded px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-wide {{ trackChip }}">
+            {{ card.id.track.label }}
+        </span>
+        <span class="truncate font-mono text-[11px] text-ink-faint">{{ card.id.value }}</span>
+    </div>
+    <div class="truncate text-[13px] font-medium text-ink group-hover:text-ink-bright">{{ card.id.humanizedTitle }}</div>
+    <div class="mt-1.5 flex items-center gap-1 text-[11px] text-ink-faint">
+        <twig:ux:icon name="tabler:file-text" class="size-3.5"/>
+        {{ card.documents|length }} document{{ card.documents|length > 1 ? 's' : '' }}
+    </div>
+</button>

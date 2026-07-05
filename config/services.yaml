@@ -22,5 +22,39 @@ services:
     DataFixtures\:
         resource: '../fixtures'
 
+    # Extensions CommonMark pour le rendu du drawer (contenu de repos tiers).
+    League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension: ~
+    League\CommonMark\Extension\GithubFlavoredMarkdownExtension: ~
+    League\CommonMark\Extension\ExternalLink\ExternalLinkExtension: ~
+
+    # Environnement GFM en mode sûr : `html_input: strip` retire tout HTML brut,
+    # `allow_unsafe_links: false` neutralise les liens dangereux (javascript:…), et les
+    # liens externes s'ouvrent en nouvel onglet avec rel="noopener noreferrer" (défaut de
+    # l'extension) — le contenu vient d'un dépôt non maîtrisé.
+    forge.markdown.environment:
+        class: League\CommonMark\Environment\Environment
+        arguments:
+            $config:
+                html_input: strip
+                allow_unsafe_links: false
+                external_link:
+                    open_in_new_window: true
+        calls:
+            - [addExtension, ['@League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension']]
+            - [addExtension, ['@League\CommonMark\Extension\GithubFlavoredMarkdownExtension']]
+            - [addExtension, ['@League\CommonMark\Extension\ExternalLink\ExternalLinkExtension']]
+
+    League\CommonMark\MarkdownConverter:
+        arguments:
+            $environment: '@forge.markdown.environment'
+
+    # Le filtre `markdown_to_html` passe par `twig.markdown.default` (consommé par le
+    # MarkdownRuntime de twig/extra-bundle) : on le redéfinit pour qu'il s'appuie sur ce
+    # converter sûr plutôt que sur le converter permissif par défaut du bundle.
+    twig.markdown.default:
+        class: Twig\Extra\Markdown\LeagueMarkdown
+        arguments:
+            $converter: '@League\CommonMark\MarkdownConverter'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

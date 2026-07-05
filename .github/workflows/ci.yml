@@ -149,6 +149,9 @@ jobs:
           php bin/console doctrine:fixtures:load -n
 
       - name: Start Symfony server
+        env:
+          # Reader factice déterministe : l'E2E du board ne dépend d'aucun dépôt réel.
+          APP_FAKE_REPOSITORY_READER: 1
         run: |
           php -S 127.0.0.1:8000 -t public &
           echo $! > .server.pid

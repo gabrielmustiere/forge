@@ -30,4 +30,15 @@ interface RepositoryReaderInterface
      * @throws RepositoryAccessDeniedException accès refusé (401/403)
      */
     public function readStoryTree(RepositoryUrl $url, string $plainToken): StoryTree;
+
+    /**
+     * Lit le contenu brut d'un fichier précis du dépôt et le retourne tel quel.
+     *
+     * @param string $plainToken token en clair, utilisé le temps de l'appel puis oublié
+     * @param string $path       chemin du fichier relatif à la racine du dépôt (ex. `docs/story/005-f-x/pitch.md`)
+     *
+     * @throws RepositoryUnreachableException  fichier/dépôt introuvable, réseau, timeout, quota
+     * @throws RepositoryAccessDeniedException accès refusé (401/403)
+     */
+    public function readFile(RepositoryUrl $url, string $plainToken, string $path): string;
 }

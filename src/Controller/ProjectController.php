@@ -8,6 +8,9 @@ use App\Entity\Project;
 use App\Form\ProjectFormData;
 use App\Form\ProjectType;
 use App\Manager\ProjectManager;
+use App\Service\Board\ProjectBoardBuilder;
+use App\Service\Board\StoryDocumentFetcher;
+use App\Service\Board\StoryDocumentUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,6 +21,8 @@ final class ProjectController extends AbstractController
 {
     public function __construct(
         private readonly ProjectManager $manager,
+        private readonly ProjectBoardBuilder $boardBuilder,
+        private readonly StoryDocumentFetcher $documentFetcher,
     ) {
     }
 
@@ -47,7 +52,40 @@ final class ProjectController extends AbstractController
     #[Route('/{id}', name: 'app_project_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Project $project): Response
     {
-        return $this->render('project/show.html.twig', ['project' => $project]);
+        // Scan live à chaque ouverture (règle 8) : le board reflète l'état réel du dépôt.
+        return $this->render('project/show.html.twig', [
+            'project' => $project,
+            'result' => $this->boardBuilder->build($project),
+        ]);
+    }
+
+    /**
+     * Fragment (turbo-frame) chargé à la demande dans le drawer : le contenu markdown d'un
+     * document de story. `storyId` et `filename` sont contraints par des regex strictes
+     * (aucun `/`, aucun `..`) pour interdire toute traversée de chemin.
+     */
+    #[Route(
+        '/{id}/story/{storyId}/doc/{filename}',
+        name: 'app_project_story_doc',
+        requirements: [
+            'id' => '\d+',
+            'storyId' => '\d{3}-[frt]-[a-z0-9-]+',
+            'filename' => '[a-z0-9._-]+\.md',
+        ],
+        methods: ['GET'],
+    )]
+    public function storyDoc(Project $project, string $storyId, string $filename): Response
+    {
+        try {
+            $markdown = $this->documentFetcher->fetch($project, $storyId, $filename);
+        } catch (StoryDocumentUnavailableException) {
+            $markdown = null;
+        }
+
+        return $this->render('project/_doc.html.twig', [
+            'filename' => $filename,
+            'markdown' => $markdown,
+        ]);
     }
 
     #[Route('/{id}/verify', name: 'app_project_verify', requirements: ['id' => '\d+'], methods: ['POST'])]

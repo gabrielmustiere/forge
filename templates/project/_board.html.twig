@@ -1,0 +1,81 @@
+{#
+    Tableau d'un projet. Attend :
+      - result  (App\Service\Board\BoardResult) : succès porteur du Board, ou échec.
+      - project (App\Entity\Project)            : pour construire les URLs de documents des cartes.
+
+    Trois états mutuellement exclusifs : échec de scan (garde-fou, règle 10), board vide
+    (projet éligible sans story, règle 9), ou le pipeline à quatre colonnes + bandeau.
+#}
+{% if not result.isSuccess %}
+    <div data-test="board-error"
+         class="rounded-xl border border-dashed border-danger-subtle bg-danger-soft p-8 text-center">
+        <div class="mx-auto mb-3 grid size-11 place-items-center rounded-lg border border-danger-subtle bg-canvas text-fg-danger">
+            <twig:ux:icon name="tabler:plug-connected-x" class="size-6"/>
+        </div>
+        <h2 class="text-sm font-semibold text-fg-danger-strong">Tableau indisponible</h2>
+        <p class="mx-auto mt-1 max-w-md text-[13px] text-fg-danger">{{ result.failureReason }}</p>
+    </div>
+{% elseif result.board.isEmpty %}
+    <div data-test="board-empty"
+         class="rounded-xl border border-dashed border-line-strong bg-stat p-10 text-center">
+        <div class="mx-auto mb-3 grid size-11 place-items-center rounded-lg border border-line-strong bg-input text-ink-muted">
+            <twig:ux:icon name="tabler:layout-kanban" class="size-6"/>
+        </div>
+        <h2 class="text-sm font-semibold text-ink">Aucune story pour l'instant</h2>
+        <p class="mx-auto mt-1 max-w-md text-[13px] text-ink-muted">
+            Ce dépôt est éligible forge mais ne contient encore aucune story dans <code class="font-mono">docs/story/</code>.
+        </p>
+    </div>
+{% else %}
+    {% set board = result.board %}
+    {% set stageAccent = {
+        'cadrage':  'text-st-pitch',
+        'planifie': 'text-st-plan',
+        'review':   'text-st-review',
+        'livre':    'text-st-report',
+    } %}
+    {% set stageBar = {
+        'cadrage':  'bg-st-pitch',
+        'planifie': 'bg-st-plan',
+        'review':   'bg-st-review',
+        'livre':    'bg-st-report',
+    } %}
+
+    <div data-test="board" class="flex gap-3 overflow-x-auto pb-2">
+        {% for stage in board.columns %}
+            <section data-test="board-column" data-stage="{{ stage.value }}"
+                     class="flex min-w-[15rem] flex-1 flex-col rounded-xl border border-line bg-stat">
+                <header class="flex items-center gap-2 border-b border-line px-3 py-2.5">
+                    <span class="size-2 rounded-full {{ stageBar[stage.value] }}"></span>
+                    <span class="text-[12.5px] font-semibold text-ink">{{ stage.label }}</span>
+                    <span data-test="column-count"
+                          class="ml-auto font-mono text-[11px] font-medium {{ stageAccent[stage.value] }}">{{ board.countFor(stage) }}</span>
+                </header>
+                <div class="flex flex-col gap-2 p-2">
+                    {% for card in board.cardsFor(stage) %}
+                        {{ include('project/_card.html.twig', { card: card, project: project }) }}
+                    {% else %}
+                        <p class="px-1 py-3 text-center text-[11.5px] text-ink-faint">—</p>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endfor %}
+    </div>
+
+    {% if board.bannerCount > 0 %}
+        <section data-test="board-banner"
+                 class="mt-4 rounded-xl border border-dashed border-line-strong bg-canvas p-3">
+            <header class="mb-2 flex items-center gap-2 px-1">
+                <span class="size-2 rounded-full bg-st-brief"></span>
+                <span class="text-[12.5px] font-semibold text-ink">À vérifier</span>
+                <span data-test="banner-count" class="font-mono text-[11px] font-medium text-st-brief">{{ board.bannerCount }}</span>
+                <span class="ml-2 text-[11.5px] text-ink-faint">Aucun fichier de pipeline reconnu — hors des colonnes.</span>
+            </header>
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {% for card in board.banner %}
+                    {{ include('project/_card.html.twig', { card: card, project: project }) }}
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+{% endif %}

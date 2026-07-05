@@ -1,0 +1,37 @@
+{#
+    Drawer latéral d'ouverture des documents d'une story (règle 6). Panneau glissant qui
+    garde le tableau visible en fond. Le contrôleur `story-drawer` (Stimulus) gère
+    l'ouverture/fermeture, peuple la liste des documents depuis les `data-` de la carte
+    cliquée, et arme le `src` du `<turbo-frame loading="lazy">` qui charge le contenu.
+    Lecture seule stricte — aucune action d'édition.
+#}
+{# Voile de fond #}
+<div data-story-drawer-target="backdrop" data-action="story-drawer#close"
+     class="fixed inset-0 z-40 hidden bg-dark-backdrop/70 backdrop-blur-sm"></div>
+
+{# Panneau #}
+<aside data-story-drawer-target="panel" data-test="story-drawer" aria-hidden="true"
+       class="fixed inset-y-0 right-0 z-50 flex w-full max-w-xl translate-x-full flex-col border-l border-line-modal bg-surface shadow-2xl transition-transform duration-200 ease-out">
+    <header class="flex items-center gap-3 border-b border-line px-4 py-3">
+        <div class="min-w-0 flex-1">
+            <div data-story-drawer-target="storyId" class="font-mono text-[11px] text-ink-faint"></div>
+            <h2 data-story-drawer-target="title" class="truncate text-sm font-semibold text-ink-bright"></h2>
+        </div>
+        <button type="button" data-action="story-drawer#close" data-test="drawer-close"
+                class="grid size-7 shrink-0 place-items-center rounded-md text-ink-faint hover:bg-raised hover:text-ink">
+            <twig:ux:icon name="tabler:x" class="size-4"/>
+            <span class="sr-only">Fermer</span>
+        </button>
+    </header>
+
+    {# Liste des documents (toujours affichée d'abord), peuplée par Stimulus #}
+    <nav data-story-drawer-target="docList" data-test="drawer-doc-list"
+         class="flex flex-wrap gap-1.5 border-b border-line bg-stat px-4 py-2.5"></nav>
+
+    {# Contenu du document choisi, chargé à la demande via Turbo #}
+    <div class="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <turbo-frame id="story-doc" loading="lazy" data-story-drawer-target="frame">
+            <p class="py-8 text-center text-[13px] text-ink-faint">Sélectionnez un document.</p>
+        </turbo-frame>
+    </div>
+</aside>
