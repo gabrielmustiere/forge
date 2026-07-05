@@ -9,7 +9,7 @@ async function login(page: Page) {
 }
 
 // Déclare un projet dont l'URL contient `board` : le reader neutralisé en env test
-// renvoie alors un pipeline complet (quatre colonnes peuplées + une story « À vérifier »).
+// renvoie alors un pipeline complet (cinq colonnes peuplées + une story « À vérifier »).
 async function declareBoardProject(page: Page): Promise<void> {
   const repoUrl = `https://github.com/acme-e2e/board-${Date.now()}`;
 
@@ -24,15 +24,19 @@ async function declareBoardProject(page: Page): Promise<void> {
   await page.locator('[data-test="project-row"]', { hasText: name }).locator('[data-test="project-open"]').click();
 }
 
-test('board shows the four ordered columns, counts and the banner', async ({ page }) => {
+test('board shows the five ordered columns, counts and the banner', async ({ page }) => {
   await login(page);
   await declareBoardProject(page);
 
   await expect(page.locator('[data-test="board"]')).toBeVisible();
-  await expect(page.locator('[data-test="board-column"]')).toHaveCount(4);
+  await expect(page.locator('[data-test="board-column"]')).toHaveCount(5);
 
-  // Compteurs par colonne (Cadrage 1, Planifié 1, Review 1, Livré 2).
+  // Compteurs par colonne (Idée 1, Besoin 1, Cadré 1, Implémenté 1, Livré 2).
+  await expect(page.locator('[data-stage="idee"] [data-test="column-count"]')).toHaveText('1');
   await expect(page.locator('[data-stage="livre"] [data-test="column-count"]')).toHaveText('2');
+
+  // La colonne « Idée » contient la story `brief.md` seule (sortie de « À vérifier »).
+  await expect(page.locator('[data-stage="idee"] [data-test="story-card"][data-story-id="012-f-idee"]')).toBeVisible();
 
   // Bandeau « À vérifier » distinct, sous les colonnes.
   await expect(page.locator('[data-test="board-banner"]')).toBeVisible();
@@ -50,6 +54,8 @@ test('filters cards by tag and sorts by activity, client-side', async ({ page })
   await expect(livreCount).toHaveText('2');
 
   // Filtre par tag « dette » : un thème isolé à travers le pipeline (Review + Livré).
+  // Les tags vivent dans un popover recherchable qu'il faut ouvrir d'abord.
+  await page.locator('[data-test="tag-filter-toggle"]').click();
   await page.locator('[data-test="filter-tag"]', { hasText: 'dette' }).click();
   await expect(page.locator('[data-test="story-card"][data-story-id="005-r-review"]')).toBeVisible();
   await expect(page.locator('[data-test="story-card"][data-story-id="007-t-livre"]')).toBeVisible();

@@ -45,12 +45,12 @@ final class ProjectBoardBuilderTest extends TestCase
         $board = $result->board;
         self::assertNotNull($board);
 
-        self::assertSame(1, $board->countFor(PipelineStage::Cadrage));
-        self::assertSame('001-f-cadrage', $board->cardsFor(PipelineStage::Cadrage)[0]->id->value);
+        self::assertSame(1, $board->countFor(PipelineStage::Besoin));
+        self::assertSame('001-f-cadrage', $board->cardsFor(PipelineStage::Besoin)[0]->id->value);
 
-        self::assertSame(1, $board->countFor(PipelineStage::Planifie));
-        self::assertSame(1, $board->countFor(PipelineStage::Review));
-        self::assertSame(Track::Refacto, $board->cardsFor(PipelineStage::Review)[0]->id->track);
+        self::assertSame(1, $board->countFor(PipelineStage::Cadre));
+        self::assertSame(1, $board->countFor(PipelineStage::Implemente));
+        self::assertSame(Track::Refacto, $board->cardsFor(PipelineStage::Implemente)[0]->id->track);
 
         // report.md l'emporte pour les deux cartes Livré ; tri par numéro décroissant.
         self::assertSame(2, $board->countFor(PipelineStage::Livre));
@@ -65,17 +65,19 @@ final class ProjectBoardBuilderTest extends TestCase
         self::assertFalse($board->isEmpty());
     }
 
-    public function testRefactoStoryNeverLandsInCadrage(): void
+    public function testRefactoStoryNeverLandsInBesoin(): void
     {
-        // Convention forge : une refacto démarre à plan.md (pas de pitch) → jamais Cadrage.
+        // Convention forge : une refacto démarre à plan.md (ni brief ni pitch) → entre
+        // directement en Cadré, jamais en Idée ni Besoin.
         $result = $this->buildFrom(new StoryTree([
             new StoryFolder('004-r-refonte', ['plan.md']),
         ]));
 
         $board = $result->board;
         self::assertNotNull($board);
-        self::assertSame(0, $board->countFor(PipelineStage::Cadrage));
-        self::assertSame(1, $board->countFor(PipelineStage::Planifie));
+        self::assertSame(0, $board->countFor(PipelineStage::Idee));
+        self::assertSame(0, $board->countFor(PipelineStage::Besoin));
+        self::assertSame(1, $board->countFor(PipelineStage::Cadre));
     }
 
     public function testDocumentsAreOrderedForTheDrawer(): void
@@ -105,7 +107,7 @@ final class ProjectBoardBuilderTest extends TestCase
         self::assertNotNull($board);
         self::assertSame(
             ['pitch.md', 'annexe.md'],
-            $board->cardsFor(PipelineStage::Cadrage)[0]->documents,
+            $board->cardsFor(PipelineStage::Besoin)[0]->documents,
         );
     }
 
@@ -126,7 +128,7 @@ final class ProjectBoardBuilderTest extends TestCase
         self::assertNotNull($board);
 
         $byId = [];
-        foreach ($board->cardsFor(PipelineStage::Cadrage) as $card) {
+        foreach ($board->cardsFor(PipelineStage::Besoin) as $card) {
             $byId[$card->id->value] = $card;
         }
 
@@ -152,7 +154,7 @@ final class ProjectBoardBuilderTest extends TestCase
 
         self::assertTrue($result->isSuccess());
         self::assertNotNull($result->board);
-        $card = $result->board->cardsFor(PipelineStage::Cadrage)[0];
+        $card = $result->board->cardsFor(PipelineStage::Besoin)[0];
         self::assertNull($card->metadata);
         self::assertSame('X', $card->title());
     }

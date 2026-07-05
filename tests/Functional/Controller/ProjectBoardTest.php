@@ -48,31 +48,36 @@ final class ProjectBoardTest extends WebTestCase
         $crawler = $this->client->request('GET', '/projects/' . $project->getId());
         self::assertResponseIsSuccessful();
 
-        // Les quatre colonnes ordonnées du pipeline.
-        self::assertCount(4, $crawler->filter('[data-test="board-column"]'));
+        // Les cinq colonnes ordonnées du pipeline.
+        self::assertCount(5, $crawler->filter('[data-test="board-column"]'));
 
-        // Compteurs par colonne : Cadrage 1, Planifié 1, Review 1, Livré 2.
-        self::assertSame('1', trim($crawler->filter('[data-stage="cadrage"] [data-test="column-count"]')->text()));
-        self::assertSame('1', trim($crawler->filter('[data-stage="planifie"] [data-test="column-count"]')->text()));
-        self::assertSame('1', trim($crawler->filter('[data-stage="review"] [data-test="column-count"]')->text()));
+        // Compteurs par colonne : Idée 1, Besoin 1, Cadré 1, Implémenté 1, Livré 2.
+        self::assertSame('1', trim($crawler->filter('[data-stage="idee"] [data-test="column-count"]')->text()));
+        self::assertSame('1', trim($crawler->filter('[data-stage="besoin"] [data-test="column-count"]')->text()));
+        self::assertSame('1', trim($crawler->filter('[data-stage="cadre"] [data-test="column-count"]')->text()));
+        self::assertSame('1', trim($crawler->filter('[data-stage="implemente"] [data-test="column-count"]')->text()));
         self::assertSame('2', trim($crawler->filter('[data-stage="livre"] [data-test="column-count"]')->text()));
+
+        // La story `brief.md` seule est bien rangée en Idée (et non dans le bandeau).
+        self::assertStringContainsString('012-f-idee', $crawler->filter('[data-stage="idee"]')->text());
 
         // Bandeau « À vérifier » présent avec son compte.
         self::assertCount(1, $crawler->filter('[data-test="board-banner"]'));
         self::assertSame('1', trim($crawler->filter('[data-test="banner-count"]')->text()));
     }
 
-    public function testRefactoCardIsNeverInCadrageColumn(): void
+    public function testRefactoCardIsNeverInBesoinColumn(): void
     {
         $project = $this->persistProject('https://github.com/acme/board-app', 'acme/board-app');
 
         $crawler = $this->client->request('GET', '/projects/' . $project->getId());
 
-        $cadrage = $crawler->filter('[data-stage="cadrage"]')->text();
-        self::assertStringNotContainsString('005-r-review', $cadrage);
+        // Une refacto démarre à plan.md → jamais en Besoin (colonne du pitch), toujours en aval.
+        $besoin = $crawler->filter('[data-stage="besoin"]')->text();
+        self::assertStringNotContainsString('005-r-review', $besoin);
 
-        $review = $crawler->filter('[data-stage="review"]')->text();
-        self::assertStringContainsString('005-r-review', $review);
+        $implemente = $crawler->filter('[data-stage="implemente"]')->text();
+        self::assertStringContainsString('005-r-review', $implemente);
     }
 
     public function testCardsWithinAColumnAreSortedByNumberDescending(): void

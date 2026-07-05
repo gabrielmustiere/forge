@@ -95,15 +95,17 @@ final class FakeRepositoryCatalog
         '005-r-review' => '{"version":1,"title":"Revue du normaliseur d\'URL","created":"2026-06-02","updated":"2026-06-25","tags":["dette","url"],"changelog":[{"date":"2026-06-25","type":"Review","description":"Revue faite."}]}',
         '007-t-livre' => '{"version":1,"title":"Durcir le client HTTP","created":"2026-05-20","updated":"2026-06-28","tags":["http","dette"],"changelog":[{"date":"2026-06-28","type":"Livraison","description":"Livré."}],"delivery":{"release":"v4.2.0","commit":"abc1234"}}',
         '003-f-livre-complet' => '{"version":1,"title":"Afficher le kanban d\'un projet","created":"2026-05-25","updated":"2026-06-30","tags":["board","kanban"],"changelog":[{"date":"2026-06-30","type":"Livraison","description":"Livré."}],"delivery":{"release":"v4.3.0","commit":"b7964b4"}}',
+        '012-f-idee' => '{"version":1,"title":"Explorer les notifications de sync","created":"2026-07-01","updated":"2026-07-02","tags":["exploration","notifications"],"changelog":[{"date":"2026-07-01","type":"Interview","description":"Besoin dégrossi par interview."}]}',
     ];
 
     /**
-     * Arbre riche : les quatre colonnes peuplées, deux cartes en Livré (tri par numéro
-     * décroissant) et une story « À vérifier ».
+     * Arbre riche : les cinq colonnes peuplées (une story `brief.md` seule en Idée),
+     * deux cartes en Livré (tri par numéro décroissant) et une story « À vérifier ».
      */
     private static function boardTree(): StoryTree
     {
         return new StoryTree([
+            new StoryFolder('012-f-idee', ['brief.md']),
             new StoryFolder('001-f-cadrage', ['pitch.md']),
             new StoryFolder('010-f-planifie', ['pitch.md', 'plan.md']),
             new StoryFolder('005-r-review', ['plan.md', 'review.md']),

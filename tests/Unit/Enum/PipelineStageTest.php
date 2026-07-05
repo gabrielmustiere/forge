@@ -24,9 +24,10 @@ final class PipelineStageTest extends TestCase
      */
     public static function provideLabels(): iterable
     {
-        yield 'cadrage' => [PipelineStage::Cadrage, 'Cadrage'];
-        yield 'planifie' => [PipelineStage::Planifie, 'Planifié'];
-        yield 'review' => [PipelineStage::Review, 'Review'];
+        yield 'idee' => [PipelineStage::Idee, 'Idée'];
+        yield 'besoin' => [PipelineStage::Besoin, 'Besoin'];
+        yield 'cadre' => [PipelineStage::Cadre, 'Cadré'];
+        yield 'implemente' => [PipelineStage::Implemente, 'Implémenté'];
         yield 'livre' => [PipelineStage::Livre, 'Livré'];
         yield 'a_verifier' => [PipelineStage::AVerifier, 'À vérifier'];
     }
@@ -42,9 +43,10 @@ final class PipelineStageTest extends TestCase
      */
     public static function provideOnPipeline(): iterable
     {
-        yield 'cadrage' => [PipelineStage::Cadrage, true];
-        yield 'planifie' => [PipelineStage::Planifie, true];
-        yield 'review' => [PipelineStage::Review, true];
+        yield 'idee' => [PipelineStage::Idee, true];
+        yield 'besoin' => [PipelineStage::Besoin, true];
+        yield 'cadre' => [PipelineStage::Cadre, true];
+        yield 'implemente' => [PipelineStage::Implemente, true];
         yield 'livre' => [PipelineStage::Livre, true];
         yield 'a_verifier' => [PipelineStage::AVerifier, false];
     }

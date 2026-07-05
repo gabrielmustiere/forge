@@ -92,12 +92,13 @@
     --color-positive: #86efac;      /* valeurs positives */
 
     /* États du pipeline forge (points de colonne / statuts) */
-    --color-st-brief: #a1a1aa;      /* Brief  — gris */
-    --color-st-pitch: #f59e0b;      /* Pitch  — ambre */
-    --color-st-plan: #3b82f6;       /* Plan   — bleu */
-    --color-st-review: #8b5cf6;     /* Review — violet */
-    --color-st-report: #14b8a6;     /* Report — teal */
+    --color-st-brief: #a1a1aa;      /* Brief  — gris (colonne Idée) */
+    --color-st-pitch: #f59e0b;      /* Pitch  — ambre (colonne Besoin) */
+    --color-st-plan: #3b82f6;       /* Plan   — bleu (colonne Cadré) */
+    --color-st-review: #8b5cf6;     /* Review — violet (colonne Implémenté) */
+    --color-st-report: #14b8a6;     /* Report — teal (colonne Livré) */
     --color-st-done: #22c55e;       /* Done   — vert */
+    --color-st-flag: #f43f5e;       /* À vérifier — rose (anomalie, hors pipeline) */
 
     /* ═══════════════════════════════════════════════════════════════════════
      *  TOKENS SÉMANTIQUES DU KIT (Flowbite/Twig) — remappés sur Nova

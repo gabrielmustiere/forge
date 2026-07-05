@@ -21,15 +21,17 @@ final readonly class StoryStageMapper
     /**
      * Fichier déclencheur → étape, ordonnés du plus avancé au moins avancé.
      * Le premier fichier présent (nom top-level exact) l'emporte : `report.md`
-     * gagne sur `review.md`, qui gagne sur `plan.md`, qui gagne sur `pitch.md`.
+     * gagne sur `review.md`, qui gagne sur `plan.md`, qui gagne sur `pitch.md`,
+     * qui gagne sur `brief.md`. `estimate.md` n'est pas déclencheur (transversal).
      *
      * @var array<string, PipelineStage>
      */
     private const array PRECEDENCE = [
         'report.md' => PipelineStage::Livre,
-        'review.md' => PipelineStage::Review,
-        'plan.md' => PipelineStage::Planifie,
-        'pitch.md' => PipelineStage::Cadrage,
+        'review.md' => PipelineStage::Implemente,
+        'plan.md' => PipelineStage::Cadre,
+        'pitch.md' => PipelineStage::Besoin,
+        'brief.md' => PipelineStage::Idee,
     ];
 
     /**

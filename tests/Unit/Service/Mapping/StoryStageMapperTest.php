@@ -35,32 +35,35 @@ final class StoryStageMapperTest extends TestCase
      */
     public static function provideMappings(): iterable
     {
-        // Correspondance fichier déclencheur → colonne (règle #3).
-        yield 'pitch seul → Cadrage' => [['pitch.md'], PipelineStage::Cadrage];
-        yield 'plan → Planifié' => [['pitch.md', 'plan.md'], PipelineStage::Planifie];
-        yield 'review → Review' => [['pitch.md', 'plan.md', 'review.md'], PipelineStage::Review];
+        // Correspondance fichier déclencheur → colonne du cycle de vie.
+        yield 'brief seul → Idée' => [['brief.md'], PipelineStage::Idee];
+        yield 'pitch → Besoin' => [['brief.md', 'pitch.md'], PipelineStage::Besoin];
+        yield 'plan → Cadré' => [['brief.md', 'pitch.md', 'plan.md'], PipelineStage::Cadre];
+        yield 'review → Implémenté' => [['pitch.md', 'plan.md', 'review.md'], PipelineStage::Implemente];
         yield 'report → Livré' => [['pitch.md', 'plan.md', 'review.md', 'report.md'], PipelineStage::Livre];
 
-        // Track r/t qui entre en Planifié sans jamais passer par Cadrage (règle #5) :
-        // le mapper est track-agnostique, `plan.md` sans `pitch.md` classe en Planifié.
-        yield 'refacto/tech avec plan seul → Planifié' => [['plan.md'], PipelineStage::Planifie];
+        // Track r/t qui entre en Cadré sans passer par Idée/Besoin :
+        // le mapper est track-agnostique, `plan.md` sans amont classe en Cadré.
+        yield 'refacto/tech avec plan seul → Cadré' => [['plan.md'], PipelineStage::Cadre];
 
-        // Le plus avancé l'emporte, séquence incomplète tolérée (règle #4).
+        // Le plus avancé l'emporte, séquence incomplète tolérée.
         yield 'report sans plan → Livré' => [['pitch.md', 'report.md'], PipelineStage::Livre];
-        yield 'review sans plan → Review' => [['pitch.md', 'review.md'], PipelineStage::Review];
+        yield 'review sans plan → Implémenté' => [['pitch.md', 'review.md'], PipelineStage::Implemente];
 
-        // Transversaux ignorés (règle #7).
-        yield 'plan + estimate → Planifié' => [['plan.md', 'estimate.md'], PipelineStage::Planifie];
-        yield 'plan + brief + adr → Planifié' => [['brief.md', 'plan.md', '0001-adr-choix.md'], PipelineStage::Planifie];
+        // `estimate.md` n'est pas déclencheur : plan gouverne, reste en Cadré.
+        yield 'plan + estimate → Cadré' => [['plan.md', 'estimate.md'], PipelineStage::Cadre];
+        // brief présent mais plan plus avancé l'emporte.
+        yield 'brief + plan + adr → Cadré' => [['brief.md', 'plan.md', '0001-adr-choix.md'], PipelineStage::Cadre];
 
-        // Aucun fichier de pipeline → À vérifier (règle #6).
-        yield 'brief seul → À vérifier' => [['brief.md'], PipelineStage::AVerifier];
+        // Aucun fichier de pipeline reconnu → À vérifier.
         yield 'fichier inconnu → À vérifier' => [['notes.txt'], PipelineStage::AVerifier];
+        yield 'estimate seul → À vérifier' => [['estimate.md'], PipelineStage::AVerifier];
         yield 'dossier vide → À vérifier' => [[], PipelineStage::AVerifier];
 
         // Match top-level exact : un fichier en sous-dossier ne compte pas.
         yield 'pitch en sous-dossier → À vérifier' => [['feature-map/pitch.md'], PipelineStage::AVerifier];
-        yield 'plan en sous-dossier ignoré, pitch top-level compte' => [['x/plan.md', 'pitch.md'], PipelineStage::Cadrage];
+        yield 'plan en sous-dossier ignoré, pitch top-level compte' => [['x/plan.md', 'pitch.md'], PipelineStage::Besoin];
+        yield 'brief top-level compte si rien de plus avancé' => [['x/pitch.md', 'brief.md'], PipelineStage::Idee];
     }
 
     /**
@@ -96,6 +99,6 @@ final class StoryStageMapperTest extends TestCase
         $second = $this->mapper->stageFor($folder);
 
         self::assertSame($first, $second);
-        self::assertSame(PipelineStage::Planifie, $first);
+        self::assertSame(PipelineStage::Cadre, $first);
     }
 }

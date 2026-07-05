@@ -16,7 +16,7 @@ final class StoryCardTest extends TestCase
     {
         $card = new StoryCard(
             StoryId::parse('005-f-kanban-projet'),
-            PipelineStage::Cadrage,
+            PipelineStage::Besoin,
             ['pitch.md'],
             new StoryMetadata(
                 1,
@@ -34,7 +34,7 @@ final class StoryCardTest extends TestCase
 
     public function testTitleFallsBackToHumanizedSlugWithoutMetadata(): void
     {
-        $card = new StoryCard(StoryId::parse('005-f-kanban-projet'), PipelineStage::Cadrage, ['pitch.md']);
+        $card = new StoryCard(StoryId::parse('005-f-kanban-projet'), PipelineStage::Besoin, ['pitch.md']);
 
         self::assertNull($card->metadata);
         self::assertSame('Kanban projet', $card->title());

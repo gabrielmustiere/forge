@@ -7,7 +7,7 @@ namespace App\Service\Board;
 use App\Enum\Type\PipelineStage;
 
 /**
- * Le tableau d'un projet : les cartes réparties sur les quatre colonnes ordonnées du
+ * Le tableau d'un projet : les cartes réparties sur les cinq colonnes ordonnées du
  * pipeline unifié, plus le bandeau « À vérifier » regroupant les stories indécidables.
  *
  * Value object immuable produit par {@see ProjectBoardBuilder}. Les cartes d'une colonne
@@ -16,11 +16,12 @@ use App\Enum\Type\PipelineStage;
  */
 final readonly class Board
 {
-    /** Les quatre colonnes du pipeline, de gauche à droite (règle 1). */
+    /** Les cinq colonnes du pipeline, de gauche à droite (règle 1). */
     private const array COLUMNS = [
-        PipelineStage::Cadrage,
-        PipelineStage::Planifie,
-        PipelineStage::Review,
+        PipelineStage::Idee,
+        PipelineStage::Besoin,
+        PipelineStage::Cadre,
+        PipelineStage::Implemente,
         PipelineStage::Livre,
     ];
 
@@ -35,7 +36,7 @@ final readonly class Board
     }
 
     /**
-     * @return list<PipelineStage> les quatre colonnes dans l'ordre d'affichage
+     * @return list<PipelineStage> les cinq colonnes dans l'ordre d'affichage
      */
     public function columns(): array
     {

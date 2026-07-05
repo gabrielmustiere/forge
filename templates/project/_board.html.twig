@@ -34,27 +34,58 @@
 {% else %}
     {% set board = result.board %}
     {% set stageAccent = {
-        'cadrage':  'text-st-pitch',
-        'planifie': 'text-st-plan',
-        'review':   'text-st-review',
-        'livre':    'text-st-report',
+        'idee':       'text-st-brief',
+        'besoin':     'text-st-pitch',
+        'cadre':      'text-st-plan',
+        'implemente': 'text-st-review',
+        'livre':      'text-st-report',
     } %}
     {% set stageBar = {
-        'cadrage':  'bg-st-pitch',
-        'planifie': 'bg-st-plan',
-        'review':   'bg-st-review',
-        'livre':    'bg-st-report',
+        'idee':       'bg-st-brief',
+        'besoin':     'bg-st-pitch',
+        'cadre':      'bg-st-plan',
+        'implemente': 'bg-st-review',
+        'livre':      'bg-st-report',
     } %}
 
     {# Le contrôleur `board-filter` opère sur les cartes déjà rendues : filtre par tag et tri
        par activité, côté client, sans round-trip (règles 10 & 11). #}
     <div data-controller="board-filter" class="flex min-h-0 flex-1 flex-col">
 
-        {# Barre d'outils : chips de tags (injectés par Stimulus) + bascule de tri #}
+        {# Barre d'outils : filtre par tag (popover recherchable) + bascule de tri #}
         <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-line-strong px-4 py-2">
             <div class="flex items-center gap-2">
-                <span class="text-[10.5px] font-semibold uppercase tracking-wide text-ink-faint">Tags</span>
-                <div data-board-filter-target="tags" data-test="board-tag-filters"
+                {# Déclencheur + popover : la liste des tags est injectée par Stimulus depuis le DOM des cartes #}
+                <div class="relative">
+                    <button type="button" data-test="tag-filter-toggle"
+                            data-action="board-filter#toggleMenu"
+                            data-board-filter-target="menuButton"
+                            aria-haspopup="true" aria-expanded="false" aria-controls="board-tag-menu"
+                            class="flex items-center gap-1.5 rounded-md border border-line-strong bg-raised px-2.5 py-1 text-[11px] font-medium text-ink-dim transition hover:bg-raised-hover hover:text-ink">
+                        <twig:ux:icon name="tabler:filter" class="size-3.5 text-ink-faint"/>
+                        <span>Tags</span>
+                        <span data-board-filter-target="activeCount"
+                              class="hidden rounded bg-iris/15 px-1 font-mono text-[10px] font-semibold text-iris-text"></span>
+                        <twig:ux:icon name="tabler:chevron-down" class="size-3 text-ink-faint"/>
+                    </button>
+
+                    {# Popover — caché par défaut, ancré sous le bouton #}
+                    <div id="board-tag-menu" data-board-filter-target="menu" data-test="tag-filter-menu"
+                         class="absolute left-0 top-full z-20 mt-1.5 hidden w-64 overflow-hidden rounded-lg border border-line-modal bg-overlay shadow-xl shadow-black/50">
+                        <div class="border-b border-line p-2">
+                            <input type="text" data-board-filter-target="search"
+                                   data-action="input->board-filter#filterMenu keydown->board-filter#onMenuKeydown"
+                                   placeholder="Rechercher un tag…"
+                                   class="w-full rounded-md border border-line-strong bg-input px-2.5 py-1.5 text-[12px] text-ink placeholder:text-ink-faint focus:border-iris focus:outline-none"/>
+                        </div>
+                        <div data-board-filter-target="menuList" class="max-h-64 overflow-y-auto p-1"></div>
+                        <p data-board-filter-target="menuEmpty"
+                           class="hidden px-3 py-4 text-center text-[11px] text-ink-muted">Aucun tag</p>
+                    </div>
+                </div>
+
+                {# Pills des tags actifs (filtre OR), chacune retirable #}
+                <div data-board-filter-target="pills" data-test="board-tag-filters"
                      class="flex flex-wrap items-center gap-1"></div>
             </div>
             <div class="ml-auto flex items-center gap-1.5">
@@ -75,11 +106,11 @@
 
             {# À vérifier — première colonne : stories hors pipeline reconnu #}
             {% if board.bannerCount > 0 %}
-                <section data-test="board-banner" class="flex w-80 shrink-0 flex-col border-r border-line-strong">
+                <section data-test="board-banner" class="flex w-80 shrink-0 flex-col border-r border-line-strong transition-[width] duration-200 ease-out">
                     <header class="flex h-11 shrink-0 items-center gap-2 px-4">
-                        <span class="size-2 rounded-full bg-st-brief"></span>
-                        <span class="text-[12.5px] font-semibold text-ink">À vérifier</span>
-                        <span data-test="banner-count" class="font-mono text-[11px] font-medium text-st-brief">{{ board.bannerCount }}</span>
+                        <span class="size-2 shrink-0 rounded-full bg-st-flag"></span>
+                        <span class="min-w-0 truncate text-[12.5px] font-semibold text-ink" title="À vérifier">À vérifier</span>
+                        <span data-test="banner-count" class="shrink-0 font-mono text-[11px] font-medium text-st-flag">{{ board.bannerCount }}</span>
                     </header>
                     <div data-board-filter-target="column" class="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-4">
                         {% for card in board.banner %}
@@ -90,13 +121,16 @@
             {% endif %}
 
             {% for stage in board.columns %}
+                {% set stageCount = board.countFor(stage) %}
+                {# Colonne vide → largeur réduite (le libellé se clampe si besoin) ; le contrôleur
+                   `board-filter` bascule cette largeur au fil du filtrage. #}
                 <section data-test="board-column" data-stage="{{ stage.value }}"
-                         class="flex w-80 shrink-0 flex-col border-r border-line-strong">
+                         class="flex {{ stageCount == 0 ? 'w-44' : 'w-80' }} shrink-0 flex-col border-r border-line-strong transition-[width] duration-200 ease-out">
                     <header class="flex h-11 shrink-0 items-center gap-2 px-4">
-                        <span class="size-2 rounded-full {{ stageBar[stage.value] }}"></span>
-                        <span class="text-[12.5px] font-semibold text-ink">{{ stage.label }}</span>
+                        <span class="size-2 shrink-0 rounded-full {{ stageBar[stage.value] }}"></span>
+                        <span class="min-w-0 truncate text-[12.5px] font-semibold text-ink" title="{{ stage.label }}">{{ stage.label }}</span>
                         <span data-test="column-count"
-                              class="font-mono text-[11px] font-medium {{ stageAccent[stage.value] }}">{{ board.countFor(stage) }}</span>
+                              class="shrink-0 font-mono text-[11px] font-medium {{ stageAccent[stage.value] }}">{{ stageCount }}</span>
                     </header>
                     <div data-board-filter-target="column" class="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto px-4 pb-4">
                         {% for card in board.cardsFor(stage) %}
