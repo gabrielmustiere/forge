@@ -7,6 +7,11 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [4.5.0] - 2026-07-05
+
+### Added
+- **Skill `backfill-metadata`** — reconstruit rétroactivement le `metadata.json` des stories écrites **avant** l'introduction du contrat de métadonnées. Déduit le `title` du H1 du document principal, `created`/`updated` de l'historique git du dossier de la story, la timeline `changelog` de la date d'apparition de chaque artifact (`pitch`/`plan`/`review`/`report`) avec **fusion des jalons de même date**, et `delivery` (`commit`/`release`) des commits et tags git. Les `tags` sont proposés puis **validés** par l'utilisateur ; aucune date n'est inventée (toujours issue de git) et `delivery` reste **absent** si la livraison n'est pas identifiable avec certitude. Ne réécrit jamais un `metadata.json` valide sauf `--force`, validation par story avant écriture. Écrit le même schéma v1 que les skills de cadrage (`references/story-metadata.md`).
+
 ## [4.4.0] - 2026-07-05
 
 ### Added

@@ -1,6 +1,6 @@
 # Inventaire — plugin `forge`
 
-Pipeline de développement stack-agnostique (26 skills).
+Pipeline de développement stack-agnostique (27 skills).
 
 > **Convention métadonnées de story** : chaque skill qui écrit dans un dossier `docs/story/NNN-<f\|r\|t>-<slug>/` maintient un fichier `metadata.json` (titre réel, dates, tags, changelog consolidé, livraison) selon la référence partagée [`references/story-metadata.md`](references/story-metadata.md). Les skills de création écrivent `title`/`created`/`tags` + première entrée ; chaque passe rebouge `updated` et append au changelog ; `commit`/`release` renseignent `delivery`. La timeline vit dans ce fichier — plus de table de changelog en pied de `pitch.md`/`plan.md`. Le Forge Board lit ce fichier (jamais ne l'écrit).
 
@@ -30,6 +30,7 @@ Pipeline de développement stack-agnostique (26 skills).
 | [`estimate`](../plugins/forge/skills/estimate/SKILL.md) | **Transversal optionnel** — chiffre le temps **« tout compris »** d'une story (feature, refacto, tech) à facturer : cadrage, implem, tests, review, doc, release (forfait fixe 30 min). Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe, méthode réaliste + marge d'incertitude, **en heures**, avec **deux colonnes** (temps de référence sans IA / temps réel avec assistant IA) → `estimate.md`. Du temps, jamais de montant. |
 | [`migrate-legacy`](../plugins/forge/skills/migrate-legacy/SKILL.md) | Migre les anciens formats workflow — dossiers `<f\|r\|t>-NNN-<slug>/` → `NNN-<f\|r\|t>-<slug>/`, et artifacts `feature.md`/`design.md` → `pitch.md`/`plan.md` + `feature.md` → `overview.md` dans `feature-map/`, via `git mv` |
 | [`import-external`](../plugins/forge/skills/import-external/SKILL.md) | Importe une doc Spec Kit / BMAD-METHOD / GSD vers le format `docs/story/NNN-<f\|r\|t>-<slug>/` |
+| [`backfill-metadata`](../plugins/forge/skills/backfill-metadata/SKILL.md) | Reconstruit rétroactivement le `metadata.json` des stories antérieures dépourvues : titre depuis le H1, `created`/`updated` depuis l'historique git du dossier, `changelog` depuis l'apparition de chaque artifact, `delivery` (commit/release) depuis les commits et tags — tags proposés puis validés. N'écrit que des valeurs vraies (jamais de date inventée), delivery laissé absent si la livraison n'est pas identifiable avec certitude. Ne touche pas un fichier valide sauf `--force`. |
 | [`release`](../plugins/forge/skills/release/SKILL.md) | Tag annoté SemVer + `CHANGELOG.md` Keep a Changelog + release GitHub |
 | [`doc-feature`](../plugins/forge/skills/doc-feature/SKILL.md) | Documente une feature existante (stack-agnostique, détection Sylius/Symfony) → `docs/feature-map/NNN-slug/overview.md` |
 
