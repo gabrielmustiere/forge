@@ -3,15 +3,34 @@
 {% block title %}{{ project.name }} · Forge Board{% endblock %}
 
 {% block body %}
-    <header class="flex h-12 items-center justify-between border-b border-line bg-surface px-5">
-        <div class="flex items-center gap-2 text-[13px]">
-            <span class="text-ink-muted">Forge Board</span>
-            <span class="text-divider">/</span>
-            <a href="{{ path('app_project_index') }}" class="text-ink-muted hover:text-ink">Projets</a>
-            <span class="text-divider">/</span>
-            <span class="font-medium text-ink">{{ project.name }}</span>
+    <div class="flex h-full flex-col">
+    <header class="flex h-12 shrink-0 items-center gap-4 border-b border-line bg-surface px-5">
+        {# Fil d'ariane + identité du projet #}
+        <div class="flex min-w-0 items-center gap-2.5 text-[13px]">
+            <span class="shrink-0 text-ink-muted">Forge Board</span>
+            <span class="shrink-0 text-divider">/</span>
+            <a href="{{ path('app_project_index') }}" class="shrink-0 text-ink-muted hover:text-ink">Projets</a>
+            <span class="shrink-0 text-divider">/</span>
+            <h1 class="truncate font-medium text-ink">{{ project.name }}</h1>
+            <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer" data-test="project-repo-link"
+               class="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-raised px-2 py-1 text-[12px] font-medium text-ink-dim hover:bg-stat hover:text-ink">
+                <twig:ux:icon name="{{ project.provider.icon }}" class="size-3.5"/> {{ project.provider.label }}
+                <twig:ux:icon name="tabler:external-link" class="size-3.5 text-ink-faint"/>
+            </a>
+            {{ include('project/_status_badge.html.twig', { status: project.verificationStatus }) }}
         </div>
-        <div class="flex items-center gap-2">
+
+        {# Métadonnées + actions #}
+        <div class="ml-auto flex shrink-0 items-center gap-3">
+            <span class="hidden items-center gap-1.5 text-[12px] text-ink-faint xl:inline-flex">
+                <twig:ux:icon name="tabler:calendar-plus" class="size-3.5"/>
+                <span class="font-mono text-ink-dim">{{ project.createdAt|date('d/m/Y') }}</span>
+            </span>
+            <span class="hidden items-center gap-1.5 text-[12px] text-ink-faint xl:inline-flex" data-test="project-verified-at">
+                <twig:ux:icon name="tabler:refresh" class="size-3.5"/>
+                <span class="font-mono text-ink-dim">{{ project.verifiedAt ? project.verifiedAt|date('d/m/Y à H:i') : 'Jamais' }}</span>
+            </span>
+            <span class="hidden h-5 w-px bg-line xl:block"></span>
             <form method="post" action="{{ path('app_project_verify', { id: project.id }) }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('verify' ~ project.id) }}">
                 <button type="submit" data-test="project-verify"
@@ -26,49 +45,12 @@
         </div>
     </header>
 
-    <div class="p-6">
-        <div class="mx-auto max-w-6xl space-y-5" data-test="project-detail">
-
-            {# En-tête projet #}
-            <div class="flex items-start justify-between gap-4">
-                <div class="min-w-0">
-                    <div class="mb-2 flex items-center gap-2">
-                        <span class="inline-flex items-center gap-1.5 rounded-md bg-raised px-2 py-0.5 text-[12px] font-medium text-ink-dim">
-                            <twig:ux:icon name="{{ project.provider.icon }}" class="size-3.5"/> {{ project.provider.label }}
-                        </span>
-                        {{ include('project/_status_badge.html.twig', { status: project.verificationStatus }) }}
-                    </div>
-                    <h1 class="truncate font-mono text-[22px] font-bold tracking-tight text-ink-bright">{{ project.name }}</h1>
-                </div>
-            </div>
-
-            {# Métadonnées #}
-            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div class="rounded-xl border border-line-strong bg-raised p-4">
-                    <div class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Dépôt</div>
-                    <a href="{{ project.url }}" target="_blank" rel="noopener noreferrer" data-test="project-repo-link"
-                       class="inline-flex items-center gap-1.5 break-all font-mono text-[13px] text-iris-text hover:text-iris-tint">
-                        {{ project.url }} <twig:ux:icon name="tabler:external-link" class="size-3.5 shrink-0"/>
-                    </a>
-                </div>
-                <div class="rounded-xl border border-line-strong bg-raised p-4">
-                    <div class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Déclaré le</div>
-                    <div class="font-mono text-[13px] text-ink">{{ project.createdAt|date('d/m/Y') }}</div>
-                </div>
-                <div class="rounded-xl border border-line-strong bg-raised p-4">
-                    <div class="mb-1 text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Dernière vérification</div>
-                    <div class="font-mono text-[13px] text-ink" data-test="project-verified-at">
-                        {{ project.verifiedAt ? project.verifiedAt|date('d/m/Y à H:i') : 'Jamais' }}
-                    </div>
-                </div>
-            </div>
-
-            {# Kanban : scan live du dépôt projeté en colonnes + drawer d'ouverture de document #}
-            <div data-controller="story-drawer" data-test="project-board">
-                {{ include('project/_board.html.twig', { result: result, project: project }) }}
-                {{ include('project/_drawer.html.twig') }}
-            </div>
-
+    <div data-test="project-detail" class="flex min-h-0 flex-1 flex-col">
+        {# Kanban : scan live du dépôt projeté en colonnes + drawer d'ouverture de document #}
+        <div data-controller="story-drawer" data-test="project-board" class="flex min-h-0 flex-1 flex-col">
+            {{ include('project/_board.html.twig', { result: result, project: project }) }}
+            {{ include('project/_drawer.html.twig') }}
         </div>
+    </div>
     </div>
 {% endblock %}
