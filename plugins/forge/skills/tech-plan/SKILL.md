@@ -138,6 +138,8 @@ Quand l'utilisateur valide, écris le plan dans `docs/story/`.
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction.
 
+**Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du plan), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`. Si tu relances ce skill pour **éditer un plan existant** (le `metadata.json` est déjà là), ne recrée rien : rebouge simplement `updated` à la date du jour et **append** une entrée de changelog décrivant la révision, sans jamais toucher `created`.
+
 Après écriture, affiche un résumé et demande si des ajustements sont nécessaires.
 
 ### Phase 6 — Clôture

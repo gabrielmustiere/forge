@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "title": "Déduire l'étape de chaque story depuis les fichiers présents",
+  "created": "2026-07-05",
+  "updated": "2026-07-05",
+  "tags": ["mapping", "pipeline"],
+  "changelog": [
+    { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan du mapping d'étape par présence de fichiers." },
+    { "date": "2026-07-05", "type": "Livraison", "description": "Moteur de mapping livré, revu et reporté." }
+  ],
+  "delivery": { "release": "v4.3.0", "commit": "cce192c" }
+}

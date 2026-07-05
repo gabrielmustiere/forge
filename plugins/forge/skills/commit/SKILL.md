@@ -209,6 +209,8 @@ Si le push échoue malgré le rebase préalable (race avec un autre push entre f
 - Push         : ✅ (standard | --force-with-lease) | ❌ --no-push
 ```
 
+**Métadonnées de story** : après le commit, renseigne `delivery.commit` (SHA court) dans le `metadata.json` des stories livrées, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`, puis rebouge `updated` et append une entrée `type: "Livraison"`. Si `delivery` est absent, crée-le avec `release: null`.
+
 > Prochaine étape : `/report` pour documenter l'implémentation.
 
 ## Arguments

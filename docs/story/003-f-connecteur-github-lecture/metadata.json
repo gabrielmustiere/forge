@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "title": "Lire à distance un repo GitHub et vérifier qu'il est éligible forge",
+  "created": "2026-07-05",
+  "updated": "2026-07-05",
+  "tags": ["connecteur", "github"],
+  "changelog": [
+    { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan du connecteur GitHub en lecture + vérification d'éligibilité." },
+    { "date": "2026-07-05", "type": "Livraison", "description": "Lecture distante et éligibilité livrées, revues et reportées." }
+  ],
+  "delivery": { "release": "v4.3.0", "commit": "3fe4133" }
+}

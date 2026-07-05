@@ -124,6 +124,8 @@ Quand la revue est complète et validée, écris le fichier.
 
 Retirer tous les blocs guides et commentaires HTML avant commit.
 
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+
 ### Phase 5 — Clôture
 
 Affiche le chemin du fichier et le résumé.

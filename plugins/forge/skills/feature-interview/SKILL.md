@@ -123,6 +123,8 @@ Le dossier que tu crées ici est **le même** que celui où `/feature-pitch` éc
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — il contient le squelette, les guides par section et les placeholders à retirer.
 
+**Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du brief), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`.
+
 Après écriture, affiche un résumé et demande si des ajustements sont nécessaires.
 
 ### Phase 5 — Clôture

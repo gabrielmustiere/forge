@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "title": "Enrichir chaque story de métadonnées lisibles par le Board",
+  "created": "2026-07-05",
+  "updated": "2026-07-05",
+  "tags": ["metadata", "board"],
+  "changelog": [
+    { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan des métadonnées de story (metadata.json)." },
+    { "date": "2026-07-05", "type": "Implémentation", "description": "Contrat, VO/parser, lecture groupée GraphQL, cartes enrichies, filtre/tri." },
+    { "date": "2026-07-05", "type": "Report", "description": "Report d'implémentation : ~98% conforme, 14/14 critères, écarts documentés (rate-limit GraphQL, compteurs filtrés, complexité PHPStan)." },
+    { "date": "2026-07-05", "type": "Sync", "description": "Réalignement pitch/plan : règle 11 (compteurs recalés au filtre), risque GraphQL (détection rate-limit 200+RATE_LIMITED, complexité bi-protocole)." }
+  ]
+}

@@ -7,6 +7,16 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+## [4.4.0] - 2026-07-05
+
+### Added
+- **Métadonnées de story (`metadata.json`)** — chaque story forge porte désormais un fichier `metadata.json` (schéma v1 versionné : `title`, `created`, `updated`, `tags`, `changelog`, `delivery`) **produit et maintenu par les skills** via une référence partagée (`plugins/forge/references/story-metadata.md`). Les skills de création écrivent `title`/`created`/`tags`/première entrée ; chaque passe rebouge `updated` et append au changelog ; `commit`/`release` renseignent `delivery`. La timeline consolidée vit dans ce fichier — les tables de changelog en pied de `pitch.md`/`plan.md` sont abandonnées.
+- **Cartes de board enrichies** (Forge Board) — les cartes affichent le vrai titre, la date de dernière activité, les tags et un badge de livraison (release/commit), lus depuis le `metadata.json` des stories en **un seul appel groupé** (GraphQL GitHub, nombre d'appels indépendant du nombre de stories). Le drawer expose le changelog consolidé.
+- **Filtre par tag et tri par activité** (Forge Board) — barre d'outils client-side pour isoler un thème à travers le pipeline et réordonner les cartes par date de mise à jour, sans round-trip.
+
+### Changed
+- Le lecteur de dépôt (`RepositoryReaderInterface`) expose `readStoryMetadata()` (lecture groupée du metadata) ; l'implémentation GitHub devient bi-protocole REST + GraphQL. Une story sans `metadata.json`, ou avec un fichier invalide, dégrade gracieusement vers le slug humanisé — aucune régression. `StoryStageMapper` ignore `metadata.json` : la colonne reste déduite des seuls `.md`.
+
 ## [4.3.0] - 2026-07-05
 
 ### Added

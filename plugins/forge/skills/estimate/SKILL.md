@@ -126,6 +126,8 @@ Quand l'utilisateur valide, écris `estimate.md` **dans le dossier de la story**
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — il contient le squelette, les guides par section et les placeholders à retirer avant commit. Note dans l'estimate **sur quelle base** elle a été produite (brief / pitch / plan) : une estimation sur brief seul devra être reconfirmée après le pitch.
 
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+
 Après écriture, affiche les deux totaux (référence et avec IA, chacun avec marge) et demande si des ajustements sont nécessaires.
 
 ### Phase 6 — Clôture

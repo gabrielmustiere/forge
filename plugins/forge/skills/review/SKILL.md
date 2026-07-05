@@ -83,6 +83,8 @@ docs/story/NNN-t-slug/review.md   # review d'une évolution technique
 
 **Format du fichier + tags** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction.
 
+**Métadonnées de story** : après avoir écrit `review.md` dans le dossier de la story (review rattachée à une story, pas standalone), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé, ex. verdict + bloquants restants). Ne modifie jamais `created`.
+
 ### Phase 4 — Présentation au développeur
 
 Affiche les findings groupés par priorité dans la conversation.

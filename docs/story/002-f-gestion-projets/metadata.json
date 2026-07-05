@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "title": "Gérer les projets forge à suivre : les déclarer, les retrouver, maintenir leurs accès",
+  "created": "2026-07-04",
+  "updated": "2026-07-04",
+  "tags": ["projets", "crud"],
+  "changelog": [
+    { "date": "2026-07-04", "type": "Création", "description": "Pitch et plan de la gestion des projets (déclarer, lister, éditer, retirer)." },
+    { "date": "2026-07-04", "type": "Livraison", "description": "CRUD projets livré, revu et reporté." }
+  ],
+  "delivery": { "release": "v4.2.0", "commit": "f5a8194" }
+}

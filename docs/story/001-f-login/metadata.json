@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "title": "Verrouiller Forge Board derrière une connexion locale mono-utilisateur",
+  "created": "2026-07-04",
+  "updated": "2026-07-04",
+  "tags": ["auth", "securite"],
+  "changelog": [
+    { "date": "2026-07-04", "type": "Création", "description": "Pitch et plan de la connexion locale mono-utilisateur." },
+    { "date": "2026-07-04", "type": "Livraison", "description": "Login/logout livré, revu et reporté." }
+  ],
+  "delivery": { "release": "v4.2.0", "commit": "558adef" }
+}

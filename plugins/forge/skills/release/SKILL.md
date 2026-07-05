@@ -197,6 +197,8 @@ Si `gh` est absent : afficher le contenu de la release et l'URL `https://github.
 - CHANGELOG : N entrées ajoutées (Added: 2, Fixed: 3)
 ```
 
+**Métadonnées de story** : après le tag de version, renseigne `delivery.release` (ex. `v4.3.0`) dans le `metadata.json` des stories couvertes par la release, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`. Le tag peut arriver après le commit : complète un `delivery.commit` déjà présent sans le modifier, rebouge `updated` et append une entrée `type: "Release"`.
+
 > Prochaine étape : annoncer la release / déployer / `/sync` si applicable.
 
 ## Arguments

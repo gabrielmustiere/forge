@@ -2,6 +2,8 @@
 
 Pipeline de développement stack-agnostique (26 skills).
 
+> **Convention métadonnées de story** : chaque skill qui écrit dans un dossier `docs/story/NNN-<f\|r\|t>-<slug>/` maintient un fichier `metadata.json` (titre réel, dates, tags, changelog consolidé, livraison) selon la référence partagée [`references/story-metadata.md`](references/story-metadata.md). Les skills de création écrivent `title`/`created`/`tags` + première entrée ; chaque passe rebouge `updated` et append au changelog ; `commit`/`release` renseignent `delivery`. La timeline vit dans ce fichier — plus de table de changelog en pied de `pitch.md`/`plan.md`. Le Forge Board lit ce fichier (jamais ne l'écrit).
+
 | Skill | Rôle |
 | --- | --- |
 | [`help`](../plugins/forge/skills/help/SKILL.md) | Sommaire du workflow, tracks, skills et artifacts |

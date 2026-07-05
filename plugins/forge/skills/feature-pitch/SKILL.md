@@ -126,6 +126,8 @@ Quand l'utilisateur valide, rédige le pitch dans `docs/story/`.
 
 Section "Alignement vision" : à ajouter **uniquement si `docs/vision.md` existe** (le template n'inclut pas cette section — l'insérer après "Contexte" avec les points : problème adressé, audience servie, principes respectés/tendus, impact North Star).
 
+**Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du pitch), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`.
+
 Après écriture, affiche un résumé et demande si des ajustements sont nécessaires.
 
 ### Phase 5 — Clôture

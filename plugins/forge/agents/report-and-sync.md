@@ -177,6 +177,8 @@ Après les `Edit` de contenu, ajoute (ou complète) la table de changelog en pie
 
 Si la table existe déjà, ajoute une ligne au lieu d'écraser.
 
+**Métadonnées de story** : la timeline consolidée vit désormais **uniquement** dans `metadata.json` — même convention que les SKILL.md (`${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`), décrite pour cet agent dans `${CLAUDE_PLUGIN_ROOT}/references/story-metadata.md`. Ne produis plus de table de changelog en pied de `pitch.md`/`plan.md` ; à la place, append une entrée au changelog du `metadata.json` (documentant la divergence) et rebouge `updated`.
+
 ### 3.4 — Vérification post-sync
 
 ```bash

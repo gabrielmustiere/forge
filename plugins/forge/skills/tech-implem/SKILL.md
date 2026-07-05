@@ -246,6 +246,8 @@ Stack : [symfony | sylius]
 → `/sync` si le plan a dévié et mérite d'être réaligné
 ```
 
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+
 ## Argument optionnel
 
 `/tech docs/story/044-t-redis-cache/plan.md` — charge le plan et démarre.

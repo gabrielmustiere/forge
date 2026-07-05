@@ -107,6 +107,8 @@ Quand l'utilisateur valide, écris le fichier de plan.
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — il contient le squelette, les guides de remplissage par section et les conventions (`> _Skill : ..._`, commentaires HTML, placeholders) à retirer avant commit.
 
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+
 ### Phase 6 — Clôture
 
 Affiche le chemin du fichier produit et propose :

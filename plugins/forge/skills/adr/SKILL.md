@@ -168,6 +168,8 @@ Si la story n'a pas encore de report, ne rien faire — `/report` lira l'index p
 
 **Si un ADR est superseded** par celui-ci : édite l'ADR ancien pour passer son statut à `superseded by ADR-NNNN`, et mentionne-le dans la section `Links` du nouveau.
 
+**Métadonnées de story** : si l'ADR est rattaché à une story (backlink dans un artifact de `docs/story/NNN-<f|r|t>-<slug>/`), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = décision gravée + numéro d'ADR). Ne modifie jamais `created`. (ADR standalone sans story : rien à faire.)
+
 ### Phase 7 — Clôture
 
 Affiche le résumé :

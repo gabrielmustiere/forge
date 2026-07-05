@@ -126,6 +126,8 @@ Après chaque fichier modifié, ajoute un bloc changelog en fin de fichier (ou a
 | YYYY-MM-DD | Sync post-implémentation | Résumé des modifications appliquées |
 ```
 
+**Métadonnées de story** : la timeline consolidée vit désormais **uniquement** dans `metadata.json` (voir `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). Ne produis plus de table de changelog en pied de `pitch.md`/`plan.md` ; à la place, append une entrée au changelog du `metadata.json` (documentant la divergence) et rebouge `updated`.
+
 ### Phase 5 — Clôture
 
 Affiche le résumé des modifications :

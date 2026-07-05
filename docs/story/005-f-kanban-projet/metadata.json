@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "title": "Afficher le kanban d'un projet — colonnes, cartes, ouverture de document",
+  "created": "2026-07-05",
+  "updated": "2026-07-05",
+  "tags": ["board", "kanban"],
+  "changelog": [
+    { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan du kanban projet (colonnes, cartes, drawer)." },
+    { "date": "2026-07-05", "type": "Livraison", "description": "Board projet livré, revu et reporté." }
+  ],
+  "delivery": { "release": "v4.3.0", "commit": "b7964b4" }
+}
