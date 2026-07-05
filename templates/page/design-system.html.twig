@@ -4,723 +4,725 @@
 
 {% block body %}
 
-    {# En-tête #}
-    <div class="mb-8">
-        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
-            Design System
-            <span class="ml-2 inline-flex items-center rounded-full bg-violet-50 px-2.5 py-0.5 text-sm font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">Flowbite 4</span>
-        </h1>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Inventaire des composants UX Toolkit — kit Flowbite 4.
-        </p>
-    </div>
+    <div class="p-4">
 
-    {# Sommaire #}
-    <nav class="mb-10 flex flex-wrap gap-2">
-        {% set anchors = ['alert','badge','button','button-group','card','checkbox','indicator','input','kbd','modal','pagination','radio','select','skeleton','spinner','table','tabs','textarea','toggle'] %}
-        {% for anchor in anchors %}
-            <a href="#{{ anchor }}"
-               class="rounded-md border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:border-violet-300 hover:text-violet-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-violet-500 dark:hover:text-violet-300">
-                {{ anchor|replace({'-': ' '})|title }}
-            </a>
-        {% endfor %}
-    </nav>
+        {# En-tête #}
+        <div class="mb-8">
+            <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
+                Design System
+                <span class="ml-2 inline-flex items-center rounded-full bg-violet-50 px-2.5 py-0.5 text-sm font-medium text-violet-700 dark:bg-violet-900/30 dark:text-violet-300">Flowbite 4</span>
+            </h1>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                Inventaire des composants UX Toolkit — kit Flowbite 4.
+            </p>
+        </div>
 
-    {% macro section(id, title) %}
-        <section id="{{ id }}" class="mb-12 scroll-mt-20">
+        {# Sommaire #}
+        <nav class="mb-10 flex flex-wrap gap-2">
+            {% set anchors = ['alert','badge','button','button-group','card','checkbox','indicator','input','kbd','modal','pagination','radio','select','skeleton','spinner','table','tabs','textarea','toggle'] %}
+            {% for anchor in anchors %}
+                <a href="#{{ anchor }}"
+                   class="rounded-md border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:border-violet-300 hover:text-violet-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-violet-500 dark:hover:text-violet-300">
+                    {{ anchor|replace({'-': ' '})|title }}
+                </a>
+            {% endfor %}
+        </nav>
+
+        {% macro section(id, title) %}
+            <section id="{{ id }}" class="mb-12 scroll-mt-20">
+                <div class="mb-4 flex items-center gap-3">
+                    <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">{{ title }}</h2>
+                    <span class="font-mono text-xs text-gray-400">&lt;twig:{{ title|replace({' ': ''})|title }}&gt;</span>
+                </div>
+            </section>
+        {% endmacro %}
+
+        {# ── Alert ──────────────────────────────────────────────────────────────── #}
+        <section id="alert" class="mb-12 scroll-mt-20">
             <div class="mb-4 flex items-center gap-3">
-                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">{{ title }}</h2>
-                <span class="font-mono text-xs text-gray-400">&lt;twig:{{ title|replace({' ': ''})|title }}&gt;</span>
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Alert</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Alert&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <p class="mb-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
+                <div class="grid w-full max-w-2xl gap-3">
+                    <twig:Alert>
+                        <twig:Alert:Title>Info</twig:Alert:Title>
+                        <twig:Alert:Description><p>Voici une alerte informative. <span class="font-medium">variant par défaut.</span></p></twig:Alert:Description>
+                    </twig:Alert>
+                    <twig:Alert variant="success">
+                        <twig:Alert:Title>Succès</twig:Alert:Title>
+                        <twig:Alert:Description><p>L'opération s'est <span class="font-medium">terminée avec succès.</span></p></twig:Alert:Description>
+                    </twig:Alert>
+                    <twig:Alert variant="danger">
+                        <twig:Alert:Title>Erreur</twig:Alert:Title>
+                        <twig:Alert:Description><p>Une <span class="font-medium">erreur critique</span> est survenue.</p></twig:Alert:Description>
+                    </twig:Alert>
+                    <twig:Alert variant="warning">
+                        <twig:Alert:Title>Attention</twig:Alert:Title>
+                        <twig:Alert:Description><p>Cette action nécessite votre <span class="font-medium">attention.</span></p></twig:Alert:Description>
+                    </twig:Alert>
+                    <twig:Alert variant="dark">
+                        <twig:Alert:Title>Dark</twig:Alert:Title>
+                        <twig:Alert:Description><p>Alerte sur fond sombre.</p></twig:Alert:Description>
+                    </twig:Alert>
+                </div>
+                <p class="mb-4 mt-6 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec action</p>
+                <div class="max-w-2xl">
+                    <twig:Alert variant="success" border="accent">
+                        <twig:block name="icon">
+                            <twig:ux:icon name="flowbite:check-circle-outline" class="shrink-0" aria-hidden="true"/>
+                        </twig:block>
+                        <twig:Alert:Title>Mise à jour disponible</twig:Alert:Title>
+                        <twig:Alert:Description>Une nouvelle version est disponible. Mettez à jour maintenant.</twig:Alert:Description>
+                        <twig:Alert:Action>
+                            <twig:Button size="sm" variant="success">Mettre à jour</twig:Button>
+                        </twig:Alert:Action>
+                    </twig:Alert>
+                </div>
             </div>
         </section>
-    {% endmacro %}
 
-    {# ── Alert ──────────────────────────────────────────────────────────────── #}
-    <section id="alert" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Alert</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Alert&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <p class="mb-4 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
-            <div class="grid w-full max-w-2xl gap-3">
-                <twig:Alert>
-                    <twig:Alert:Title>Info</twig:Alert:Title>
-                    <twig:Alert:Description><p>Voici une alerte informative. <span class="font-medium">variant par défaut.</span></p></twig:Alert:Description>
-                </twig:Alert>
-                <twig:Alert variant="success">
-                    <twig:Alert:Title>Succès</twig:Alert:Title>
-                    <twig:Alert:Description><p>L'opération s'est <span class="font-medium">terminée avec succès.</span></p></twig:Alert:Description>
-                </twig:Alert>
-                <twig:Alert variant="danger">
-                    <twig:Alert:Title>Erreur</twig:Alert:Title>
-                    <twig:Alert:Description><p>Une <span class="font-medium">erreur critique</span> est survenue.</p></twig:Alert:Description>
-                </twig:Alert>
-                <twig:Alert variant="warning">
-                    <twig:Alert:Title>Attention</twig:Alert:Title>
-                    <twig:Alert:Description><p>Cette action nécessite votre <span class="font-medium">attention.</span></p></twig:Alert:Description>
-                </twig:Alert>
-                <twig:Alert variant="dark">
-                    <twig:Alert:Title>Dark</twig:Alert:Title>
-                    <twig:Alert:Description><p>Alerte sur fond sombre.</p></twig:Alert:Description>
-                </twig:Alert>
+        {# ── Badge ───────────────────────────────────────────────────────────────── #}
+        <section id="badge" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Badge</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Badge&gt;</span>
             </div>
-            <p class="mb-4 mt-6 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec action</p>
-            <div class="max-w-2xl">
-                <twig:Alert variant="success" border="accent">
-                    <twig:block name="icon">
-                        <twig:ux:icon name="flowbite:check-circle-outline" class="shrink-0" aria-hidden="true"/>
-                    </twig:block>
-                    <twig:Alert:Title>Mise à jour disponible</twig:Alert:Title>
-                    <twig:Alert:Description>Une nouvelle version est disponible. Mettez à jour maintenant.</twig:Alert:Description>
-                    <twig:Alert:Action>
-                        <twig:Button size="sm" variant="success">Mettre à jour</twig:Button>
-                    </twig:Alert:Action>
-                </twig:Alert>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Badge variant="brand">Brand</twig:Badge>
+                        <twig:Badge variant="alternative">Alternative</twig:Badge>
+                        <twig:Badge variant="gray">Gray</twig:Badge>
+                        <twig:Badge variant="danger">Danger</twig:Badge>
+                        <twig:Badge variant="success">Success</twig:Badge>
+                        <twig:Badge variant="warning">Warning</twig:Badge>
+                    </div>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Pill</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Badge variant="brand" shape="pill">Brand</twig:Badge>
+                        <twig:Badge variant="success" shape="pill">Success</twig:Badge>
+                        <twig:Badge variant="danger" shape="pill">Danger</twig:Badge>
+                    </div>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Large</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Badge variant="brand" size="lg">Brand</twig:Badge>
+                        <twig:Badge variant="gray" size="lg">Gray</twig:Badge>
+                    </div>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec icône + bordure</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Badge variant="brand" border="bordered">
+                            <twig:ux:icon name="flowbite:clock-outline" class="h-3 w-3 me-1" aria-hidden="true"/>
+                            Il y a 2 min
+                        </twig:Badge>
+                        <twig:Badge variant="success" border="bordered">
+                            <twig:ux:icon name="flowbite:check-circle-outline" class="h-3 w-3 me-1" aria-hidden="true"/>
+                            Validé
+                        </twig:Badge>
+                        <twig:Badge variant="danger" border="bordered">
+                            <twig:ux:icon name="flowbite:close-circle-outline" class="h-3 w-3 me-1" aria-hidden="true"/>
+                            Rejeté
+                        </twig:Badge>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Badge ───────────────────────────────────────────────────────────────── #}
-    <section id="badge" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Badge</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Badge&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Badge variant="brand">Brand</twig:Badge>
-                    <twig:Badge variant="alternative">Alternative</twig:Badge>
-                    <twig:Badge variant="gray">Gray</twig:Badge>
-                    <twig:Badge variant="danger">Danger</twig:Badge>
-                    <twig:Badge variant="success">Success</twig:Badge>
-                    <twig:Badge variant="warning">Warning</twig:Badge>
-                </div>
+        {# ── Button ──────────────────────────────────────────────────────────────── #}
+        <section id="button" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Button</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Button&gt;</span>
             </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Pill</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Badge variant="brand" shape="pill">Brand</twig:Badge>
-                    <twig:Badge variant="success" shape="pill">Success</twig:Badge>
-                    <twig:Badge variant="danger" shape="pill">Danger</twig:Badge>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Button>Brand</twig:Button>
+                        <twig:Button variant="secondary">Secondary</twig:Button>
+                        <twig:Button variant="tertiary">Tertiary</twig:Button>
+                        <twig:Button variant="success">Success</twig:Button>
+                        <twig:Button variant="danger">Danger</twig:Button>
+                        <twig:Button variant="warning">Warning</twig:Button>
+                        <twig:Button variant="dark">Dark</twig:Button>
+                        <twig:Button variant="ghost">Ghost</twig:Button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Large</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Badge variant="brand" size="lg">Brand</twig:Badge>
-                    <twig:Badge variant="gray" size="lg">Gray</twig:Badge>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Outline</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Button variant="outline">Outline</twig:Button>
+                        <twig:Button variant="outline-brand">Outline Brand</twig:Button>
+                        <twig:Button variant="outline-success">Outline Success</twig:Button>
+                        <twig:Button variant="outline-danger">Outline Danger</twig:Button>
+                        <twig:Button variant="outline-warning">Outline Warning</twig:Button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec icône + bordure</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Badge variant="brand" border="bordered">
-                        <twig:ux:icon name="flowbite:clock-outline" class="h-3 w-3 me-1" aria-hidden="true"/>
-                        Il y a 2 min
-                    </twig:Badge>
-                    <twig:Badge variant="success" border="bordered">
-                        <twig:ux:icon name="flowbite:check-circle-outline" class="h-3 w-3 me-1" aria-hidden="true"/>
-                        Validé
-                    </twig:Badge>
-                    <twig:Badge variant="danger" border="bordered">
-                        <twig:ux:icon name="flowbite:close-circle-outline" class="h-3 w-3 me-1" aria-hidden="true"/>
-                        Rejeté
-                    </twig:Badge>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Tailles</p>
+                    <div class="flex flex-wrap items-center gap-2">
+                        <twig:Button size="xs">Extra Small</twig:Button>
+                        <twig:Button size="sm">Small</twig:Button>
+                        <twig:Button>Default</twig:Button>
+                        <twig:Button size="lg">Large</twig:Button>
+                        <twig:Button size="xl">Extra Large</twig:Button>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    {# ── Button ──────────────────────────────────────────────────────────────── #}
-    <section id="button" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Button</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Button&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Button>Brand</twig:Button>
-                    <twig:Button variant="secondary">Secondary</twig:Button>
-                    <twig:Button variant="tertiary">Tertiary</twig:Button>
-                    <twig:Button variant="success">Success</twig:Button>
-                    <twig:Button variant="danger">Danger</twig:Button>
-                    <twig:Button variant="warning">Warning</twig:Button>
-                    <twig:Button variant="dark">Dark</twig:Button>
-                    <twig:Button variant="ghost">Ghost</twig:Button>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Pill</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Button shape="pill">Brand Pill</twig:Button>
+                        <twig:Button variant="secondary" shape="pill">Secondary Pill</twig:Button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Outline</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Button variant="outline">Outline</twig:Button>
-                    <twig:Button variant="outline-brand">Outline Brand</twig:Button>
-                    <twig:Button variant="outline-success">Outline Success</twig:Button>
-                    <twig:Button variant="outline-danger">Outline Danger</twig:Button>
-                    <twig:Button variant="outline-warning">Outline Warning</twig:Button>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec icône</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Button>
+                            <twig:ux:icon name="flowbite:cart-outline" class="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true"/>
+                            Acheter
+                        </twig:Button>
+                        <twig:Button variant="secondary">
+                            Continuer
+                            <twig:ux:icon name="flowbite:arrow-right-outline" class="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true"/>
+                        </twig:Button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Tailles</p>
-                <div class="flex flex-wrap items-center gap-2">
-                    <twig:Button size="xs">Extra Small</twig:Button>
-                    <twig:Button size="sm">Small</twig:Button>
-                    <twig:Button>Default</twig:Button>
-                    <twig:Button size="lg">Large</twig:Button>
-                    <twig:Button size="xl">Extra Large</twig:Button>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Icône seule</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Button size="icon-xs" aria-label="Paramètres">
+                            <twig:ux:icon name="tabler:settings" class="size-4"/>
+                        </twig:Button>
+                        <twig:Button size="icon-sm" aria-label="Éditer">
+                            <twig:ux:icon name="tabler:edit" class="size-4"/>
+                        </twig:Button>
+                        <twig:Button size="icon" aria-label="Supprimer" variant="danger">
+                            <twig:ux:icon name="tabler:trash" class="size-5"/>
+                        </twig:Button>
+                    </div>
                 </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Pill</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Button shape="pill">Brand Pill</twig:Button>
-                    <twig:Button variant="secondary" shape="pill">Secondary Pill</twig:Button>
-                </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec icône</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Button>
-                        <twig:ux:icon name="flowbite:cart-outline" class="w-4 h-4 me-1.5 -ms-0.5" aria-hidden="true"/>
-                        Acheter
-                    </twig:Button>
-                    <twig:Button variant="secondary">
-                        Continuer
-                        <twig:ux:icon name="flowbite:arrow-right-outline" class="w-4 h-4 ms-1.5 -me-0.5" aria-hidden="true"/>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec spinner (désactivé)</p>
+                    <twig:Button disabled>
+                        <twig:Spinner class="me-2"/>
+                        Chargement…
                     </twig:Button>
                 </div>
             </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Icône seule</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Button size="icon-xs" aria-label="Paramètres">
-                        <twig:ux:icon name="tabler:settings" class="size-4"/>
-                    </twig:Button>
-                    <twig:Button size="icon-sm" aria-label="Éditer">
-                        <twig:ux:icon name="tabler:edit" class="size-4"/>
-                    </twig:Button>
-                    <twig:Button size="icon" aria-label="Supprimer" variant="danger">
-                        <twig:ux:icon name="tabler:trash" class="size-5"/>
-                    </twig:Button>
-                </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Avec spinner (désactivé)</p>
-                <twig:Button disabled>
-                    <twig:Spinner class="me-2"/>
-                    Chargement…
-                </twig:Button>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Button Group ─────────────────────────────────────────────────────────── #}
-    <section id="button-group" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Button Group</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:ButtonGroup&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Horizontal (défaut)</p>
-                <twig:ButtonGroup>
-                    <twig:Button variant="tertiary" size="sm">Profil</twig:Button>
-                    <twig:Button variant="tertiary" size="sm">Paramètres</twig:Button>
-                    <twig:Button variant="tertiary" size="sm">Messages</twig:Button>
-                </twig:ButtonGroup>
+        {# ── Button Group ─────────────────────────────────────────────────────────── #}
+        <section id="button-group" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Button Group</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:ButtonGroup&gt;</span>
             </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Vertical</p>
-                <twig:ButtonGroup orientation="vertical">
-                    <twig:Button variant="tertiary" size="sm">Profil</twig:Button>
-                    <twig:Button variant="tertiary" size="sm">Paramètres</twig:Button>
-                    <twig:Button variant="tertiary" size="sm">Messages</twig:Button>
-                </twig:ButtonGroup>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Horizontal (défaut)</p>
+                    <twig:ButtonGroup>
+                        <twig:Button variant="tertiary" size="sm">Profil</twig:Button>
+                        <twig:Button variant="tertiary" size="sm">Paramètres</twig:Button>
+                        <twig:Button variant="tertiary" size="sm">Messages</twig:Button>
+                    </twig:ButtonGroup>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Vertical</p>
+                    <twig:ButtonGroup orientation="vertical">
+                        <twig:Button variant="tertiary" size="sm">Profil</twig:Button>
+                        <twig:Button variant="tertiary" size="sm">Paramètres</twig:Button>
+                        <twig:Button variant="tertiary" size="sm">Messages</twig:Button>
+                    </twig:ButtonGroup>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Card ─────────────────────────────────────────────────────────────────── #}
-    <section id="card" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Card</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Card&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <div class="flex flex-wrap gap-4">
-                <twig:Card class="max-w-sm">
-                    <twig:Card:Header>
-                        <twig:Card:Title as="h5">Acquisitions technologiques 2025</twig:Card:Title>
-                    </twig:Card:Header>
-                    <twig:Card:Content>
-                        <p>Voici les plus grandes acquisitions technologiques de 2025, en ordre chronologique inverse.</p>
-                    </twig:Card:Content>
-                </twig:Card>
-                <twig:Card class="max-w-sm">
-                    <twig:Card:Header>
-                        <twig:Card:Title as="h5">Card avec action</twig:Card:Title>
-                    </twig:Card:Header>
-                    <twig:Card:Content>
-                        <p>Une card peut contenir n'importe quel contenu, y compris des boutons et des liens.</p>
-                    </twig:Card:Content>
-                    <twig:Card:Footer>
-                        <twig:Button size="sm">En savoir plus</twig:Button>
-                        <twig:Button variant="ghost" size="sm">Ignorer</twig:Button>
-                    </twig:Card:Footer>
-                </twig:Card>
+        {# ── Card ─────────────────────────────────────────────────────────────────── #}
+        <section id="card" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Card</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Card&gt;</span>
             </div>
-        </div>
-    </section>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-wrap gap-4">
+                    <twig:Card class="max-w-sm">
+                        <twig:Card:Header>
+                            <twig:Card:Title as="h5">Acquisitions technologiques 2025</twig:Card:Title>
+                        </twig:Card:Header>
+                        <twig:Card:Content>
+                            <p>Voici les plus grandes acquisitions technologiques de 2025, en ordre chronologique inverse.</p>
+                        </twig:Card:Content>
+                    </twig:Card>
+                    <twig:Card class="max-w-sm">
+                        <twig:Card:Header>
+                            <twig:Card:Title as="h5">Card avec action</twig:Card:Title>
+                        </twig:Card:Header>
+                        <twig:Card:Content>
+                            <p>Une card peut contenir n'importe quel contenu, y compris des boutons et des liens.</p>
+                        </twig:Card:Content>
+                        <twig:Card:Footer>
+                            <twig:Button size="sm">En savoir plus</twig:Button>
+                            <twig:Button variant="ghost" size="sm">Ignorer</twig:Button>
+                        </twig:Card:Footer>
+                    </twig:Card>
+                </div>
+            </div>
+        </section>
 
-    {# ── Checkbox ─────────────────────────────────────────────────────────────── #}
-    <section id="checkbox" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Checkbox</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Checkbox&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <div class="flex flex-col gap-3">
-                <div class="flex items-center">
-                    <twig:Checkbox id="cb-default"/>
-                    <twig:Label for="cb-default" class="select-none ms-2 font-medium">Par défaut</twig:Label>
-                </div>
-                <div class="flex items-center">
-                    <twig:Checkbox id="cb-checked" checked/>
-                    <twig:Label for="cb-checked" class="select-none ms-2 font-medium">Coché</twig:Label>
-                </div>
-                <div class="flex items-center">
-                    <twig:Checkbox id="cb-disabled" disabled/>
-                    <twig:Label for="cb-disabled" class="select-none ms-2 font-medium text-gray-400 dark:text-gray-500">Désactivé</twig:Label>
-                </div>
+        {# ── Checkbox ─────────────────────────────────────────────────────────────── #}
+        <section id="checkbox" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Checkbox</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Checkbox&gt;</span>
             </div>
-        </div>
-    </section>
-
-    {# ── Indicator ────────────────────────────────────────────────────────────── #}
-    <section id="indicator" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Indicator</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Indicator&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
-                <div class="flex items-center gap-4">
-                    <twig:Indicator variant="brand"/>
-                    <twig:Indicator variant="gray"/>
-                    <twig:Indicator variant="danger"/>
-                    <twig:Indicator variant="success"/>
-                    <twig:Indicator variant="warning"/>
-                </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Contexte (avatar + badge statut)</p>
-                <div class="flex items-center gap-4">
-                    <div class="relative inline-flex">
-                        <div class="grid size-10 place-items-center rounded-full bg-gray-200 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">JD</div>
-                        <twig:Indicator variant="success" class="absolute bottom-0 right-0 size-3 border-2 border-white dark:border-gray-800"/>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center">
+                        <twig:Checkbox id="cb-default"/>
+                        <twig:Label for="cb-default" class="select-none ms-2 font-medium">Par défaut</twig:Label>
                     </div>
-                    <div class="relative inline-flex">
-                        <div class="grid size-10 place-items-center rounded-full bg-gray-200 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">AB</div>
-                        <twig:Indicator variant="warning" class="absolute bottom-0 right-0 size-3 border-2 border-white dark:border-gray-800"/>
+                    <div class="flex items-center">
+                        <twig:Checkbox id="cb-checked" checked/>
+                        <twig:Label for="cb-checked" class="select-none ms-2 font-medium">Coché</twig:Label>
                     </div>
-                    <div class="relative inline-flex">
-                        <div class="grid size-10 place-items-center rounded-full bg-gray-200 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">MR</div>
-                        <twig:Indicator variant="gray" class="absolute bottom-0 right-0 size-3 border-2 border-white dark:border-gray-800"/>
+                    <div class="flex items-center">
+                        <twig:Checkbox id="cb-disabled" disabled/>
+                        <twig:Label for="cb-disabled" class="select-none ms-2 font-medium text-gray-400 dark:text-gray-500">Désactivé</twig:Label>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Input ────────────────────────────────────────────────────────────────── #}
-    <section id="input" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Input</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Input&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <form>
-                <div class="grid gap-5 mb-5 md:grid-cols-2 max-w-2xl">
-                    <div>
-                        <twig:Label for="inp-first">Prénom</twig:Label>
-                        <twig:Input id="inp-first" type="text" placeholder="Jean" class="mt-1.5"/>
-                    </div>
-                    <div>
-                        <twig:Label for="inp-last">Nom</twig:Label>
-                        <twig:Input id="inp-last" type="text" placeholder="Dupont" class="mt-1.5"/>
-                    </div>
-                    <div>
-                        <twig:Label for="inp-email">Email</twig:Label>
-                        <twig:Input id="inp-email" type="email" placeholder="jean.dupont@example.com" class="mt-1.5"/>
-                    </div>
-                    <div>
-                        <twig:Label for="inp-tel">Téléphone</twig:Label>
-                        <twig:Input id="inp-tel" type="tel" placeholder="06 12 34 56 78" class="mt-1.5"/>
+        {# ── Indicator ────────────────────────────────────────────────────────────── #}
+        <section id="indicator" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Indicator</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Indicator&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variants</p>
+                    <div class="flex items-center gap-4">
+                        <twig:Indicator variant="brand"/>
+                        <twig:Indicator variant="gray"/>
+                        <twig:Indicator variant="danger"/>
+                        <twig:Indicator variant="success"/>
+                        <twig:Indicator variant="warning"/>
                     </div>
                 </div>
-                <div class="max-w-2xl mb-5">
-                    <twig:Label for="inp-pwd">Mot de passe</twig:Label>
-                    <twig:Input id="inp-pwd" type="password" placeholder="••••••••" class="mt-1.5"/>
-                </div>
-                <twig:Button type="submit">Enregistrer</twig:Button>
-            </form>
-        </div>
-    </section>
-
-    {# ── Kbd ──────────────────────────────────────────────────────────────────── #}
-    <section id="kbd" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Kbd</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Kbd&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Touches individuelles</p>
-                <div class="flex flex-wrap gap-2">
-                    <twig:Kbd>Shift</twig:Kbd>
-                    <twig:Kbd>Ctrl</twig:Kbd>
-                    <twig:Kbd>Alt</twig:Kbd>
-                    <twig:Kbd>Tab</twig:Kbd>
-                    <twig:Kbd>Caps Lock</twig:Kbd>
-                    <twig:Kbd>Esc</twig:Kbd>
-                    <twig:Kbd>Espace</twig:Kbd>
-                    <twig:Kbd>Entrée</twig:Kbd>
-                    <twig:Kbd>⌘</twig:Kbd>
-                </div>
-            </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Combinaisons</p>
-                <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                    <span><twig:Kbd>Ctrl</twig:Kbd> + <twig:Kbd>C</twig:Kbd> — Copier</span>
-                    <span><twig:Kbd>Ctrl</twig:Kbd> + <twig:Kbd>Z</twig:Kbd> — Annuler</span>
-                    <span><twig:Kbd>⌘</twig:Kbd> + <twig:Kbd>K</twig:Kbd> — Recherche</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {# ── Modal ────────────────────────────────────────────────────────────────── #}
-    <section id="modal" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Modal</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Modal&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Confirmation</p>
-                <twig:Modal id="modal-confirm">
-                    <twig:Modal:Trigger>
-                        <twig:Button variant="outline-brand" {{ ...modal_trigger_attrs }}>Ouvrir la modale</twig:Button>
-                    </twig:Modal:Trigger>
-                    <twig:Modal:Content>
-                        <twig:Modal:Header>
-                            <twig:Modal:Title>Confirmer la suppression</twig:Modal:Title>
-                        </twig:Modal:Header>
-                        <twig:Modal:Body>
-                            <p class="leading-relaxed text-body">
-                                Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible et toutes les données associées seront définitivement perdues.
-                            </p>
-                        </twig:Modal:Body>
-                        <twig:Modal:Footer>
-                            <twig:Button variant="danger">Supprimer</twig:Button>
-                            <twig:Modal:Close>
-                                <twig:Button variant="outline" {{ ...modal_close_attrs }}>Annuler</twig:Button>
-                            </twig:Modal:Close>
-                        </twig:Modal:Footer>
-                    </twig:Modal:Content>
-                </twig:Modal>
-            </div>
-        </div>
-    </section>
-
-    {# ── Pagination ───────────────────────────────────────────────────────────── #}
-    <section id="pagination" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Pagination</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Pagination&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <twig:Pagination>
-                <twig:Pagination:Content>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Previous href="#"/>
-                    </twig:Pagination:Item>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Link href="#">1</twig:Pagination:Link>
-                    </twig:Pagination:Item>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Link href="#" active>2</twig:Pagination:Link>
-                    </twig:Pagination:Item>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Link href="#">3</twig:Pagination:Link>
-                    </twig:Pagination:Item>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Link href="#">4</twig:Pagination:Link>
-                    </twig:Pagination:Item>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Link href="#">5</twig:Pagination:Link>
-                    </twig:Pagination:Item>
-                    <twig:Pagination:Item>
-                        <twig:Pagination:Next href="#"/>
-                    </twig:Pagination:Item>
-                </twig:Pagination:Content>
-            </twig:Pagination>
-        </div>
-    </section>
-
-    {# ── Radio ────────────────────────────────────────────────────────────────── #}
-    <section id="radio" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Radio</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Radio&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <div class="flex flex-col gap-3">
-                <div class="flex items-center">
-                    <twig:Radio id="radio-a" value="a" name="radio-ds"/>
-                    <twig:Label for="radio-a" class="select-none ms-2 font-medium">Option A</twig:Label>
-                </div>
-                <div class="flex items-center">
-                    <twig:Radio id="radio-b" value="b" name="radio-ds" checked/>
-                    <twig:Label for="radio-b" class="select-none ms-2 font-medium">Option B (sélectionnée)</twig:Label>
-                </div>
-                <div class="flex items-center">
-                    <twig:Radio id="radio-c" value="c" name="radio-ds" disabled/>
-                    <twig:Label for="radio-c" class="select-none ms-2 font-medium text-gray-400 dark:text-gray-500">Option C (désactivée)</twig:Label>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {# ── Select ───────────────────────────────────────────────────────────────── #}
-    <section id="select" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Select</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Select&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
-            <div class="max-w-xs">
-                <twig:Label for="sel-country" class="mb-2">Pays</twig:Label>
-                <twig:Select id="sel-country">
-                    <option selected>Choisissez un pays</option>
-                    <option value="fr">France</option>
-                    <option value="be">Belgique</option>
-                    <option value="ch">Suisse</option>
-                    <option value="ca">Canada</option>
-                </twig:Select>
-            </div>
-            <div class="max-w-xs">
-                <twig:Label for="sel-disabled" class="mb-2">Select désactivé</twig:Label>
-                <twig:Select id="sel-disabled" disabled>
-                    <option>Option désactivée</option>
-                </twig:Select>
-            </div>
-        </div>
-    </section>
-
-    {# ── Skeleton ─────────────────────────────────────────────────────────────── #}
-    <section id="skeleton" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Skeleton</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Skeleton&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <div class="grid gap-8 sm:grid-cols-2">
-                <div role="status" aria-label="Chargement du texte">
-                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Texte</p>
-                    <twig:Skeleton class="h-2.5 w-48 mb-4"/>
-                    <div class="space-y-2.5">
-                        <twig:Skeleton class="h-2 max-w-[360px]"/>
-                        <twig:Skeleton class="h-2 w-[200px]"/>
-                        <twig:Skeleton class="h-2 max-w-[330px]"/>
-                        <twig:Skeleton class="h-2 max-w-[300px]"/>
-                    </div>
-                    <span class="sr-only">Chargement…</span>
-                </div>
-                <div role="status" aria-label="Chargement de la card">
-                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Card</p>
-                    <div class="flex items-start gap-3">
-                        <twig:Skeleton class="size-10 rounded-full shrink-0"/>
-                        <div class="flex-1 space-y-2">
-                            <twig:Skeleton class="h-2.5 w-24"/>
-                            <twig:Skeleton class="h-2 max-w-[200px]"/>
-                            <twig:Skeleton class="h-2 max-w-[160px]"/>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Contexte (avatar + badge statut)</p>
+                    <div class="flex items-center gap-4">
+                        <div class="relative inline-flex">
+                            <div class="grid size-10 place-items-center rounded-full bg-gray-200 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">JD</div>
+                            <twig:Indicator variant="success" class="absolute bottom-0 right-0 size-3 border-2 border-white dark:border-gray-800"/>
+                        </div>
+                        <div class="relative inline-flex">
+                            <div class="grid size-10 place-items-center rounded-full bg-gray-200 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">AB</div>
+                            <twig:Indicator variant="warning" class="absolute bottom-0 right-0 size-3 border-2 border-white dark:border-gray-800"/>
+                        </div>
+                        <div class="relative inline-flex">
+                            <div class="grid size-10 place-items-center rounded-full bg-gray-200 text-sm font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">MR</div>
+                            <twig:Indicator variant="gray" class="absolute bottom-0 right-0 size-3 border-2 border-white dark:border-gray-800"/>
                         </div>
                     </div>
-                    <span class="sr-only">Chargement…</span>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Spinner ──────────────────────────────────────────────────────────────── #}
-    <section id="spinner" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Spinner</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Spinner&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Tailles</p>
-                <div class="flex items-center gap-4">
-                    <twig:Spinner class="size-4"/>
-                    <twig:Spinner class="size-6"/>
-                    <twig:Spinner class="size-8"/>
-                    <twig:Spinner class="size-10"/>
-                    <twig:Spinner class="size-12"/>
+        {# ── Input ────────────────────────────────────────────────────────────────── #}
+        <section id="input" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Input</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Input&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <form>
+                    <div class="grid gap-5 mb-5 md:grid-cols-2 max-w-2xl">
+                        <div>
+                            <twig:Label for="inp-first">Prénom</twig:Label>
+                            <twig:Input id="inp-first" type="text" placeholder="Jean" class="mt-1.5"/>
+                        </div>
+                        <div>
+                            <twig:Label for="inp-last">Nom</twig:Label>
+                            <twig:Input id="inp-last" type="text" placeholder="Dupont" class="mt-1.5"/>
+                        </div>
+                        <div>
+                            <twig:Label for="inp-email">Email</twig:Label>
+                            <twig:Input id="inp-email" type="email" placeholder="jean.dupont@example.com" class="mt-1.5"/>
+                        </div>
+                        <div>
+                            <twig:Label for="inp-tel">Téléphone</twig:Label>
+                            <twig:Input id="inp-tel" type="tel" placeholder="06 12 34 56 78" class="mt-1.5"/>
+                        </div>
+                    </div>
+                    <div class="max-w-2xl mb-5">
+                        <twig:Label for="inp-pwd">Mot de passe</twig:Label>
+                        <twig:Input id="inp-pwd" type="password" placeholder="••••••••" class="mt-1.5"/>
+                    </div>
+                    <twig:Button type="submit">Enregistrer</twig:Button>
+                </form>
+            </div>
+        </section>
+
+        {# ── Kbd ──────────────────────────────────────────────────────────────────── #}
+        <section id="kbd" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Kbd</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Kbd&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Touches individuelles</p>
+                    <div class="flex flex-wrap gap-2">
+                        <twig:Kbd>Shift</twig:Kbd>
+                        <twig:Kbd>Ctrl</twig:Kbd>
+                        <twig:Kbd>Alt</twig:Kbd>
+                        <twig:Kbd>Tab</twig:Kbd>
+                        <twig:Kbd>Caps Lock</twig:Kbd>
+                        <twig:Kbd>Esc</twig:Kbd>
+                        <twig:Kbd>Espace</twig:Kbd>
+                        <twig:Kbd>Entrée</twig:Kbd>
+                        <twig:Kbd>⌘</twig:Kbd>
+                    </div>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Combinaisons</p>
+                    <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                        <span><twig:Kbd>Ctrl</twig:Kbd> + <twig:Kbd>C</twig:Kbd> — Copier</span>
+                        <span><twig:Kbd>Ctrl</twig:Kbd> + <twig:Kbd>Z</twig:Kbd> — Annuler</span>
+                        <span><twig:Kbd>⌘</twig:Kbd> + <twig:Kbd>K</twig:Kbd> — Recherche</span>
+                    </div>
                 </div>
             </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Dans un bouton</p>
-                <twig:Button disabled>
-                    <twig:Spinner class="me-2 size-4"/>
-                    Chargement…
-                </twig:Button>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Table ────────────────────────────────────────────────────────────────── #}
-    <section id="table" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Table</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Table&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            {% set products = [
-                {name: 'Apple MacBook Pro 17"', color: 'Argent', category: 'Laptop', price: '2 999 €', stock: 231},
-                {name: 'Microsoft Surface Pro', color: 'Blanc', category: 'Laptop PC', price: '1 999 €', stock: 423},
-                {name: 'Magic Mouse 2', color: 'Noir', category: 'Accessoires', price: '99 €', stock: 121},
-            ] %}
-            <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-                <twig:Table>
-                    <twig:Table:Caption>
-                        Nos produits
-                        <p class="mt-1.5 text-sm font-normal text-body">Liste d'exemple de produits avec une table Flowbite.</p>
-                    </twig:Table:Caption>
-                    <twig:Table:Header class="border-t">
-                        <twig:Table:Row>
-                            <twig:Table:Head>Produit</twig:Table:Head>
-                            <twig:Table:Head>Couleur</twig:Table:Head>
-                            <twig:Table:Head>Catégorie</twig:Table:Head>
-                            <twig:Table:Head>Prix</twig:Table:Head>
-                            <twig:Table:Head>Stock</twig:Table:Head>
-                        </twig:Table:Row>
-                    </twig:Table:Header>
-                    <twig:Table:Body>
-                        {% for product in products %}
+        {# ── Modal ────────────────────────────────────────────────────────────────── #}
+        <section id="modal" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Modal</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Modal&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Confirmation</p>
+                    <twig:Modal id="modal-confirm">
+                        <twig:Modal:Trigger>
+                            <twig:Button variant="outline-brand" {{ ...modal_trigger_attrs }}>Ouvrir la modale</twig:Button>
+                        </twig:Modal:Trigger>
+                        <twig:Modal:Content>
+                            <twig:Modal:Header>
+                                <twig:Modal:Title>Confirmer la suppression</twig:Modal:Title>
+                            </twig:Modal:Header>
+                            <twig:Modal:Body>
+                                <p class="leading-relaxed text-body">
+                                    Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible et toutes les données associées seront définitivement perdues.
+                                </p>
+                            </twig:Modal:Body>
+                            <twig:Modal:Footer>
+                                <twig:Button variant="danger">Supprimer</twig:Button>
+                                <twig:Modal:Close>
+                                    <twig:Button variant="outline" {{ ...modal_close_attrs }}>Annuler</twig:Button>
+                                </twig:Modal:Close>
+                            </twig:Modal:Footer>
+                        </twig:Modal:Content>
+                    </twig:Modal>
+                </div>
+            </div>
+        </section>
+
+        {# ── Pagination ───────────────────────────────────────────────────────────── #}
+        <section id="pagination" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Pagination</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Pagination&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <twig:Pagination>
+                    <twig:Pagination:Content>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Previous href="#"/>
+                        </twig:Pagination:Item>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Link href="#">1</twig:Pagination:Link>
+                        </twig:Pagination:Item>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Link href="#" active>2</twig:Pagination:Link>
+                        </twig:Pagination:Item>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Link href="#">3</twig:Pagination:Link>
+                        </twig:Pagination:Item>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Link href="#">4</twig:Pagination:Link>
+                        </twig:Pagination:Item>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Link href="#">5</twig:Pagination:Link>
+                        </twig:Pagination:Item>
+                        <twig:Pagination:Item>
+                            <twig:Pagination:Next href="#"/>
+                        </twig:Pagination:Item>
+                    </twig:Pagination:Content>
+                </twig:Pagination>
+            </div>
+        </section>
+
+        {# ── Radio ────────────────────────────────────────────────────────────────── #}
+        <section id="radio" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Radio</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Radio&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center">
+                        <twig:Radio id="radio-a" value="a" name="radio-ds"/>
+                        <twig:Label for="radio-a" class="select-none ms-2 font-medium">Option A</twig:Label>
+                    </div>
+                    <div class="flex items-center">
+                        <twig:Radio id="radio-b" value="b" name="radio-ds" checked/>
+                        <twig:Label for="radio-b" class="select-none ms-2 font-medium">Option B (sélectionnée)</twig:Label>
+                    </div>
+                    <div class="flex items-center">
+                        <twig:Radio id="radio-c" value="c" name="radio-ds" disabled/>
+                        <twig:Label for="radio-c" class="select-none ms-2 font-medium text-gray-400 dark:text-gray-500">Option C (désactivée)</twig:Label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {# ── Select ───────────────────────────────────────────────────────────────── #}
+        <section id="select" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Select</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Select&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
+                <div class="max-w-xs">
+                    <twig:Label for="sel-country" class="mb-2">Pays</twig:Label>
+                    <twig:Select id="sel-country">
+                        <option selected>Choisissez un pays</option>
+                        <option value="fr">France</option>
+                        <option value="be">Belgique</option>
+                        <option value="ch">Suisse</option>
+                        <option value="ca">Canada</option>
+                    </twig:Select>
+                </div>
+                <div class="max-w-xs">
+                    <twig:Label for="sel-disabled" class="mb-2">Select désactivé</twig:Label>
+                    <twig:Select id="sel-disabled" disabled>
+                        <option>Option désactivée</option>
+                    </twig:Select>
+                </div>
+            </div>
+        </section>
+
+        {# ── Skeleton ─────────────────────────────────────────────────────────────── #}
+        <section id="skeleton" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Skeleton</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Skeleton&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="grid gap-8 sm:grid-cols-2">
+                    <div role="status" aria-label="Chargement du texte">
+                        <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Texte</p>
+                        <twig:Skeleton class="h-2.5 w-48 mb-4"/>
+                        <div class="space-y-2.5">
+                            <twig:Skeleton class="h-2 max-w-[360px]"/>
+                            <twig:Skeleton class="h-2 w-[200px]"/>
+                            <twig:Skeleton class="h-2 max-w-[330px]"/>
+                            <twig:Skeleton class="h-2 max-w-[300px]"/>
+                        </div>
+                        <span class="sr-only">Chargement…</span>
+                    </div>
+                    <div role="status" aria-label="Chargement de la card">
+                        <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Card</p>
+                        <div class="flex items-start gap-3">
+                            <twig:Skeleton class="size-10 rounded-full shrink-0"/>
+                            <div class="flex-1 space-y-2">
+                                <twig:Skeleton class="h-2.5 w-24"/>
+                                <twig:Skeleton class="h-2 max-w-[200px]"/>
+                                <twig:Skeleton class="h-2 max-w-[160px]"/>
+                            </div>
+                        </div>
+                        <span class="sr-only">Chargement…</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {# ── Spinner ──────────────────────────────────────────────────────────────── #}
+        <section id="spinner" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Spinner</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Spinner&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-5">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Tailles</p>
+                    <div class="flex items-center gap-4">
+                        <twig:Spinner class="size-4"/>
+                        <twig:Spinner class="size-6"/>
+                        <twig:Spinner class="size-8"/>
+                        <twig:Spinner class="size-10"/>
+                        <twig:Spinner class="size-12"/>
+                    </div>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Dans un bouton</p>
+                    <twig:Button disabled>
+                        <twig:Spinner class="me-2 size-4"/>
+                        Chargement…
+                    </twig:Button>
+                </div>
+            </div>
+        </section>
+
+        {# ── Table ────────────────────────────────────────────────────────────────── #}
+        <section id="table" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Table</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Table&gt;</span>
+            </div>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                {% set products = [
+                    {name: 'Apple MacBook Pro 17"', color: 'Argent', category: 'Laptop', price: '2 999 €', stock: 231},
+                    {name: 'Microsoft Surface Pro', color: 'Blanc', category: 'Laptop PC', price: '1 999 €', stock: 423},
+                    {name: 'Magic Mouse 2', color: 'Noir', category: 'Accessoires', price: '99 €', stock: 121},
+                ] %}
+                <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
+                    <twig:Table>
+                        <twig:Table:Caption>
+                            Nos produits
+                            <p class="mt-1.5 text-sm font-normal text-body">Liste d'exemple de produits avec une table Flowbite.</p>
+                        </twig:Table:Caption>
+                        <twig:Table:Header class="border-t">
                             <twig:Table:Row>
-                                <twig:Table:Head scope="row" class="font-medium text-heading whitespace-nowrap">{{ product.name }}</twig:Table:Head>
-                                <twig:Table:Cell>{{ product.color }}</twig:Table:Cell>
-                                <twig:Table:Cell>{{ product.category }}</twig:Table:Cell>
-                                <twig:Table:Cell>{{ product.price }}</twig:Table:Cell>
-                                <twig:Table:Cell>{{ product.stock }}</twig:Table:Cell>
+                                <twig:Table:Head>Produit</twig:Table:Head>
+                                <twig:Table:Head>Couleur</twig:Table:Head>
+                                <twig:Table:Head>Catégorie</twig:Table:Head>
+                                <twig:Table:Head>Prix</twig:Table:Head>
+                                <twig:Table:Head>Stock</twig:Table:Head>
                             </twig:Table:Row>
-                        {% endfor %}
-                    </twig:Table:Body>
-                    <twig:Table:Footer>
-                        <twig:Table:Row>
-                            <twig:Table:Head scope="row" class="text-base" colspan="3">Total</twig:Table:Head>
-                            <twig:Table:Cell>5 097 €</twig:Table:Cell>
-                            <twig:Table:Cell>775</twig:Table:Cell>
-                        </twig:Table:Row>
-                    </twig:Table:Footer>
-                </twig:Table>
+                        </twig:Table:Header>
+                        <twig:Table:Body>
+                            {% for product in products %}
+                                <twig:Table:Row>
+                                    <twig:Table:Head scope="row" class="font-medium text-heading whitespace-nowrap">{{ product.name }}</twig:Table:Head>
+                                    <twig:Table:Cell>{{ product.color }}</twig:Table:Cell>
+                                    <twig:Table:Cell>{{ product.category }}</twig:Table:Cell>
+                                    <twig:Table:Cell>{{ product.price }}</twig:Table:Cell>
+                                    <twig:Table:Cell>{{ product.stock }}</twig:Table:Cell>
+                                </twig:Table:Row>
+                            {% endfor %}
+                        </twig:Table:Body>
+                        <twig:Table:Footer>
+                            <twig:Table:Row>
+                                <twig:Table:Head scope="row" class="text-base" colspan="3">Total</twig:Table:Head>
+                                <twig:Table:Cell>5 097 €</twig:Table:Cell>
+                                <twig:Table:Cell>775</twig:Table:Cell>
+                            </twig:Table:Row>
+                        </twig:Table:Footer>
+                    </twig:Table>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Tabs ─────────────────────────────────────────────────────────────────── #}
-    <section id="tabs" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Tabs</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Tabs&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-6">
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Défaut</p>
-                <twig:Tabs defaultValue="profile" class="w-full max-w-xl">
-                    <twig:Tabs:List>
-                        <twig:Tabs:Trigger value="profile">Profil</twig:Tabs:Trigger>
-                        <twig:Tabs:Trigger value="dashboard">Tableau de bord</twig:Tabs:Trigger>
-                        <twig:Tabs:Trigger value="settings">Paramètres</twig:Tabs:Trigger>
-                        <twig:Tabs:Trigger value="disabled" disabled>Désactivé</twig:Tabs:Trigger>
-                    </twig:Tabs:List>
-                    <twig:Tabs:Content value="profile">
-                        <div class="p-4 bg-neutral-secondary text-medium text-body rounded-base w-full">
-                            <p class="text-sm">Contenu de l'onglet <strong class="font-medium text-heading">Profil</strong>. Cliquez sur un autre onglet pour basculer.</p>
-                        </div>
-                    </twig:Tabs:Content>
-                    <twig:Tabs:Content value="dashboard">
-                        <div class="p-4 bg-neutral-secondary text-medium text-body rounded-base w-full">
-                            <p class="text-sm">Contenu de l'onglet <strong class="font-medium text-heading">Tableau de bord</strong>.</p>
-                        </div>
-                    </twig:Tabs:Content>
-                    <twig:Tabs:Content value="settings">
-                        <div class="p-4 bg-neutral-secondary text-medium text-body rounded-base w-full">
-                            <p class="text-sm">Contenu de l'onglet <strong class="font-medium text-heading">Paramètres</strong>.</p>
-                        </div>
-                    </twig:Tabs:Content>
-                </twig:Tabs>
+        {# ── Tabs ─────────────────────────────────────────────────────────────────── #}
+        <section id="tabs" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Tabs</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Tabs&gt;</span>
             </div>
-            <div>
-                <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variant pill</p>
-                <twig:Tabs defaultValue="tab1" variant="pill" class="w-full max-w-xl">
-                    <twig:Tabs:List>
-                        <twig:Tabs:Trigger value="tab1">Onglet 1</twig:Tabs:Trigger>
-                        <twig:Tabs:Trigger value="tab2">Onglet 2</twig:Tabs:Trigger>
-                        <twig:Tabs:Trigger value="tab3">Onglet 3</twig:Tabs:Trigger>
-                    </twig:Tabs:List>
-                    <twig:Tabs:Content value="tab1">
-                        <div class="p-4 bg-neutral-secondary rounded-base"><p class="text-sm text-body">Contenu onglet 1.</p></div>
-                    </twig:Tabs:Content>
-                    <twig:Tabs:Content value="tab2">
-                        <div class="p-4 bg-neutral-secondary rounded-base"><p class="text-sm text-body">Contenu onglet 2.</p></div>
-                    </twig:Tabs:Content>
-                    <twig:Tabs:Content value="tab3">
-                        <div class="p-4 bg-neutral-secondary rounded-base"><p class="text-sm text-body">Contenu onglet 3.</p></div>
-                    </twig:Tabs:Content>
-                </twig:Tabs>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-6">
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Défaut</p>
+                    <twig:Tabs defaultValue="profile" class="w-full max-w-xl">
+                        <twig:Tabs:List>
+                            <twig:Tabs:Trigger value="profile">Profil</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="dashboard">Tableau de bord</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="settings">Paramètres</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="disabled" disabled>Désactivé</twig:Tabs:Trigger>
+                        </twig:Tabs:List>
+                        <twig:Tabs:Content value="profile">
+                            <div class="p-4 bg-neutral-secondary text-medium text-body rounded-base w-full">
+                                <p class="text-sm">Contenu de l'onglet <strong class="font-medium text-heading">Profil</strong>. Cliquez sur un autre onglet pour basculer.</p>
+                            </div>
+                        </twig:Tabs:Content>
+                        <twig:Tabs:Content value="dashboard">
+                            <div class="p-4 bg-neutral-secondary text-medium text-body rounded-base w-full">
+                                <p class="text-sm">Contenu de l'onglet <strong class="font-medium text-heading">Tableau de bord</strong>.</p>
+                            </div>
+                        </twig:Tabs:Content>
+                        <twig:Tabs:Content value="settings">
+                            <div class="p-4 bg-neutral-secondary text-medium text-body rounded-base w-full">
+                                <p class="text-sm">Contenu de l'onglet <strong class="font-medium text-heading">Paramètres</strong>.</p>
+                            </div>
+                        </twig:Tabs:Content>
+                    </twig:Tabs>
+                </div>
+                <div>
+                    <p class="mb-3 text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Variant pill</p>
+                    <twig:Tabs defaultValue="tab1" variant="pill" class="w-full max-w-xl">
+                        <twig:Tabs:List>
+                            <twig:Tabs:Trigger value="tab1">Onglet 1</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="tab2">Onglet 2</twig:Tabs:Trigger>
+                            <twig:Tabs:Trigger value="tab3">Onglet 3</twig:Tabs:Trigger>
+                        </twig:Tabs:List>
+                        <twig:Tabs:Content value="tab1">
+                            <div class="p-4 bg-neutral-secondary rounded-base"><p class="text-sm text-body">Contenu onglet 1.</p></div>
+                        </twig:Tabs:Content>
+                        <twig:Tabs:Content value="tab2">
+                            <div class="p-4 bg-neutral-secondary rounded-base"><p class="text-sm text-body">Contenu onglet 2.</p></div>
+                        </twig:Tabs:Content>
+                        <twig:Tabs:Content value="tab3">
+                            <div class="p-4 bg-neutral-secondary rounded-base"><p class="text-sm text-body">Contenu onglet 3.</p></div>
+                        </twig:Tabs:Content>
+                    </twig:Tabs>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Textarea ─────────────────────────────────────────────────────────────── #}
-    <section id="textarea" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Textarea</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Textarea&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
-            <div class="max-w-lg">
-                <twig:Label for="ta-msg" class="mb-2">Message</twig:Label>
-                <twig:Textarea id="ta-msg" placeholder="Saisissez votre message ici…" rows="4"/>
+        {# ── Textarea ─────────────────────────────────────────────────────────────── #}
+        <section id="textarea" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Textarea</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Textarea&gt;</span>
             </div>
-            <div class="max-w-lg">
-                <twig:Label for="ta-disabled" class="mb-2">Message (désactivé)</twig:Label>
-                <twig:Textarea id="ta-disabled" placeholder="Ce champ est désactivé." rows="3" disabled/>
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800 space-y-4">
+                <div class="max-w-lg">
+                    <twig:Label for="ta-msg" class="mb-2">Message</twig:Label>
+                    <twig:Textarea id="ta-msg" placeholder="Saisissez votre message ici…" rows="4"/>
+                </div>
+                <div class="max-w-lg">
+                    <twig:Label for="ta-disabled" class="mb-2">Message (désactivé)</twig:Label>
+                    <twig:Textarea id="ta-disabled" placeholder="Ce champ est désactivé." rows="3" disabled/>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    {# ── Toggle ───────────────────────────────────────────────────────────────── #}
-    <section id="toggle" class="mb-12 scroll-mt-20">
-        <div class="mb-4 flex items-center gap-3">
-            <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Toggle</h2>
-            <span class="font-mono text-xs text-gray-400">&lt;twig:Toggle&gt;</span>
-        </div>
-        <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
-            <div class="flex flex-col gap-3">
-                <twig:Toggle id="toggle-default" value="">Notifications</twig:Toggle>
-                <twig:Toggle id="toggle-checked" value="" checked>Emails marketing (activé)</twig:Toggle>
-                <twig:Toggle id="toggle-disabled" value="" disabled>Fonctionnalité bêta (désactivée)</twig:Toggle>
+        {# ── Toggle ───────────────────────────────────────────────────────────────── #}
+        <section id="toggle" class="mb-12 scroll-mt-20">
+            <div class="mb-4 flex items-center gap-3">
+                <h2 class="font-display text-lg font-semibold text-gray-900 dark:text-white">Toggle</h2>
+                <span class="font-mono text-xs text-gray-400">&lt;twig:Toggle&gt;</span>
             </div>
-        </div>
-    </section>
-
+            <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-col gap-3">
+                    <twig:Toggle id="toggle-default" value="">Notifications</twig:Toggle>
+                    <twig:Toggle id="toggle-checked" value="" checked>Emails marketing (activé)</twig:Toggle>
+                    <twig:Toggle id="toggle-disabled" value="" disabled>Fonctionnalité bêta (désactivée)</twig:Toggle>
+                </div>
+            </div>
+        </section>
+    </div>
 {% endblock %}
