@@ -79,4 +79,12 @@ Sans rien faire, le board continue de masquer les idées en phase interview et i
 
 ## Questions ouvertes
 
-- **Couleur/accent de la colonne « Idée »** : quelle teinte dans le design system Nova ? → à trancher au plan (choix visuel, non bloquant fonctionnellement).
+- ~~**Couleur/accent de la colonne « Idée »**~~ → **tranché** : token `st-brief` (gris `#a1a1aa`) réservé à « Idée » ; « À vérifier » recoloré via un token dédié `--color-st-flag` (rose). Choix Nova validé au navigateur.
+
+---
+
+## Changelog
+
+| Date | Type | Description |
+|------|------|-------------|
+| 2026-07-05 | Sync post-implémentation | §Questions ouvertes : couleur de la colonne « Idée » tranchée (gris `st-brief`, « À vérifier » en `st-flag` rose). Aucune règle métier ni critère d'acceptation impacté — l'intention fonctionnelle est livrée conforme. Cf. `report.md`. |

@@ -47,6 +47,7 @@ Aucun fichier de production à créer — la feature réétalonne l'existant. Le
 | `tests/Unit/Service/Board/ProjectBoardBuilderTest.php` | Adapter les `countFor`/`cardsFor` aux nouveaux cases ; renommer `testRefactoStoryNeverLandsInCadrage` → refacto `plan.md` entre en **Cadré**, jamais en Idée/Besoin. |
 | `tests/Functional/Controller/ProjectBoardTest.php` | `assertCount(4→5)` colonnes ; `data-stage` `cadrage/planifie/review`→`besoin/cadre/implemente` ; compteurs recalés ; `testRefactoCardIsNeverInCadrageColumn` → « never in Besoin » et présent en « implemente ». Ajouter l'assertion « story `brief.md` → colonne `idee` ». |
 | `tests/e2e/project-board.spec.ts` | `toHaveCount(4→5)` ; labels/compteurs ; conserver `data-stage="livre"` ; ajouter une assertion sur la colonne « Idée » peuplée. Le test filtre/tri reste valide (sélecteurs inchangés). |
+| `tests/Unit/Service/Board/StoryCardTest.php` | Fixtures `PipelineStage::Cadrage` → `Besoin` : le VO `StoryCard` figeait l'ancien case, le renommage cassait sa construction. **Ajouté au relevé post-implémentation** — non recensé initialement, débusqué par le grep de contrôle (cf. §Risques). |
 
 ## Impacts transverses
 
@@ -97,8 +98,8 @@ Aucun fichier de production à créer — la feature réétalonne l'existant. Le
 
 ## Questions ouvertes
 
-- **Couleur de « À vérifier »** → tranché (par défaut) : rose/danger discret, distinct de `st-brief` réservé à « Idée ». Alternatives si le rendu ne convient pas : (a) « Idée » en indigo/slate (nouveau token) + « À vérifier » garde le gris ; (b) deux gris différenciés (`st-brief` plein vs `ink-muted`). À valider visuellement à l'implémentation.
-- **Identifiant de la story fake « Idée »** : `012-f-idee` proposé — vérifier qu'il ne collisionne pas avec les ids déjà présents dans `boardTree()` (`001/010/005/007/003/002`) ; libre.
+- ~~**Couleur de « À vérifier »**~~ → **tranché à l'implem** : token dédié `--color-st-flag: #f43f5e` (rose), distinct de `st-brief` (gris) réservé à « Idée ». Option par défaut du plan retenue ; validée au navigateur sur données réelles.
+- ~~**Identifiant de la story fake « Idée »**~~ → **réalisé** : story `brief.md` seule ajoutée à `FakeRepositoryCatalog::boardTree()` (+ metadata fake), sans collision d'id.
 
 ---
 
@@ -106,4 +107,4 @@ Aucun fichier de production à créer — la feature réétalonne l'existant. Le
 
 | Date | Type | Description |
 |------|------|-------------|
-| — | — | — |
+| 2026-07-05 | Sync post-implémentation | §Fichiers à modifier : ajout de `StoryCardTest.php` (fixture figeant l'ancien case, oubli du relevé initial débusqué par le grep). §Questions ouvertes : couleur « À vérifier » tranchée (`--color-st-flag` rose #f43f5e) et story fake « Idée » réalisée — les deux questions closes par la livraison. Cf. `report.md`. |
