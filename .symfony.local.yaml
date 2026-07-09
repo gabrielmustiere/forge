@@ -8,3 +8,5 @@ workers:
         cmd: [ 'symfony', 'console', 'messenger:consume', 'async', '--silent' ]
     tailwind:
         cmd: [ 'symfony', 'console', 'tailwind:build', '--watch' ]
+    mate:
+        cmd: [ 'symfony', 'php', 'vendor/bin/mate', 'serve' ]

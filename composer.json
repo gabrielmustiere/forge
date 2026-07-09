@@ -1,6 +1,6 @@
 {
     "name": "gabrielmustiere/forge-board",
-    "description": "Forge Board — kanban de suivi des stories du workflow forge",
+    "description": "Forge Board \u2014 kanban de suivi des stories du workflow forge",
     "type": "project",
     "license": "Apache-2.0",
     "minimum-stability": "stable",
@@ -60,6 +60,7 @@
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
+            "symfony/ai-mate-composer-plugin": true,
             "symfony/flex": true,
             "symfony/runtime": true
         },
@@ -75,7 +76,8 @@
         "psr-4": {
             "App\\Tests\\": "tests/",
             "DataFixtures\\": "fixtures/",
-            "App\\Mate\\": "mate/src/"
+            "App\\Mate\\": "mate/src/",
+            "Mate\\": "mate/src/"
         }
     },
     "replace": {
