@@ -67,6 +67,8 @@ Pourquoi : le brief est lu par un humain qui cadre un besoin et par `/feature-pi
 2. **Privilégier `AskUserQuestion`** pour les questions à choix structurés. Si l'outil n'est pas chargé dans la session, le récupérer via `ToolSearch` au démarrage. Mais beaucoup de questions de découverte sont ouvertes (« raconte-moi… ») et passent mieux en texte libre — ne force pas des cases sur de l'exploratoire.
 3. **Maximum 2-3 questions par tour.** Une interview de découverte se mène doucement. Trop de questions d'un coup et l'utilisateur se referme.
 4. **Une question = une idée.** Pas de questions doubles (« qui l'utilise et à quelle fréquence et pourquoi ? »).
+5. **Signale clairement quand tu es prêt à conclure.** Une interview de découverte n'a pas de fin évidente pour l'utilisateur : c'est à toi de la rendre visible. Dès que tu peux énoncer le besoin en une phrase et que l'utilisateur acquiesce, **annonce explicitement** que tu as de quoi rédiger le brief et propose le choix — continuer ou conclure — plutôt que d'enchaîner une nouvelle question par défaut (cf. Phase 3).
+6. **Respecte une demande explicite de conclusion.** Si l'utilisateur demande de conclure (« produis le brief maintenant », « c'est bon, on écrit », ou un message de conclusion équivalent), traite-le comme la validation de la règle 1 : rédige le brief avec ce que tu as recueilli, **sans relancer un tour de questions**. Ne pose une dernière question que s'il **manque un élément vraiment bloquant** (l'irritant, ou le qui) — sinon, écris.
 
 ## Déroulement
 
@@ -103,11 +105,13 @@ Itère par petits tours. Après chaque tour, reformule-miroir et laisse corriger
 
 ### Phase 3 — Restitution
 
-Avant d'écrire quoi que ce soit, restitue à l'oral ta compréhension complète, en clair :
+Avant d'écrire quoi que ce soit, restitue à l'oral ta compréhension complète, en clair, et **signale sans ambiguïté que tu es prêt à conclure** — c'est le moment où l'utilisateur, qui sinon ne sait pas quand l'interview se termine, apprend qu'il tient la fin :
 
-> Voilà ce que j'ai compris : **<besoin en une phrase>**. Ça touche **<qui>**, le déclencheur c'est **<irritant>**, et la situation résolue ressemblerait à **<résultat>**. J'ai aussi vu que le produit te permet déjà de **<capacité déjà en place, en clair>**. C'est fidèle, ou il y a des choses à corriger ?
+> Voilà ce que j'ai compris : **<besoin en une phrase>**. Ça touche **<qui>**, le déclencheur c'est **<irritant>**, et la situation résolue ressemblerait à **<résultat>**. J'ai aussi vu que le produit te permet déjà de **<capacité déjà en place, en clair>**.
+>
+> **Je pense avoir de quoi rédiger le brief.** C'est fidèle ? Si tu veux ajouter ou corriger quelque chose, dis-le — sinon, dis-moi « on écrit » et je le produis.
 
-Laisse l'utilisateur amender. Boucle jusqu'à validation explicite. **Ne pas écrire le fichier avant ce « oui ».**
+Laisse l'utilisateur amender. Boucle jusqu'à validation explicite. **Ne pas écrire le fichier avant ce « oui ».** Ce « prêt à conclure » doit être net : ne le noie pas au milieu d'une nouvelle salve de questions, sinon l'utilisateur ne verra pas qu'il peut clore.
 
 ### Phase 4 — Rédaction du brief
 

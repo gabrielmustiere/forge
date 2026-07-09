@@ -7,6 +7,10 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Changed
+
+- `feature-interview` : le skill signale désormais explicitement quand il est prêt à conclure (Phase 3) et respecte une demande explicite de conclusion sans relancer un tour de questions — pour que l'utilisateur, qui sinon ne sait pas quand l'interview se termine, tienne clairement la fin du dialogue.
+
 ## [4.6.0] - 2026-07-05
 
 ### Added
