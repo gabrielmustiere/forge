@@ -22,6 +22,17 @@ services:
     DataFixtures\:
         resource: '../fixtures'
 
+    # Port de clone : une seule implémentation (git identique GitHub/GitLab), aliasée
+    # explicitement pour l'autowiring. En test, l'id GitRepositoryCloner est remplacé par
+    # un double (config/services_test.yaml) sans toucher cet alias.
+    App\Service\Repository\RepositoryClonerInterface: '@App\Service\Repository\GitRepositoryCloner'
+
+    # Ports de l'interview de cadrage (story 009), une implémentation chacun, aliasés pour
+    # l'autowiring. En test, les ids concrets sont remplacés par des doubles (services_test.yaml).
+    # L'ouverture de PR passe par un registry (tagged iterator), pas d'alias direct.
+    App\Service\Interview\InterviewRunnerInterface: '@App\Service\Interview\ClaudeInterviewRunner'
+    App\Service\Interview\BriefPusherInterface: '@App\Service\Interview\GitBriefPusher'
+
     # Extensions CommonMark pour le rendu du drawer (contenu de repos tiers).
     League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension: ~
     League\CommonMark\Extension\GithubFlavoredMarkdownExtension: ~

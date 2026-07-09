@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Manager;
 
 use App\Entity\Project;
+use App\Enum\Type\CloneStatus;
 use App\Form\ProjectFormData;
+use App\Message\CloneRepository;
 use App\Service\Repository\ProjectVerifier;
 use App\Service\RepositoryUrl;
 use App\Service\RepositoryUrlNormalizer;
 use App\Service\TokenCipher;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class ProjectManager
 {
@@ -19,6 +22,7 @@ final readonly class ProjectManager
         private RepositoryUrlNormalizer $normalizer,
         private TokenCipher $cipher,
         private ProjectVerifier $verifier,
+        private MessageBusInterface $bus,
     ) {
     }
 
@@ -69,6 +73,26 @@ final readonly class ProjectManager
     {
         $this->em->remove($project);
         $this->em->flush();
+    }
+
+    /**
+     * Déclenche (ou re-déclenche) le clone/pull local du projet en tâche de fond.
+     *
+     * Le passage à `Cloning` est **synchrone** et persisté avant le dispatch : il borne le
+     * double-clic et sert de garde d'idempotence (un clone déjà en cours n'est pas relancé).
+     * Le travail réel part sur le transport `async` via {@see CloneRepository}.
+     */
+    public function requestClone(Project $project): void
+    {
+        if (CloneStatus::Cloning === $project->getCloneStatus()) {
+            return;
+        }
+
+        $project->markCloning();
+        $this->em->flush();
+
+        $id = $project->getId() ?? throw new \LogicException('Projet non persisté.');
+        $this->bus->dispatch(new CloneRepository($id));
     }
 
     /**

@@ -22,5 +22,9 @@ framework:
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
 
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            # Clone/pull local d'un repo hors requête HTTP (story 008).
+            App\Message\CloneRepository: async
+
+            # Interview de cadrage : un tour de dialogue et le dépôt du brief (story 009).
+            App\Message\RunInterviewTurn: async
+            App\Message\SubmitBrief: async

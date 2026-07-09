@@ -1,0 +1,21 @@
+{#
+    État de clone local d'un projet : badge + bouton (déclenche/relance le clone via POST).
+    Tant que le statut est `cloning`, `data-poll` fait re-render le composant toutes les 2 s :
+    le projet (LiveProp entité) est réhydraté depuis la base → le badge bascule vers `cloned`
+    ou `failed` sans rechargement de page.
+#}
+{% set status = project.cloneStatus %}
+<div {{ attributes }} class="flex items-center gap-2"{% if status.value == 'cloning' %} data-poll{% endif %}>
+    {{ include('project/_status_badge.html.twig', {
+        status: status,
+        testId: 'project-clone-status',
+        iconClass: status.value == 'cloning' ? 'animate-spin' : '',
+    }) }}
+    <form method="post" action="{{ path('app_project_clone', { id: project.id }) }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('clone' ~ project.id) }}">
+        <button type="submit" data-test="project-clone"{{ status.value == 'cloning' ? ' disabled' }}
+                class="flex h-7 items-center gap-1.5 rounded-md border border-line-strong px-2.5 text-[12.5px] text-ink-dim hover:bg-raised hover:text-ink disabled:cursor-not-allowed disabled:opacity-50">
+            <twig:ux:icon name="tabler:cloud-download" class="size-3.5"/> {{ status.value == 'cloned' ? 'Mettre à jour' : 'Cloner' }}
+        </button>
+    </form>
+</div>

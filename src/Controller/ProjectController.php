@@ -99,6 +99,17 @@ final class ProjectController extends AbstractController
         return $this->redirectToRoute('app_project_show', ['id' => $project->getId()]);
     }
 
+    #[Route('/{id}/clone', name: 'app_project_clone', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function clone(Request $request, Project $project): Response
+    {
+        if ($this->isCsrfTokenValid('clone' . $project->getId(), (string) $request->request->get('_token'))) {
+            $this->manager->requestClone($project);
+            $this->addFlash('success', 'Clonage lancé.');
+        }
+
+        return $this->redirectToRoute('app_project_show', ['id' => $project->getId()]);
+    }
+
     #[Route('/{id}/edit', name: 'app_project_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Project $project): Response
     {

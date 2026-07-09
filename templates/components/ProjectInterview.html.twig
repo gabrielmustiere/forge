@@ -1,0 +1,148 @@
+{#
+    Fil d'interview de cadrage (story 009) — piloté par le Live Component ProjectInterview.
+    Tant que le statut est « in-flight » (thinking/submitting), `data-poll` fait re-render le
+    composant toutes les 2 s : l'interview (relue depuis le repository à chaque cycle) reflète
+    l'état posé par le worker sans rechargement.
+
+    Le contenu assistant vient de `claude` : `markdown_to_html` s'appuie sur le converter GFM
+    en mode sûr (html_input: strip) — sortie assainie, aucun `|raw` supplémentaire. Le message
+    utilisateur est du texte brut, échappé par défaut puis `nl2br`.
+#}
+{% set interview = this.interview %}
+{% set status = interview ? interview.status : null %}
+<div {{ attributes }} data-test="project-interview" class="flex min-h-full flex-col gap-4"{% if status and status.isInFlight %} data-poll{% endif %}>
+
+    {% if this.error %}
+        <div data-test="interview-error" class="flex items-start gap-2 rounded-lg border border-danger-subtle bg-danger-soft px-3.5 py-2.5 text-[13px] text-fg-danger-strong">
+            <twig:ux:icon name="tabler:alert-triangle" class="mt-0.5 size-4 shrink-0"/>
+            <span>{{ this.error }}</span>
+        </div>
+    {% endif %}
+
+    {% if interview %}
+        {# En-tête d'état #}
+        <div class="flex items-center justify-between">
+            <span class="text-[11px] font-semibold uppercase tracking-wide text-ink-faint">Interview de cadrage</span>
+            {{ include('project/_status_badge.html.twig', {
+                status: status,
+                testId: 'interview-status',
+                iconClass: status.isInFlight ? 'animate-spin' : '',
+            }) }}
+        </div>
+
+        {# Fil de conversation #}
+        <div data-test="interview-thread" class="flex flex-col gap-3">
+            {% for message in interview.messages %}
+                {% set isUser = message.role.value == 'user' %}
+                <div data-test="interview-message" data-role="{{ message.role.value }}"
+                     class="max-w-[85%] rounded-xl border px-3.5 py-2.5 text-[13.5px] leading-relaxed {{ isUser
+                        ? 'ml-auto border-iris-tint bg-iris-tint text-ink'
+                        : 'mr-auto border-line bg-raised text-ink-soft' }}">
+                    {% if isUser %}
+                        {{ message.content|nl2br }}
+                    {% else %}
+                        <div class="[&_a]:text-iris-text [&_a]:underline
+                                    [&_code]:rounded [&_code]:bg-canvas [&_code]:px-1 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[12px]
+                                    [&_pre]:my-2 [&_pre]:overflow-x-auto [&_pre]:rounded-lg [&_pre]:border [&_pre]:border-line [&_pre]:bg-canvas [&_pre]:p-3 [&_pre]:text-[12px]
+                                    [&_h1]:mb-1.5 [&_h1]:text-base [&_h1]:font-bold [&_h2]:mb-1.5 [&_h2]:mt-3 [&_h2]:text-sm [&_h2]:font-semibold [&_h3]:mt-2 [&_h3]:font-semibold
+                                    [&_p]:my-1.5 [&_ul]:my-1.5 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:my-1.5 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-0.5
+                                    [&_blockquote]:my-1.5 [&_blockquote]:border-l-2 [&_blockquote]:border-line-strong [&_blockquote]:pl-3 [&_blockquote]:text-ink-muted">
+                            {{ message.content|markdown_to_html }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {% if status.isInFlight %}
+                <div data-test="interview-thinking" class="mr-auto flex items-center gap-2 rounded-xl border border-line bg-raised px-3.5 py-2.5 text-[13px] text-ink-muted">
+                    <twig:ux:icon name="tabler:loader-2" class="size-4 animate-spin"/>
+                    {{ status.value == 'submitting' ? 'Dépôt de la proposition en cours…' : 'Le cadrage réfléchit…' }}
+                </div>
+            {% endif %}
+        </div>
+
+        {# Contrôles selon l'état #}
+        {% if status.value == 'awaiting' %}
+            <div class="flex flex-col gap-2.5">
+                {{ _self.composer('send', 'Votre réponse…', 'Envoyer', 'tabler:send') }}
+                <div class="flex items-center gap-2 border-t border-line pt-2.5 text-[12.5px] text-ink-muted">
+                    <span>Rien à ajouter ?</span>
+                    <button type="button" data-test="interview-conclude" data-action="live#action" data-live-action-param="conclude"
+                            class="inline-flex items-center gap-1.5 font-medium text-iris-text hover:text-iris-bright hover:underline">
+                        <twig:ux:icon name="tabler:file-check" class="size-3.5"/> Conclure le cadrage
+                    </button>
+                </div>
+            </div>
+        {% elseif status.value == 'brief_ready' %}
+            <div class="flex flex-col gap-3 rounded-xl border border-warning-subtle bg-warning-soft p-4">
+                <p class="text-[13px] text-ink">Le brief est prêt. Relisez-le ci-dessus, puis validez pour le déposer en proposition de revue (brouillon), ou abandonnez.</p>
+                <div class="flex items-center gap-2.5">
+                    <button type="button" data-test="interview-validate" data-action="live#action" data-live-action-param="validate"
+                            class="flex items-center gap-1.5 rounded-lg bg-iris px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-iris-bright">
+                        <twig:ux:icon name="tabler:check" class="size-4"/> Valider et déposer
+                    </button>
+                    <button type="button" data-test="interview-abandon" data-action="live#action" data-live-action-param="abandon"
+                            class="rounded-lg border border-line-strong px-3.5 py-2 text-[13px] text-ink-dim hover:bg-raised hover:text-ink">
+                        Abandonner
+                    </button>
+                </div>
+            </div>
+        {% elseif status.value == 'submitted' %}
+            <div class="flex flex-col gap-3 rounded-xl border border-success-subtle bg-success-soft p-4">
+                <p class="flex items-center gap-1.5 text-[13px] font-medium text-fg-success-strong">
+                    <twig:ux:icon name="tabler:git-pull-request" class="size-4"/> Proposition ouverte en brouillon.
+                </p>
+                {% if interview.pullRequestUrl %}
+                    <a href="{{ interview.pullRequestUrl }}" target="_blank" rel="noopener noreferrer" data-test="interview-pr-link"
+                       class="inline-flex w-fit items-center gap-1.5 rounded-lg border border-line-strong bg-raised px-3 py-1.5 text-[13px] text-ink-dim hover:bg-stat hover:text-ink">
+                        Voir la proposition <twig:ux:icon name="tabler:external-link" class="size-3.5"/>
+                    </a>
+                {% endif %}
+            </div>
+        {% elseif status.value == 'failed' %}
+            <div class="flex flex-col gap-3 rounded-xl border border-danger-subtle bg-danger-soft p-4">
+                <p class="flex items-start gap-1.5 text-[13px] text-fg-danger-strong">
+                    <twig:ux:icon name="tabler:alert-triangle" class="mt-0.5 size-4 shrink-0"/>
+                    <span data-test="interview-failure">{{ interview.lastError ?? 'Une erreur est survenue.' }}</span>
+                </p>
+                <p class="text-[12.5px] text-ink-muted">Le brief produit n'est pas perdu : vous pouvez re-tenter.</p>
+                <div class="flex items-center gap-2.5">
+                    <button type="button" data-test="interview-retry" data-action="live#action" data-live-action-param="retry"
+                            class="flex items-center gap-1.5 rounded-lg bg-iris px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-iris-bright">
+                        <twig:ux:icon name="tabler:refresh" class="size-4"/> Re-tenter
+                    </button>
+                    <button type="button" data-test="interview-abandon" data-action="live#action" data-live-action-param="abandon"
+                            class="rounded-lg border border-line-strong px-3.5 py-2 text-[13px] text-ink-dim hover:bg-raised hover:text-ink">
+                        Abandonner
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {# Amorce d'une nouvelle interview : aucune active (jamais démarrée, ou terminée). #}
+    {% if interview is null or not status.isActive %}
+        <div data-test="interview-start" class="flex flex-col gap-3">
+            {% if interview %}
+                <div class="border-t border-line pt-4"></div>
+            {% endif %}
+            <div>
+                <h2 class="text-sm font-semibold text-ink">Exprimer un besoin</h2>
+                <p class="mt-1 text-[13px] text-ink-muted">Décrivez librement ce dont vous avez besoin. Le cadrage vous posera des questions ancrées sur votre produit avant de produire un brief.</p>
+            </div>
+            {{ _self.composer('start', 'Ex. « je veux pouvoir exporter mes factures au format comptable »…', 'Démarrer le cadrage', 'tabler:message-plus') }}
+        </div>
+    {% endif %}
+</div>
+
+{% macro composer(action, placeholder, label, icon) %}
+    <div class="flex flex-col gap-2">
+        <textarea data-test="interview-message-input" data-model="norender|draft" rows="3"
+                  placeholder="{{ placeholder }}"
+                  class="w-full resize-y rounded-lg border border-line-strong bg-input px-3.5 py-2.5 text-[13.5px] text-ink placeholder:text-ink-faint focus:border-iris focus:outline-none"></textarea>
+        <button type="button" data-test="interview-submit" data-action="live#action" data-live-action-param="{{ action }}"
+                class="flex w-fit items-center gap-1.5 rounded-lg bg-iris px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-iris-bright">
+            <twig:ux:icon name="{{ icon }}" class="size-4"/> {{ label }}
+        </button>
+    </div>
+{% endmacro %}

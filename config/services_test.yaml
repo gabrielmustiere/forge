@@ -10,3 +10,20 @@ services:
     # déterministe (aucun appel HTTP réel n'est jamais émis pendant les tests).
     App\Service\Github\GitHubRepositoryReader:
         class: App\Tests\Double\StubRepositoryReader
+
+    # Neutralise le shell-out git : le cloner réel est remplacé par un double déterministe
+    # (aucun `git`/réseau réel n'est jamais lancé). L'alias RepositoryClonerInterface pointe
+    # sur cet id, il résout donc automatiquement vers le fake.
+    App\Service\Repository\GitRepositoryCloner:
+        class: App\Tests\Double\FakeRepositoryCloner
+
+    # Interview de cadrage (story 009) : on neutralise les trois I/O externes (claude, git push,
+    # API GitHub) par des doubles déterministes. Les ids concrets sont réassignés vers les fakes ;
+    # les alias/tags (InterviewRunnerInterface, BriefPusherInterface, app.pull_request_opener)
+    # résolvent donc automatiquement vers eux. Le ProducedBriefLocator reste réel (testé intégré).
+    App\Service\Interview\ClaudeInterviewRunner:
+        class: App\Tests\Double\FakeInterviewRunner
+    App\Service\Interview\GitBriefPusher:
+        class: App\Tests\Double\FakeBriefPusher
+    App\Service\Github\GitHubPullRequestOpener:
+        class: App\Tests\Double\FakePullRequestOpener

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exprimer un besoin · {{ project.name }} · Forge Board{% endblock %}
+
+{% block body %}
+    <div class="flex h-full flex-col">
+        <header class="flex h-12 shrink-0 items-center gap-4 border-b border-line bg-surface px-5">
+            <div class="flex min-w-0 items-center gap-2.5 text-[13px]">
+                <a href="{{ path('app_project_index') }}" class="shrink-0 text-ink-muted hover:text-ink">Projets</a>
+                <span class="shrink-0 text-divider">/</span>
+                <a href="{{ path('app_project_show', { id: project.id }) }}" class="shrink-0 truncate text-ink-muted hover:text-ink">{{ project.name }}</a>
+                <span class="shrink-0 text-divider">/</span>
+                <h1 class="truncate font-medium text-ink">Exprimer un besoin</h1>
+            </div>
+            <div class="ml-auto flex shrink-0 items-center gap-3">
+                <a href="{{ path('app_project_show', { id: project.id }) }}" data-test="interview-back"
+                   class="flex h-7 items-center gap-1.5 rounded-md border border-line-strong px-2.5 text-[12.5px] text-ink-dim hover:bg-raised hover:text-ink">
+                    <twig:ux:icon name="tabler:arrow-left" class="size-3.5"/> Retour au projet
+                </a>
+            </div>
+        </header>
+
+        <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+            <div class="mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 py-6">
+                <twig:ProjectInterview :project="project"/>
+            </div>
+        </div>
+    </div>
+{% endblock %}

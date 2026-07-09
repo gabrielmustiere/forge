@@ -31,6 +31,18 @@
                 <span class="font-mono text-ink-dim">{{ project.verifiedAt ? project.verifiedAt|date('d/m/Y à H:i') : 'Jamais' }}</span>
             </span>
             <span class="hidden h-5 w-px bg-line xl:block"></span>
+            <twig:ProjectCloneStatus :project="project"/>
+            {% if project.isCloned %}
+                <a href="{{ path('app_project_interview', { id: project.id }) }}" data-test="project-interview"
+                   class="flex h-7 items-center gap-1.5 rounded-md bg-iris px-2.5 text-[12.5px] font-semibold text-white hover:bg-iris-bright">
+                    <twig:ux:icon name="tabler:message-plus" class="size-3.5"/> Exprimer un besoin
+                </a>
+            {% else %}
+                <button type="button" disabled data-test="project-interview" title="Clonez d'abord le dépôt pour exprimer un besoin"
+                        class="flex h-7 cursor-not-allowed items-center gap-1.5 rounded-md border border-line-strong px-2.5 text-[12.5px] text-ink-faint opacity-50">
+                    <twig:ux:icon name="tabler:message-plus" class="size-3.5"/> Exprimer un besoin
+                </button>
+            {% endif %}
             <form method="post" action="{{ path('app_project_verify', { id: project.id }) }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('verify' ~ project.id) }}">
                 <button type="submit" data-test="project-verify"

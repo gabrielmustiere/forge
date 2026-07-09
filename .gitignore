@@ -54,3 +54,7 @@ node_modules
 
 # Binaire chromedriver hérité du squelette (15 Mo, re-téléchargeable — hors versioning)
 /drivers/
+
+# Clones locaux des repos de projets (artefacts de travail, jamais committés — story 008)
+/private/*
+!/private/.gitkeep

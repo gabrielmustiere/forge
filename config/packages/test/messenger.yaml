@@ -1,0 +1,7 @@
+# En test, le transport `async` est en mémoire : le job de clone n'est PAS consommé au
+# dispatch (contrairement à `sync://`). On peut ainsi observer l'état `Cloning` persisté et
+# asserter que le message a bien été enqueué, sans exécuter le handler pendant la requête.
+framework:
+    messenger:
+        transports:
+            async: 'in-memory://'
