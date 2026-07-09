@@ -2,13 +2,15 @@
   "version": 1,
   "title": "Cloner en local le repo d'un projet depuis son kanban",
   "created": "2026-07-08",
-  "updated": "2026-07-09",
+  "updated": "2026-07-10",
   "tags": ["projets", "clone", "git"],
   "changelog": [
     { "date": "2026-07-08", "type": "Création", "description": "Pitch initial rédigé — bouton de clone/mise à jour local d'un repo depuis le kanban, brique d'amorçage du pivot." },
     { "date": "2026-07-08", "type": "Planification", "description": "Plan technique validé — job Messenger async, port RepositoryCloner (GitRepositoryCloner via Process + GIT_ASKPASS), 4 champs d'état + enum CloneStatus sur Project, Live Component polling." },
     { "date": "2026-07-09", "type": "Implémentation", "description": "Feature livrée : enum CloneStatus + 4 champs d'état sur Project (migration), port RepositoryCloner + GitRepositoryCloner (Process/GIT_ASKPASS), message CloneRepository + handler async, ProjectManager::requestClone + route POST /clone (CSRF), Live Component ProjectCloneStatus (poll). Tests unit/fonctionnels + smoke E2E verts (176 PHPUnit + E2E). Écarts : transport async→in-memory en test, badge inline (data-test dédié), question worker tranchée (worker .symfony.local.yaml)." },
     { "date": "2026-07-09", "type": "Review", "description": "Code review pré-merge : verdict READY TO COMMIT — 0 bloquant, 0 important, 5 mineurs (DRY badge, catch large, test non-fuite token sur /show, polling perpétuel si worker absent, dispatch après flush). Sécurité token exemplaire, cohérence avec l'existant, idempotence solide." },
-    { "date": "2026-07-09", "type": "Correctifs review", "description": "Findings traités : partial _status_badge paramétrable (DRY), InvalidCloneDestinationException dédiée (catch précis), test non-fuite token sur /show ajouté. Bug découvert et corrigé : CS-Fixer réécrivait les clones dans private/ (exclusion ajoutée au finder, clone restauré). 2 mineurs laissés en dette POC assumée. 177 PHPUnit + PHPStan L9 + smoke E2E verts." }
-  ]
+    { "date": "2026-07-09", "type": "Correctifs review", "description": "Findings traités : partial _status_badge paramétrable (DRY), InvalidCloneDestinationException dédiée (catch précis), test non-fuite token sur /show ajouté. Bug découvert et corrigé : CS-Fixer réécrivait les clones dans private/ (exclusion ajoutée au finder, clone restauré). 2 mineurs laissés en dette POC assumée. 177 PHPUnit + PHPStan L9 + smoke E2E verts." },
+    { "date": "2026-07-10", "type": "Livraison", "description": "Story livrée avec le pivot productif (commit feat 268bed4), aux côtés de la 009." }
+  ],
+  "delivery": { "release": null, "commit": "268bed4" }
 }
