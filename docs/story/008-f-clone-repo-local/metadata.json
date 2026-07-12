@@ -2,7 +2,7 @@
   "version": 1,
   "title": "Cloner en local le repo d'un projet depuis son kanban",
   "created": "2026-07-08",
-  "updated": "2026-07-10",
+  "updated": "2026-07-12",
   "tags": ["projets", "clone", "git"],
   "changelog": [
     { "date": "2026-07-08", "type": "Création", "description": "Pitch initial rédigé — bouton de clone/mise à jour local d'un repo depuis le kanban, brique d'amorçage du pivot." },
@@ -12,7 +12,8 @@
     { "date": "2026-07-09", "type": "Correctifs review", "description": "Findings traités : partial _status_badge paramétrable (DRY), InvalidCloneDestinationException dédiée (catch précis), test non-fuite token sur /show ajouté. Bug découvert et corrigé : CS-Fixer réécrivait les clones dans private/ (exclusion ajoutée au finder, clone restauré). 2 mineurs laissés en dette POC assumée. 177 PHPUnit + PHPStan L9 + smoke E2E verts." },
     { "date": "2026-07-10", "type": "Livraison", "description": "Story livrée avec le pivot productif (commit feat 268bed4), aux côtés de la 009." },
     { "date": "2026-07-10", "type": "Report", "description": "Compte rendu d'implémentation produit — conformité au plan ~100 %, 0 manque, 8/8 critères d'acceptation cochés. Écarts mineurs : signature markCloneFailed sans $at, transport async in-memory en test. 5 ajouts review-driven (InvalidCloneDestinationException, _status_badge paramétrable, exclusion CS-Fixer private/, config test messenger, FakeRepositoryCloner). 2 dettes POC assumées (polling perpétuel, dispatch après flush)." },
-    { "date": "2026-07-10", "type": "Sync", "description": "Doc d'intention réalignée : plan.md §Questions ouvertes acté (worker messenger_consume_async déclaré dans .symfony.local.yaml, libellé de bouton contextuel Cloner/Mettre à jour). pitch.md inchangé (8/8 critères atteints, aucune règle métier modifiée)." }
+    { "date": "2026-07-10", "type": "Sync", "description": "Doc d'intention réalignée : plan.md §Questions ouvertes acté (worker messenger_consume_async déclaré dans .symfony.local.yaml, libellé de bouton contextuel Cloner/Mettre à jour). pitch.md inchangé (8/8 critères atteints, aucune règle métier modifiée)." },
+    { "date": "2026-07-12", "type": "Release", "description": "Publiée dans la release v4.7.0 (tag annoté + release GitHub)." }
   ],
-  "delivery": { "release": null, "commit": "268bed4" }
+  "delivery": { "release": "v4.7.0", "commit": "268bed4" }
 }

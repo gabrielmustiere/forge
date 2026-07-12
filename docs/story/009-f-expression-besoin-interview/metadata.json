@@ -2,7 +2,7 @@
   "version": 1,
   "title": "Exprimer un besoin depuis le board et le cadrer en brief soumis en revue",
   "created": "2026-07-09",
-  "updated": "2026-07-10",
+  "updated": "2026-07-12",
   "tags": ["cadrage", "interview", "ia", "git", "pivot"],
   "changelog": [
     { "date": "2026-07-09", "type": "Création", "description": "Pitch initial rédigé — exprimer un besoin depuis un projet cloné, interview feature-interview headless (ADR-0002) tour par tour, brief.md validé puis déposé en proposition de revue (branche dédiée + PR draft GitHub). Skill interview seul, GitHub d'abord, token write requis, une interview active par projet." },
@@ -11,7 +11,8 @@
     { "date": "2026-07-10", "type": "Review", "description": "Review pré-merge — 0 bloquant, 2 importants (ré-entrance) corrigés : contamination inter-interviews réglée par StoryWorkspaceCleaner (purge du dossier de story non suivi après état terminal Submitted/Abandoned), re-tentative de dépôt rendue idempotente par push --force sur la branche app-owned forge/<slug>. 4 tests ajoutés (non-contamination, purge à l'abandon, cleaner unit, assertion happy path). Dette POC assumée consignée : Bash dans la liste blanche d'outils (sandbox déférée ADR-0002), fichiers MCP mate/ hors périmètre, 422 PR déjà ouverte non resurfacée. QA re-verte (PHPStan L9, CS-Fixer, 237 PHPUnit). Verdict READY TO COMMIT." },
     { "date": "2026-07-10", "type": "Livraison", "description": "Story livrée avec le pivot productif (commit feat 268bed4), aux côtés de la 008 ; skill feature-interview cooperatif livré en b7ce883." },
     { "date": "2026-07-10", "type": "Report", "description": "Report post-livraison — conformité au plan ~95 %, 8/8 critères d'acceptation, review verte (0 bloquant, 2 importants corrigés). 3 écarts volontaires : push --force idempotent sur branche app-owned forge/<slug>, LiveActions élargies (start/send/conclude/validate/retry/abandon), repository findLatestForProject ajouté à findActiveForProject. Ajout notable : StoryWorkspaceCleaner (purge du dossier de story non suivi à chaque état terminal, correctif contamination inter-interviews). Dette POC consignée : Bash dans la liste blanche d'outils (sandbox déférée), 422 PR déjà ouverte non resurfacée, reprise d'interview interrompue sans test/UX dédié, interview/push GitHub réels non validés hors doubles." },
-    { "date": "2026-07-10", "type": "Sync", "description": "Doc d'intention réalignée sur le code livré (plan.md) : LiveActions réelles (§Mécanismes + §Fichiers), findLatestForProject + StoryWorkspaceCleaner + InterviewNotAllowedException (§Fichiers à créer + §Ordre), push --force idempotent (§Approche + §Fichiers), §Risques nettoyage tranché, §Questions ouvertes tranchées (nettoyage post-submit = on nettoie, copie isolée git clone --local, modèle Haiku) vs encore ouvertes (reprise interrompue, 422, E2E scopé). Pitch.md inchangé (critères et règles métier tous honorés). Aucune proposition refusée." }
+    { "date": "2026-07-10", "type": "Sync", "description": "Doc d'intention réalignée sur le code livré (plan.md) : LiveActions réelles (§Mécanismes + §Fichiers), findLatestForProject + StoryWorkspaceCleaner + InterviewNotAllowedException (§Fichiers à créer + §Ordre), push --force idempotent (§Approche + §Fichiers), §Risques nettoyage tranché, §Questions ouvertes tranchées (nettoyage post-submit = on nettoie, copie isolée git clone --local, modèle Haiku) vs encore ouvertes (reprise interrompue, 422, E2E scopé). Pitch.md inchangé (critères et règles métier tous honorés). Aucune proposition refusée." },
+    { "date": "2026-07-12", "type": "Release", "description": "Publiée dans la release v4.7.0 (tag annoté + release GitHub)." }
   ],
-  "delivery": { "release": null, "commit": "268bed4" }
+  "delivery": { "release": "v4.7.0", "commit": "268bed4" }
 }
