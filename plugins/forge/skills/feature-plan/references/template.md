@@ -92,7 +92,7 @@ Attributs au niveau classe :
 
 ## Ordre d'implémentation
 
-> _Skill : checklist exécutable, des fondations vers l'UI. Modèle → migration → service → contrôleur/composant → template → tests. Numéroter en respectant les dépendances. Les cases cochées au fil de l'exécution servent de fil rouge pour `/forge:autopilot`._
+> _Skill : checklist exécutable, des fondations vers l'UI. Modèle → migration → service → contrôleur/composant → template → tests. Numéroter en respectant les dépendances. Les cases cochées au fil de l'exécution servent de fil rouge pendant `/forge:feature-implem`._
 
 1. [ ] <Étape 1 : entité + relation inverse + contrainte custom>.
 2. [ ] <Étape 2 : EntityListener / EventSubscriber>.

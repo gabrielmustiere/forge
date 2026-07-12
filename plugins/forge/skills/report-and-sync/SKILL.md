@@ -1,38 +1,44 @@
 ---
 name: report-and-sync
-description: Enchaîne `/forge:report` puis `/forge:sync` en une passe après livraison d'une story (feature, refacto ou évolution technique) — compte rendu d'écarts intention vs code livré, puis réalignement de la doc. Délègue à un subagent isolé.
+description: Enchaîne `/forge:report` puis `/forge:sync` en une passe après livraison d'une story (feature, refacto ou évolution technique) — compte rendu d'écarts intention vs code livré, puis réalignement de la doc d'intention. Court-circuite le sync si conformité totale.
 user_invocable: true
 argument-hint: "[slug-story ou chemin docs/story/NNN-<f|r|t>-<slug>/]"
-allowed-tools:
-  - Agent
-  - AskUserQuestion
 ---
 
-# /report-and-sync — Clôture documentaire en contexte isolé
+# /report-and-sync — Clôture documentaire en une passe
 
-Cette skill est un **point d'entrée slash** pour le subagent `forge:report-and-sync`. Le subagent enchaîne deux phases :
+Cette skill enchaîne les deux procédures de clôture documentaire **dans la session courante**, en s'appuyant sur les deux skills canoniques comme **unique source de vérité** :
 
-1. **REPORT** — invoque la skill `/forge:report` pour produire `report.md` (constat des écarts entre intention et code livré)
-2. **SYNC** — invoque la skill `/forge:sync` pour appliquer les écarts validés à la doc d'intention (`pitch.md` + `plan.md` pour une feature, `plan.md` pour un refacto ou une évolution tech) avec changelog interne
+1. **REPORT** — `/forge:report` produit `report.md` (constat des écarts entre intention et code livré)
+2. **SYNC** — `/forge:sync` applique les écarts validés à la doc d'intention (`pitch.md` + `plan.md` pour une feature, `plan.md` pour un refacto ou une évolution tech), puis **propage aux documents projet** (`vision.md` / `stack.md` / `product-backlog.md`) via leurs modes Enrichir/Éditer (Phase 5 de `/forge:sync`)
 
-Le wrapper te donne un point d'entrée slash explicite et préserve l'isolation de contexte : c'est le subagent qui pilote l'enchaînement, pas la session principale.
+> **Pas de subagent.** Report et sync sont des procédures **interactives** : elles te font valider chaque écart et écrivent des fichiers. Elles doivent tourner dans la session principale, où l'écriture peut t'être autorisée et où tu peux répondre aux questions. Un subagent délégué ne peut ni demander la permission d'écrire (`report.md` ne s'écrit pas) ni mener une revue interactive fluide — c'est ce qui cassait la clôture par le passé.
 
 ## Procédure
 
-1. Récupère les arguments transmis dans `$ARGUMENTS` (slug de story ou chemin `docs/story/NNN-<f|r|t>-<slug>/`).
+1. Récupère `$ARGUMENTS` (slug de story ou chemin `docs/story/NNN-<f|r|t>-<slug>/`). Si vide, demande le slug ou le chemin — ne devine pas.
 
-2. Si `$ARGUMENTS` est vide, demande à l'utilisateur le slug ou le chemin de la story. La clôture documentaire a besoin d'une story livrée explicitement nommée — ne devine pas.
+2. **Phase REPORT** — invoque la skill `/forge:report` en lui passant le slug/chemin. Laisse-la dérouler **intégralement** sa procédure (chargement de l'intention, analyse du code, revue interactive, écriture de `report.md`, mise à jour du `metadata.json`). Ne passe à l'étape suivante qu'une fois `report.md` écrit et confirmé.
 
-3. Invoque le tool `Agent` avec :
-   - `subagent_type: "forge:report-and-sync"`
-   - `description: "Report+Sync story <slug>"`
-   - `prompt` : transmets le slug/chemin et toute consigne complémentaire de l'utilisateur (par exemple, contraintes particulières sur le sync, sections à ne pas réaligner, etc.). L'agent connaît sa propre procédure REPORT → SYNC.
+3. **Court-circuit conformité** — si le report conclut à une conformité totale (aucun écart : ni écart volontaire, ni manque, ni ajout), le sync est inutile. Annonce-le et arrête-toi là.
 
-4. Quand le subagent rend la main, relaie à l'utilisateur :
+4. **Phase SYNC** — sinon, invoque la skill `/forge:sync` sur la même story. Elle repart du `report.md` fraîchement écrit comme source des écarts, propose chaque réalignement à validation, applique les `Edit` et met à jour le `metadata.json`.
+
+5. **Bilan** — récapitule :
    - le chemin du `report.md` produit
-   - les fichiers d'intention modifiés par le sync (avec rappel du changelog ajouté)
+   - les fichiers d'intention modifiés par le sync
+   - les documents projet propagés (`stack.md` / `product-backlog.md`) et tout signalement `vision.md`
    - les écarts éventuellement laissés non-réalignés (et pourquoi)
+   - prochaine étape suggérée : `/forge:commit` pour committer la clôture documentaire
 
 ## Référence
 
-La spécification complète (enchaînement REPORT → SYNC, architecture inline) vit dans la définition du subagent `forge:report-and-sync`, que tu invoques par son nom — tu n'as aucun fichier à lire manuellement.
+Les procédures complètes vivent dans `skills/report/SKILL.md` et `skills/sync/SKILL.md` — **seule source de vérité**. Cette skill ne fait que les enchaîner ; elle ne réimplémente rien.
+
+## Argument optionnel
+
+`/report-and-sync ma-feature` — enchaîne report puis sync sur la story trouvée par slug.
+
+`/report-and-sync docs/story/015-f-checkout-express/` — cible directement le dossier.
+
+`/report-and-sync` sans argument — demande la story à traiter.

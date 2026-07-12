@@ -86,7 +86,7 @@ Perdu en cours de route ? `/forge:help` est le GPS du pipeline.
 | `/forge:review` | Code review du diff : sécu, qualité, conformité au plan, non-régression → `review.md` |
 | `/forge:commit` | Message Conventional Commits en français (l'intention), commit + push |
 | `/forge:report` | Compte rendu honnête : ce qui a été fait vs prévu, écarts, dettes → `report.md` |
-| `/forge:sync` | Réaligne `pitch.md` / `plan.md` sur le code livré, avec changelog |
+| `/forge:sync` | Réaligne `pitch.md` / `plan.md` **et les docs projet** (`vision.md` / `stack.md` / `product-backlog.md`) sur le code livré, avec changelog |
 
 ### Utilitaires (hors pipeline)
 
@@ -98,16 +98,13 @@ Perdu en cours de route ? `/forge:help` est le GPS du pipeline.
 | `/forge:adr` | Rédige un Architecture Decision Record MADR léger → `docs/adr/NNNN-slug.md` |
 | `/forge:estimate` | Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release (forfait fixe 30 min) → `estimate.md` (en heures, marge incluse, deux colonnes réf./avec IA) |
 | `/forge:doc-feature` | Cartographie une feature existante (legacy) → `docs/feature-map/NNN-slug/overview.md` |
-| `/forge:migrate-legacy` | Migre les anciens formats workflow via `git mv` (historique préservé) |
-| `/forge:import-external` | Importe une doc Spec Kit / BMAD-METHOD / GSD vers le format workflow |
 | `/forge:release` | Tag SemVer annoté + `CHANGELOG.md` Keep a Changelog + release GitHub |
 
-### Orchestrateurs (en contexte isolé)
+### Clôture en une passe
 
 | Skill | Rôle |
 | --- | --- |
-| `/forge:autopilot` | Pilote autonome bout-en-bout d'une story — délègue chaque sous-tâche à un subagent isolé, trace dans `.autopilot.json` (reprise possible), s'arrête aux stop-points stratégiques |
-| `/forge:report-and-sync` | Enchaîne `report` puis `sync` en une passe, en contexte isolé |
+| `/forge:report-and-sync` | Enchaîne `report` puis `sync` en une passe dans la session courante |
 
 ## Track fast — Bugfix express (hors pipeline)
 

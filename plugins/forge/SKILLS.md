@@ -1,6 +1,6 @@
 # Inventaire — plugin `forge`
 
-Pipeline de développement stack-agnostique (27 skills).
+Pipeline de développement stack-agnostique (24 skills).
 
 > **Convention métadonnées de story** : chaque skill qui écrit dans un dossier `docs/story/NNN-<f\|r\|t>-<slug>/` maintient un fichier `metadata.json` (titre réel, dates, tags, changelog consolidé, livraison) selon la référence partagée [`references/story-metadata.md`](references/story-metadata.md). Les skills de création écrivent `title`/`created`/`tags` + première entrée ; chaque passe rebouge `updated` et append au changelog ; `commit`/`release` renseignent `delivery`. La timeline vit dans ce fichier — plus de table de changelog en pied de `pitch.md`/`plan.md`. Le Forge Board lit ce fichier (jamais ne l'écrit).
 
@@ -22,23 +22,11 @@ Pipeline de développement stack-agnostique (27 skills).
 | [`review`](../plugins/forge/skills/review/SKILL.md) | Code review du diff (sécurité, qualité, conformité) |
 | [`commit`](../plugins/forge/skills/commit/SKILL.md) | Génère un Conventional Commit FR et push |
 | [`report`](../plugins/forge/skills/report/SKILL.md) | Compte rendu intention vs code réel |
-| [`sync`](../plugins/forge/skills/sync/SKILL.md) | Réaligne la doc d'intention avec le code livré |
-| [`report-and-sync`](../plugins/forge/skills/report-and-sync/SKILL.md) | Point d'entrée slash qui délègue au subagent `forge:report-and-sync` (enchaîne `report` puis `sync` en contexte isolé) |
-| [`autopilot`](../plugins/forge/skills/autopilot/SKILL.md) | Point d'entrée slash qui délègue au subagent `forge:autopilot` (pilotage autonome bout-en-bout d'une story avec stop-points stratégiques et reprise via `.autopilot.json`) |
+| [`sync`](../plugins/forge/skills/sync/SKILL.md) | Réaligne la doc d'intention **et les docs projet** (`vision` / `stack` / `product-backlog`) avec le code livré |
+| [`report-and-sync`](../plugins/forge/skills/report-and-sync/SKILL.md) | Enchaîne `report` puis `sync` en une passe dans la session courante (compte rendu d'écarts, puis réalignement de la doc) — court-circuite le sync si conformité totale |
 | [`test-scenario`](../plugins/forge/skills/test-scenario/SKILL.md) | Joue un scénario utilisateur via Playwright MCP |
 | [`adr`](../plugins/forge/skills/adr/SKILL.md) | Rédige un Architecture Decision Record MADR léger (`docs/adr/NNNN-slug.md`) depuis un artifact (`pitch.md` / `plan.md` / `review.md` / `report.md`) ou un topic libre — atelier interactif (contexte, drivers, options, conséquences), backlinks automatiques dans l'artifact source, index `docs/adr/README.md` et `report.md` de la story |
 | [`estimate`](../plugins/forge/skills/estimate/SKILL.md) | **Transversal optionnel** — chiffre le temps **« tout compris »** d'une story (feature, refacto, tech) à facturer : cadrage, implem, tests, review, doc, release (forfait fixe 30 min). Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe, méthode réaliste + marge d'incertitude, **en heures**, avec **deux colonnes** (temps de référence sans IA / temps réel avec assistant IA) → `estimate.md`. Du temps, jamais de montant. |
-| [`migrate-legacy`](../plugins/forge/skills/migrate-legacy/SKILL.md) | Migre les anciens formats workflow — dossiers `<f\|r\|t>-NNN-<slug>/` → `NNN-<f\|r\|t>-<slug>/`, et artifacts `feature.md`/`design.md` → `pitch.md`/`plan.md` + `feature.md` → `overview.md` dans `feature-map/`, via `git mv` |
-| [`import-external`](../plugins/forge/skills/import-external/SKILL.md) | Importe une doc Spec Kit / BMAD-METHOD / GSD vers le format `docs/story/NNN-<f\|r\|t>-<slug>/` |
 | [`backfill-metadata`](../plugins/forge/skills/backfill-metadata/SKILL.md) | Reconstruit rétroactivement le `metadata.json` des stories antérieures dépourvues : titre depuis le H1, `created`/`updated` depuis l'historique git du dossier, `changelog` depuis l'apparition de chaque artifact, `delivery` (commit/release) depuis les commits et tags — tags proposés puis validés. N'écrit que des valeurs vraies (jamais de date inventée), delivery laissé absent si la livraison n'est pas identifiable avec certitude. Ne touche pas un fichier valide sauf `--force`. |
 | [`release`](../plugins/forge/skills/release/SKILL.md) | Tag annoté SemVer + `CHANGELOG.md` Keep a Changelog + release GitHub |
 | [`doc-feature`](../plugins/forge/skills/doc-feature/SKILL.md) | Documente une feature existante (stack-agnostique, détection Sylius/Symfony) → `docs/feature-map/NNN-slug/overview.md` |
-
-## Agents
-
-Deux subagents sont fournis par le plugin pour les opérations qui doivent tourner en **contexte isolé** (saturation contexte évitée, reprise possible après interruption). Ils sont invocables directement par l'orchestrateur via le tool `Agent`, ou via leur skill wrapper slash (`/forge:autopilot`, `/forge:report-and-sync`).
-
-| Agent | Rôle |
-| --- | --- |
-| [`autopilot`](../plugins/forge/agents/autopilot.md) | Pilote autonome bout-en-bout d'une story (feature, refacto, évolution technique). Délègue **chaque sous-tâche à un subagent dédié** pour préserver l'isolation, trace l'avancement dans `.autopilot.json` (reprise propre après crash ou pause), et n'arrête la boucle qu'aux stop-points stratégiques : verrou caractérisation (refacto), baseline mesurée (tech), écart majeur détecté, échec QA/tests irrécupérable, avant tests finaux. Ne fait ni `/review`, ni `/commit`, ni `/report`, ni `/sync`. |
-| [`report-and-sync`](../plugins/forge/agents/report-and-sync.md) | Clôture documentaire d'une story livrée en une passe. **Architecture inline** (aucun appel au tool `Skill`) : produit lui-même `report.md` (constat des écarts intention vs code livré) avec vérification post-écriture, puis applique le sync sur `pitch.md` / `plan.md` avec changelog. Court-circuite le sync si conformité totale détectée. |

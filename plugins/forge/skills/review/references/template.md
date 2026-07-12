@@ -6,7 +6,7 @@
 > Référence d'intention : `docs/story/<NNN>-<f|r|t>-<slug>/plan.md` <!-- guide: + `pitch.md` pour `-f-` -->
 
 <!--
-guide: Compte rendu de revue du diff par rapport à l'intention. Produit par `/code-review` ou pendant `/forge:autopilot` (étape review).
+guide: Compte rendu de revue du diff par rapport à l'intention. Produit par `/forge:review`.
 Trois niveaux de criticité — chacun avec checkbox `[ ]` / `[x]` indiquant si l'item a été corrigé en cours de review.
 Le verdict final indique READY TO COMMIT ou non.
 Retirer ce bloc et tous les `> _Skill : ..._` avant commit.

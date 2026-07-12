@@ -212,9 +212,12 @@ Lit le diff git, regroupe les changements en lots cohérents, propose des messag
 Crée `report.md` dans le dossier de track (`docs/story/NNN-<f|r|t>-slug/`). Documente **ce qui a été fait vs ce qui était prévu** : écart entre intention (`pitch.md`/`plan.md`) et exécution réelle — ajouts non prévus, choix qui ont dévié, dette laissée, métriques effectivement obtenues (en track tech : valeur cible vs mesurée, kill switch armé ou non). C'est la **mémoire factuelle** de la livraison, utile pour les rétros, l'onboarding futur et la traçabilité produit.
 
 ### `/sync` — Réaligner la doc d'intention avec le code
-Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier (modèle de données ajusté, route renommée, lib remplacée, étape rajoutée…). Le but : que la doc d'intention **se lise comme si elle avait été écrite correctement dès le départ**, sans cicatrice de l'historique de décisions.
+Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier (modèle de données ajusté, route renommée, lib remplacée, étape rajoutée…). Le but : que la doc d'intention **se lise comme si elle avait été écrite correctement dès le départ**, sans cicatrice de l'historique de décisions. Une **phase finale** propage aussi les écarts vers les **documents de phase 0** quand ils existent (modes Enrichir/Éditer, toujours validés) : `stack.md` gagne une dépendance/service détecté dans le diff, `product-backlog.md` marque la feature livrée, et `vision.md` **évolue avec le produit** — une feature qui étend le périmètre enrichit la vision, une feature qui contredit un anti-objectif le fait retirer. La vision **suit** les features, elle ne les bloque pas ; seule une divergence stratégique large est renvoyée vers un `/vision` en mode Pivot.
 
 **Différence `/report` vs `/sync`** : `/report` raconte l'histoire de la livraison **une fois pour toutes** (document figé, lecture chronologique). `/sync` met à jour le document d'intention **en place**, comme une révision documentaire. Les deux sont complémentaires : on garde la trace dans `report.md` et on rend les docs d'intention à nouveau fiables pour les futurs lecteurs.
+
+### `/report-and-sync` — Les deux en une passe
+Enchaîne `/report` puis `/sync` sur une même story, dans la foulée. Court-circuite le `/sync` si le report conclut à une conformité totale. Pratique juste après une livraison pour clôturer la doc en une seule commande.
 
 > **Ne pas confondre `/sync` avec `/doc-feature`** : `/sync` recale un document d'intention récent que tu viens de modifier dans un track structuré. `/doc-feature` (voir Utilitaires) cartographie une feature **ancienne ou jamais passée par le pipeline**, en partant du code livré, sans dossier de track préalable.
 
@@ -227,32 +230,9 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 | `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |
 | `/doc-feature`       | **Cartographier une feature existante** en lisant le code (entités, flux, routes, services, templates, points d'extension) — stack-agnostique avec détection auto (Sylius, Symfony, autre). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarder sur un module legacy ou documenter une zone du code jamais passée par le pipeline. À distinguer de `/sync` (qui met à jour une doc d'intention récente). |
 | `/release`           | **Créer une release versionnée bout en bout** — détermine le bump SemVer (major/minor/patch) depuis les Conventional Commits depuis le dernier tag, met à jour `CHANGELOG.md` (format Keep a Changelog), crée un tag annoté `vX.Y.Z`, push, puis publie la release sur GitHub via `gh`. Demande validation avant toute action publique. Argument-hint : `[major\|minor\|patch] [--no-push] [--draft] [--pre <suffix>]`. |
-| `/migrate-legacy`    | Renommer les anciens dossiers `docs/story/<f\|r\|t>-NNN-<slug>/` vers `NNN-<f\|r\|t>-<slug>/`, et migrer les artifacts `feature.md`/`design.md` → `pitch.md`/`plan.md` |
-| `/import-external`   | Importer une doc produite par Spec Kit, BMAD-METHOD ou GSD vers le format workflow         |
 | `/help`              | Ce sommaire — pour se rappeler le workflow et les skills disponibles                       |
 
 Des plugins complémentaires (ex: `sylius`, `symfony`) peuvent exposer des skills plus tactiques (procédures spécifiques au framework : créer une Resource, diagnostiquer un Twig Hook, etc.). Ils se combinent naturellement avec le workflow via l'auto-découverte de Claude Code.
-
-## Agents (orchestrateurs multi-skills)
-
-Les **agents** sont des orchestrateurs invocables via le tool `Agent` (pas via `/`). Ils enchaînent plusieurs skills ou pilotent une boucle d'exécution sans surveillance interactive permanente. Contrairement aux skills, ils ne s'utilisent pas en frappant un slash command — c'est Claude (ou toi, en demandant explicitement "lance l'agent X") qui les déclenche.
-
-| Agent              | Rôle                                                                                                  | Quand l'utiliser                                                                                  |
-|--------------------|-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
-| `report-and-sync`  | Enchaîne `/forge:report` puis `/forge:sync` pour une story livrée                              | Après livraison d'une feature/refacto/tech, pour produire le compte rendu **et** réaligner la doc d'intention en une seule passe |
-| `autopilot`        | Pilote autonome des skills `/forge:feature-implem`, `/forge:refactor-implem`, `/forge:tech-implem` — délègue chaque sous-tâche à un sous-agent isolé, trace l'avancement dans `.autopilot.json` (reprise possible), ne s'arrête qu'aux stop-points stratégiques (verrou caractérisation, baseline, écart majeur, tests finaux) | Quand l'implémentation est longue et que tu veux laisser tourner sans valider chaque sous-tâche — typiquement features structurées en 5+ sous-tâches, gros refactos Strangler Fig multi-étapes, évolutions tech avec mesure post-étape |
-
-**Invocation type** :
-
-```
-Agent({
-  subagent_type: "autopilot",
-  description: "Pilote autonome story <slug>",
-  prompt: "Pilote en autopilot la story `<slug>`."
-})
-```
-
-ou demander en langage naturel : *"Lance l'agent autopilot sur `checkout-express`"*.
 
 ## Règles framework
 
