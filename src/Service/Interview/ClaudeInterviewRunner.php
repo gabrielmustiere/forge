@@ -26,7 +26,7 @@ use Symfony\Component\Process\Process;
 final readonly class ClaudeInterviewRunner implements InterviewRunnerInterface
 {
     /** Borne haute d'un tour (secondes) : au-delà, échec propre plutôt que blocage du worker. */
-    private const TIMEOUT_SECONDS = 300.0;
+    private const float TIMEOUT_SECONDS = 300.0;
 
     public function __construct(
         #[Autowire('%env(CLAUDE_BIN)%')]
@@ -79,7 +79,10 @@ final readonly class ClaudeInterviewRunner implements InterviewRunnerInterface
         array_push($command, ...$isFirstTurn ? ['--session-id', $sessionId] : ['--resume', $sessionId]);
 
         // Liste blanche d'outils : un argv par outil (`--allowedTools <tools...>` est variadique).
-        $tools = array_values(array_filter(array_map('trim', explode(',', $this->allowedTools)), static fn (string $t): bool => '' !== $t));
+        $tools = explode(',', $this->allowedTools)
+                |> (fn ($x) => array_map('trim', $x))
+                |> (fn ($x) => array_filter($x, static fn (string $t): bool => '' !== $t))
+                |> array_values(...);
         if ([] !== $tools) {
             array_push($command, '--allowedTools', ...$tools);
         }
@@ -141,7 +144,9 @@ final readonly class ClaudeInterviewRunner implements InterviewRunnerInterface
     private function reason(Process $process): string
     {
         $output = trim($process->getErrorOutput()) ?: trim($process->getOutput());
-        $lines = array_values(array_filter(explode("\n", $output), static fn (string $l): bool => '' !== trim($l)));
+        $lines = explode("\n", $output)
+                |> (fn ($x) => array_filter($x, static fn (string $l): bool => '' !== trim($l)))
+                |> array_values(...);
         $lastLine = trim((string) end($lines));
 
         if ('' === $lastLine) {

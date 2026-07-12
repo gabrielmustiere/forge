@@ -27,7 +27,7 @@ use Symfony\Component\Process\Process;
 final readonly class GitBriefPusher implements BriefPusherInterface
 {
     /** Borne haute d'une opération git (secondes). */
-    private const TIMEOUT_SECONDS = 300.0;
+    private const float TIMEOUT_SECONDS = 300.0;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/bin/git-askpass.sh')]

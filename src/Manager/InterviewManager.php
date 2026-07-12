@@ -12,6 +12,7 @@ use App\Message\SubmitBrief;
 use App\Repository\InterviewRepository;
 use App\Service\Interview\StoryWorkspaceCleaner;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Uid\Uuid;
 
@@ -44,6 +45,7 @@ final readonly class InterviewManager
      * premier tour en tâche de fond.
      *
      * @throws InterviewNotAllowedException projet non cloné, ou interview déjà active
+     * @throws ExceptionInterface
      */
     public function start(Project $project, string $firstMessage): Interview
     {
@@ -71,6 +73,7 @@ final readonly class InterviewManager
      * Envoie un nouveau message dans une interview en attente et relance un tour.
      *
      * @throws InterviewNotAllowedException l'interview n'attend pas de message
+     * @throws ExceptionInterface
      */
     public function submitMessage(Interview $interview, string $message): void
     {
@@ -100,7 +103,7 @@ final readonly class InterviewManager
     /**
      * Valide le brief présenté et lance son dépôt en proposition de revue.
      *
-     * @throws InterviewNotAllowedException aucun brief n'est en attente de validation
+     * @throws InterviewNotAllowedException|ExceptionInterface aucun brief n'est en attente de validation
      */
     public function submitBrief(Interview $interview): void
     {
@@ -118,7 +121,7 @@ final readonly class InterviewManager
      * Re-tente l'opération après un échec récupérable : le dépôt seul si le brief était prêt
      * (l'interview n'est pas rejouée), sinon le dernier tour d'interview.
      *
-     * @throws InterviewNotAllowedException l'interview n'est pas en échec
+     * @throws InterviewNotAllowedException|ExceptionInterface l'interview n'est pas en échec
      */
     public function retry(Interview $interview): void
     {
@@ -160,13 +163,20 @@ final readonly class InterviewManager
         if (null !== $storySlug && null !== $cloneDir) {
             $this->cleaner->clean($cloneDir, $storySlug);
         }
+
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     private function dispatchTurn(Interview $interview): void
     {
         $this->bus->dispatch(new RunInterviewTurn($this->id($interview)));
     }
 
+    /**
+     * @throws ExceptionInterface
+     */
     private function dispatchSubmit(Interview $interview): void
     {
         $this->bus->dispatch(new SubmitBrief($this->id($interview)));

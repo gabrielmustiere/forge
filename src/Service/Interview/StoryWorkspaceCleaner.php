@@ -25,7 +25,7 @@ final readonly class StoryWorkspaceCleaner
         $storyDir = $cloneDir . '/docs/story/' . $storySlug;
 
         try {
-            (new Filesystem())->remove($storyDir);
+            new Filesystem()->remove($storyDir);
         } catch (IOException) {
             // Hygiène uniquement : on n'interrompt jamais le parcours pour un échec de suppression.
         }
