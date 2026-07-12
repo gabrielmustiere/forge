@@ -186,11 +186,15 @@ Si `gh` est disponible et que l'utilisateur le souhaite :
 
 Le titre de la release GitHub reprend le **titre validé** (`vX.Y.Z — Titre`), pas seulement le numéro.
 
+Les notes sont la **section `[X.Y.Z]` du CHANGELOG** (les deux chapitres, sans la ligne de titre). Extraction : imprimer les lignes situées **après** l'en-tête de version jusqu'au prochain `## [`.
+
 ```bash
 gh release create vX.Y.Z \
   --title "vX.Y.Z — <Titre de la release>" \
-  --notes-file <(awk '/^## \[X.Y.Z\]/,/^## \[/{if(/^## \[/ && !/X.Y.Z/) exit; print}' CHANGELOG.md | tail -n +2)
+  --notes-file <(awk 'found && /^## \[/{exit} /^## \[X\.Y\.Z\]/{found=1; next} found' CHANGELOG.md)
 ```
+
+> Ne **pas** utiliser une plage `awk '/début/,/fin/'` ici : l'en-tête de version matche à la fois le motif de début (`## [X.Y.Z]`) et le motif de fin (`## [`), donc la plage se referme sur cette seule ligne et l'extraction est vide. Le flag `found` ci-dessus lève l'ambiguïté. Penser à **échapper les points** de la version dans le motif (`X\.Y\.Z`).
 
 Options selon contexte :
 - `--draft` (passé via `/release ... --draft`) → release brouillon, à publier manuellement.

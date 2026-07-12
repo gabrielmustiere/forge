@@ -10,17 +10,20 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-07-12 — Refonte du changelog & nettoyage du plugin
+
 ### ✨ Fonctionnel
 - **`/forge:release` : versions titrées et changelog scindé Fonctionnel/Technique** — chaque release porte désormais un **titre obligatoire** (repris à l'identique dans l'en-tête du `CHANGELOG.md`, le message du tag annoté et le titre de la release GitHub), et ses changements sont répartis en deux chapitres `✨ Fonctionnel` (perceptible à l'usage) / `🔧 Technique` (interne) au lieu des sections `Added/Changed/Fixed`. Le `CHANGELOG.md` racine est restructuré dans ce format sur tout son historique, pensé pour être **montré à l'utilisateur final** dans l'app. `references/keep-a-changelog.md` et les phases 2 à 8 du skill sont réécrites en conséquence.
 - **`/forge:sync` propage les écarts aux documents de phase 0** — une nouvelle Phase 5 réaligne aussi `docs/vision.md`, `docs/stack.md` et `docs/product-backlog.md` sur le code livré, pas seulement le `pitch.md`/`plan.md` de la story. Propagation **différenciée** selon le profil de chaque doc : `stack.md` gagne les dépendances/services détectés dans le diff (prouvés par fichier), `product-backlog.md` marque la feature livrée ou ajoute une capacité émergente, `vision.md` **évolue avec le produit** — une feature qui étend le périmètre enrichit la vision, une feature qui contredit un anti-objectif le fait retirer (la vision **suit** les features, elle ne les bloque pas ; seule une divergence stratégique large renvoie vers un `/vision` en mode Pivot). Modifications toujours **proposées et validées** via les modes et changelogs natifs des 3 skills (aucun nouveau format). Une story conforme à son plan déclenche quand même cette phase (une livraison conforme peut introduire une dépendance absente des docs projet). La clôture `/forge:report-and-sync` en bénéficie automatiquement.
-- **Skills `migrate-legacy` et `import-external` retirés** — le skill de migration des anciens formats workflow (`<f|r|t>-NNN-<slug>/` → `NNN-<f|r|t>-<slug>/`, `feature.md`/`design.md` → `pitch.md`/`plan.md`) et le skill d'import depuis Spec Kit / BMAD-METHOD / GSD disparaissent du plugin. Leurs références sont nettoyées de `SKILLS.md`, `help`, `README.md` et de la description du plugin.
-- **Skill et agent `/forge:autopilot` retirés** (inutilisés) — le plugin ne fournit plus aucun subagent ; la section « Agents » disparaît de `SKILLS.md` et du sommaire `/forge:help`.
+- **BREAKING — Skills `migrate-legacy` et `import-external` retirés** — le skill de migration des anciens formats workflow (`<f|r|t>-NNN-<slug>/` → `NNN-<f|r|t>-<slug>/`, `feature.md`/`design.md` → `pitch.md`/`plan.md`) et le skill d'import depuis Spec Kit / BMAD-METHOD / GSD disparaissent du plugin. Leurs références sont nettoyées de `SKILLS.md`, `help`, `README.md` et de la description du plugin.
+- **BREAKING — Skill et agent `/forge:autopilot` retirés** (inutilisés) — le plugin ne fournit plus aucun subagent ; la section « Agents » disparaît de `SKILLS.md` et du sommaire `/forge:help`.
 
 ### 🔧 Technique
 - **`/forge:report-and-sync` s'exécute désormais dans la session courante** — la skill enchaîne directement les skills canoniques `/forge:report` puis `/forge:sync` au lieu de déléguer à un subagent. Les deux SKILL.md deviennent l'**unique source de vérité** de la procédure (fin de la triple recopie).
 - **`/forge:sync` : suppression du bloc changelog en pied de fichier** — la Phase 4 ne présente plus de table `## Changelog` à insérer dans `pitch.md`/`plan.md` (consigne contradictoire avec la convention `metadata.json` introduite en 4.4.0). La timeline vit uniquement dans `metadata.json`.
 - **Subagent `report-and-sync` supprimé** — au profit de l'enchaînement direct des skills `report` et `sync` en session principale. Ses 235 lignes recopiaient inline `report/SKILL.md` + `sync/SKILL.md` (troisième source de vérité qui divergeait déjà).
 - **Écriture du `report.md` réparée pour la clôture documentaire** — le subagent `report-and-sync` ne pouvait pas écrire `report.md` : son `permissionMode: acceptEdits` (interdit aux agents livrés par un plugin, pour raisons de sécurité) était silencieusement ignoré, si bien que le `Write` échouait faute de pouvoir demander l'autorisation en contexte délégué. En exécutant report et sync dans la session principale, l'écriture est de nouveau autorisée normalement.
+- **Extraction des notes de release réparée** — la commande `gh release create` de `/forge:release` s'appuyait sur une plage `awk '/début/,/fin/'` dont le motif de début (`## [X.Y.Z]`) matchait aussi le motif de fin (`## [`) : la plage se refermait sur la seule ligne de titre et les notes ressortaient vides. Remplacée par une extraction à flag (impression des lignes après l'en-tête de version jusqu'au prochain `## [`), avec les points de version échappés.
 
 ## [4.7.0] - 2026-07-12 — Clone local & interview de cadrage
 
@@ -153,7 +156,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.7.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/gabrielmustiere/forge/compare/v4.7.0...v5.0.0
 [4.7.0]: https://github.com/gabrielmustiere/forge/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/gabrielmustiere/forge/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/gabrielmustiere/forge/compare/v4.4.0...v4.5.0
