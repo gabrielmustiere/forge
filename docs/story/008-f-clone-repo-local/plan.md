@@ -150,5 +150,7 @@ Le constructeur initialise `cloneStatus = CloneStatus::NotCloned`. Migration gé
 
 ## Questions ouvertes
 
-- **Auto-consommation du worker en local** : documenter `messenger:consume` à lancer à la main, ou ajouter un worker dans `.symfony.local.yaml` pour qu'il démarre avec `symfony serve` ? Options : (a) manuel documenté (POC), (b) worker déclaré (plus fluide). → à trancher à l'implémentation.
-- **Libellé unique vs contextuel du bouton** : « Cloner » quand `NotCloned`/`Failed`, « Mettre à jour » quand `Cloned` — un seul bouton dont le libellé suit le statut. À confirmer au rendu.
+_Toutes tranchées à l'implémentation (cf. `report.md` §Questions ouvertes tranchées) :_
+
+- **Auto-consommation du worker en local** : **tranché — option (b)**. Un worker `messenger_consume_async` (`symfony console messenger:consume async --silent`) est déclaré dans `.symfony.local.yaml` : il démarre avec `symfony serve` (le `messenger:consume async` manuel reste possible hors de ce contexte).
+- **Libellé unique vs contextuel du bouton** : **tranché — libellé contextuel**. Un seul bouton dont le libellé suit le statut : « Cloner » quand `NotCloned`/`Failed`, « Mettre à jour » quand `Cloned`.
