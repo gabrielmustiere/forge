@@ -7,8 +7,14 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
-### Changed
+## [4.7.0] - 2026-07-12
 
+### Added
+- **Clone local du repo d'un projet** (Forge Board) — depuis le kanban, un bouton clone (ou met à jour via `git pull --ff-only`) le dépôt d'un projet en local, en tâche de fond (job Messenger async), avec bascule d'état en direct (Live Component, sans reload). Auth git par `GIT_ASKPASS` (token jamais en argv ni dans `.git/config`). Premier maillon du pivot productif.
+- **Expression d'un besoin en interview de cadrage** (Forge Board) — depuis un projet cloné, l'utilisateur exprime un besoin en langage libre ; le skill `feature-interview` tourne en headless (`claude -p`, ADR-0002) dans le clone local et mène l'interview tour par tour, ancrée sur le code réel. Le `brief.md` produit est présenté pour relecture puis, à validation, poussé sur une branche dédiée et ouvert en **PR draft GitHub** (jamais de merge ni d'écriture sur la branche principale). Parcours asynchrone, une interview active par projet.
+- **Serveur MCP `symfony-ai-mate`** — outillage MCP pour le développement du board (config `mcp.json`, worker dédié).
+
+### Changed
 - `feature-interview` : le skill signale désormais explicitement quand il est prêt à conclure (Phase 3) et respecte une demande explicite de conclusion sans relancer un tour de questions — pour que l'utilisateur, qui sinon ne sait pas quand l'interview se termine, tienne clairement la fin du dialogue.
 
 ## [4.6.0] - 2026-07-05
@@ -136,7 +142,8 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ### Added
 - Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.6.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v4.7.0...HEAD
+[4.7.0]: https://github.com/gabrielmustiere/forge/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/gabrielmustiere/forge/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/gabrielmustiere/forge/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/gabrielmustiere/forge/compare/v4.3.0...v4.4.0
