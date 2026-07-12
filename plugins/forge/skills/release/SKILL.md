@@ -1,6 +1,6 @@
 ---
 name: release
-description: Crée une release versionnée bout-en-bout — bump SemVer depuis Conventional Commits, met à jour `CHANGELOG.md` (Keep a Changelog), tag annoté `vX.Y.Z`, push, puis publie sur GitHub via `gh`. Demande validation avant toute action publique.
+description: Crée une release versionnée bout-en-bout — bump SemVer depuis Conventional Commits, met à jour `CHANGELOG.md` (version titrée, chapitres Fonctionnel/Technique), tag annoté `vX.Y.Z`, push, puis publie sur GitHub via `gh`. Demande validation avant toute action publique.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[major|minor|patch] [--no-push] [--draft] [--pre <suffix>]"
@@ -39,11 +39,13 @@ Ce skill **versionne, tagge et publie** uniquement. Il ne commit pas le code app
 6. **Pas de re-tag** d'une version déjà publiée. Si l'utilisateur veut corriger, créer un nouveau patch.
 7. **Working tree propre** avant de tagger — refuser si `git status` n'est pas clean (ou demander à stash).
 8. **Ne jamais `--force` un tag**. Si un tag local diverge du remote, c'est une anomalie à remonter.
+9. **Titre de release obligatoire** — chaque version taggée porte un titre court (2 à 5 mots, le fil rouge produit de la release). Il apparaît à l'identique dans l'en-tête du CHANGELOG, le message du tag annoté et le titre de la release GitHub. Ne jamais tagger sans un titre validé par l'utilisateur.
+10. **CHANGELOG scindé Fonctionnel / Technique** — chaque version répartit ses changements en deux chapitres `✨ Fonctionnel` (perceptible à l'usage) / `🔧 Technique` (interne), un chapitre omis s'il est vide. Le fichier est **montré à l'utilisateur final** dans l'app : rester propre, lisible, sans hash de commit ni jargon superflu.
 
 ## Références à charger
 
 - **Règles SemVer + table de bump** : `${CLAUDE_SKILL_DIR}/references/semver.md` — à lire en Phase 2 quand on classe les commits et qu'on décide du bump.
-- **Format Keep a Changelog + mapping commits → sections** : `${CLAUDE_SKILL_DIR}/references/keep-a-changelog.md` — à lire en Phase 3/4 quand on rédige l'entrée du CHANGELOG.
+- **Format du CHANGELOG (titre + chapitres Fonctionnel/Technique) + mapping commits → chapitre** : `${CLAUDE_SKILL_DIR}/references/keep-a-changelog.md` — à lire en Phase 2 (classement) puis Phase 3/4 (rédaction de l'entrée).
 
 ## Déroulement
 
@@ -78,13 +80,14 @@ Classer chaque commit :
    - `!` après le type/scope (ex: `feat(api)!: ...`)
    - `BREAKING CHANGE:` dans le body/footer
 3. **Déterminer le bump** selon la table SemVer.
-4. **Grouper par section CHANGELOG** selon la table de mapping.
+4. **Classer chaque changement dans un chapitre** — `✨ Fonctionnel` (perceptible à l'usage) ou `🔧 Technique` (interne) — selon la table de mapping de `references/keep-a-changelog.md`. Le critère qui tranche est la perceptibilité par l'utilisateur, pas le type de commit à la lettre.
+5. **Dégager le titre de la release** — le fil rouge produit des changements (2 à 5 mots). Il sera proposé et validé en Phase 3.
 
 Si l'utilisateur a passé un argument explicite (`/release minor`), respecter son choix mais **alerter** si l'analyse suggère un bump plus élevé (ex: il demande `minor` mais il y a un `BREAKING CHANGE` → demander confirmation).
 
 ### Phase 3 — Proposition de version & changelog
 
-Présenter à l'utilisateur :
+Présenter à l'utilisateur — **version + titre + les deux chapitres** :
 
 ```
 ## Release proposée
@@ -92,31 +95,39 @@ Présenter à l'utilisateur :
 Dernier tag : v1.4.2
 Bump détecté : MINOR (1 feat, 3 fix, 0 breaking)
 Nouvelle version : v1.5.0
+Titre proposé : « Filtres produits & export commandes »
 
 ## Entrée CHANGELOG proposée
 
-### Added
-- Filtre par disponibilité sur la liste produits
-- Export CSV des commandes
+### ✨ Fonctionnel
+- **Filtre par disponibilité** — trier la liste produits sur le stock réel.
+- **Export CSV des commandes** — récupérer les commandes en un fichier.
+- **Calcul de TVA corrigé** — les promotions n'affichaient plus la bonne TVA.
+- **Login réparé** — un email contenant un `+` faisait planter la connexion.
 
-### Fixed
-- Calcul de TVA incorrect sur les promotions
-- Crash au login avec un email contenant un +
-- Cache invalidé trop agressivement sur le panier
+### 🔧 Technique
+- **Invalidation de cache du panier** resserrée — elle était trop agressive.
 
-→ OK pour cette version et ce changelog ? (oui / modifier le bump / éditer le contenu)
+→ OK pour cette version, ce titre et ce changelog ?
+  (oui / changer le titre / modifier le bump / éditer le contenu)
 ```
 
+Le **titre est obligatoire** : ne pas continuer sans un titre validé. S'il n'émerge pas clairement des commits, le demander explicitement.
+
 Attendre validation. Si modification demandée :
+- **Changer le titre** : appliquer, re-proposer.
 - **Changer le bump** : recalculer la version, re-proposer.
-- **Éditer le contenu** : appliquer les modifications, re-proposer.
+- **Éditer le contenu** : appliquer les modifications (y compris re-basculer un item entre chapitres), re-proposer.
+
+N'inclure un chapitre que s'il a du contenu ; mettre `✨ Fonctionnel` avant `🔧 Technique` quand les deux existent.
 
 ### Phase 4 — Mise à jour des fichiers
 
-1. **CHANGELOG.md** :
-   - S'il n'existe pas, le créer avec l'en-tête Keep a Changelog complet.
-   - Insérer la nouvelle entrée `## [X.Y.Z] - YYYY-MM-DD` **au-dessus** de la précédente, **sous** `## [Unreleased]`.
-   - Vider la section `## [Unreleased]` (les changements y migrent dans la nouvelle version).
+1. **CHANGELOG.md** (format complet dans `references/keep-a-changelog.md`) :
+   - S'il n'existe pas, le créer avec l'en-tête complet.
+   - Insérer la nouvelle entrée `## [X.Y.Z] - YYYY-MM-DD — Titre de la release` **au-dessus** de la précédente, **sous** `## [Unreleased]`. Le titre est **obligatoire** ; garder `[X.Y.Z]` entre crochets intact (c'est l'ancre des liens de comparaison).
+   - Sous l'en-tête, les chapitres `### ✨ Fonctionnel` puis `### 🔧 Technique` (un chapitre omis s'il est vide).
+   - Vider la section `## [Unreleased]` (ses deux chapitres migrent dans la nouvelle version).
    - Mettre à jour les liens de comparaison en bas du fichier.
 
 2. **Fichier de version du projet** (optionnel — uniquement si l'utilisateur le mentionne ou si le projet en a un évident) :
@@ -135,8 +146,10 @@ Ce commit fait partie de la version qui sera taguée juste après — c'est volo
 
 ### Phase 5 — Création du tag annoté
 
+La **première ligne du message reprend le titre validé** (`vX.Y.Z — Titre`), le corps résume la release.
+
 ```bash
-git tag -a vX.Y.Z -m "Release vX.Y.Z
+git tag -a vX.Y.Z -m "vX.Y.Z — <Titre de la release>
 
 <résumé court de la release — 1-3 lignes>
 
@@ -171,9 +184,11 @@ git push origin vX.Y.Z
 
 Si `gh` est disponible et que l'utilisateur le souhaite :
 
+Le titre de la release GitHub reprend le **titre validé** (`vX.Y.Z — Titre`), pas seulement le numéro.
+
 ```bash
 gh release create vX.Y.Z \
-  --title "vX.Y.Z" \
+  --title "vX.Y.Z — <Titre de la release>" \
   --notes-file <(awk '/^## \[X.Y.Z\]/,/^## \[/{if(/^## \[/ && !/X.Y.Z/) exit; print}' CHANGELOG.md | tail -n +2)
 ```
 
@@ -189,12 +204,12 @@ Si `gh` est absent : afficher le contenu de la release et l'URL `https://github.
 ```
 ## Release publiée
 
-- Version : `vX.Y.Z`
+- Version : `vX.Y.Z` — <Titre de la release>
 - Bump : MINOR
 - Commit release : `abc1234` — chore(release): vX.Y.Z
 - Tag : `vX.Y.Z` (annoté, poussé)
 - Release GitHub : https://github.com/owner/repo/releases/tag/vX.Y.Z
-- CHANGELOG : N entrées ajoutées (Added: 2, Fixed: 3)
+- CHANGELOG : N entrées ajoutées (Fonctionnel: 2, Technique: 1)
 ```
 
 **Métadonnées de story** : après le tag de version, renseigne `delivery.release` (ex. `v4.3.0`) dans le `metadata.json` des stories couvertes par la release, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`. Le tag peut arriver après le commit : complète un `delivery.commit` déjà présent sans le modifier, rebouge `updated` et append une entrée `type: "Release"`.
