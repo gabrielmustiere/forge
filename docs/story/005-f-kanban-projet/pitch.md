@@ -81,7 +81,7 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 - **Apparence / déclinaisons** : non.
 - **Exposition à des tiers** : non — les données ne sont consultables que dans l'écran lui-même, rien n'est mis à disposition d'une application extérieure.
 - **Emails / notifications** : non.
-- **Données existantes** : à confirmer au plan selon la décision, héritée de `004`, de conserver ou non l'état d'un affichage à l'autre (si les positions sont recalculées à chaque ouverture → rien à reprendre ; si l'état scanné est conservé, une reprise est à prévoir). Le scan live à l'ouverture (règle 7) penche vers « rien de conservé en plus », à trancher au plan.
+- **Données existantes** : à confirmer au plan selon la décision, héritée de `004`, de conserver ou non l'état d'un affichage à l'autre (si les positions sont recalculées à chaque ouverture → rien à reprendre ; si l'état scanné est conservé, une reprise est à prévoir). Le scan live à l'ouverture (règle 8) penche vers « rien de conservé en plus », à trancher au plan.
 - **Comportement par défaut** : c'est le premier écran de valeur du produit ; il devient l'écran principal après ouverture d'un projet.
 
 ## Questions ouvertes
@@ -102,6 +102,6 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 - **Consommation du moteur `004`** : réutiliser tel quel le service de mapping (fichiers → colonne + track + « À vérifier »). L'écran orchestre : projet → `003` (arborescence + contenu) → `004` (positions) → rendu. Ne rien re-parser.
 - **Extraction du titre (C4.2)** : lire le `# H1` du document le plus avancé via le contenu déjà accessible par `003`. Définir une petite fonction pure « premier H1 du markdown, sinon null » ; le repli slug humanisé est trivial. Attention au coût : une lecture de contenu par carte — voir si `003` permet un fetch groupé/économe.
 - **Rendu markdown du drawer** : choisir la voie de rendu markdown (extension Twig, lib PHP, ou composant) ; lecture seule, pas d'exécution de HTML arbitraire — assainir le rendu (le contenu vient d'un repo tiers).
-- **Scan live vs coût réseau** : le peuplement à l'ouverture (règle 7) appelle `003` à chaque affichage ; surveiller la latence sur un repo à quelques dizaines de stories. Un cache court de requête est une optimisation possible mais **hors périmètre fonctionnel** — à noter au plan, pas à concevoir ici.
-- **Garde-fou d'échec (règle 9)** : capter proprement l'échec de `003` (injoignable / token invalide) et rendre un état d'erreur minimal ; le diagnostic riche viendra avec `sync-manuelle`.
+- **Scan live vs coût réseau** : le peuplement à l'ouverture (règle 8) appelle `003` à chaque affichage ; surveiller la latence sur un repo à quelques dizaines de stories. Un cache court de requête est une optimisation possible mais **hors périmètre fonctionnel** — à noter au plan, pas à concevoir ici.
+- **Garde-fou d'échec (règle 10)** : capter proprement l'échec de `003` (injoignable / token invalide) et rendre un état d'erreur minimal ; le diagnostic riche viendra avec `sync-manuelle`.
 - **Ouverture d'un document** : route/endpoint de lecture d'un document d'une story (chemin `docs/story/NNN-…/fichier.md`) via `003`, rendu en drawer. Vérifier qu'on ne sert que des fichiers du dossier de story (pas de traversée de chemin).
