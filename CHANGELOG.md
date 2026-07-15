@@ -10,6 +10,22 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.2.1] - 2026-07-15 — Site public & documentation en ligne
+
+### ✨ Fonctionnel
+
+- **Site public [forge.mustiere.fr](https://forge.mustiere.fr)** — une vitrine qui présente le pipeline, les trois tracks et l'inventaire des skills, avec une carte de partage social. Servi en HTTPS, indexable par les moteurs, et lisible par les assistants via un `llms.txt` qui décrit le pipeline en entier.
+- **Documentation en ligne** — prérequis, installation pas à pas, concepts (la règle d'or de la validation explicite, les artefacts de `docs/story/`, comment choisir son track, le track fast), référence des skills track par track, configuration des permissions et dépannage. Sommaire navigable, contenu tiré du plugin lui-même — aucune commande inventée.
+- **Le plugin est inchangé** — cette version ne touche à aucune skill : rien de nouveau à apprendre, `/plugin marketplace update forge` ne fait que suivre le numéro.
+
+### 🔧 Technique
+
+- **Déploiement GitHub Pages** — un workflow unique vérifie puis publie le site, sur domaine personnalisé avec certificat automatique.
+- **Garde-fou de version** — le déploiement échoue si le site annonce une version différente de `plugin.json`, désormais seule source de vérité. La dérive n'était pas théorique : le site a déjà affiché une version périmée sans que rien ne le signale.
+- **Intégration continue réduite au site** — les jobs PHP (CS-Fixer, PHPStan, PHPUnit, Playwright) sont retirés : rouges depuis le 4 juillet et Actions désactivées, ils ne garantissaient plus rien. La QA de l'application tourne en local via le Makefile.
+- **README recentré** — la documentation vit sur le site ; l'inventaire des skills n'y est plus dupliqué (il avait déjà deux skills de retard). Bannière refaite à la charte du site.
+- **Documentation projet réalignée** — `CLAUDE.md` et `docs/stack.md` décrivent le site comme troisième brique du dépôt, et corrigent deux affirmations fausses de longue date : la direction artistique du Board (« Nova · Midnight », pas « Paper ») et le niveau PHPStan (10, pas 9).
+
 ## [6.2.0] - 2026-07-15 — Rules de projet
 
 ### ✨ Fonctionnel
@@ -212,7 +228,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.2.1...HEAD
+[6.2.1]: https://github.com/gabrielmustiere/forge/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/gabrielmustiere/forge/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/gabrielmustiere/forge/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/gabrielmustiere/forge/compare/v5.0.0...v6.0.0
