@@ -14,6 +14,15 @@ env:
   NODE_VERSION: '22'
 
 jobs:
+  site:
+    name: Site (cohérence de version)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version affichée par le site vs plugin.json
+        run: python3 tools/check-site-version.py
+
   lint:
     name: Lint (CS-Fixer + PHPStan)
     runs-on: ubuntu-latest
