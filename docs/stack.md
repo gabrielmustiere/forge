@@ -1,8 +1,8 @@
 # Stack technique — Forge Board
 
-> Dernière mise à jour : 2026-07-08 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier (source entre parenthèses) ou marquée _non renseigné_.
+> Dernière mise à jour : 2026-07-15 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier (source entre parenthèses) ou marquée _non renseigné_.
 
-> **Statut : stack installée à la racine du repo.** L'application Forge Board (Symfony 8) vit à la racine et cohabite avec la marketplace forge (`plugins/`). Les versions ci-dessous sont prouvées par les manifestes présents à la racine ; `composer.lock` est figé (versions résolues disponibles).
+> **Statut : stack installée à la racine du repo.** L'application Forge Board (Symfony 8) vit à la racine et cohabite avec la marketplace forge (`plugins/`) et le site public (`site/`). Les versions ci-dessous sont prouvées par les manifestes présents à la racine ; `composer.lock` est figé (versions résolues disponibles).
 
 ## Vue d'ensemble
 
@@ -17,7 +17,7 @@ Monolithe **Symfony 8** server-rendered (Twig + Symfony UX / Live Components, pa
 | Frontend | Symfony UX (Live Component, Turbo, Stimulus) + AssetMapper |
 | Données | SQLite (fichier) |
 | Ops | Symfony CLI en local ; Docker uniquement pour Mailpit (dev) |
-| DevOps | GitHub Actions (PHPUnit, Playwright, PHPStan, PHP-CS-Fixer) |
+| DevOps | QA en local (Makefile) ; GitHub Actions limité au déploiement du site statique |
 
 ## Langages & runtimes
 
@@ -38,10 +38,10 @@ Monolithe **Symfony 8** server-rendered (Twig + Symfony UX / Live Components, pa
   - `symfony/ux-live-component ^3.0` (composants interactifs live), `ux-turbo ^3.0`, `ux-icons ^3.0`, `ux-toolkit ^3.0`, `stimulus-bundle ^3.0` (`composer.json`)
 - **Bundler / build** : **AssetMapper** (`symfony/asset-mapper 8.0.*`) — pas de Webpack Encore (`composer.json`)
 - **CSS** : Tailwind CSS `^4.3` (`package.json`) intégré via `symfonycasts/tailwind-bundle ^0.12` + `tales-from-a-dev/twig-tailwind-extra` (`composer.json`)
-- **UI kit** : Flowbite `^4.0.2` (`package.json`) via `tales-from-a-dev/flowbite-bundle ^1.0` — design system « Paper » (drawer, toasts, datepicker) (`composer.json`)
+- **UI kit** : Flowbite `^4.0.2` (`package.json`) via `tales-from-a-dev/flowbite-bundle ^1.0` — drawer, toasts, datepicker (`composer.json`)
 - **TypeScript** : non (AssetMapper, JS natif via Stimulus)
 
-> **Direction artistique** : l'application embarque le design system « Paper » (Flowbite). L'intention produit d'une **DA moderne** propre au Forge Board est un choix de _design_, hors périmètre de ce document — à cadrer côté produit/feature, pas côté stack. Techniquement, Tailwind 4 + Flowbite restent le socle.
+> **Direction artistique** : **« Nova · Midnight »** (`DESIGN.md`) — thème sombre dense inspiré de Linear, accent iris (violet). Les tokens sémantiques du kit Flowbite sont remappés sur la palette Nova dans `assets/styles/app.css` (bloc `@theme`), point d'entrée unique du re-thème. Techniquement, Tailwind 4 + Flowbite restent le socle ; Nova est la couche de tokens par-dessus.
 
 ## Données & stockage
 
@@ -59,7 +59,7 @@ Briques mobilisées pour rapatrier et mettre à jour un repo en local (pivot « 
 - **`git`** 2.50.1 — binaire système requis pour le clone/pull — _source : environnement local, pas un fichier du repo ; à considérer comme prérequis d'exécution_.
 - **Enum `Provider`** GitHub/GitLab avec `host()` (`src/Enum/Type/Provider.php`) — permet de dériver l'URL de clone selon le provider.
 
-> **Cible du clone** : dossier `private/` à la racine. ⚠️ `private/` **n'est pas gitignoré** aujourd'hui (seul `private/.gitkeep` est suivi) — cloner dedans polluerait le repo du Board. Ajout `private/*` (sauf `.gitkeep`) au `.gitignore` à prévoir à l'implémentation (`008`).
+> **Cible du clone** : dossier `private/` à la racine. Gitignoré depuis la story `008` — `/private/*` avec exception `!/private/.gitkeep` (`.gitignore`) : cloner dedans ne pollue pas le repo du Board.
 
 ## Ops / Infrastructure
 
@@ -71,15 +71,25 @@ Briques mobilisées pour rapatrier et mettre à jour un repo en local (pivot « 
 
 ## DevOps / CI-CD
 
-- **Pipeline CI** : GitHub Actions — jobs lint + tests unitaires/fonctionnels + E2E, sur push et PR vers `main` (`.github/workflows/ci.yml`)
-- **Tests** :
+- **Pipeline CI** : **aucune CI sur le code applicatif**. Le seul workflow du repo (`.github/workflows/pages.yml`) vérifie et déploie le site statique — il ne lance ni PHPUnit, ni Playwright, ni l'analyse statique. La QA de l'app tourne **en local** via le Makefile (`make ci`, `make quality`). Les jobs PHP historiques (`ci.yml`) ont été retirés le 2026-07-15 : rouges depuis le 2026-07-04 et Actions désactivées, ils ne garantissaient plus rien.
+- **Tests** (locaux) :
   - PHPUnit `^13.1` (unitaires & fonctionnels) (`composer.json`)
   - Playwright `^1.60` (E2E navigateur), script `test:e2e` (`package.json`)
-- **Analyse statique / style** :
-  - PHPStan `^2.1` niveau élevé + extensions `phpstan-doctrine`, `phpstan-phpunit`, `phpstan-strict-rules`, `phpstan-symfony` (`composer.json`)
+- **Analyse statique / style** (locaux) :
+  - PHPStan `^2.1` **niveau 10** (`phpstan.dist.neon`) + extensions `phpstan-doctrine`, `phpstan-phpunit`, `phpstan-strict-rules`, `phpstan-symfony` (`composer.json`)
   - PHP-CS-Fixer `^3.95` (`composer.json`)
   - `tomasvotruba/cognitive-complexity ^1.1` (`composer.json`)
-- **Déploiement** : _sans objet_ (V1 locale, pas de mise en production)
+- **Déploiement** : _sans objet pour l'app_ (V1 locale, pas de mise en production). Seul le **site statique** est déployé — voir ci-dessous.
+
+## Site public (`site/`)
+
+Troisième brique du repo, à distinguer de l'app et de la marketplace : deux pages HTML statiques publiées sur **forge.mustiere.fr**. Vitrine du plugin + documentation. **Aucun build, aucune dépendance** hors Google Fonts.
+
+- **Hébergement** : GitHub Pages en mode `workflow` (`.github/workflows/pages.yml`) — domaine custom `forge.mustiere.fr` (`site/CNAME`), DNS `CNAME forge → gabrielmustiere.github.io` chez LWS, certificat Let's Encrypt automatique.
+- **Contenu** : `site/index.html` (vitrine), `site/docs/index.html` (documentation), `assets/forge.css` + `assets/forge.js` partagés, `llms.txt`, `robots.txt`, `sitemap.xml`, `assets/og.png`.
+- **Charte** : fond `#0a0e12`, accent cyan `#3fd6f2`, Space Grotesk + JetBrains Mono (`site/assets/forge.css`) — **distincte** de la DA du Board (Nova · Midnight, violet iris).
+- **Garde-fou de version** : `tools/check-site-version.py` compare la version affichée par le site à `plugins/forge/.claude-plugin/plugin.json` (source de vérité) et **fait échouer le déploiement** en cas de dérive. Le workflow se déclenche aussi sur `plugin.json` pour attraper une release qui n'aurait pas mis le site à jour.
+- **Images** : `site/assets/og.png` et `.github/banner.png` sont générés depuis `tools/og-source.html` et `tools/banner-source.html` (rendus navigateur, procédure en commentaire).
 
 ## Monitoring / observabilité
 
@@ -118,3 +128,4 @@ Ces points ne sont pas encore matérialisés par un fichier ; ils sont notés ic
 - 2026-07-04 — Création — inventaire initial (socle Symfony 8)
 - 2026-07-04 — Éditer — application Symfony installée à la racine ; cohabitation tranchée (racine, aux côtés de `plugins/`) ; SQLite confirmé via `.env` ; sources relocalisées (chemins locaux)
 - 2026-07-08 — Enrichir — socle git/clone documenté (`process`, `doctrine-messenger` async, `http-client`, binaire `git`, enum `Provider` — sans nouvelle dépendance) ; distinction `ai-mate` (dev MCP) vs Symfony AI runtime clarifiée ; décisions à trancher ajoutées (moteur d'exécution des skills → ADR, push distant → ADR, persistance état de clone → feature-plan 008). Suite au pivot vision du 2026-07-08.
+- 2026-07-15 — Éditer — réalignement sur le code livré. **Site public** ajouté comme troisième brique (`site/`, GitHub Pages, forge.mustiere.fr, garde-fou de version). **CI corrigée** : les jobs PHP (`ci.yml`) ont été retirés, la QA tourne en local, GitHub Actions ne fait plus que déployer le site. **DA corrigée** : « Nova · Midnight » (`DESIGN.md`) et non « Paper » — la note qui renvoyait la DA moderne à un chantier à venir est caduque. **PHPStan** : niveau 10 attesté par `phpstan.dist.neon` (le document disait « niveau élevé », le `CLAUDE.md` disait 9). **Dette `private/` résolue** : gitignoré depuis la story 008.

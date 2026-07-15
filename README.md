@@ -48,7 +48,7 @@ Pour tester une modification du plugin avant publication : `claude --plugin-dir 
 - **Design system** : « Nova · Midnight » (voir [`DESIGN.md`](DESIGN.md)) — thème sombre dense inspiré de Linear, accent iris. Tokens dans `assets/styles/app.css`
 - **Front** : Tailwind CSS 4, Flowbite 4, Symfony UX (Stimulus, Icons, Live Component, Turbo, Toolkit) + AssetMapper
 - **Tests** : PHPUnit 13 (Unit + Functional) + Playwright (E2E)
-- **Qualité** : PHPStan level 9 + PHP-CS-Fixer
+- **Qualité** : PHPStan level 10 + PHP-CS-Fixer
 - **Async** : Symfony Messenger (transport Doctrine)
 - **E-mails (dev)** : Mailpit
 

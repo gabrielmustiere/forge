@@ -4,12 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Nature du repo
 
-Ce dépôt héberge **deux sujets distincts** qui cohabitent :
+Ce dépôt héberge **trois sujets distincts** qui cohabitent :
 
 1. **La marketplace `forge`** — un catalogue de plugins Claude Code distribué via GitHub (`plugins/`, `.claude-plugin/`). Pas de build ni de runtime : du JSON et du Markdown consommés chez les utilisateurs qui font `/plugin marketplace add gabrielmustiere/forge`.
 2. **L'application Forge Board** — une app Symfony 8 (à la **racine** du repo : `src/`, `config/`, `templates/`, `composer.json`…) qui projette les stories du workflow forge en kanban. C'est un vrai projet buildable/testable. Sa vision : `docs/vision.md`, sa stack : `docs/stack.md`.
+3. **Le site public** (`site/`) — deux pages HTML statiques publiées sur [forge.mustiere.fr](https://forge.mustiere.fr) via GitHub Pages : la vitrine du plugin et sa documentation. Aucun build, aucune dépendance. Sa charte (fond sombre, accent cyan) est **distincte** de la DA du Board (« Nova · Midnight », violet iris) — ne pas les confondre.
 
-Les deux vivent côte à côte : la racine est un projet Symfony **et** contient `plugins/` (la marketplace). Ne pas confondre les deux quand on édite.
+Les trois vivent côte à côte : la racine est un projet Symfony **et** contient `plugins/` et `site/`. Ne pas confondre les trois quand on édite.
+
+⚠️ Ne pas confondre `docs/` (documentation du workflow forge : `vision.md`, `stack.md`, `story/`…) et `site/docs/` (la page de documentation publiée). GitHub Pages ne peut pas servir depuis `docs/`, déjà occupé — d'où `site/`.
 
 ---
 
@@ -83,7 +86,7 @@ Une skill qui ne se déclenche pas automatiquement → le problème est presque 
 
 # Partie 2 — Application Forge Board (Symfony)
 
-App Symfony 8 à la racine du repo. Kanban **lecture seule** qui scanne les `docs/story/` de repos forge (cf. `docs/vision.md`). DA actuelle : design system « Paper » (voir `DESIGN.md`) — une DA plus moderne est un chantier à venir.
+App Symfony 8 à la racine du repo. Kanban **lecture seule** qui scanne les `docs/story/` de repos forge (cf. `docs/vision.md`). DA : design system **« Nova · Midnight »** (voir `DESIGN.md`) — thème sombre dense inspiré de Linear, accent iris. Tokens dans `assets/styles/app.css` (bloc `@theme`), point d'entrée unique du re-thème.
 
 ## Principes de travail (app)
 
@@ -97,7 +100,7 @@ App Symfony 8 à la racine du repo. Kanban **lecture seule** qui scanne les `doc
 - PHP 8.5+ (`declare(strict_types=1)` partout), SQLite (`var/data.db`), Symfony 8.0, Symfony Messenger (Doctrine)
 - Frontend : Tailwind CSS 4, Stimulus, Symfony UX (Live Components, Turbo, Icons), Flowbite 4
 - Tests : PHPUnit 13 + Playwright (E2E)
-- Qualité : PHPStan level 9 + PHP-CS-Fixer
+- Qualité : PHPStan level 10 + PHP-CS-Fixer
 - AI : serveur MCP `symfony-ai-mate` configuré dans `mate/` ; extensions maison dans `App\Mate\` (`mate/src/`)
 
 ## Commandes (app)
@@ -112,8 +115,10 @@ symfony console make:migration            # Après modif d'une entité
 make phpunit                              # PHPUnit (Unit + Functional)
 make playwright                           # Playwright (E2E)
 make quality                              # CS-Fixer + PHPStan + build
-make ci                                   # Reproduit la CI (lint + tests unitaires)
+make ci                                   # Lint + tests unitaires
 ```
+
+La QA de l'app tourne **en local** : la seule CI du dépôt (`.github/workflows/pages.yml`) vérifie et déploie le site statique, elle ne lance ni PHPUnit ni Playwright.
 
 ## Règles critiques (app)
 
@@ -142,3 +147,33 @@ Request → Controller → Service/Manager → Repository → Entity → Respons
 ## Développer le Board avec le workflow forge
 
 Le Board se développe **avec le plugin forge lui-même** (dogfooding) : `/forge:vision`, `/forge:product-backlog`, `/forge:stack` (phase 0, déjà faits → `docs/`), puis les tracks feature/refacto/tech. Pour les recettes framework, s'appuyer sur les skills `symfony:*` de la marketplace `gabrielmustiere/skills` (controllers, doctrine, forms, events, messenger, validation…) — les préférer aux conventions ad hoc.
+
+---
+
+# Partie 3 — Site public (`site/`)
+
+Deux pages HTML statiques publiées sur [forge.mustiere.fr](https://forge.mustiere.fr) : `site/index.html` (vitrine) et `site/docs/index.html` (documentation du plugin). Zéro build, zéro dépendance externe hors Google Fonts.
+
+```
+site/
+  index.html          ← vitrine
+  docs/index.html     ← documentation développeur
+  assets/forge.css    ← charte partagée par les deux pages (tokens en :root)
+  assets/forge.js     ← burger + sommaire + scrollspy, partagés
+  assets/og.png       ← carte de partage social
+  llms.txt            ← indexation LLM
+  CNAME               ← forge.mustiere.fr
+```
+
+## Règles (site)
+
+- **CSS et JS sont partagés** (`assets/forge.*`) — ne pas réintroduire de style ou de script inline dans une seule page : les deux pages divergeraient.
+- **Charte** : fond `#0a0e12`, accent cyan `#3fd6f2`, Space Grotesk + JetBrains Mono. Les tokens font foi (`:root` dans `forge.css`). **Rien à voir** avec la DA du Board (Nova · Midnight, violet).
+- **Mobile-first** : styles de base pour mobile, `@media (min-width: 861px)` pour le desktop (+ `1024px` pour le layout de la doc).
+- **Contraste** : tout texte doit tenir 4.5:1 sur `--surface`. C'est pourquoi `--text-dim` vaut `#7d8f9c` et non le `#5a6b78` d'origine (3.4:1, insuffisant).
+- **Version en dur** : le site affiche la version du plugin à plusieurs endroits. `plugins/forge/.claude-plugin/plugin.json` est la **source de vérité** ; `tools/check-site-version.py` vérifie la cohérence et **le déploiement échoue** en cas de dérive. Après un `/forge:release`, mettre le site à jour.
+- **Images** : `assets/og.png` et `.github/banner.png` se régénèrent depuis `tools/og-source.html` et `tools/banner-source.html` (procédure en commentaire dans chaque fichier). Ne pas les éditer à la main.
+
+## Déploiement (site)
+
+`.github/workflows/pages.yml` est la **seule CI du dépôt** : elle vérifie la version puis déploie sur GitHub Pages. Elle se déclenche sur `site/**`, `tools/check-site-version.py`, le workflow lui-même et `plugin.json` (pour attraper une dérive de version après une release).
