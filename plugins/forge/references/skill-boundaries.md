@@ -41,6 +41,9 @@ Le corollaire de I2, qui vaut d'être dit parce qu'il est contre-intuitif : **un
 `allowed-tools` généreuse n'est pas un problème**, et une liste avare n'est pas une garantie.
 Elles ne parlent que du chemin. La discipline se lit dans les documents produits — d'où le §7.
 
+Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint techniquement rien**
+(§4). Une liste avare n'est donc pas seulement une faible garantie — c'en est zéro.
+
 ## 2. Propriété d'écriture : un artifact, un écrivain
 
 | Artifact | Écrivain **unique** | Lecteurs |
@@ -113,11 +116,35 @@ que le pipeline ne se juge que sur ses livrables (I2). Un `feature-pitch` privé
 produit pas un meilleur `pitch.md` ; il produit le même, avec une demande d'autorisation en plus.
 
 **Les outillages projet (`composer`, `cargo`, `pytest`, `npm`, `make`, `docker`…) ne sont donc pas
-restreints.** Les skills d'implémentation en pré-autorisent une liste large et multi-stack, pour
-la seule raison qui vaille : éviter une demande d'autorisation par commande. Cette liste est un
-**confort**, elle ne défend rien. Un projet dont l'outillage n'y figure pas fonctionne pareil —
-Claude Code demande, et le projet peut pré-autoriser ce qu'il veut dans son propre
-`.claude/settings.json`, seul endroit où une décision de stack a sa place.
+restreints** — et les skills d'implémentation n'en énumèrent aucun. Le projet pré-autorise ce
+qu'il veut dans son propre `.claude/settings.json`, seul endroit où une décision de stack a sa
+place ; à défaut Claude Code demande, ce qui est un coût de confort, pas un défaut de frontière.
+
+### `allowed-tools` ne restreint rien
+
+Le point technique qui règle le débat, parce qu'il est contre-intuitif et que la formulation
+inverse a longtemps figuré ici : **`allowed-tools` n'est pas une allowlist qui borne le skill,
+c'est une pré-autorisation.** La doc est explicite — *« It does not restrict which tools are
+available: every tool remains callable, and your permission settings still govern tools that are
+not listed. »* Un outil absent de la liste reste appelable ; il déclenche simplement une demande
+d'autorisation.
+
+Ce qui s'ensuit, et qui vaut d'être posé noir sur blanc :
+
+- **Un `allowed-tools` avare ne défend pas l'écriture git.** Un implem qui liste `Bash(git
+  status:*)` peut lancer `git commit` — l'utilisateur sera juste sollicité. La liste n'a jamais
+  été le rempart qu'on croyait.
+- **Un frontmatter sans `allowed-tools` n'est donc pas plus permissif qu'un autre.** Il est
+  identique, aux prompts près. L'omettre est même plus honnête : ça n'affiche pas une garantie
+  qui n'existe pas.
+- **La frontière git tient à la règle écrite** (I1 + §2), pas au frontmatter. C'est de la prose
+  qu'un skill respecte, comme il respecte « ne réécris pas le plan d'un autre ».
+
+Deux mécanismes contraignent réellement, et **aucun n'est du ressort d'un skill** :
+`permissions.deny` dans le `.claude/settings.json` du projet (souverain — il bat tout
+`allowed-tools`) et `disallowed-tools` dans le frontmatter (retire l'outil du pool, mais
+s'efface au message suivant : c'est une portée de tour, pas un contrat). Un projet qui veut
+rendre la frontière git *dure* pour les implem le fait chez lui, dans ses permissions — pas ici.
 
 **La seule capacité qui est une frontière, c'est l'écriture git** — parce qu'elle seule permet de
 produire l'artifact d'un autre. L'historique est le livrable de `commit` (et le tag celui de
@@ -133,14 +160,25 @@ une question d'outil.
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
 | **Vérification** | `test-scenario` | non | **rien** — elle observe, elle ne corrige pas |
 
-Deux règles de rédaction des `allowed-tools` :
+Trois règles de rédaction des `allowed-tools`, toutes de confort — puisque rien n'y est
+contraignant :
 
-- **`Bash(git:*)` est proscrit.** Le joker donne `commit` et `push` à qui n'a pas à livrer. On
-  énumère la lecture : `Bash(git log:*)`, `Bash(git diff:*)`, `Bash(git show:*)`,
-  `Bash(git status:*)`.
-- **Pas de skill sans `allowed-tools`.** Un frontmatter qui omet la clé n'est pas « permissif par
-  défaut » : il est **illimité** — donc il détient l'écriture git sans l'avoir demandée. Un
-  orchestrateur (`report-and-sync`) déclare l'**union** de ce qu'il enchaîne.
+- **Ne rien déclarer plutôt que déclarer une liste de stacks.** Un skill dont l'outillage dépend
+  du projet (les trois `*-implem`) **n'a pas d'`allowed-tools`**. Énumérer `cargo`, `poetry`,
+  `gradlew`… serait une liste infinie par nature, fausse dès le premier projet Elixir ou le
+  premier wrapper maison, et qui n'achèterait aucune garantie en échange de son coût de
+  contexte. La décision de stack appartient au `.claude/settings.json` du projet.
+- **Un skill dont l'outillage est fini et connu peut le déclarer** — `commit` sait qu'il fera du
+  git, `vision` qu'il ne fera que lire et écrire du Markdown. C'est un confort légitime : moins
+  de prompts, et une déclaration d'intention lisible. Ça reste une intention, pas une barrière.
+  Un orchestrateur (`report-and-sync`) déclare l'**union** de ce qu'il enchaîne, jamais plus :
+  non pour se brider, mais pour que sa déclaration reste le reflet fidèle des deux skills dont
+  il tient lieu.
+- **`Bash(git:*)` est à éviter chez qui ne livre pas.** Non parce que le joker « donnerait »
+  `commit` et `push` — il sont disponibles de toute façon — mais parce qu'il les pré-autorise,
+  et supprime ainsi la demande de confirmation qui est, en pratique, le dernier signal avant
+  qu'un skill livre à la place de `commit`. Énumérer la lecture (`Bash(git log:*)`,
+  `Bash(git diff:*)`, `Bash(git show:*)`, `Bash(git status:*)`) garde ce signal.
 
 Le reste — la longueur de la liste, les binaires qui s'y trouvent — est une affaire de confort,
 pas de frontière. Ne pas y consacrer d'énergie : elle se dépense mieux sur les documents produits.
@@ -196,16 +234,22 @@ qu'il livre. Lire le frontmatter rassure ; lire le `pitch.md` renseigne.
    plutôt que de placeholders ? Les critères sont-ils vérifiables ? Un document conforme au format
    mais creux a franchi une frontière plus grave qu'un `allowed-tools` trop large.
 
-**Ce qui se vérifie accessoirement, dans le frontmatter** — trois points, parce qu'ils touchent
+**Ce qui se vérifie accessoirement, dans le frontmatter** — deux points, parce qu'ils touchent
 au livrable et pas au chemin :
 
-- `allowed-tools` présent et non vide (sinon le skill détient l'écriture git sans l'avoir demandée).
-- L'écriture git (`add`, `commit`, `push`, `tag`) seulement chez `commit` et `release`.
+- L'écriture git (`add`, `commit`, `push`, `tag`) **pré-autorisée** seulement chez `commit` et
+  `release`. Ailleurs, c'est la demande de confirmation qui doit rester en place (§4).
 - `disable-model-invocation: true` (un mauvais aiguillage produit le mauvais document).
 
-Tout le reste du frontmatter — quels binaires, combien, lesquels — **ne se revoit pas**. Une
-capacité déclarée mais jamais utilisée se retire par hygiène si on la croise (`test-scenario` a
-perdu ainsi un `curl` mort), mais ce n'est pas un défaut de frontière : c'est du ménage.
+**Ce qui ne se vérifie pas** : la présence d'`allowed-tools`. Son absence n'ouvre aucune porte —
+elle n'en fermait aucune (§4). Les trois `*-implem` n'en ont pas, délibérément. Quels binaires,
+combien, lesquels : idem, **ne se revoit pas**. Une capacité déclarée mais jamais utilisée se
+retire par hygiène si on la croise (`test-scenario` a perdu ainsi un `curl` mort), mais ce n'est
+pas un défaut de frontière : c'est du ménage.
+
+Le vrai contrôle de l'écriture git n'est pas dans le frontmatter, il est dans `git log` : un
+commit dont le message n'a pas la forme que `commit` produit est le signe qu'un skill a livré à
+la place d'un voisin. C'est la question 1, encore.
 
 **Le signal le plus fiable reste le frottement.** Un skill qui a besoin d'écrire dans le document
 d'un voisin, un renvoi vers un autre skill qu'on trouve pénible et qu'on est tenté de

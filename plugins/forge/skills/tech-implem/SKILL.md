@@ -4,62 +4,9 @@ description: Exécute une évolution technique cadrée — capture la baseline A
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-tech]"
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - Bash(ls:*)
-  - Bash(find:*)
-  - Bash(cat:*)
-  - Bash(git status:*)
-  - Bash(git diff:*)
-  - Bash(git log:*)
-  - Bash(git show:*)
-  - Bash(php:*)
-  - Bash(composer:*)
-  - Bash(symfony:*)
-  - Bash(vendor/bin/*:*)
-  - Bash(./vendor/bin/*:*)
-  - Bash(bin/console:*)
-  - Bash(npm:*)
-  - Bash(npx:*)
-  - Bash(yarn:*)
-  - Bash(pnpm:*)
-  - Bash(bun:*)
-  - Bash(deno:*)
-  - Bash(cargo:*)
-  - Bash(go:*)
-  - Bash(python:*)
-  - Bash(python3:*)
-  - Bash(pip:*)
-  - Bash(uv:*)
-  - Bash(poetry:*)
-  - Bash(pytest:*)
-  - Bash(ruff:*)
-  - Bash(bundle:*)
-  - Bash(rake:*)
-  - Bash(rspec:*)
-  - Bash(rails:*)
-  - Bash(mvn:*)
-  - Bash(./mvnw:*)
-  - Bash(gradle:*)
-  - Bash(./gradlew:*)
-  - Bash(dotnet:*)
-  - Bash(make:*)
-  - Bash(just:*)
-  - Bash(task:*)
-  - Bash(docker:*)
-  - Bash(docker compose:*)
-  - Bash(docker-compose:*)
-  - Bash(curl:*)
-  - Bash(k6:*)
-  - Bash(wrk:*)
-  - Bash(ab:*)
 ---
 
-> _Outillage : la liste `allowed-tools` pré-autorise les outillages des stacks courants pour éviter une demande d'autorisation à chaque commande de build ou de test. Ce n'est **pas** une frontière — lancer `cargo` ou `composer` ne produit aucun artifact du pipeline, donc ça n'engage rien. Un projet dont l'outillage n'y est pas fonctionne pareil : Claude Code demandera l'autorisation, et le projet peut le pré-autoriser dans son propre `.claude/settings.json`. La vraie frontière est ailleurs : **l'historique git est le livrable de `/forge:commit`** — ce skill ne commite pas lui-même (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §2)._ _Les outils de bench (`curl`, `k6`, `wrk`, `ab`) sont propres à une évolution technique._
+> _Outillage : ce skill ne déclare pas d'`allowed-tools` — l'outillage d'une évolution technique dépend du projet, et plus encore ici que sur les autres tracks : le banc de mesure (générateur de charge, client HTTP, requêtes vers un système de métriques, script maison) est propre à chaque contexte et ne s'énumère pas d'avance. Ça ne relâche aucune garantie : `allowed-tools` ne restreint rien, il pré-autorise (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §4). Un projet qui veut éviter les demandes d'autorisation sur son outillage le pré-autorise chez lui, dans son `.claude/settings.json`. La frontière, elle, est une règle, pas une liste : **l'historique git est le livrable de `/forge:commit`** — ce skill ne commite pas lui-même, ni le commit d'instrumentation, ni celui de baseline (§2)._
 
 # /tech — Exécution guidée d'une évolution technique
 
@@ -117,7 +64,7 @@ Avant toute modif qui change le comportement :
 
 #### 2.1 — Si l'étape 1 du plan est "instrumentation"
 
-Exécute-la intégralement : poser les métriques, les logs, les traces qui permettront de lire la baseline. Commit dédié. Déploie si nécessaire (sur l'env qui sert de référence — local, staging, ou prod selon le contexte du plan).
+Exécute-la intégralement : poser les métriques, les logs, les traces qui permettront de lire la baseline. Faire commiter via `/forge:commit` (commit dédié). Déploie si nécessaire (sur l'env qui sert de référence — local, staging, ou prod selon le contexte du plan).
 
 #### 2.2 — Mesure de la baseline
 
@@ -125,7 +72,7 @@ Charge `${CLAUDE_SKILL_DIR}/references/measurement-toolkit.md` qui contient les 
 
 #### 2.3 — Consigner la baseline dans le plan
 
-Modifier `docs/story/NNN-t-slug/plan.md` pour renseigner la colonne "Baseline actuelle" de chaque métrique. Commit dédié : "docs(t-NNN): consigne baseline".
+Modifier `docs/story/NNN-t-slug/plan.md` pour renseigner la colonne "Baseline actuelle" de chaque métrique. Faire commiter via `/forge:commit` — commit dédié, la baseline doit être en base avant la première modif fonctionnelle pour rester opposable.
 
 Checkpoint baseline :
 
@@ -218,7 +165,7 @@ Si le plan prévoit le retrait du kill switch une fois l'évolution stabilisée 
 - Nettoyer le code conditionnel lié au flag.
 - Supprimer la config / l'env var du flag.
 - S'assurer que le code restant suppose le nouveau comportement uniquement.
-- Commit dédié : "chore(t-NNN): retire kill switch <flag>".
+- Faire commiter via `/forge:commit` (commit dédié).
 
 Si le plan prévoit de garder le kill switch en permanence (utile pour un incident futur), le documenter dans le runbook / le README infra et **ne pas le retirer**.
 
@@ -226,8 +173,8 @@ Si le plan prévoit de garder le kill switch en permanence (utile pour un incide
 
 Avant de clôturer :
 
-- Supprimer `dump()`, `var_dump()`, `dd()` et traces de debug.
-- Supprimer les fichiers temporaires.
+- Supprimer les traces de debug laissées en chemin (dumps, `print`/`console.log`, breakpoints, logs temporaires).
+- Supprimer les fichiers temporaires (artefacts d'outils, scripts de bench jetables).
 - Vérifier que les TODO dans le code référencent un ticket.
 - Vérifier qu'aucun fichier sensible n'est staged.
 
@@ -239,7 +186,7 @@ Affiche le bilan :
 ## Évolution tech terminée — [Nom]
 
 Plan suivi : `docs/story/NNN-t-slug/plan.md`
-Stack : [symfony | sylius]
+Stack : [stack détecté]
 Étapes : M/M complétées
 
 ### Critères de sortie

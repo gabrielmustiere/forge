@@ -10,6 +10,20 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.1.0] - 2026-07-15 — Les skills d'implémentation reprennent leur liberté
+
+### ✨ Fonctionnel
+
+- **Les trois skills d'implémentation (`feature-implem`, `refactor-implem`, `tech-implem`) ne déclarent plus d'`allowed-tools`.** Chacune énumérait ~45 outillages de stacks (`composer`, `cargo`, `poetry`, `gradlew`, `k6`…) : une liste infinie par nature, fausse dès le premier projet sortant des stacks prévus, et qui coûtait du contexte à chaque invocation. C'est désormais au `.claude/settings.json` du projet de pré-autoriser son propre outillage — le seul endroit où une décision de stack a sa place.
+- **Le corps des skills d'implémentation est réellement stack-agnostique.** Les commandes PHP en dur (`vendor/bin/ecs`, `vendor/bin/phpstan`, `vendor/bin/phpunit`, `npm run build`) laissent place à l'intention (style, analyse statique, build, tests du périmètre) : les commandes se lisent dans le `CLAUDE.md` du projet, la référence stack ou le manifeste de tâches réel — avec consigne explicite de **demander plutôt que deviner** une commande plausible. Idem pour les traces de debug du nettoyage et les `Stack : [symfony | sylius]` des bilans.
+
+### 🔧 Technique
+
+- **Correction d'une erreur de fait dans le contrat `skill-boundaries.md`.** Le §4 affirmait qu'un frontmatter sans `allowed-tools` est « illimité — donc il détient l'écriture git sans l'avoir demandée », et le §7 en faisait un point de revue. La doc Claude Code dit l'inverse : `allowed-tools` *« does not restrict which tools are available: every tool remains callable »*. C'est une **pré-autorisation**, pas une allowlist — un `allowed-tools` avare n'a donc jamais défendu l'écriture git, il ajoutait seulement une demande de confirmation. Le §4 gagne une sous-section qui pose le comportement réel et nomme les deux seuls mécanismes contraignants (`permissions.deny` du projet, souverain ; `disallowed-tools`, à portée d'un tour), le §7 cesse de vérifier la présence de la clé et renvoie au vrai contrôle : `git log`.
+- Le contrat tranche désormais la règle de rédaction : **ne rien déclarer plutôt qu'une liste de stacks** pour les skills dont l'outillage dépend du projet ; déclaration permise quand l'outillage est fini et connu (`commit`, `vision`) ; `Bash(git:*)` toujours évité chez qui ne livre pas — non comme rempart, mais pour préserver la demande de confirmation qui est le dernier signal avant qu'un skill livre à la place de `commit`.
+- `tech-implem` ne s'attribue plus les commits d'instrumentation, de baseline et de retrait du kill switch : ils passent par `/forge:commit`, conformément à I1. `refactor-implem` le faisait déjà pour son commit de verrouillage.
+- Les `allowed-tools` des autres skills (`commit`, `release`, `vision`, `adr`, `report-and-sync`…) sont inchangés : courts, finis, et alignés sur de vraies responsabilités.
+
 ## [6.0.0] - 2026-07-15 — Chartes de format et de frontières
 
 ### ✨ Fonctionnel

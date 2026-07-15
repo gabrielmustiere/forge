@@ -4,58 +4,9 @@ description: "Exécute un refacto cadré — verrou bloquant sur tests de caract
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-refacto]"
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - Bash(ls:*)
-  - Bash(find:*)
-  - Bash(cat:*)
-  - Bash(git status:*)
-  - Bash(git diff:*)
-  - Bash(git log:*)
-  - Bash(git show:*)
-  - Bash(php:*)
-  - Bash(composer:*)
-  - Bash(symfony:*)
-  - Bash(vendor/bin/*:*)
-  - Bash(./vendor/bin/*:*)
-  - Bash(bin/console:*)
-  - Bash(npm:*)
-  - Bash(npx:*)
-  - Bash(yarn:*)
-  - Bash(pnpm:*)
-  - Bash(bun:*)
-  - Bash(deno:*)
-  - Bash(cargo:*)
-  - Bash(go:*)
-  - Bash(python:*)
-  - Bash(python3:*)
-  - Bash(pip:*)
-  - Bash(uv:*)
-  - Bash(poetry:*)
-  - Bash(pytest:*)
-  - Bash(ruff:*)
-  - Bash(bundle:*)
-  - Bash(rake:*)
-  - Bash(rspec:*)
-  - Bash(rails:*)
-  - Bash(mvn:*)
-  - Bash(./mvnw:*)
-  - Bash(gradle:*)
-  - Bash(./gradlew:*)
-  - Bash(dotnet:*)
-  - Bash(make:*)
-  - Bash(just:*)
-  - Bash(task:*)
-  - Bash(docker:*)
-  - Bash(docker compose:*)
-  - Bash(docker-compose:*)
 ---
 
-> _Outillage : la liste `allowed-tools` pré-autorise les outillages des stacks courants pour éviter une demande d'autorisation à chaque commande de build ou de test. Ce n'est **pas** une frontière — lancer `cargo` ou `composer` ne produit aucun artifact du pipeline, donc ça n'engage rien. Un projet dont l'outillage n'y est pas fonctionne pareil : Claude Code demandera l'autorisation, et le projet peut le pré-autoriser dans son propre `.claude/settings.json`. La vraie frontière est ailleurs : **l'historique git est le livrable de `/forge:commit`** — ce skill ne commite pas lui-même (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §2)._
+> _Outillage : ce skill ne déclare pas d'`allowed-tools` — l'outillage d'un refacto dépend du projet, et l'énumérer serait une liste sans fin, fausse au premier projet qui sort des stacks prévus. Ça ne relâche aucune garantie : `allowed-tools` ne restreint rien, il pré-autorise (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §4). Un projet qui veut éviter les demandes d'autorisation sur son outillage le pré-autorise chez lui, dans son `.claude/settings.json`. La frontière, elle, est une règle, pas une liste : **l'historique git est le livrable de `/forge:commit`** — ce skill ne commite pas lui-même, y compris le commit de verrouillage de la Phase 2 (§2)._
 
 # /refactor — Exécution guidée d'un refacto
 
@@ -114,13 +65,7 @@ Avant de toucher à la moindre ligne du code visé par le refacto :
 
 #### 2.1 — Inventaire et exécution du filet existant
 
-Lance la portion de tests existante listée dans le plan comme filet de sécurité. Vérifie que **tout est vert avant de commencer**.
-
-```bash
-# Exemples génériques — adapter au stack et au CLAUDE.md du projet
-vendor/bin/phpunit tests/path/to/CoveredArea
-npx playwright test e2e/<spec-concernée>.spec.ts
-```
+Lance la portion de tests existante listée dans le plan comme filet de sécurité, avec le lanceur du projet restreint à ce périmètre. Vérifie que **tout est vert avant de commencer**.
 
 Si un test existant est déjà rouge avant qu'on fasse quoi que ce soit, **stop** — remonter à l'utilisateur : "La suite existante est déjà cassée sur le périmètre du refacto. On corrige d'abord, puis on refactore."
 
@@ -172,19 +117,9 @@ Appliquer la restructuration en respectant :
 
 #### 3.4 — QA + non-régression (obligatoire)
 
-Exécuter les checks du stack (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md` et `CLAUDE.md`). Pattern typique stacks PHP :
+Exécuter les checks du projet — style/formatage et analyse statique a minima. Les commandes viennent du `CLAUDE.md`, de la référence stack chargée en Phase 1, ou du manifeste de tâches réel (`Makefile`, `package.json`, `justfile`…) : ne devine pas une commande plausible, demande si tu ne trouves pas.
 
-```bash
-vendor/bin/ecs check --fix                   # style
-vendor/bin/phpstan analyse                   # analyse statique
-```
-
-Puis **lancer les tests concernés par le périmètre de l'étape** (a minima les tests de caractérisation + les tests existants listés comme filet) :
-
-```bash
-vendor/bin/phpunit tests/path/to/CoveredArea
-npx playwright test e2e/<spec-concernée>.spec.ts
-```
+Puis **lancer les tests concernés par le périmètre de l'étape** — a minima les tests de caractérisation + les tests existants listés comme filet.
 
 **Tout doit être vert.** Si un test de caractérisation casse :
 
@@ -212,12 +147,7 @@ Attendre validation ("ok", "go", "c") avant l'étape suivante.
 
 ### Phase 4 — Suite complète de non-régression
 
-Une fois toutes les étapes faites, lancer **l'intégralité** de la suite de tests du projet :
-
-```bash
-vendor/bin/phpunit
-npm run test:e2e
-```
+Une fois toutes les étapes faites, lancer **l'intégralité** de la suite de tests du projet, à tous les niveaux qu'il possède.
 
 **Aucun test ne doit régresser.** Si un test hors du périmètre initial casse, c'est que le refacto a eu un effet de bord non anticipé. Remonter à l'utilisateur — soit on corrige, soit on révise le plan.
 
@@ -227,8 +157,8 @@ Avant de clôturer :
 
 - **Si Strangler Fig** : vérifier avec l'utilisateur si on supprime maintenant l'ancien code (tous les clients ont bien basculé ?) ou si ça fait l'objet d'une étape ultérieure.
 - **Si feature flag** : décider avec l'utilisateur si on retire le flag maintenant ou plus tard (prévoir un ticket dans ce cas).
-- Supprimer `dump()`, `var_dump()`, `dd()` et autres traces.
-- Supprimer les fichiers temporaires (`.playwright-mcp/`, screenshots laissés).
+- Supprimer les traces de debug laissées en chemin (dumps, `print`/`console.log`, breakpoints, logs temporaires).
+- Supprimer les fichiers temporaires (artefacts d'outils, screenshots laissés).
 - Vérifier que les TODO dans le code référencent un ticket.
 - Vérifier qu'aucun fichier sensible n'est staged.
 
@@ -240,7 +170,7 @@ Affiche le bilan :
 ## Refacto terminé — [Nom]
 
 Plan suivi : `docs/story/NNN-r-slug/plan.md`
-Stack : [symfony | sylius]
+Stack : [stack détecté]
 Étapes : M/M complétées
 
 ### Comportement externe
