@@ -1,9 +1,19 @@
 # Review — Cloner en local le repo d'un projet depuis son kanban
 
-> Date : 2026-07-09
-> Stack : symfony
-> Périmètre : working tree + fichiers non suivis (~12 fichiers source, 6 tests/config, 1 migration)
-> Référence d'intention : `docs/story/008-f-clone-repo-local/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/008-f-clone-repo-local/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree + fichiers non suivis (~12 fichiers source, 6 tests/config, 1 migration)
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 1 (corrigé)
+- Mineurs restants : 2 / 5 (dette assumée : polling perpétuel, dispatch après flush)
+- Statut : **PRÊT À COMMITER**
+
+Correctifs appliqués et vérifiés (PHPStan L9 ✓, 177 PHPUnit ✓, smoke E2E clone + badges ✓). Les 2 mineurs restants sont de la dette POC assumée (à consigner au `/report`). Prochaine étape : `/commit` pour commit et push.
 
 ## Bloquants
 
@@ -29,15 +39,6 @@ _(aucun)_
 - **Anti-traversée de chemin** : `ClonePathResolver` aplatit les sous-groupes GitLab (`/` → `-`), rejette `..` et tout caractère hors `[A-Za-z0-9._-]`.
 - **Migration propre** : générée par `make:migration`, `clone_status` NOT NULL avec `DEFAULT 'not_cloned'` (couvre les lignes existantes sans backfill), `down()` réversible restaurant l'index unique, `schema:validate` en sync.
 - **Tests ciblés** : enum exhaustif, resolver (nominal + sous-groupe + traversée), contrôleur (Cloning + enqueue + CSRF + firewall via transport in-memory), handler (succès/échec sans propagation/projet inconnu). 176 PHPUnit verts, PHPStan L9 vert.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 1 (corrigé)
-- Mineurs restants : 2 / 5 (dette assumée : polling perpétuel, dispatch après flush)
-- Statut : **READY TO COMMIT**
-
-Correctifs appliqués et vérifiés (PHPStan L9 ✓, 177 PHPUnit ✓, smoke E2E clone + badges ✓). Les 2 mineurs restants sont de la dette POC assumée (à consigner au `/report`). Prochaine étape : `/commit` pour commit et push.
 
 ## Hors review (à vérifier en environnement réel)
 

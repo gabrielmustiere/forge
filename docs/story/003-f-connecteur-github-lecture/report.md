@@ -1,16 +1,15 @@
 # Report — Lire à distance un repo GitHub et vérifier qu'il est éligible forge
 
-> Pitch : `docs/story/003-f-connecteur-github-lecture/pitch.md`
-> Plan : `docs/story/003-f-connecteur-github-lecture/plan.md`
-> Date d'implémentation : 2026-07-05
-> Commits liés : working tree non commité au moment du report
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/003-f-connecteur-github-lecture/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
-Feature livrée intégralement (12 sous-tâches) et reviewée **READY TO COMMIT** — conformité au plan estimée à ~90 %. Les 8 critères d'acceptation du pitch sont couverts et vérifiés (dont un contrôle réel sur le projet `enao` → statut Éligible via liste et fiche). Trois écarts structurants, tous volontaires : (1) neutralisation réseau en test par un **double reader** (`StubRepositoryReader` + `services_test.yaml`) plutôt que le `MockHttpClient` bindé décidé au plan ; (2) ajout d'une **route POST `app_project_verify`** + `ProjectManager::reverify()` pour le bouton « vérifier » de la fiche (non-Live) ; (3) ajout d'un **VO `VerificationResult`** pour garder `ProjectVerifier` pur. Périmètre : 11 fichiers suivis modifiés + ~15 nouveaux (~660 lignes). QA finale verte (`make ci` : 72 tests / 199 assertions, E2E 3/3, PHPStan niveau 9, CS-Fixer clean). Dette résiduelle : 1 mineur review accepté (web-profiler `http_client` dev-only), 1 résiduel E2E (réseau non isolé en env test).
+Feature livrée intégralement (12 sous-tâches) et reviewée **PRÊT À COMMITER** — conformité au plan estimée à ~90 %. Les 8 critères d'acceptation du pitch sont couverts et vérifiés (dont un contrôle réel sur le projet `enao` → statut Éligible via liste et fiche). Trois écarts structurants, tous volontaires : (1) neutralisation réseau en test par un **double reader** (`StubRepositoryReader` + `services_test.yaml`) plutôt que le `MockHttpClient` bindé décidé au plan ; (2) ajout d'une **route POST `app_project_verify`** + `ProjectManager::reverify()` pour le bouton « vérifier » de la fiche (non-Live) ; (3) ajout d'un **VO `VerificationResult`** pour garder `ProjectVerifier` pur. Périmètre : 11 fichiers suivis modifiés + ~15 nouveaux (~660 lignes). QA finale verte (`make ci` : 72 tests / 199 assertions, E2E 3/3, PHPStan niveau 9, CS-Fixer clean). Dette résiduelle : 1 mineur review accepté (web-profiler `http_client` dev-only), 1 résiduel E2E (réseau non isolé en env test).
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

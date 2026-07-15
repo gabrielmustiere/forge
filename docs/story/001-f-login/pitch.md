@@ -1,5 +1,10 @@
 # Verrouiller Forge Board derrière une connexion locale mono-utilisateur
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/001-f-login/`
+> **Amont** : aucun
+
 > L'application entière vit derrière un écran de connexion : l'unique utilisateur se connecte pour accéder à ses projets et à ses tableaux, et se déconnecte quand il le souhaite. Objectif : protéger l'app et, en amont, les tokens de lecture qui y seront stockés.
 
 ## Contexte
@@ -69,7 +74,14 @@ Aujourd'hui le socle de sécurité Symfony est déjà scaffoldé (entité `User`
 - **Migration de données** : la table `user` existe déjà (migration `Version20260420133408`). Aucune nouvelle migration attendue, sauf si `remember_me` impose un stockage (l'implémentation par signature n'en requiert pas).
 - **Comportement par défaut** : l'utilisateur voit d'abord l'écran de login à chaque première visite d'une session non mémorisée.
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **Durée du « rester connecté »** : combien de temps le cookie remember-me maintient-il la session ? Options : (a) 1 semaine (défaut proposé), (b) 1 mois, (c) autre. → à trancher au plan.
+- **DA de l'écran de login** : « Paper » (socle actuel) ou « Nova · Midnight » (DA de référence récente) ? → décision design, à trancher au plan.
+
+---
+
+## Annexe — Pistes pour le plan
 
 - Créer le template manquant `security/login.html.twig` (le `SecurityController` le rend déjà) : formulaire email + password + case « rester connecté » + affichage de l'erreur d'auth.
 - Activer `remember_me` (par signature, `secret: '%kernel.secret%'`) et `login_throttling` dans le firewall `main` de `security.yaml`.
@@ -78,16 +90,3 @@ Aujourd'hui le socle de sécurité Symfony est déjà scaffoldé (entité `User`
 - Fixtures : le compte existe déjà dans `AppFixtures`. Confirmer qu'il reste l'unique source du compte et qu'il couvre bien le critère d'acceptation (rechargement → connexion possible).
 - Écran de login = premier écran visible → il devra suivre le design system. Point à trancher côté design/plan : socle actuel « Paper » vs DA de référence « Nova · Midnight » (commit récent). Ne pas trancher ici.
 - Tests : parcours de login/logout, redirection et protection des routes couverts en E2E Playwright (sélecteurs `data-test`). _Réalignement post-livraison : la protection des routes est vérifiée en E2E, sans test fonctionnel PHP dédié (cf. `plan.md` §Stratégie de test)._
-
-## Questions ouvertes
-
-- **Durée du « rester connecté »** : combien de temps le cookie remember-me maintient-il la session ? Options : (a) 1 semaine (défaut proposé), (b) 1 mois, (c) autre. → à trancher au plan.
-- **DA de l'écran de login** : « Paper » (socle actuel) ou « Nova · Midnight » (DA de référence récente) ? → décision design, à trancher au plan.
-
----
-
-## Changelog
-
-| Date       | Type                     | Description                                       |
-|------------|--------------------------|---------------------------------------------------|
-| 2026-07-04 | Sync post-implémentation | §Notes pour le plan technique : la protection des routes est vérifiée en E2E (pas de test fonctionnel PHP dédié), aligné sur le code livré. Critères d'acceptation et règles métier inchangés (tous couverts). Réf. `report.md`. |

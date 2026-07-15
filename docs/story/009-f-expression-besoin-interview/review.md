@@ -1,9 +1,18 @@
 # Review — Exprimer un besoin depuis le board et le cadrer en brief soumis en revue
 
-> Date : 2026-07-10
-> Stack : symfony
-> Périmètre : working tree + non suivis, story 009 (~35 fichiers source/tests, 2 migrations). Les deltas 008 présents dans le diff (`CloneRepositoryHandler`, `ClonePathResolver`, `.php-cs-fixer.dist.php`) sont **exactement les correctifs de la review 008** — non re-jugés.
-> Référence d'intention : `docs/story/009-f-expression-besoin-interview/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/009-f-expression-besoin-interview/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree + non suivis, story 009 (~35 fichiers source/tests, 2 migrations). Les deltas 008 présents dans le diff (`CloneRepositoryHandler`, `ClonePathResolver`, `.php-cs-fixer.dist.php`) sont **exactement les correctifs de la review 008** — non re-jugés.
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 2 (les 2 corrigés)
+- Statut : **PRÊT À COMMITER**
+
+Les 2 importants (contamination inter-interviews, re-tentative de dépôt) sont corrigés et vérifiés : nettoyage post-terminal via `StoryWorkspaceCleaner` + push `--force` idempotent, couverts par 4 nouveaux tests. QA re-passée verte (PHPStan L9 ✓, 237 PHPUnit ✓, CS-Fixer ✓). Dette POC assumée restante à consigner au `/report` : `Bash` dans la liste blanche d'outils (sandbox déférée), fichiers MCP `mate/` hors périmètre à isoler, 422 « PR déjà ouverte » non resurfacée. Prochaine étape : `/commit` pour commit et push.
 
 ## Bloquants
 
@@ -29,14 +38,6 @@ _(aucun)_
 - **Détection du brief sur le filesystem** (`git status --porcelain`) plutôt que devinée dans le texte : robuste et testée sur repo git réel.
 - **Migration propre** : générée, `status` NOT NULL `DEFAULT 'awaiting'`, FK `ON DELETE CASCADE` indexées, `down()` réversible (enfant avant parent).
 - **QA verte** : PHPStan L9 ✓, PHP-CS-Fixer ✓ (le `->exclude('private')` de 008 tient), **237 PHPUnit ✓** (enum exhaustif, transitions entité, `ProducedBriefLocator` sur repo git réel, `GitHubPullRequestOpener` en `MockHttpClient` nominal + 401/403/quota/422, parcours fonctionnel complet via doubles, non-contamination inter-interviews, nettoyage à l'abandon, `StoryWorkspaceCleaner`, bouton/page).
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 2 (les 2 corrigés)
-- Statut : **READY TO COMMIT**
-
-Les 2 importants (contamination inter-interviews, re-tentative de dépôt) sont corrigés et vérifiés : nettoyage post-terminal via `StoryWorkspaceCleaner` + push `--force` idempotent, couverts par 4 nouveaux tests. QA re-passée verte (PHPStan L9 ✓, 237 PHPUnit ✓, CS-Fixer ✓). Dette POC assumée restante à consigner au `/report` : `Bash` dans la liste blanche d'outils (sandbox déférée), fichiers MCP `mate/` hors périmètre à isoler, 422 « PR déjà ouverte » non resurfacée. Prochaine étape : `/commit` pour commit et push.
 
 ## Hors review (à vérifier en environnement réel)
 

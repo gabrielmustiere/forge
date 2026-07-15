@@ -126,7 +126,7 @@ Quand l'utilisateur valide, rédige le pitch dans `docs/story/`.
 
 **Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
 
-Section "Alignement vision" : à ajouter **uniquement si `docs/vision.md` existe** (le template n'inclut pas cette section — l'insérer après "Contexte" avec les points : problème adressé, audience servie, principes respectés/tendus, impact North Star).
+Section `## Alignement vision` : le template l'inclut, juste après `## Contexte`. Elle est **conditionnelle** — la garder **uniquement si `docs/vision.md` existe**, la retirer entièrement sinon (c'est la seule section du pitch qui se supprime : son absence signifie « pas de vision projet », pas « pas regardé »).
 
 **Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du pitch), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`.
 

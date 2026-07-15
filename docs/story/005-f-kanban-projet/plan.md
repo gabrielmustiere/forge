@@ -1,7 +1,9 @@
 # Plan technique — Afficher le kanban d'un projet
 
-> Pitch : `docs/story/005-f-kanban-projet/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/005-f-kanban-projet/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
@@ -11,19 +13,7 @@ Aucune position n'est persistée : le board est **recalculé à la volée** à c
 
 > **Dépendance à installer** : `league/commonmark` et `twig/markdown-extra` ne sont **pas** installés (seul `twig/extra-bundle` l'est). Étape préalable : `composer require twig/markdown-extra` (tire `league/commonmark`). Le filtre `markdown_to_html` est alors fourni par `twig/extra-bundle`.
 
-**Alternatives écartées** :
-
-- **Kanban en Live Component** : chaque `LiveAction` ré-hydrate le composant ; soit on re-scanne le repo à chaque clic (coûteux, viole « scan une fois »), soit on sérialise tout le board en `LiveProp` (lourd). La page server-rendered + drawer par route est plus simple et plus fidèle au read-only.
-- **Titre `# H1` lu sur chaque carte au chargement** : imposerait un appel GitHub par story à l'ouverture (~30 appels). Écarté au profit du slug sur la carte + H1 dans le drawer (cf. pitch règle 4, changelog).
-- **Persister l'état scanné (colonne/board en base)** : contredit « état déduit, jamais saisi » et le scan live ; introduirait une migration et un risque de dérive. Recalcul à la volée retenu.
-- **Fetch Stimulus custom pour le contenu du doc** : plus de JS à maintenir ; `ux-turbo` est déjà installé et le `<turbo-frame loading="lazy">` couvre le besoin sans code réseau maison.
-- **Fabriquer une liste de docs côté serveur par re-scan de la story** : un appel arbre supplémentaire par ouverture de drawer ; la liste est déjà connue (`StoryCard.files` issu du scan initial), on la passe en `data-`.
-
-## Entités et modèle de données
-
-**Aucun impact modèle.** Aucune entité créée ni modifiée, **aucune migration** : le board est recalculé à la volée à chaque affichage (règle 8, principe vision « état déduit, jamais saisi »). L'entité `Project` existante fournit déjà provider / url / token chiffré, tout ce dont `ProjectBoardBuilder` a besoin.
-
-## Mécanismes framework mobilisés
+### Mécanismes mobilisés
 
 - **Service d'orchestration pur (`ProjectBoardBuilder`)** : même patron que `ProjectVerifier` (`RepositoryReaderRegistry` pour résoudre le reader par provider + normalizer + `TokenCipher` + catch des exceptions métier). Injection par constructeur, `readonly`, `strict_types`. Choisi plutôt qu'un Live Component pour éviter le re-scan à chaque interaction.
 - **Extension d'interface (`RepositoryReaderInterface::readFile`)** : ajout d'une capacité de lecture de contenu au contrat existant, implémentée par `GitHubRepositoryReader` (et à venir GitLab en V2). Pas de décoration : c'est une extension du contrat, pas un override de comportement.
@@ -33,7 +23,21 @@ Aucune position n'est persistée : le board est **recalculé à la volée** à c
 - **Filtre `markdown_to_html` (`twig/markdown-extra` via `twig/extra-bundle`)** : rendu markdown dans le drawer. Le service **`twig.markdown.default`** (`Twig\Extra\Markdown\LeagueMarkdown`, consommé par le `MarkdownRuntime` du bundle) est **redéfini** en `services.yaml` pour s'appuyer sur un `League\CommonMark\MarkdownConverter` bâti sur un `Environment` explicite (core + GFM + `ExternalLinkExtension`) configuré sûr (`html_input: strip`, `allow_unsafe_links: false`, `external_link.open_in_new_window`). **NB** : cibler `twig.markdown.default` directement — un alias sur `Twig\Extra\Markdown\MarkdownInterface` est **ignoré** par le runtime du bundle. Pas d'extension maison — on configure le mécanisme existant.
 - **Enum backed string (`Track`)** : convention projet `src/Enum/Type/` (comme `PipelineStage`, `Provider`, `VerificationStatus`), avec `label()`.
 
-## Fichiers à créer
+### Alternatives écartées
+
+- **Kanban en Live Component** : chaque `LiveAction` ré-hydrate le composant ; soit on re-scanne le repo à chaque clic (coûteux, viole « scan une fois »), soit on sérialise tout le board en `LiveProp` (lourd). La page server-rendered + drawer par route est plus simple et plus fidèle au read-only.
+- **Titre `# H1` lu sur chaque carte au chargement** : imposerait un appel GitHub par story à l'ouverture (~30 appels). Écarté au profit du slug sur la carte + H1 dans le drawer (cf. pitch règle 4, changelog).
+- **Persister l'état scanné (colonne/board en base)** : contredit « état déduit, jamais saisi » et le scan live ; introduirait une migration et un risque de dérive. Recalcul à la volée retenu.
+- **Fetch Stimulus custom pour le contenu du doc** : plus de JS à maintenir ; `ux-turbo` est déjà installé et le `<turbo-frame loading="lazy">` couvre le besoin sans code réseau maison.
+- **Fabriquer une liste de docs côté serveur par re-scan de la story** : un appel arbre supplémentaire par ouverture de drawer ; la liste est déjà connue (`StoryCard.files` issu du scan initial), on la passe en `data-`.
+
+## Modèle de données
+
+**Aucun impact modèle.** Aucune entité créée ni modifiée, **aucune migration** : le board est recalculé à la volée à chaque affichage (règle 8, principe vision « état déduit, jamais saisi »). L'entité `Project` existante fournit déjà provider / url / token chiffré, tout ce dont `ProjectBoardBuilder` a besoin.
+
+## Périmètre
+
+### Fichiers à créer
 
 | Fichier | Rôle |
 |---|---|
@@ -58,7 +62,7 @@ Aucune position n'est persistée : le board est **recalculé à la volée** à c
 | `tests/Functional/Controller/ProjectBoardTest.php` | `show` : colonnes/compteurs/bandeau/vide/erreur ; route drawer (doc rendu, sanitize, filename invalide rejeté). Convention `Functional/Controller` du projet (pas de dossier `Application`). |
 | `tests/e2e/project-board.spec.ts` | Playwright : ouvrir board → colonnes visibles → clic carte → drawer + liste → clic doc → markdown rendu. |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier | Modification |
 |---|---|
@@ -85,7 +89,7 @@ Aucune position n'est persistée : le board est **recalculé à la volée** à c
 - **Comportement par défaut** : la page projet, aujourd'hui « Kanban à venir », affiche désormais le tableau réel.
 - **Sécurité** : le contenu markdown vient d'un repo tiers → rendu **sanitizé** (`html_input: strip`, `allow_unsafe_links: false`). La route drawer valide `storyId` (regex `\d{3}-[frt]-[a-z0-9-]+`) et `filename` (`[a-z0-9._-]+\.md`, pas de `/` ni `..`) pour interdire toute traversée de chemin. Le token reste chiffré, déchiffré au plus près de l'appel (patron `ProjectVerifier`), jamais loggé.
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] `src/Enum/Type/Track.php` + `src/Service/Board/StoryId.php` (VO purs) + tests unitaires.
 2. [ ] `RepositoryReaderInterface::readFile` + implémentation `GitHubRepositoryReader::readFile` + test `MockHttpClient`.
@@ -116,7 +120,7 @@ Aucune position n'est persistée : le board est **recalculé à la volée** à c
 - Pas de test de bout en bout réseau GitHub réel — tout est mocké/stubé.
 - Pas de test de rafraîchissement/erreur riche (relève de `sync-manuelle`).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Latence du scan live** : `show` appelle GitHub à chaque ouverture (borné par `timeout: 5` / `max_duration: 10` du `github.client`). Acceptable pour « quelques dizaines de stories ». Mitigation possible plus tard (cache court), **hors scope** ici ; noté pour `sync-manuelle`.
 - **Traversée de chemin sur la route drawer** : un `filename`/`storyId` malicieux pourrait viser un autre fichier. Mitigation : regex stricte sur les deux segments (pas de `/`, pas de `..`) + le reader ne construit que `docs/story/{storyId}/{filename}`.
@@ -131,11 +135,3 @@ _Toutes tranchées avant implémentation._
 - **Rendu markdown** : extension Twig maison vs runtime `twig/markdown-extra`. → **tranché : runtime `markdown_to_html`**, converter GFM configuré sûr en `services.yaml` via redéfinition de `twig.markdown.default` (l'alias `MarkdownInterface` est ignoré par le runtime — cf. changelog). Dépendance `twig/markdown-extra` à installer (absente).
 - **Format de `BoardResult::failure`** : string vs enum. → **tranché : message `string` court** (le diagnostic riche relève de `sync-manuelle`).
 - **Drawer / Turbo** : drawer partagé (src réarmé) vs frame par doc. → **tranché : drawer partagé**, `src` du `<turbo-frame>` réarmé au clic par Stimulus.
-
----
-
-## Changelog
-
-| Date       | Type                     | Description                                                                                                                                                                                                                                                                                       |
-|------------|--------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 2026-07-05 | Sync post-implémentation | Réalignement sur le code livré (cf. `report.md`) : wiring markdown corrigé (§Approche, §Framework, §Fichiers, §Tests, §Ordre, §Questions) — `twig.markdown.default` + `ExternalLinkExtension`, l'alias `MarkdownInterface` étant ignoré par le runtime ; orchestration via `RepositoryReaderRegistry` ; ajout des fichiers hors plan (`StoryDocumentUnavailableException`, `DevFakeRepositoryReader`, `FakeRepositoryCatalog`, flag `APP_FAKE_REPOSITORY_READER` dans `.env`/`.env.example`/`ci.yml`, `StubRepositoryReader`) ; tests replacés sur la convention `Functional` (pas `Application`) et cas `readFile` regroupés en Unit ; filtrage `documentsFor` aligné sur le `requirements` de route (bloquant review). |

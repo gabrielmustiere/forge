@@ -1,16 +1,15 @@
 # Report — Verrouiller Forge Board derrière une connexion locale mono-utilisateur
 
-> Pitch : `docs/story/001-f-login/pitch.md`
-> Plan : `docs/story/001-f-login/plan.md`
-> Date d'implémentation : 2026-07-04
-> Commits liés : working tree non commité au moment du report
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/001-f-login/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
-Feature livrée à ~95 % de conformité au plan : la barrière de sécurité native Symfony est finalisée (template de login Nova, `remember_me` par signature, `login_throttling`, redirection de logout, `symfony/rate-limiter` ajouté), sans entité ni migration comme prévu. **Unique écart structurant** : le test fonctionnel PHP `SecurityControllerTest` prévu au plan n'a pas été créé — la couverture est désormais 100 % E2E (6 tests Playwright), sur décision utilisateur, scénarios rapatriés. 8/8 critères d'acceptation couverts, dont 2 avec vérification manuelle en attente (throttling, survie réelle du remember-me). Review : 0 bloquant, 0 important, 2 mineurs restants (décisions assumées). Statut review : READY TO COMMIT.
+Feature livrée à ~95 % de conformité au plan : la barrière de sécurité native Symfony est finalisée (template de login Nova, `remember_me` par signature, `login_throttling`, redirection de logout, `symfony/rate-limiter` ajouté), sans entité ni migration comme prévu. **Unique écart structurant** : le test fonctionnel PHP `SecurityControllerTest` prévu au plan n'a pas été créé — la couverture est désormais 100 % E2E (6 tests Playwright), sur décision utilisateur, scénarios rapatriés. 8/8 critères d'acceptation couverts, dont 2 avec vérification manuelle en attente (throttling, survie réelle du remember-me). Review : 0 bloquant, 0 important, 2 mineurs restants (décisions assumées). Statut review : PRÊT À COMMITER.
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

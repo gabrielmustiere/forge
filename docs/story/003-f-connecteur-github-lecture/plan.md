@@ -1,7 +1,9 @@
 # Plan technique — Lire à distance un repo GitHub et vérifier qu'il est éligible forge
 
-> Pitch : `docs/story/003-f-connecteur-github-lecture/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/003-f-connecteur-github-lecture/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
@@ -9,7 +11,15 @@ Le connecteur est structuré autour d'une **abstraction d'accès distant** (`Rep
 
 GitHub est interrogé via l'**API REST**, en **ciblant précisément le sous-arbre `docs/story/`** — jamais l'arbre entier du repo. Séquence : (1) `GET /repos/{owner}/{repo}` → `default_branch` (valide aussi l'existence du repo et l'accès) ; (2) `GET /contents/docs?ref={branch}` → localiser l'entrée `story` (type `dir`) et récupérer son **tree SHA** (absence de `docs` ou de `story` → `NotForge`) ; (3) `GET /git/trees/{story_sha}?recursive=1` → un **unique appel récursif borné au sous-arbre `docs/story`**, qui ramène dossiers + fichiers par story. Comme on ne rapatrie que ce sous-arbre (et non tout le repo), le risque de troncature est **éliminé en pratique**, l'appel reste économe, et le résultat suffit à l'éligibilité aujourd'hui comme à alimenter `mapping-etapes` demain, sans refonte du reader.
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
+
+- **`RepositoryReaderInterface` + `tagged_iterator`** (`symfony:service-tags`) : sélection de l'implémentation par `supports(Provider)`. Un provider sans reader (GitLab) est détecté par le registry → statut `UnsupportedProvider`, aucun appel réseau. Prépare V2 sans toucher l'orchestration.
+- **Scoped HTTP client** (`symfony:http-client-request`) : un client `github.client` dédié (base_uri `https://api.github.com`, en-têtes `Accept: application/vnd.github+json` + `X-GitHub-Api-Version`). Le token n'est PAS en config (il est par-projet) → passé en `auth_bearer` à chaque requête.
+- **Exceptions typées** (`symfony:http-client-response`) : le reader capte `ClientException` (401/403 → invalid_token, 404 → unreachable/not_forge selon le chemin), `ServerException`, `TransportExceptionInterface` (réseau/timeout → unreachable) et les remonte via des exceptions métier (`RepositoryUnreachableException`, `RepositoryAccessDeniedException`) que `ProjectVerifier` traduit en statut.
+- **Live Component** (pattern existant `ProjectList`) : LiveAction `verify(int $id)` + getter du statut pour le badge, sans introduire de nouveau composant.
+- **Manager comme point d'orchestration** : `ProjectVerifier` injecté dans `ProjectManager` ; la vérification est un effet de bord contrôlé de create/update, pas dispersé dans le controller.
+
+### Alternatives écartées
 
 - **Vérification asynchrone (Messenger)** : nécessiterait un worker `messenger:consume` permanent, absent en usage local mono-utilisateur → statut « non vérifié » qui ne se résout jamais. Gain UX nul dans ce contexte.
 - **Git trees récursif sur la racine du repo** : ramènerait tout l'arbre du dépôt → risque de troncature (`truncated: true`) sur les gros repos et transfert inutile. Écarté au profit du ciblage borné à `docs/story/`.
@@ -17,7 +27,7 @@ GitHub est interrogé via l'**API REST**, en **ciblant précisément le sous-arb
 - **GraphQL / serveur MCP** : surdimensionnés pour une lecture d'arborescence en lecture seule ; MCP ajoute une dépendance externe non justifiée.
 - **Statut recalculé à la volée** (pas de persistance) : rappellerait GitHub à chaque rendu de la liste → rate-limit et couplage UI/réseau. Écarté au pitch (statut persisté).
 
-## Entités et modèle de données
+## Modèle de données
 
 ### Modification de `App\Entity\Project`
 
@@ -44,15 +54,9 @@ Représente le résultat de lecture : liste immuable de stories (`StoryFolder`) 
 
 Résultat immuable d'une vérification : `status` (`VerificationStatus`) + `verifiedAt` (`\DateTimeImmutable`), cohérents entre eux. Produit par `ProjectVerifier::verify()`, appliqué par le caller (`ProjectManager`/controller) via `Project::applyVerification()`. Sépare le **calcul** du statut de sa **persistance** — le verifier reste pur et testable sans entité, et l'ordre d'implémentation (verifier avant l'entité) est préservé.
 
-## Mécanismes framework mobilisés
+## Périmètre
 
-- **`RepositoryReaderInterface` + `tagged_iterator`** (`symfony:service-tags`) : sélection de l'implémentation par `supports(Provider)`. Un provider sans reader (GitLab) est détecté par le registry → statut `UnsupportedProvider`, aucun appel réseau. Prépare V2 sans toucher l'orchestration.
-- **Scoped HTTP client** (`symfony:http-client-request`) : un client `github.client` dédié (base_uri `https://api.github.com`, en-têtes `Accept: application/vnd.github+json` + `X-GitHub-Api-Version`). Le token n'est PAS en config (il est par-projet) → passé en `auth_bearer` à chaque requête.
-- **Exceptions typées** (`symfony:http-client-response`) : le reader capte `ClientException` (401/403 → invalid_token, 404 → unreachable/not_forge selon le chemin), `ServerException`, `TransportExceptionInterface` (réseau/timeout → unreachable) et les remonte via des exceptions métier (`RepositoryUnreachableException`, `RepositoryAccessDeniedException`) que `ProjectVerifier` traduit en statut.
-- **Live Component** (pattern existant `ProjectList`) : LiveAction `verify(int $id)` + getter du statut pour le badge, sans introduire de nouveau composant.
-- **Manager comme point d'orchestration** : `ProjectVerifier` injecté dans `ProjectManager` ; la vérification est un effet de bord contrôlé de create/update, pas dispersé dans le controller.
-
-## Fichiers à créer
+### Fichiers à créer
 
 | Fichier                                                        | Rôle                                                                              |
 |----------------------------------------------------------------|-----------------------------------------------------------------------------------|
@@ -76,7 +80,7 @@ Résultat immuable d'une vérification : `status` (`VerificationStatus`) + `veri
 | `tests/Unit/Enum/VerificationStatusTest.php`                   | `label()`/`badgeTone()` par cas.                                                  |
 | `tests/Functional/Twig/ProjectListVerifyTest.php`             | LiveAction `verify` (reader stubbé) met à jour statut + horodatage.               |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier                                                | Modification                                                                                     |
 |--------------------------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -102,7 +106,7 @@ Résultat immuable d'une vérification : `status` (`VerificationStatus`) + `veri
 - **Migration de données** : ajout de deux colonnes sur `project` ; `verification_status DEFAULT 'unverified'` backfille les lignes existantes, `verified_at` nullable → `null`. Aucun script de backfill applicatif.
 - **Comportement par défaut** : un projet existant s'affiche `Unverified` jusqu'à sa prochaine édition ou un clic « vérifier l'accès ». Un projet GitLab affiche `UnsupportedProvider` sans tentative d'appel.
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] Enum `VerificationStatus` (+ `label()`/`badgeTone()`/`icon()`) et son test unitaire.
 2. [ ] Value objects `StoryFolder` / `StoryTree` (parsing convention `docs/story/`) + test unitaire du parsing.
@@ -135,7 +139,7 @@ Résultat immuable d'une vérification : `status` (`VerificationStatus`) + `veri
 - Pas de test de la logique de mapping fichiers→colonne (relève de `mapping-etapes`) : on vérifie seulement que l'arbre est correctement lu et parsé.
 - Pas de test de rate-limit réel (simulé via `MockHttpClient` avec en-têtes/statut correspondants).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Sécurité du token** : le token déchiffré ne doit jamais fuiter. Mitigation : `TokenCipher::decrypt()` appelé au plus près de l'appel (variable locale, non stockée), passé en `auth_bearer` (jamais dans l'URL ni un log). Vérifier que le web-profiler / monolog ne dumpe pas les en-têtes du client en dev (scrubbing ou niveau de log adéquat). Un test functional D2 vérifie déjà l'absence du token dans le HTML — étendre l'esprit au flux de vérif.
 - **Rate-limit GitHub** : ~60 req/h non authentifié, 5000/h authentifié. Mitigation : appels uniquement à la déclaration/édition/clic (jamais au rendu de liste, statut lu en base) ; timeout court ; un dépassement (403 + `X-RateLimit-Remaining: 0`) est traduit en `Unreachable` lisible plutôt qu'en exception.
@@ -153,11 +157,3 @@ Toutes tranchées au cadrage du plan :
 - **Ciblage de l'appel / arbre tronqué** → **tranché : appel borné à `docs/story`**. On localise le tree SHA de `docs/story` (via `contents`) puis un unique `git/trees/{sha}?recursive=1` sur ce seul sous-arbre — on ne lit jamais tout le repo. La troncature devient un cas résiduel (filet : `Eligible` si ≥1 story visible). Pas de 7e statut « partiel ».
 - **Token invalide sur repo public** → **tranché : privilégier la lecture réussie**. `InvalidToken` uniquement sur échec 401/403 ; si la lecture aboutit, statut selon le contenu.
 - **Neutralisation du réseau en test** → **révisé à l'implémentation (cf. `report.md` §Écarts + changelog)** : deux niveaux plutôt qu'un seul. **Unitaire** — `MockHttpClient`/`JsonMockResponse` dans `GitHubRepositoryReader` (couvre le parsing réel des réponses, sans réseau). **Fonctionnel/E2E** — binding d'un double `StubRepositoryReader` via `config/services_test.yaml` (statut piloté par nom de dépôt : `*eligible*`/`*denied*`/`*offline*`/sinon `NotForge`), plus lisible que des réponses HTTP mockées à ce niveau. Le plan proposait déjà cette alternative en §Fichiers à modifier (« reader de test OU `MockHttpClient` »).
-
----
-
-## Changelog
-
-| Date       | Type                      | Description |
-|------------|---------------------------|-------------|
-| 2026-07-05 | Sync post-implémentation  | Réalignement sur le code livré (cf. `report.md`). §Approche + §Entités : ajout du VO `VerificationResult` (verifier pur, appliqué par le caller). §Fichiers à créer/modifier : route POST `app_project_verify` + `ProjectManager::reverify()` (bouton fiche non-Live), `RepositoryReaderException`, partial `_status_badge.html.twig`, double `StubRepositoryReader`. §Entités : `badgeTone()` renvoie une tonalité mappée dans le template, pas des classes CSS. Neutralisation réseau en test révisée (§Fichiers, §Ordre, §Stratégie de test, §Questions ouvertes) : double reader (fonctionnel/E2E) + `MockHttpClient` (unitaire). E2E replié dans « declare then delete » avec risque réseau documenté (§Risques). Fixtures : GitLab `UnsupportedProvider`. Pitch inchangé (aucun écart sur les règles métier / critères). |

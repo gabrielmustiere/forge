@@ -6,7 +6,9 @@
   "tags": ["board", "kanban"],
   "changelog": [
     { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan du kanban projet (colonnes, cartes, drawer)." },
-    { "date": "2026-07-05", "type": "Livraison", "description": "Board projet livré, revu et reporté." }
+    { "date": "2026-07-05", "type": "Ajustement", "description": "Règle 4 et critères de titre revus : le **slug humanisé** est affiché sur la carte (0 appel réseau au chargement) et le **titre réel `# H1`** apparaît dans le drawer. Décidé en `/feature-plan` car lire le H1 par carte imposerait un appel GitHub par story à l'ouverture ; on privilégie la vitesse. Questions ouvertes « persistance » et « titre » tranchées." },
+    { "date": "2026-07-05", "type": "Livraison", "description": "Board projet livré, revu et reporté." },
+    { "date": "2026-07-05", "type": "Sync", "description": "Réalignement sur le code livré (cf. `report.md`) : wiring markdown corrigé (§Approche, §Framework, §Fichiers, §Tests, §Ordre, §Questions) — `twig.markdown.default` + `ExternalLinkExtension`, l'alias `MarkdownInterface` étant ignoré par le runtime ; orchestration via `RepositoryReaderRegistry` ; ajout des fichiers hors plan (`StoryDocumentUnavailableException`, `DevFakeRepositoryReader`, `FakeRepositoryCatalog`, flag `APP_FAKE_REPOSITORY_READER` dans `.env`/`.env.example`/`ci.yml`, `StubRepositoryReader`) ; tests replacés sur la convention `Functional` (pas `Application`) et cas `readFile` regroupés en Unit ; filtrage `documentsFor` aligné sur le `requirements` de route (bloquant review)." }
   ],
   "delivery": { "release": "v4.3.0", "commit": "b7964b4" }
 }

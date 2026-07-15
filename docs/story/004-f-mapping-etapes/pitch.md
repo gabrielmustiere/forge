@@ -1,5 +1,10 @@
 # Déduire l'étape de chaque story depuis les fichiers présents
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/004-f-mapping-etapes/`
+> **Amont** : aucun
+
 > Un moteur de mapping qui lit la liste des fichiers d'une story (`pitch.md`, `plan.md`, `review.md`, `report.md`…) et en déduit sa colonne sur un pipeline unifié — sans jamais lire le contenu, sans jamais deviner. C'est la brique qui transforme une arborescence `docs/story/` en positions sur un kanban.
 
 ## Contexte
@@ -71,7 +76,15 @@ C'est précisément le trou que cette feature comble. Sans moteur de mapping, il
 - **Migration de données** : à confirmer au plan selon la décision de persistance (si la colonne est stockée sur la story → migration ; si recalculée à la volée → aucune). Non tranché ici.
 - **Comportement par défaut** : transparent — la feature ne produit pas d'écran à elle seule ; son effet devient visible avec `kanban-projet`.
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **`brief.md` seul → « À vérifier »** : retenu (cohérent avec la voie dédiée), mais une story avec uniquement `brief.md` est légitimement précoce, pas anormale. Option future : une colonne/entrée « Découverte » distincte de « À vérifier » si le mélange « précoce » vs « anomalie » gêne à l'usage. → à réévaluer une fois le kanban visible.
+- **Persistance de la colonne** : (a) stockée sur la story (attribut + migration, recalculée à la sync) ; (b) recalculée à la volée à chaque rendu (pas de migration, dépend de la fraîcheur du scan). → tranché en `/feature-plan`, en lien avec `sync-manuelle`.
+- **Libellés définitifs des colonnes** : Cadrage / Planifié / Review / Livré retenus par défaut ; ré-ajustables à la mise en place du kanban selon la lisibilité réelle.
+
+---
+
+## Annexe — Pistes pour le plan
 
 > Pistes brutes — **ne pas concevoir ici**, à trancher en `/forge:feature-plan`.
 
@@ -81,17 +94,3 @@ C'est précisément le trou que cette feature comble. Sans moteur de mapping, il
 - **Pureté** : un service de mapping sans effet de bord (fichiers → colonne), testable unitairement sur des jeux de noms de fichiers, dans l'esprit du `ProjectVerifier` (calcul pur, appliqué par le caller).
 - **Persistance vs recalcul** : trancher si la colonne est un attribut stocké sur la story (couplé à la sync) ou recalculée au rendu — impacte migration et `sync-manuelle`.
 - **Validation déterminisme** : prévoir un test rejouant le mapping sur les stories réelles (`001`/`002`/`003`) et éventuellement d'autres jeux forge, pour verrouiller l'hypothèse #1 avant de figer.
-
-## Questions ouvertes
-
-- **`brief.md` seul → « À vérifier »** : retenu (cohérent avec la voie dédiée), mais une story avec uniquement `brief.md` est légitimement précoce, pas anormale. Option future : une colonne/entrée « Découverte » distincte de « À vérifier » si le mélange « précoce » vs « anomalie » gêne à l'usage. → à réévaluer une fois le kanban visible.
-- **Persistance de la colonne** : (a) stockée sur la story (attribut + migration, recalculée à la sync) ; (b) recalculée à la volée à chaque rendu (pas de migration, dépend de la fraîcheur du scan). → tranché en `/feature-plan`, en lien avec `sync-manuelle`.
-- **Libellés définitifs des colonnes** : Cadrage / Planifié / Review / Livré retenus par défaut ; ré-ajustables à la mise en place du kanban selon la lisibilité réelle.
-
----
-
-## Changelog
-
-| Date       | Type                     | Description                                                                                     |
-|------------|--------------------------|-------------------------------------------------------------------------------------------------|
-| 2026-07-05 | Sync post-implémentation | Critère d'acceptation #6 : mention de la validation renforcée de l'hypothèse critique #1 sur 30 stories réelles du repo `enao`, sans écart (cf. `report.md` §Ajouts non prévus). |

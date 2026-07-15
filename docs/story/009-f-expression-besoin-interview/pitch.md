@@ -1,5 +1,10 @@
 # Exprimer un besoin depuis le board et le cadrer en brief soumis en revue
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/009-f-expression-besoin-interview/`
+> **Amont** : aucun
+
 > Depuis un projet déjà cloné, l'utilisateur exprime un besoin en langage libre ; une interview conversationnelle — le vrai skill `feature-interview` exécuté en headless sur le repo local — le fait émerger tour par tour, ancré sur le code réel. Une fois validé, le `brief.md` produit est déposé sur le repo comme **proposition en revue (brouillon)**, isolée sur sa propre branche, sans jamais toucher la branche principale.
 
 ## Contexte
@@ -82,7 +87,16 @@ Le dépôt du brief adopte le garde-fou que la vision préconisait pour dérisqu
 - **Emails / notifications** : non.
 - **Comportement par défaut** : un projet cloné gagne le bouton « Exprimer un besoin » ; un projet non cloné est inchangé (bouton indisponible). Le kanban reste inchangé.
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **Modèle de persistance de l'état** : entité `Interview`/`ScopingSession` dédiée vs champs sur `Project` — la première prépare l'exécution d'autres skills à venir. → tranché au plan.
+- **Sort d'un brief validé mais dont le dépôt échoue** : re-tenter le seul dépôt sans rejouer l'interview ? Combien de temps garde-t-on le brief local récupérable ? → plan / implem.
+- **Sandbox d'exécution serveur** : conteneur dédié, liste blanche d'outils, coupure réseau hors fournisseur IA — niveau d'isolation à cadrer (suite obligatoire ADR-0002). → plan.
+- **Reprise après interruption** : si une interview est coupée en cours, la reprend-on ou repart-on de zéro ? (hors scope pressenti, à confirmer selon coût). → plan.
+
+---
+
+## Annexe — Pistes pour le plan
 
 - **Moteur d'exécution** : CLI `claude -p` headless + clé API, `cwd` = clone local, plugin forge chargé, dialogue multi-tours via reprise de session — **déjà décidé (ADR-0002)**, le plan en fait la traduction Symfony (job Messenger par tour, comme la story 008 pour le clone).
 - **Persistance de session de dialogue** : la reprise multi-tours s'appuie sur un état de session **sur disque** (cf. ADR-0002) ; le plan tranche son emplacement writable/persistant et sa rétention.
@@ -90,10 +104,3 @@ Le dépôt du brief adopte le garde-fou que la vision préconisait pour dérisqu
 - **Dépôt en proposition** : branche + commit + push (token write, jamais en clair, credential éphémère façon 008) puis ouverture de PR draft via l'API GitHub. Nommage branche / titre PR dérivés de `NNN-f-<slug>`.
 - **État & UI** : entité dédiée (extensible pour les skills à venir) vs champs sur `Project` — à trancher ; rafraîchissement Live Component / Turbo sans reload, comme 008.
 - **Découpe possible** : si le lot « interview → brief » + « dépôt en proposition » s'avère trop gros, il est fractionnable en deux stories (le brief produit et affiché d'abord, le dépôt ensuite). À arbitrer au plan.
-
-## Questions ouvertes
-
-- **Modèle de persistance de l'état** : entité `Interview`/`ScopingSession` dédiée vs champs sur `Project` — la première prépare l'exécution d'autres skills à venir. → tranché au plan.
-- **Sort d'un brief validé mais dont le dépôt échoue** : re-tenter le seul dépôt sans rejouer l'interview ? Combien de temps garde-t-on le brief local récupérable ? → plan / implem.
-- **Sandbox d'exécution serveur** : conteneur dédié, liste blanche d'outils, coupure réseau hors fournisseur IA — niveau d'isolation à cadrer (suite obligatoire ADR-0002). → plan.
-- **Reprise après interruption** : si une interview est coupée en cours, la reprend-on ou repart-on de zéro ? (hors scope pressenti, à confirmer selon coût). → plan.

@@ -6,7 +6,9 @@
   "tags": ["mapping", "pipeline"],
   "changelog": [
     { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan du mapping d'étape par présence de fichiers." },
-    { "date": "2026-07-05", "type": "Livraison", "description": "Moteur de mapping livré, revu et reporté." }
+    { "date": "2026-07-05", "type": "Livraison", "description": "Moteur de mapping livré, revu et reporté." },
+    { "date": "2026-07-05", "type": "Sync", "description": "Critère d'acceptation #6 : mention de la validation renforcée de l'hypothèse critique #1 sur 30 stories réelles du repo `enao`, sans écart (cf. `report.md` §Ajouts non prévus)." },
+    { "date": "2026-07-05", "type": "Sync", "description": "§Risques (Déterminisme) : ajout de la validation terrain sur 30 stories réelles du repo `enao`, qui renforce le rejeu unitaire `001`/`002`/`003` prévu (bonus hors code, cf. `report.md` §Ajouts non prévus)." }
   ],
   "delivery": { "release": "v4.3.0", "commit": "cce192c" }
 }

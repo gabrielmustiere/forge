@@ -1,16 +1,15 @@
 # Report — Afficher le kanban d'un projet
 
-> Pitch : `docs/story/005-f-kanban-projet/pitch.md`
-> Plan : `docs/story/005-f-kanban-projet/plan.md`
-> Date d'implémentation : 2026-07-05
-> Commits liés : working tree non commité au moment du report
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/005-f-kanban-projet/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
-Feature livrée avec un taux de conformité au plan d'environ 90 % : les 11 critères d'acceptation du pitch sont satisfaits (132 PHPUnit / 312 assertions + 11 E2E verts, review **READY TO COMMIT**, 0 bloquant / 0 important / 0 mineur restant). Trois écarts structurants par rapport au plan : (1) le wiring markdown a dû être refait via `twig.markdown.default` — l'alias `MarkdownInterface` prévu au plan était ignoré par le runtime Twig — et enrichi d'un `ExternalLinkExtension` ; (2) un socle de reader factice dev/test (`DevFakeRepositoryReader` + `FakeRepositoryCatalog` + flag `APP_FAKE_REPOSITORY_READER`) a été ajouté hors plan pour rendre l'E2E du board reproductible sans dépôt réel ; (3) l'orchestration passe par `RepositoryReaderRegistry` (résolution par provider) plutôt que par une injection directe du reader, et les tests ont été replacés sur la convention `Functional` existante. Dette résiduelle nulle côté review (tous les mineurs corrigés).
+Feature livrée avec un taux de conformité au plan d'environ 90 % : les 11 critères d'acceptation du pitch sont satisfaits (132 PHPUnit / 312 assertions + 11 E2E verts, review **PRÊT À COMMITER**, 0 bloquant / 0 important / 0 mineur restant). Trois écarts structurants par rapport au plan : (1) le wiring markdown a dû être refait via `twig.markdown.default` — l'alias `MarkdownInterface` prévu au plan était ignoré par le runtime Twig — et enrichi d'un `ExternalLinkExtension` ; (2) un socle de reader factice dev/test (`DevFakeRepositoryReader` + `FakeRepositoryCatalog` + flag `APP_FAKE_REPOSITORY_READER`) a été ajouté hors plan pour rendre l'E2E du board reproductible sans dépôt réel ; (3) l'orchestration passe par `RepositoryReaderRegistry` (résolution par provider) plutôt que par une injection directe du reader, et les tests ont été replacés sur la convention `Functional` existante. Dette résiduelle nulle côté review (tous les mineurs corrigés).
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

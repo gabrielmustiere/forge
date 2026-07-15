@@ -1,16 +1,15 @@
 # Report — Exprimer un besoin depuis le board et le cadrer en brief soumis en revue
 
-> Pitch : `docs/story/009-f-expression-besoin-interview/pitch.md`
-> Plan : `docs/story/009-f-expression-besoin-interview/plan.md`
-> Date d'implémentation : 2026-07-10
-> Commits liés : `268bed4` (code app, feat) + `b7ce883` (skill marketplace `feature-interview` coopératif)
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/009-f-expression-besoin-interview/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
 Story livrée **conforme au plan à ~95 %** : les 14 sous-tâches de l'ordre d'implémentation sont réalisées, les 8 critères d'acceptation sont atteints, et la review pré-merge est verte (0 bloquant, 2 importants corrigés). Trois écarts structurants, tous assumés : un **service ajouté** (`StoryWorkspaceCleaner`) qui purge le dossier de story non suivi à chaque état terminal — correctif de review contre la contamination inter-interviews et réponse tranchée à la question ouverte « nettoyage post-submit » ; le **push rendu idempotent** (`git push --force` sur la branche app-owned `forge/<slug>`) ; et un **jeu de LiveActions élargi** (`start/send/conclude/validate/retry/abandon` au lieu de `start/submit/validate/abandon`). Périmètre : ~35 fichiers source/tests, 2 migrations, **237 PHPUnit verts** (PHPStan L9, PHP-CS-Fixer, smokes E2E OK). Dette POC assumée : `Bash` dans la liste blanche d'outils, 422 « PR déjà ouverte » non resurfacée, reprise d'interview interrompue sans test/UX dédié.
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

@@ -1,5 +1,10 @@
 # Lire à distance un repo GitHub et vérifier qu'il est éligible forge
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/003-f-connecteur-github-lecture/`
+> **Amont** : aucun
+
 > Le connecteur lit en lecture seule l'arborescence de `docs/story/` d'un repo GitHub déclaré, en déduit si le repo est éligible forge, et signale le résultat (éligible / non-forge / token invalide / injoignable) sur le projet — sans jamais bloquer la déclaration ni modifier le repo.
 
 ## Contexte
@@ -73,7 +78,16 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 - **Migration de données** : oui — ajout d'un statut de vérification et d'une date de dernière vérification sur la table `project` (colonnes nullable, backfill implicite en `non vérifié`).
 - **Comportement par défaut** : un projet existant non encore vérifié s'affiche en statut `non vérifié` jusqu'à la première vérification (auto à la prochaine édition, ou manuelle via le bouton).
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **Granularité de l'appel** : lister `docs/story/` via l'API contents (un appel par niveau) vs l'API git tree (arbre récursif en un appel, filtré ensuite). Options : (a) contents, plus simple mais bavard ; (b) git tree, un appel mais nécessite le SHA de la branche par défaut. → à trancher en plan (impacte le rate-limit).
+- **Vérification synchrone vs asynchrone à la déclaration** : (a) appel réseau bloquant pendant l'enregistrement (statut connu immédiatement, mais formulaire suspendu au réseau) ; (b) enregistrement instantané puis vérification déclenchée juste après (statut `non vérifié` fugace). → à trancher en plan selon l'UX voulue (le principe « zéro friction » penche vers (b)).
+- **Branche lue** : lit-on la branche par défaut du repo, ou une branche configurable par projet ? → défaut proposé : branche par défaut du repo ; configurabilité repoussée si le besoin émerge.
+- **Retour visuel du bouton « vérifier »** : rechargement simple vs Live Component (statut mis à jour sans reload). → cosmétique, à trancher en plan selon l'ambition UX.
+
+---
+
+## Annexe — Pistes pour le plan
 
 > Pistes brutes — **ne pas concevoir ici**, à trancher en `/forge:feature-plan`.
 
@@ -85,10 +99,3 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 - **Exceptions typées** : le connecteur remonte des cas typés (non trouvé, non autorisé, réseau), la couche appelante (manager/controller) les traduit en statut persisté. S'appuyer sur les skills `symfony:http-client-*`.
 - **Déclenchement** : brancher la vérification dans le `ProjectManager` (create/update) existant + une action controller dédiée pour le bouton « vérifier l'accès ». Envisager Live Component pour un retour sans rechargement (à trancher au plan).
 - **Détection de l'arborescence** : GitHub permet de lister un sous-dossier (`docs/story/`) sans rapatrier tout le repo (contents API / git tree API) — à cadrer au plan pour rester économe.
-
-## Questions ouvertes
-
-- **Granularité de l'appel** : lister `docs/story/` via l'API contents (un appel par niveau) vs l'API git tree (arbre récursif en un appel, filtré ensuite). Options : (a) contents, plus simple mais bavard ; (b) git tree, un appel mais nécessite le SHA de la branche par défaut. → à trancher en plan (impacte le rate-limit).
-- **Vérification synchrone vs asynchrone à la déclaration** : (a) appel réseau bloquant pendant l'enregistrement (statut connu immédiatement, mais formulaire suspendu au réseau) ; (b) enregistrement instantané puis vérification déclenchée juste après (statut `non vérifié` fugace). → à trancher en plan selon l'UX voulue (le principe « zéro friction » penche vers (b)).
-- **Branche lue** : lit-on la branche par défaut du repo, ou une branche configurable par projet ? → défaut proposé : branche par défaut du repo ; configurabilité repoussée si le besoin émerge.
-- **Retour visuel du bouton « vérifier »** : rechargement simple vs Live Component (statut mis à jour sans reload). → cosmétique, à trancher en plan selon l'ambition UX.

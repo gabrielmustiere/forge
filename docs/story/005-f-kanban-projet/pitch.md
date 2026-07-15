@@ -1,5 +1,10 @@
 # Afficher le kanban d'un projet — colonnes, cartes, ouverture de document
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/005-f-kanban-projet/`
+> **Amont** : aucun
+
 > L'écran qui projette les stories d'un repo forge en cartes le long du pipeline unifié : quatre colonnes (Cadrage → Planifié → Review → Livré) plus un bandeau « À vérifier », des cartes qui portent leur badge de track et leur titre, et l'ouverture d'un document en un clic. C'est la page qui rend enfin visible « où en est le projet X ».
 
 ## Contexte
@@ -79,18 +84,6 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 - **Migration de données** : à confirmer au plan selon la décision de persistance héritée de `004` (si les positions sont recalculées à la volée → aucune migration ; si un état scanné est stocké → migration). Le scan live à l'ouverture (règle 7) penche vers « aucune persistance nouvelle », à trancher au plan.
 - **Comportement par défaut** : c'est le premier écran de valeur du produit ; il devient l'écran principal après ouverture d'un projet.
 
-## Notes pour le plan technique
-
-> Pistes brutes — **ne pas concevoir ici**, à trancher en `/forge:feature-plan`.
-
-- **Composant de rendu** : le tableau kanban est un bon candidat Live Component (Symfony UX) ou une simple page Twig server-rendered ; trancher selon le besoin d'interactivité (ouverture du drawer). Rester dans l'esprit server-rendered de la stack (pas de SPA).
-- **Consommation du moteur `004`** : réutiliser tel quel le service de mapping (fichiers → colonne + track + « À vérifier »). L'écran orchestre : projet → `003` (arborescence + contenu) → `004` (positions) → rendu. Ne rien re-parser.
-- **Extraction du titre (C4.2)** : lire le `# H1` du document le plus avancé via le contenu déjà accessible par `003`. Définir une petite fonction pure « premier H1 du markdown, sinon null » ; le repli slug humanisé est trivial. Attention au coût : une lecture de contenu par carte — voir si `003` permet un fetch groupé/économe.
-- **Rendu markdown du drawer** : choisir la voie de rendu markdown (extension Twig, lib PHP, ou composant) ; lecture seule, pas d'exécution de HTML arbitraire — assainir le rendu (le contenu vient d'un repo tiers).
-- **Scan live vs coût réseau** : le peuplement à l'ouverture (règle 7) appelle `003` à chaque affichage ; surveiller la latence sur un repo à quelques dizaines de stories. Un cache court de requête est une optimisation possible mais **hors périmètre fonctionnel** — à noter au plan, pas à concevoir ici.
-- **Garde-fou d'échec (règle 9)** : capter proprement l'échec de `003` (injoignable / token invalide) et rendre un état d'erreur minimal ; le diagnostic riche viendra avec `sync-manuelle`.
-- **Ouverture d'un document** : route/endpoint de lecture d'un document d'une story (chemin `docs/story/NNN-…/fichier.md`) via `003`, rendu en drawer. Vérifier qu'on ne sert que des fichiers du dossier de story (pas de traversée de chemin).
-
 ## Questions ouvertes
 
 - **Rendu du document** : drawer latéral, avec liste des documents toujours affichée d'abord. → tranché : drawer + liste systématique.
@@ -101,8 +94,14 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 
 ---
 
-## Changelog
+## Annexe — Pistes pour le plan
 
-| Date       | Type                | Description |
-|------------|---------------------|-------------|
-| 2026-07-05 | Ajustement (plan)   | Règle 4 et critères de titre revus : le **slug humanisé** est affiché sur la carte (0 appel réseau au chargement) et le **titre réel `# H1`** apparaît dans le drawer. Décidé en `/feature-plan` car lire le H1 par carte imposerait un appel GitHub par story à l'ouverture ; on privilégie la vitesse. Questions ouvertes « persistance » et « titre » tranchées. |
+> Pistes brutes — **ne pas concevoir ici**, à trancher en `/forge:feature-plan`.
+
+- **Composant de rendu** : le tableau kanban est un bon candidat Live Component (Symfony UX) ou une simple page Twig server-rendered ; trancher selon le besoin d'interactivité (ouverture du drawer). Rester dans l'esprit server-rendered de la stack (pas de SPA).
+- **Consommation du moteur `004`** : réutiliser tel quel le service de mapping (fichiers → colonne + track + « À vérifier »). L'écran orchestre : projet → `003` (arborescence + contenu) → `004` (positions) → rendu. Ne rien re-parser.
+- **Extraction du titre (C4.2)** : lire le `# H1` du document le plus avancé via le contenu déjà accessible par `003`. Définir une petite fonction pure « premier H1 du markdown, sinon null » ; le repli slug humanisé est trivial. Attention au coût : une lecture de contenu par carte — voir si `003` permet un fetch groupé/économe.
+- **Rendu markdown du drawer** : choisir la voie de rendu markdown (extension Twig, lib PHP, ou composant) ; lecture seule, pas d'exécution de HTML arbitraire — assainir le rendu (le contenu vient d'un repo tiers).
+- **Scan live vs coût réseau** : le peuplement à l'ouverture (règle 7) appelle `003` à chaque affichage ; surveiller la latence sur un repo à quelques dizaines de stories. Un cache court de requête est une optimisation possible mais **hors périmètre fonctionnel** — à noter au plan, pas à concevoir ici.
+- **Garde-fou d'échec (règle 9)** : capter proprement l'échec de `003` (injoignable / token invalide) et rendre un état d'erreur minimal ; le diagnostic riche viendra avec `sync-manuelle`.
+- **Ouverture d'un document** : route/endpoint de lecture d'un document d'une story (chemin `docs/story/NNN-…/fichier.md`) via `003`, rendu en drawer. Vérifier qu'on ne sert que des fichiers du dossier de story (pas de traversée de chemin).

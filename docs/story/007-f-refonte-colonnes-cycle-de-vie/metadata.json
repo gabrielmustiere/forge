@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "title": "Aligner les colonnes du board sur le cycle de vie réel d'une story forge",
+  "created": "2026-07-05",
+  "updated": "2026-07-05",
+  "tags": ["board", "kanban"],
+  "changelog": [
+    { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan de la refonte des colonnes du kanban sur le cycle de vie forge (colonne « Idée »)." },
+    { "date": "2026-07-05", "type": "Implémentation", "description": "Refonte des colonnes et du filtre du kanban." },
+    { "date": "2026-07-05", "type": "Report", "description": "Report d'implémentation : refonte livrée, écarts documentés." },
+    { "date": "2026-07-05", "type": "Sync", "description": "Réalignement pitch/plan : couleur de la colonne « Idée » tranchée (gris `st-brief`, « À vérifier » en `st-flag` rose) ; §Fichiers à modifier complété de `StoryCardTest.php` (fixture figeant l'ancien case). Aucune règle métier ni critère d'acceptation impacté." },
+    { "date": "2026-07-05", "type": "Livraison", "description": "Refonte des colonnes du board livrée et releasée en v4.6.0." }
+  ],
+  "delivery": { "release": "v4.6.0", "commit": "317a029" }
+}

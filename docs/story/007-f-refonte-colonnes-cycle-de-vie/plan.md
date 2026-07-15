@@ -1,7 +1,9 @@
 # Plan technique — Aligner les colonnes du board sur le cycle de vie réel d'une story forge
 
-> Pitch : `docs/story/007-f-refonte-colonnes-cycle-de-vie/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/007-f-refonte-colonnes-cycle-de-vie/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
@@ -9,18 +11,7 @@ Le board déduit déjà l'étape d'une story via une chaîne pure et sans état 
 
 Aucune persistance n'est en jeu : l'état d'une story n'est **jamais stocké**, il est recalculé à chaque scan. Le changement est donc purement en mémoire + présentation — **zéro migration Doctrine**. Le point unique de vérité du mapping (`StoryStageMapper::PRECEDENCE`) reste le seul endroit à toucher pour la logique métier, conformément à la vision (mapping centralisé, facile à faire évoluer).
 
-**Alternatives écartées** :
-
-- **Ajouter `estimate.md` comme déclencheur / 6ᵉ colonne** : écarté au pitch (optionnel) — une story chiffrée reste positionnée par `plan.md` en « Cadré ».
-- **Introduire un état « en cours de codage » distinct** : aucun fichier forge ne marque « je code maintenant » ; créer un état artificiel violerait le principe « état déduit, jamais saisi ».
-- **Conserver des `value` d'enum nommées par document (`brief/pitch/plan/review/report`)** : rejeté — le board parle « cycle de vie », pas « livrables » ; les `value` `idee/besoin/cadre/implemente/livre` sont plus lisibles dans le HTML (`data-stage`) et il n'y a aucune contrainte de compat (pas de persistance).
-- **Colonne « Idée » commune avec « À vérifier »** : rejeté — une idée dégrossie par interview est une vraie étape du cycle, pas une anomalie ; les fusionner reproduirait la friction du pitch.
-
-## Entités et modèle de données
-
-Aucun impact modèle. La feature ne touche aucune entité Doctrine ni aucune table : l'étape d'une story est un `PipelineStage` calculé à la volée, jamais persisté.
-
-## Mécanismes framework mobilisés
+### Mécanismes mobilisés
 
 - **Backed enum `string` (`PipelineStage`)** : porte le vocabulaire ordonné + `label()` + `isOnPipeline()`. Mécanisme déjà en place, on l'étend d'un case et on renomme — pas de nouveau pattern introduit.
 - **Fonction pure `StoryStageMapper`** : table `PRECEDENCE` (const de classe) parcourue du plus avancé au moins avancé ; aucun effet de bord, testable en isolation. On ajoute une entrée.
@@ -28,11 +19,24 @@ Aucun impact modèle. La feature ne touche aucune entité Doctrine ni aucune tab
 - **Maps Twig locales (`stageAccent`/`stageBar`)** dans `_board.html.twig` : associent `stage.value` → classes de couleur Tailwind. On remappe sur les nouvelles `value` et on ajoute « idee ».
 - **Tokens CSS `--color-st-*`** (design system Nova) : déjà nommés par document. On réserve `st-brief` (gris) à « Idée » et on donne à « À vérifier » un ton d'attention distinct.
 
-## Fichiers à créer
+### Alternatives écartées
+
+- **Ajouter `estimate.md` comme déclencheur / 6ᵉ colonne** : écarté au pitch (optionnel) — une story chiffrée reste positionnée par `plan.md` en « Cadré ».
+- **Introduire un état « en cours de codage » distinct** : aucun fichier forge ne marque « je code maintenant » ; créer un état artificiel violerait le principe « état déduit, jamais saisi ».
+- **Conserver des `value` d'enum nommées par document (`brief/pitch/plan/review/report`)** : rejeté — le board parle « cycle de vie », pas « livrables » ; les `value` `idee/besoin/cadre/implemente/livre` sont plus lisibles dans le HTML (`data-stage`) et il n'y a aucune contrainte de compat (pas de persistance).
+- **Colonne « Idée » commune avec « À vérifier »** : rejeté — une idée dégrossie par interview est une vraie étape du cycle, pas une anomalie ; les fusionner reproduirait la friction du pitch.
+
+## Modèle de données
+
+Aucun impact modèle. La feature ne touche aucune entité Doctrine ni aucune table : l'étape d'une story est un `PipelineStage` calculé à la volée, jamais persisté.
+
+## Périmètre
+
+### Fichiers à créer
 
 Aucun fichier de production à créer — la feature réétalonne l'existant. Les tests sont adaptés en place (cf. §Fichiers à modifier). Une éventuelle création de fixture E2E se fait dans le catalogue fake existant, pas dans un nouveau fichier.
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier | Modification |
 |---|---|
@@ -60,7 +64,7 @@ Aucun fichier de production à créer — la feature réétalonne l'existant. Le
 - **Migration de données** : **aucune** — pas de schéma, pas de backfill. Les `value` d'enum ne sont ni stockées ni sérialisées durablement (seulement dans le HTML rendu à la volée).
 - **Comportement par défaut** : le nouveau découpage s'applique immédiatement à tous (un seul utilisateur), sans feature flag. Effet observable : les stories `brief.md`-seul migrent de « À vérifier » vers « Idée ».
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] `PipelineStage` — ajouter `Idee`, renommer cases/values/labels, MAJ `isOnPipeline()` + docblock.
 2. [ ] `StoryStageMapper::PRECEDENCE` — ajouter `brief.md → Idee`, réaligner sur les nouveaux cases.
@@ -88,7 +92,7 @@ Aucun fichier de production à créer — la feature réétalonne l'existant. Le
 - Pas de nouveau test pour le filtre/tri (`board_filter_controller.js`) — inchangé, ses sélecteurs (`data-stage`, `column-count`) restent valides ; la spec E2E existante le recouvre.
 - Pas de test de couleur/CSS — vérification visuelle manuelle au navigateur (rendu Nova).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Oubli d'un point de lecture de l'enum** → colonne muette ou clé Twig absente. Mitigation : la recherche exhaustive est faite (Board, template, FakeRepositoryCatalog, 4 fichiers de test) ; un `grep` final sur `Cadrage|Planifie|::Review|'cadrage'|'planifie'` doit ne plus rien renvoyer hors historique.
 - **Collision de couleur `st-brief`** entre « Idée » et « À vérifier » → deux voies grises indistinctes. Mitigation : re-toner « À vérifier » (option retenue) ; contrôle visuel au navigateur.
@@ -100,11 +104,3 @@ Aucun fichier de production à créer — la feature réétalonne l'existant. Le
 
 - ~~**Couleur de « À vérifier »**~~ → **tranché à l'implem** : token dédié `--color-st-flag: #f43f5e` (rose), distinct de `st-brief` (gris) réservé à « Idée ». Option par défaut du plan retenue ; validée au navigateur sur données réelles.
 - ~~**Identifiant de la story fake « Idée »**~~ → **réalisé** : story `brief.md` seule ajoutée à `FakeRepositoryCatalog::boardTree()` (+ metadata fake), sans collision d'id.
-
----
-
-## Changelog
-
-| Date | Type | Description |
-|------|------|-------------|
-| 2026-07-05 | Sync post-implémentation | §Fichiers à modifier : ajout de `StoryCardTest.php` (fixture figeant l'ancien case, oubli du relevé initial débusqué par le grep). §Questions ouvertes : couleur « À vérifier » tranchée (`--color-st-flag` rose #f43f5e) et story fake « Idée » réalisée — les deux questions closes par la livraison. Cf. `report.md`. |

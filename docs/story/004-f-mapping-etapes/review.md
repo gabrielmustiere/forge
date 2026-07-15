@@ -1,9 +1,19 @@
 # Review — Déduire l'étape de chaque story depuis les fichiers présents
 
-> Date : 2026-07-05
-> Stack : symfony
-> Périmètre : working tree — 4 fichiers neufs (`PipelineStage`, `StoryStageMapper` + 2 tests unitaires), ~230 lignes
-> Référence d'intention : `docs/story/004-f-mapping-etapes/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/004-f-mapping-etapes/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree — 4 fichiers neufs (`PipelineStage`, `StoryStageMapper` + 2 tests unitaires), ~230 lignes
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 0
+- Mineurs restants : 0 / 2 (les deux corrigés)
+- Statut : **PRÊT À COMMITER**
+
+Deux mineurs corrigés, QA + 100 tests verts. `/forge:commit` pour commit et push.
 
 ## Bloquants
 
@@ -25,12 +35,3 @@ _(aucun)_
 - **Match top-level exact** : `in_array($filename, $files, true)` ignore proprement les sous-dossiers (`feature-map/pitch.md`), piège identifié au plan et verrouillé par test.
 - **Découplage enum/logique** : `PipelineStage` reste vocabulaire pur, aucune connaissance des noms de fichiers — cohérent avec `VerificationStatus`.
 - **Couverture d'acceptation exhaustive** : chaque critère du pitch a son cas (précédence, transversaux ignorés, absence → À vérifier, sous-dossier, rejeu déterministe), + validation terrain sur 30 stories réelles du repo enao sans écart.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 0
-- Mineurs restants : 0 / 2 (les deux corrigés)
-- Statut : **READY TO COMMIT**
-
-Deux mineurs corrigés, QA + 100 tests verts. `/forge:commit` pour commit et push.

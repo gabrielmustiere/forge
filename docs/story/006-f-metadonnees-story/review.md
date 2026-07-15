@@ -1,9 +1,21 @@
 # Review — Enrichir chaque story de métadonnées lisibles par le Board
 
-> Date : 2026-07-05
-> Stack : symfony
-> Périmètre : working tree + index (~28 fichiers modifiés + 13 nouveaux, ~1700 lignes diff — versants app Symfony + skills plugin)
-> Référence d'intention : `docs/story/006-f-metadonnees-story/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/006-f-metadonnees-story/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree + index (~28 fichiers modifiés + 13 nouveaux, ~1700 lignes diff — versants app Symfony + skills plugin)
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 1 (corrigé)
+- Mineurs restants : 0 / 3 (corrigés)
+- Statut : **PRÊT À COMMITER**
+
+Tous les findings ont été corrigés. QA verte : PHPStan level 9 OK, 158 tests PHPUnit OK, 13 E2E Playwright OK.
+
+Prochaine étape : `/commit` pour commit et push.
 
 ## Bloquants
 
@@ -27,17 +39,6 @@ _(aucun)_
 - **Dégradation gracieuse verrouillée par test** : échec de la lecture metadata → `readMetadata` catch et retourne `[]`, board toujours lisible (`testMetadataReadFailureDoesNotBreakTheBoard`) ; carte sans metadata → fallback slug (`testTitleFallsBackToHumanizedSlugWithoutMetadata`).
 - **Règle 3 respectée** : `metadata.json` exclu du mapping (`DOCUMENT_NAME = /\.md$/`, whitelist du `StoryStageMapper`) — sa présence ne change aucune colonne ni la liste de documents du drawer.
 - **Aucun XSS** : tout le rendu dynamique côté JS passe par `textContent` ; Twig auto-échappe titres, tags et attribut `title` du commit.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 1 (corrigé)
-- Mineurs restants : 0 / 3 (corrigés)
-- Statut : **READY TO COMMIT**
-
-Tous les findings ont été corrigés. QA verte : PHPStan level 9 OK, 158 tests PHPUnit OK, 13 E2E Playwright OK.
-
-Prochaine étape : `/commit` pour commit et push.
 
 ## Hors review (à vérifier en environnement réel)
 

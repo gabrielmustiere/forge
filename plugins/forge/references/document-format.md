@@ -109,8 +109,23 @@ raison.
 **Registre économique** (`estimate`) — le document chiffre du **temps**, jamais un montant.
 
 **La seule passerelle autorisée entre registres** est explicitement étiquetée comme telle : la
-section `## Pistes pour le plan` du pitch (§4) est une **annexe non contractuelle**. Elle est la
-seule zone d'un document fonctionnel où un nom technique peut apparaître, et elle le dit.
+section `## Annexe — Pistes pour le plan` du pitch (§4) est une **annexe non contractuelle**.
+Elle est la seule zone d'un document fonctionnel où un nom technique peut apparaître, et elle le
+dit.
+
+**Exemption — quand le logiciel est le domaine métier.** Certains produits ont pour objet des
+artefacts techniques : un outil de développement, un CI, un explorateur de logs, le Forge Board
+lui-même. Un terme comme `pitch.md`, `docs/story/` ou « dépôt Git » y est le **vocabulaire
+métier de l'utilisateur**, pas une fuite de registre : le traduire en « capacité vécue » le
+dénaturerait. Le test qui tranche n'est pas « est-ce que ça ressemble à du technique ? » mais :
+
+> **L'utilisateur emploierait-il ce mot pour décrire son besoin ?**
+
+Si oui, il est fonctionnel, quelle que soit son apparence (« je veux voir mes stories du dépôt »).
+Si non, c'est une fuite, même déguisée en métier (« le `StoryStageMapper` ignore le fichier de
+métadonnées » — l'utilisateur dit « une story sans métadonnées reste affichée »). Un nom de
+classe, de service ou de champ de base ne passe **jamais** ce test : personne ne formule son
+besoin en `StoryStageMapper`. Un nom de fichier que l'utilisateur ouvre et lit, si.
 
 ## 4. Vocabulaire canonique des sections
 
@@ -122,6 +137,7 @@ historiques ; toute nouvelle section doit s'y raccrocher ou y être ajoutée.
 | Conclusion d'un document de décision | `## Synthèse` | review, report, estimate | prose courte + puces |
 | Pourquoi maintenant | `## Motivation` | plan `-r-` / `-t-` | prose + un chiffre vérifiable |
 | Contexte métier | `## Contexte` | pitch | prose |
+| Alignement à la vision projet | `## Alignement vision` | pitch (conditionnel : si `docs/vision.md` existe) | puces |
 | Solution choisie | `## Approche retenue` | les 3 plans | prose + sous-sections |
 | Options rejetées | `### Alternatives écartées` | sous `## Approche retenue` | table |
 | Patterns/briques mobilisés | `### Mécanismes mobilisés` | sous `## Approche retenue` | puces |
@@ -150,6 +166,7 @@ Renommages actés (l'ancien titre ne doit plus être produit) :
 | `Ordre d'implémentation` · `Stratégie d'exécution incrémentale` · `Plan d'exécution incrémental` | `Ordre d'exécution` | les 3 plans |
 | `Critères de réussite` · `Critères de succès mesurables` | `Critères de sortie` | refactor-plan · tech-plan |
 | `Résumé` | `Synthèse` | report |
+| `Ce qui a été implémenté` | `Périmètre livré` | report |
 | `Notes pour le plan technique` | `Pistes pour le plan` | pitch |
 | `Périmètre : <N fichiers du diff>` (en-tête review) | `Diff examiné` | review |
 | `Référence d'intention` (en-tête review) | `Amont` | review |
@@ -179,7 +196,8 @@ explicitement rattachées à leur track.
 | 8 | `## Rollback et kill switch` | — | — | ✅ |
 | 9 | `## Métriques (baseline → cible)` | — | — | ✅ |
 | 10 | `## Stratégie de test` | ✅ | ✅ | ✅ |
-| 10a | `### Tests de caractérisation` | — | ✅ | — |
+| 10a | `### Tests existants utilisés comme filet` | — | ✅ | — |
+| 10b | `### Tests de caractérisation` | — | ✅ | — |
 | 11 | `## Ordre d'exécution` | ✅ | ✅ | ✅ |
 | 12 | `## Critères de sortie` | ✅ | ✅ | ✅ |
 | 13 | `## Risques et mitigations` | ✅ | ✅ | ✅ |
@@ -279,15 +297,24 @@ traités en dette). Un finding = un niveau + un tag + un emplacement.
 | `BUG` | Comportement incorrect démontrable. |
 | `SECU` | Faille, fuite de données, contrôle d'accès manquant, isolation cassée. |
 | `PLAN` | Écart avec l'intention (`plan.md` / `pitch.md`) non justifié. |
-| `ARCHI` | Violation de l'architecture ou des couches du projet. |
+| `ARCHI` | Violation de l'architecture ou des couches du projet ; duplication, abstraction manquante ou de trop. |
 | `MIGRATION` | Migration non réversible, destructrice ou non testée. |
 | `TEST` | Test manquant, faux, ou qui ne teste pas ce qu'il prétend. |
 | `PERF` | Régression de performance ou requête pathologique. |
 | `CONV` | Non-respect d'une convention du projet (`CLAUDE.md`, stack). |
 | `ROBUSTESSE` | Cas limite non géré, erreur avalée, état incohérent possible. |
 | `I18N` | Libellé en dur, traduction manquante. |
+| `UX` | Parcours ou affordance qui dessert l'utilisateur, sans être un bug. |
+| `A11Y` | Accessibilité : contraste, navigation clavier, rôle ARIA, alternative textuelle. |
 | `DOC` | Documentation absente ou fausse. |
 | `STYLE` | Lisibilité, nommage, formatage. |
+
+Le catalogue est **fermé** : il couvre ce que les reviews trouvent réellement, et se lit d'un
+coup d'œil — deux propriétés qu'une liste ouverte perd immédiatement. Un finding qui semble
+n'entrer nulle part entre presque toujours dans `ARCHI` (duplication, `DRY`), `PLAN` (dérive de
+périmètre, `SCOPE`) ou `ROBUSTESSE`. S'il résiste vraiment, c'est que le catalogue a un trou :
+l'ajouter **ici**, dans la charte, plutôt qu'inventer un tag dans un `review.md` — un tag qui ne
+vit que dans un document est invisible pour le `report.md` qui le reprendra.
 
 **Format d'un finding**, identique dans `review.md` et dans la dette du `report.md` :
 

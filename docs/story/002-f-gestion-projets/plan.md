@@ -1,7 +1,9 @@
 # Plan technique — Gérer les projets forge (déclarer, lister, éditer/retirer)
 
-> Pitch : `docs/story/002-f-gestion-projets/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/002-f-gestion-projets/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
@@ -9,7 +11,20 @@ CRUD server-rendered classique posé sur l'architecture imposée du projet (Requ
 
 Rendu en deux registres : le **formulaire déclaration/édition est une page classique** (contrôleur + `FormType` sur DTO, markup mutualisé dans un partial `_form.html.twig`) — c'est ce qui rend propre la règle « token inchangé si non touché » et la garantie « jamais dans le HTML ». La **liste est un Live Component** (`ProjectList`) avec suppression via `#[LiveAction]` derrière un **overlay de confirmation piloté par l'état Live** (`LiveProp confirmingId`), re-render sans rechargement. L'**ouverture d'un projet** mène à une page détail placeholder (métadonnées + encart « kanban à venir » + lien sortant vers le repo), prête à héberger le board en D3/D4.
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
+
+- **Service `TokenCipher`** (`sodium_crypto_secretbox`) : chiffrement authentifié du token. Clé dérivée `hash_hkdf('sha256', <APP_SECRET brut>, 32, 'project-read-token')`, nonce aléatoire par chiffrement (`random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES)`), sortie `base64(nonce || cipher)`. Injecté avec `#[Autowire('%kernel.secret%')]`. Justification : natif PHP (`ext-sodium` vérifié présent), zéro dépendance, AEAD.
+- **Service `RepositoryUrlNormalizer` + value object `RepositoryUrl`** : parsing/normalisation d'URL pur (https, ssh `git@host:owner/repo.git`, avec/sans `.git`), extraction `owner/repo`, **dérivation du provider depuis l'hôte** (le provider n'est pas un paramètre d'entrée). Une URL d'hôte inconnu ou malformée lève `InvalidRepositoryUrlException` (exception dédiée, `src/Service/`). Service sans état, testable unitairement, réutilisé par le manager ET la validation.
+- **`ProjectManager`** (service métier) : orchestration create/update/delete. Concentre la logique (normaliser → dédupliquer → chiffrer si token fourni → déduire le nom si vide → persister via repository/EM). Justification : archi projet (logique hors contrôleur/entité).
+- **Repository custom `ProjectRepository`** (`ServiceEntityRepository`) : méthodes nommées, QueryBuilder confiné ici.
+- **Contrainte de validation custom `UniqueRepositoryUrl`** (`Constraint` + `ConstraintValidator`) : **contrainte consolidée** qui regroupe validité de l'URL, cohérence provider↔hôte (règle métier 7) et unicité sur URL normalisée via `ProjectRepository` (en excluant l'entité courante à l'édition). Les trois contrôles reposant tous sur la même normalisation, les mécanismes séparés esquissés initialement (Callback de cohérence + contrainte d'unicité distincte) sont abandonnés au profit de ce point d'entrée unique — moins de fichiers, normalisation faite une seule fois.
+- **Form `ProjectType` sur DTO `ProjectFormData`** : découple la représentation de saisie du modèle. Sélecteur `provider` en `ChoiceType` (`expanded: true` → radios) stylé façon button-group ; le bouton du provider sélectionné adopte les **couleurs de la marque** (GitHub blanc/clair, GitLab orange `#fc6d26`) via `group-has-[:checked]:` sur le span, le widget radio étant masqué en `sr-only` — contournement nécessaire car le thème Flowbite enveloppe la radio dans un `<div>`, ce qui casse `peer-checked`. Champ `plainToken` en `PasswordType` `mapped` côté DTO mais **jamais pré-rempli** ; `always_empty: true` pour ne jamais réémettre de valeur.
+- **Live Component `ProjectList`** (`#[AsLiveComponent]`) : liste + `#[LiveAction] public function delete(int $id)` (CSRF géré par le composant), délègue à `ProjectManager::delete()`, re-render sans reload. Confirmation via un **overlay piloté par l'état Live** (`LiveProp confirmingId` + actions `confirmDelete`/`cancelDelete`/`delete`) plutôt que le composant `Modal` (`<dialog>`), qui s'accorde mal avec le re-render Live.
+- **Composant `#[AsTwigComponent] SidebarProjects`** : alimente la liste des projets de la sidebar (`base.html.twig`) hors du layout, isolant la requête et le rendu — testable et réutilisable.
+- **Contrôleur Stimulus `url-name-suggest`** : pré-remplit le champ nom (`owner/repo`) au `input`/`blur` de l'URL, sans écraser une saisie manuelle.
+- **`EntityValueResolver`** : résolution de `Project` par `{id}` dans `show`/`edit` (seule exception tolérée à « tout passe par une méthode de repository »).
+
+### Alternatives écartées
 
 - **Type Doctrine `EncryptedStringType`** (chiffrement transparent au mapping) : injecter la clé dans un type Doctrine (non-service) est un point de douleur connu, et l'entité porterait le clair en mémoire (risque de sérialisation accidentelle). Le chiffrement au niveau `ProjectManager` garde l'entité porteuse du seul chiffré.
 - **Clé de chiffrement dédiée (`PROJECT_TOKEN_KEY`)** : écartée au profit d'une clé dérivée d'`APP_SECRET` (hkdf) — zéro nouvelle variable. Tradeoff assumé : rotation d'`APP_SECRET` = tokens illisibles.
@@ -17,7 +32,7 @@ Rendu en deux registres : le **formulaire déclaration/édition est une page cla
 - **Bind direct du form sur l'entité `Project`** : écarté au profit d'un DTO — sans lui, gérer « token inchangé si non touché » et empêcher le chiffré de repartir au front serait fragile.
 - **Déduction du nom 100 % serveur** : conservée comme garantie (nom vide au submit → dérivé), mais complétée par un contrôleur Stimulus de pré-remplissage pour honorer le « pré-rempli » du pitch.
 
-## Entités et modèle de données
+## Modèle de données
 
 ### Nouvelle entité `App\Entity\Project`
 
@@ -49,20 +64,9 @@ Notes de mapping :
 
 `src/Enum/Type/Provider.php` — backed string (`github`, `gitlab`), avec `host(): string` (github.com / gitlab.com), `label(): string`, `icon(): string` (nom d'icône tabler pour l'UI). Premier occupant de `src/Enum/Type/` (convention CLAUDE.md à instaurer).
 
-## Mécanismes framework mobilisés
+## Périmètre
 
-- **Service `TokenCipher`** (`sodium_crypto_secretbox`) : chiffrement authentifié du token. Clé dérivée `hash_hkdf('sha256', <APP_SECRET brut>, 32, 'project-read-token')`, nonce aléatoire par chiffrement (`random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES)`), sortie `base64(nonce || cipher)`. Injecté avec `#[Autowire('%kernel.secret%')]`. Justification : natif PHP (`ext-sodium` vérifié présent), zéro dépendance, AEAD.
-- **Service `RepositoryUrlNormalizer` + value object `RepositoryUrl`** : parsing/normalisation d'URL pur (https, ssh `git@host:owner/repo.git`, avec/sans `.git`), extraction `owner/repo`, **dérivation du provider depuis l'hôte** (le provider n'est pas un paramètre d'entrée). Une URL d'hôte inconnu ou malformée lève `InvalidRepositoryUrlException` (exception dédiée, `src/Service/`). Service sans état, testable unitairement, réutilisé par le manager ET la validation.
-- **`ProjectManager`** (service métier) : orchestration create/update/delete. Concentre la logique (normaliser → dédupliquer → chiffrer si token fourni → déduire le nom si vide → persister via repository/EM). Justification : archi projet (logique hors contrôleur/entité).
-- **Repository custom `ProjectRepository`** (`ServiceEntityRepository`) : méthodes nommées, QueryBuilder confiné ici.
-- **Contrainte de validation custom `UniqueRepositoryUrl`** (`Constraint` + `ConstraintValidator`) : **contrainte consolidée** qui regroupe validité de l'URL, cohérence provider↔hôte (règle métier 7) et unicité sur URL normalisée via `ProjectRepository` (en excluant l'entité courante à l'édition). Les trois contrôles reposant tous sur la même normalisation, les mécanismes séparés esquissés initialement (Callback de cohérence + contrainte d'unicité distincte) sont abandonnés au profit de ce point d'entrée unique — moins de fichiers, normalisation faite une seule fois.
-- **Form `ProjectType` sur DTO `ProjectFormData`** : découple la représentation de saisie du modèle. Sélecteur `provider` en `ChoiceType` (`expanded: true` → radios) stylé façon button-group ; le bouton du provider sélectionné adopte les **couleurs de la marque** (GitHub blanc/clair, GitLab orange `#fc6d26`) via `group-has-[:checked]:` sur le span, le widget radio étant masqué en `sr-only` — contournement nécessaire car le thème Flowbite enveloppe la radio dans un `<div>`, ce qui casse `peer-checked`. Champ `plainToken` en `PasswordType` `mapped` côté DTO mais **jamais pré-rempli** ; `always_empty: true` pour ne jamais réémettre de valeur.
-- **Live Component `ProjectList`** (`#[AsLiveComponent]`) : liste + `#[LiveAction] public function delete(int $id)` (CSRF géré par le composant), délègue à `ProjectManager::delete()`, re-render sans reload. Confirmation via un **overlay piloté par l'état Live** (`LiveProp confirmingId` + actions `confirmDelete`/`cancelDelete`/`delete`) plutôt que le composant `Modal` (`<dialog>`), qui s'accorde mal avec le re-render Live.
-- **Composant `#[AsTwigComponent] SidebarProjects`** : alimente la liste des projets de la sidebar (`base.html.twig`) hors du layout, isolant la requête et le rendu — testable et réutilisable.
-- **Contrôleur Stimulus `url-name-suggest`** : pré-remplit le champ nom (`owner/repo`) au `input`/`blur` de l'URL, sans écraser une saisie manuelle.
-- **`EntityValueResolver`** : résolution de `Project` par `{id}` dans `show`/`edit` (seule exception tolérée à « tout passe par une méthode de repository »).
-
-## Fichiers à créer
+### Fichiers à créer
 
 | Fichier                                                          | Rôle                                                                                     |
 |------------------------------------------------------------------|------------------------------------------------------------------------------------------|
@@ -99,7 +103,7 @@ Notes de mapping :
 | `tests/Functional/Twig/ProjectListComponentTest.php`            | Live Component `ProjectList` testé par **instanciation directe** (endpoint live derrière firewall). |
 | `tests/e2e/projects.spec.ts`                                    | Déclaration puis suppression via l'UI (sélecteurs `data-test`).                           |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier                                              | Modification                                                                                  |
 |------------------------------------------------------|-----------------------------------------------------------------------------------------------|
@@ -121,7 +125,7 @@ Notes de mapping :
 - **Migration de données** : création de la table `project` (nouvelle, aucun backfill). `down()` = `DROP TABLE project`.
 - **Comportement par défaut** : la section « Projets » de la sidebar passe du placeholder à la liste réelle (vide au départ → CTA « déclarer un projet »).
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] `Provider` enum (`src/Enum/Type/`) + `RepositoryUrl` value object + `RepositoryUrlNormalizer` + tests unit.
 2. [ ] `TokenCipher` (sodium, clé hkdf d'`APP_SECRET`) + test unit round-trip/altération ; ajouter `ext-sodium` à `composer.json`.
@@ -155,7 +159,7 @@ Notes de mapping :
 - Pas de test de déchiffrement en usage réel (`decrypt()` existe mais n'est consommé qu'en D3 ; couvert par le round-trip unit).
 - Pas de test multi-utilisateur/permission fine (mono-utilisateur, firewall global).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **`APP_SECRET` vide** (`.env` l.actuelle `APP_SECRET=`) : bloquant pour la dérivation de clé — un secret vide produit une clé faible/déterministe. Mitigation : renseigner `APP_SECRET` en `.env.local` (étape 10) ; `TokenCipher` lève une exception explicite si le secret est vide, pour éviter un chiffrement silencieusement faible.
 - **Rotation d'`APP_SECRET`** : change la clé dérivée → tokens existants illisibles. Mitigation : documenté comme tradeoff assumé (choix produit) ; en pratique un token illisible se re-saisit via l'édition (P4). À re-arbitrer si une rotation devient un besoin réel (bascule vers `PROJECT_TOKEN_KEY`).
@@ -172,11 +176,3 @@ Notes de mapping :
 - **Garde-fou `APP_SECRET` vide** : ~~exception ou minimum de longueur ?~~ → **Tranché** : `TokenCipher` lève une exception explicite à la construction si le secret est vide.
 - **Périmètre du contrôleur Stimulus `url-name-suggest`** : ~~`blur` seul ou live ?~~ → **Tranché** : pré-remplissage **live** (à la saisie), sans écraser une saisie manuelle.
 - **Suppression depuis la page `show`** : ~~Live Component seul ou aussi route delete sur `show` ?~~ → **Tranché** : uniquement dans le Live Component ; `show` renvoie vers la liste.
-
----
-
-## Changelog
-
-| Date       | Type                      | Description |
-|------------|---------------------------|-------------|
-| 2026-07-04 | Sync post-implémentation  | Réalignement sur le code livré (cf. `report.md`) : validation consolidée en une seule contrainte `UniqueRepositoryUrl` (validité + cohérence provider↔hôte + unicité) et provider dérivé de l'hôte (§Approche, §Entités, §Mécanismes, §Fichiers) ; confirmation de suppression via overlay Live `confirmingId` au lieu du composant `Modal` (§Approche, §Mécanismes, §Ordre 8) ; sidebar via `#[AsTwigComponent] SidebarProjects` (§Mécanismes, §Fichiers, §Ordre 9) ; `.env` non modifié → `.env.example` + garde-fou `TokenCipher` (§Fichiers à modifier) ; tie-breaker `id DESC` sur `findAllOrdered` (§Fichiers) ; PHPStan niveau 10 (§Ordre 12) ; test Live Component par instanciation directe (§Stratégie de test, §Fichiers) ; ajouts `InvalidRepositoryUrlException`, partial `_form.html.twig`, couleurs de marque du bouton provider (§Fichiers, §Mécanismes) ; questions ouvertes tranchées. Limites connues versées en dette (unicité insensible à la casse, index `created_at`, requête sidebar par page) — cf. `report.md` §Dette, non promues en engagement. |

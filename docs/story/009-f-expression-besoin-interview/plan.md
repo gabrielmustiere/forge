@@ -1,14 +1,27 @@
 # Plan technique — Exprimer un besoin depuis le board et le cadrer en brief soumis en revue
 
-> Pitch : `docs/story/009-f-expression-besoin-interview/pitch.md`
-> Stack : symfony
-> ADR : `docs/adr/0002-execution-skills-cadrage-cli-claude-headless.md`
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/009-f-expression-besoin-interview/`
+> **Amont** : `pitch.md`
+> **ADR** : `docs/adr/0002-execution-skills-cadrage-cli-claude-headless.md`
 
 ## Approche retenue
 
 On calque **le socle asynchrone de la story 008** (clone) : une entité à état pilotée par des jobs Symfony Messenger, un port shell-out isolé derrière une interface (substituable par un double en test), et un rendu live sans reload. La nouveauté est un **dialogue multi-tours** : chaque message de l'utilisateur déclenche un job `RunInterviewTurn` qui shell-out `claude -p` (ADR-0002) dans le clone local du projet (`Project::getLocalPath()`, déjà persisté par la 008) ; le skill `feature-interview` pose ses questions et **rend la main** (prouvé au POC), la réponse est stockée, et la boucle continue via `--resume <session_id>` jusqu'à ce que le skill écrive `brief.md` dans le clone. La production du brief est détectée **sur le filesystem** (`git status --porcelain`), pas devinée dans le texte. À la validation, un second job `SubmitBrief` publie le brief sur une **copie de travail isolée** (branche `forge/<slug>` app-owned + push `--force` idempotent, pour qu'un `retry()` aboutisse après un push réussi mais une PR échouée) puis ouvre une **PR draft GitHub** via le client HTTP existant. À chaque état terminal (`Submitted`/`Abandoned` avec brief), le dossier de story non suivi est **purgé du clone maintenu** (`StoryWorkspaceCleaner`) pour éviter que la détection de brief d'une interview suivante ne se contamine. L'app tourne en **local mono-utilisateur** (stack.md) : `claude` s'exécute avec la **session locale ambiante** (OAuth), sans clé API ni `--bare` — le mode clé API reste la voie de durcissement serveur (suite ADR-0002).
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
+
+- **Symfony Messenger (transport Doctrine async)** : `RunInterviewTurn` et `SubmitBrief`, routés async comme `CloneRepository`. Handlers idempotents, échec métier traduit en état `Failed` **non re-propagé** (pattern `CloneRepositoryHandler`).
+- **`symfony/process`** : shell-out `claude -p` (runner) et `git` (push), en tableau d'argv (pas d'interpolation shell → pas d'injection). Timeout borné, secret par **env** jamais en argv (`GIT_ASKPASS` + `bin/git-askpass.sh` réutilisé pour le push).
+- **Port + `supports()` registry** : `InterviewRunnerInterface` (une impl) ; `PullRequestOpenerInterface` + `PullRequestOpenerRegistry` (mirroir `RepositoryReaderRegistry` — GitHub aujourd'hui, GitLab enfichable plus tard).
+- **Client HTTP scopé `github.client`** : `POST /repos/{owner}/{repo}/pulls` (`draft: true`) en `auth_bearer`, `guardStatus()` (pattern `GitHubRepositoryReader`).
+- **`TokenCipher`** : déchiffrement du token au plus près de l'exécution (jamais persisté en clair, jamais loggé).
+- **Live Component + `DefaultActionTrait`** : composant `ProjectInterview` avec `LiveAction` (`start`, `send`, `conclude`, `validate`, `retry`, `abandon`) et **poll** sur les états `isInFlight()` (le worker fait le travail hors requête ; réhydratation de l'entité `LiveProp` à chaque cycle → pattern `ProjectCloneStatus`). `send` envoie un message de tour ; `conclude` pousse le `CONCLUSION_MESSAGE` (bouton « Conclure le cadrage », en écho au skill coopératif qui signale « prêt à conclure ») ; `retry` rejoue un dépôt `Failed`.
+- **`Symfony\Component\Uid\Uuid`** : génération du `sessionId` de session `claude` à la création de l'interview.
+- **Doubles de test via `services_test.yaml`** : `FakeInterviewRunner` + `FakePullRequestOpener` + `FakeBriefPusher` (aucun `claude`/`git`/réseau réel en test — pattern `FakeRepositoryCloner`).
+
+### Alternatives écartées
 
 - **Champs d'interview sur `Project`** : fige une seule interview par projet dans le schéma et n'est pas extensible aux autres skills à venir → entité `Interview` dédiée.
 - **Transcript en colonne JSON sur `Interview`** : moins requêtable et non idiomatique → entité enfant `InterviewMessage` (OneToMany).
@@ -16,7 +29,7 @@ On calque **le socle asynchrone de la story 008** (clone) : une entité à état
 - **Réimplémenter l'agent en PHP (Symfony AI)** : abandonne la fidélité au skill — écarté et gravé en ADR-0002.
 - **Clé API + `--bare` dès la V1** : friction inutile (pas de clé, app locale) pour zéro gain au POC → session ambiante, clé API déférée au serveur.
 
-## Entités et modèle de données
+## Modèle de données
 
 ### Nouvelle entité `App\Entity\Interview`
 
@@ -85,18 +98,9 @@ Une **interview active** = statut hors terminal (`Submitted`, `Abandoned`). `isI
 
 `src/Enum/Type/MessageRole.php` — backed string `User = 'user'` / `Assistant = 'assistant'` (convention projet : enums dans `src/Enum/Type/`).
 
-## Mécanismes framework mobilisés
+## Périmètre
 
-- **Symfony Messenger (transport Doctrine async)** : `RunInterviewTurn` et `SubmitBrief`, routés async comme `CloneRepository`. Handlers idempotents, échec métier traduit en état `Failed` **non re-propagé** (pattern `CloneRepositoryHandler`).
-- **`symfony/process`** : shell-out `claude -p` (runner) et `git` (push), en tableau d'argv (pas d'interpolation shell → pas d'injection). Timeout borné, secret par **env** jamais en argv (`GIT_ASKPASS` + `bin/git-askpass.sh` réutilisé pour le push).
-- **Port + `supports()` registry** : `InterviewRunnerInterface` (une impl) ; `PullRequestOpenerInterface` + `PullRequestOpenerRegistry` (mirroir `RepositoryReaderRegistry` — GitHub aujourd'hui, GitLab enfichable plus tard).
-- **Client HTTP scopé `github.client`** : `POST /repos/{owner}/{repo}/pulls` (`draft: true`) en `auth_bearer`, `guardStatus()` (pattern `GitHubRepositoryReader`).
-- **`TokenCipher`** : déchiffrement du token au plus près de l'exécution (jamais persisté en clair, jamais loggé).
-- **Live Component + `DefaultActionTrait`** : composant `ProjectInterview` avec `LiveAction` (`start`, `send`, `conclude`, `validate`, `retry`, `abandon`) et **poll** sur les états `isInFlight()` (le worker fait le travail hors requête ; réhydratation de l'entité `LiveProp` à chaque cycle → pattern `ProjectCloneStatus`). `send` envoie un message de tour ; `conclude` pousse le `CONCLUSION_MESSAGE` (bouton « Conclure le cadrage », en écho au skill coopératif qui signale « prêt à conclure ») ; `retry` rejoue un dépôt `Failed`.
-- **`Symfony\Component\Uid\Uuid`** : génération du `sessionId` de session `claude` à la création de l'interview.
-- **Doubles de test via `services_test.yaml`** : `FakeInterviewRunner` + `FakePullRequestOpener` + `FakeBriefPusher` (aucun `claude`/`git`/réseau réel en test — pattern `FakeRepositoryCloner`).
-
-## Fichiers à créer
+### Fichiers à créer
 
 | Fichier                                                        | Rôle                                                                                  |
 |----------------------------------------------------------------|---------------------------------------------------------------------------------------|
@@ -139,7 +143,7 @@ Une **interview active** = statut hors terminal (`Submitted`, `Abandoned`). `isI
 | `tests/Functional/Interview/InterviewFlowTest.php`         | Parcours start → thinking → awaiting → brief ready → submit → submitted (doubles).     |
 | `tests/e2e/project-interview.spec.ts`                      | Smoke : exprimer un besoin, voir une réponse, valider (dépend du fake dev).            |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier                                            | Modification                                                                                      |
 |----------------------------------------------------|--------------------------------------------------------------------------------------------------|
@@ -161,7 +165,7 @@ Une **interview active** = statut hors terminal (`Submitted`, `Abandoned`). `isI
 - **Sécurité** : token jamais en clair (`GIT_ASKPASS` + `auth_bearer`) ; `claude` exécuté avec `--allowedTools` restreint aux outils du skill ; pas de sandbox conteneur en V1 locale (déféré serveur, suite ADR-0002). Commande en argv (pas de shell) → pas d'injection.
 - **Comportement par défaut** : un projet non cloné n'a pas le bouton (indisponible) ; le kanban reste inchangé (la PR draft vit sur sa branche, hors projection).
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] Enums `InterviewStatus` + `MessageRole` (+ test unitaire enum).
 2. [ ] Entités `Interview` + `InterviewMessage` (relations, transitions cohésives) + relation inverse sur `Project` (+ test unitaire entité).
@@ -195,7 +199,7 @@ Une **interview active** = statut hors terminal (`Submitted`, `Abandoned`). `isI
 - Pas de test réseau réel GitHub ni de `claude`/`git` réel (les doubles couvrent) — conformément à la règle « jamais d'appel réseau réel ».
 - `ClaudeInterviewRunner` et `GitBriefPusher` (shell-out réel) : non testés unitairement (I/O externe) — couverts indirectement par les doubles en fonctionnel ; le contrat de construction de commande peut être extrait/testé si le coût le justifie (question ouverte).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Exécution d'un agent à privilèges locaux** : `claude` shell-out tourne avec les droits de l'utilisateur. Mitigation V1 : `--allowedTools` restreint aux outils du skill, `--permission-mode acceptEdits`, timeout, argv (pas de shell). Sandbox conteneur = durcissement serveur, déféré (suite ADR-0002).
 - **Persistance de session `--resume`** : en V1 ambiante, les sessions vivent dans le dossier `claude` par défaut (`~/.claude`) — `--resume` fonctionne entre process. Un redémarrage machine ne perd pas la session tant que le dossier persiste. Server/API-key → `CLAUDE_CONFIG_DIR` dédié (suite ADR).

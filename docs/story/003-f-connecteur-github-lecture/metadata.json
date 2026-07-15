@@ -6,7 +6,8 @@
   "tags": ["connecteur", "github"],
   "changelog": [
     { "date": "2026-07-05", "type": "Création", "description": "Pitch et plan du connecteur GitHub en lecture + vérification d'éligibilité." },
-    { "date": "2026-07-05", "type": "Livraison", "description": "Lecture distante et éligibilité livrées, revues et reportées." }
+    { "date": "2026-07-05", "type": "Livraison", "description": "Lecture distante et éligibilité livrées, revues et reportées." },
+    { "date": "2026-07-05", "type": "Sync", "description": "Réalignement sur le code livré (cf. `report.md`). §Approche + §Entités : ajout du VO `VerificationResult` (verifier pur, appliqué par le caller). §Fichiers à créer/modifier : route POST `app_project_verify` + `ProjectManager::reverify()` (bouton fiche non-Live), `RepositoryReaderException`, partial `_status_badge.html.twig`, double `StubRepositoryReader`. §Entités : `badgeTone()` renvoie une tonalité mappée dans le template, pas des classes CSS. Neutralisation réseau en test révisée (§Fichiers, §Ordre, §Stratégie de test, §Questions ouvertes) : double reader (fonctionnel/E2E) + `MockHttpClient` (unitaire). E2E replié dans « declare then delete » avec risque réseau documenté (§Risques). Fixtures : GitLab `UnsupportedProvider`. Pitch inchangé (aucun écart sur les règles métier / critères)." }
   ],
   "delivery": { "release": "v4.3.0", "commit": "3fe4133" }
 }

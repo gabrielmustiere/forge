@@ -1,9 +1,18 @@
 # Review — Gérer les projets forge (déclarer, lister, éditer/retirer)
 
-> Date : 2026-07-04
-> Stack : symfony
-> Périmètre : working tree + index (35 fichiers, ~2120 lignes) — feature complète D2
-> Référence d'intention : `docs/story/002-f-gestion-projets/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/002-f-gestion-projets/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree + index (35 fichiers, ~2120 lignes) — feature complète D2
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 0
+- Statut : **PRÊT À COMMITER**
+
+Prochaine étape : `/commit` pour commit et push. Les mineurs peuvent être traités maintenant ou versés à la dette (report/sync).
 
 ## Bloquants
 
@@ -30,14 +39,6 @@ _(aucun)_
 - **Validation consolidée et testée** : une seule contrainte `UniqueRepositoryUrl` couvre validité + cohérence provider↔hôte + unicité, avec exclusion de soi à l'édition — couverte par un test unitaire (`ConstraintValidatorTestCase`, stub conforme PHPUnit 13).
 - **Couverture de test large** : 27 unit + 11 functional + 3 E2E, PHPStan niveau 10 vert, `failOnNotice/Warning/Deprecation` respecté, sélecteurs `data-test`.
 - **Migration propre** : générée, `down()` réversible (DROP TABLE nouvelle), index unique sur `url`, `schema:validate` OK.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 0
-- Statut : **READY TO COMMIT**
-
-Prochaine étape : `/commit` pour commit et push. Les mineurs peuvent être traités maintenant ou versés à la dette (report/sync).
 
 ## Hors review (à vérifier en environnement réel)
 

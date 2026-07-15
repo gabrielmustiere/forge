@@ -1,13 +1,25 @@
 # Plan technique — Cloner en local le repo d'un projet depuis son kanban
 
-> Pitch : `docs/story/008-f-clone-repo-local/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/008-f-clone-repo-local/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
 Le clone est le **premier job asynchrone** du projet. On introduit un **port** `RepositoryClonerInterface` (calqué sur `RepositoryReaderInterface`) avec une implémentation unique `GitRepositoryCloner` qui shell-out `git` via `symfony/process` — le clone étant uniforme entre GitHub et GitLab, pas besoin de registry par provider (contrairement au reader). Un message Messenger `CloneRepository(projectId)` routé sur le transport `async` (Doctrine, déjà configuré) porte le travail hors requête HTTP : le contrôleur passe le statut à `Cloning` **en synchrone** (garde anti double-clic) puis dispatche ; le handler exécute clone-ou-pull et pose `Cloned` ou `Failed`. L'état de clone est persisté en **quatre champs sur `Project`** (pas d'entité dédiée — YAGNI, cf. `CLAUDE.md`), avec des méthodes de transition cohérentes façon `applyVerification()`. La bascule d'état est reflétée en direct par un **Live Component** qui poll tant que le statut est `Cloning`, sans Mercure. L'authentification git passe par **`GIT_ASKPASS`** (token en variable d'env du worker, jamais en argv ni dans `.git/config`).
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
+
+- **Port + impl unique** (`RepositoryClonerInterface` / `GitRepositoryCloner`) : isole le shell-out git derrière une interface → substituable par un fake en test, aucune modif vendor. Suit le patron `RepositoryReaderInterface` déjà en place.
+- **`symfony/process`** : `Process` pour lancer `git clone` / `git pull` avec timeout généreux (600 s), env `GIT_ASKPASS`/`GIT_TERMINAL_PROMPT=0`, sans token en argv.
+- **Symfony Messenger** (`#[AsMessageHandler]`, transport `async` Doctrine) : premier job async ; routing `App\Message\CloneRepository: async` dans `messenger.yaml`.
+- **`#[AsLiveComponent]`** (ux-live-component) : composant `ProjectCloneStatus` avec `data-poll` conditionnel tant que `Cloning` → badge + bouton, bascule sans reload.
+- **`TokenCipher`** (existant) : déchiffrement du token au plus près de l'appel (variable locale, jamais loggée).
+- **`RepositoryUrlNormalizer` / `RepositoryUrl`** (existants) : dérivation `owner`/`repo` (déjà validés `[A-Za-z0-9._-]+`) pour le nom de dossier et l'URL de clone.
+- **CSRF** (`isCsrfTokenValid`) : jeton `clone{id}`, comme `verify{id}`.
+
+### Alternatives écartées
 
 - **Clone synchrone dans le contrôleur** (comme `verify`) : un gros repo bloquerait la requête et l'UI — le pitch impose l'asynchrone.
 - **Entité `Clone` dédiée** : spéculatif au POC ; un seul champ réellement utile aujourd'hui (`local_path`), extraction possible plus tard si l'exécution de skills complexifie l'état.
@@ -15,7 +27,7 @@ Le clone est le **premier job asynchrone** du projet. On introduit un **port** `
 - **Mercure / Turbo Streams** pour le temps réel : absent du stack, surdimensionné ; le polling du Live Component suffit pour un basculement d'état ponctuel.
 - **Token dans l'URL de clone** (`https://x-access-token:TOKEN@host/...`) : le token finirait dans `.git/config` et potentiellement les logs — remplacé par `GIT_ASKPASS`.
 
-## Entités et modèle de données
+## Modèle de données
 
 ### Modification de `App\Entity\Project`
 
@@ -55,17 +67,9 @@ Le constructeur initialise `cloneStatus = CloneStatus::NotCloned`. Migration gé
 | `Cloned`      | `cloned`       | Cloné       | `ok`          | `tabler:cloud-check`           |
 | `Failed`      | `failed`       | Échec       | `danger`      | `tabler:cloud-x`               |
 
-## Mécanismes framework mobilisés
+## Périmètre
 
-- **Port + impl unique** (`RepositoryClonerInterface` / `GitRepositoryCloner`) : isole le shell-out git derrière une interface → substituable par un fake en test, aucune modif vendor. Suit le patron `RepositoryReaderInterface` déjà en place.
-- **`symfony/process`** : `Process` pour lancer `git clone` / `git pull` avec timeout généreux (600 s), env `GIT_ASKPASS`/`GIT_TERMINAL_PROMPT=0`, sans token en argv.
-- **Symfony Messenger** (`#[AsMessageHandler]`, transport `async` Doctrine) : premier job async ; routing `App\Message\CloneRepository: async` dans `messenger.yaml`.
-- **`#[AsLiveComponent]`** (ux-live-component) : composant `ProjectCloneStatus` avec `data-poll` conditionnel tant que `Cloning` → badge + bouton, bascule sans reload.
-- **`TokenCipher`** (existant) : déchiffrement du token au plus près de l'appel (variable locale, jamais loggée).
-- **`RepositoryUrlNormalizer` / `RepositoryUrl`** (existants) : dérivation `owner`/`repo` (déjà validés `[A-Za-z0-9._-]+`) pour le nom de dossier et l'URL de clone.
-- **CSRF** (`isCsrfTokenValid`) : jeton `clone{id}`, comme `verify{id}`.
-
-## Fichiers à créer
+### Fichiers à créer
 
 | Fichier                                                        | Rôle                                                                                     |
 |----------------------------------------------------------------|------------------------------------------------------------------------------------------|
@@ -84,7 +88,7 @@ Le constructeur initialise `cloneStatus = CloneStatus::NotCloned`. Migration gé
 | `tests/Functional/Controller/ProjectCloneTest.php`             | POST `/clone` : statut `Cloning` + message enqueué ; CSRF invalide → rien ; firewall.     |
 | `tests/Functional/MessageHandler/CloneRepositoryHandlerTest.php`| Handler avec fake cloner : succès → `Cloned`, échec → `Failed`, pas d'exception propagée. |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier                                          | Modification                                                                                 |
 |--------------------------------------------------|----------------------------------------------------------------------------------------------|
@@ -108,7 +112,7 @@ Le constructeur initialise `cloneStatus = CloneStatus::NotCloned`. Migration gé
 - **Migration de données** : ajout de 4 colonnes ; `clone_status` NOT NULL avec défaut `not_cloned` → pas de backfill (le défaut couvre les lignes existantes). SQLite : `make:migration` gère la recréation de table.
 - **Comportement par défaut** : un projet existant s'affiche en `Non cloné` avec le bouton ; kanban inchangé.
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] `CloneStatus` enum + `tests/Unit/Enum/CloneStatusTest.php`.
 2. [ ] `Project` : 4 champs + méthodes de transition + init constructeur.
@@ -138,7 +142,7 @@ Le constructeur initialise `cloneStatus = CloneStatus::NotCloned`. Migration gé
 - Pas de test réseau/git réel : `GitRepositoryCloner` est validé indirectement (le fake couvre le contrat) ; un test d'intégration git réel serait fragile et lent — reporté.
 - Pas de test du polling Live Component en tant que tel (mécanisme framework) — on teste l'état rendu, pas le timer.
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Fuite du token** : jamais en argv (visible dans `ps`) ni dans `.git/config` → `GIT_ASKPASS` + env `GIT_ASKPASS_TOKEN`. `lastCloneError` ne doit contenir **ni** token **ni** URL crédentialisée (assainir le message d'erreur du process). Monolog ne logge pas l'env du `Process`.
 - **Worker non consommé** : en async, si aucun worker ne consomme `async`, le statut reste `Cloning` indéfiniment. Mitigation : documenter `symfony console messenger:consume async` (ou déclarer un worker dans `.symfony.local.yaml` pour qu'il tourne avec `symfony serve`). À signaler dans le report.

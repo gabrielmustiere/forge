@@ -1,16 +1,15 @@
 # Report — Gérer les projets forge (déclarer, lister, éditer/retirer)
 
-> Pitch : `docs/story/002-f-gestion-projets/pitch.md`
-> Plan : `docs/story/002-f-gestion-projets/plan.md`
-> Date d'implémentation : 2026-07-04
-> Commits liés : working tree non commité au moment du report (35 fichiers, +2120 lignes, index + working tree)
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/002-f-gestion-projets/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
-Feature D2 livrée intégralement et conforme à ~90 % au plan : les 8 critères d'acceptation du pitch sont satisfaits, la review est **READY TO COMMIT** (0 bloquant / 0 important, 6 mineurs versés en dette). Les écarts structurants sont tous volontaires et justifiés : (1) la validité d'URL + la cohérence provider↔hôte (règle 7) + l'unicité (règle 4) sont **consolidées dans une seule contrainte `UniqueRepositoryUrl`** au lieu des 3 mécanismes séparés esquissés au plan ; (2) la confirmation de suppression passe par un **overlay piloté par l'état Live** (`confirmingId`) au lieu du composant `Modal` existant ; (3) `.env` n'est pas modifié — un `.env.example` + un garde-fou dans `TokenCipher` remplacent la doc inline. Périmètre : 27 tests unit + 11 functional + 3 E2E, PHPStan niveau 10 vert, `make ci` OK.
+Feature D2 livrée intégralement et conforme à ~90 % au plan : les 8 critères d'acceptation du pitch sont satisfaits, la review est **PRÊT À COMMITER** (0 bloquant / 0 important, 6 mineurs versés en dette). Les écarts structurants sont tous volontaires et justifiés : (1) la validité d'URL + la cohérence provider↔hôte (règle 7) + l'unicité (règle 4) sont **consolidées dans une seule contrainte `UniqueRepositoryUrl`** au lieu des 3 mécanismes séparés esquissés au plan ; (2) la confirmation de suppression passe par un **overlay piloté par l'état Live** (`confirmingId`) au lieu du composant `Modal` existant ; (3) `.env` n'est pas modifié — un `.env.example` + un garde-fou dans `TokenCipher` remplacent la doc inline. Périmètre : 27 tests unit + 11 functional + 3 E2E, PHPStan niveau 10 vert, `make ci` OK.
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

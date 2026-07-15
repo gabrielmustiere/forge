@@ -99,6 +99,8 @@ Tous les tracks produisent un `plan.md` (cadrage technique exécutable). Le trac
 
 Les numéros s'incrémentent globalement (042-f → 043-r → 044-t → 045-f…), ce qui permet de lire la timeline d'évolution du projet en listant simplement `docs/story/`.
 
+**Un format commun à tous les documents** : `brief.md`, `pitch.md`, `plan.md`, `review.md`, `report.md` et `estimate.md` partagent un contrat de format unique (`references/document-format.md`). Chaque document sert **un seul but**, dans **un seul registre** — annoncé dans son en-tête : le brief et le pitch sont **fonctionnels** (aucun nom de classe, de service ou de framework), les plans et la review sont **techniques**, le report est **factuel**, l'estimation est **économique**. Les documents de décision (review, report, estimation) ouvrent sur leur `## Synthèse` : on doit pouvoir ne lire qu'elle. Les trois plans partagent le même squelette de sections, quel que soit le track — leurs spécificités (caractérisation d'un refacto, kill switch d'un tech) sont des sections additionnelles. La timeline, elle, ne vit dans aucun `.md` : elle est dans le `metadata.json` de la story.
+
 ## Phase 0 — Vision projet
 
 Avant le premier track, en tout début de projet (ou lors d'un pivot stratégique), poser la **vision** une fois pour toutes : pourquoi ce produit existe, pour qui, quelle valeur il crée, comment on mesure le succès, et ce qu'on refuse explicitement de faire.

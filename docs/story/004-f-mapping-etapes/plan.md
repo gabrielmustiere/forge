@@ -1,7 +1,9 @@
 # Plan technique — Déduire l'étape de chaque story depuis les fichiers présents
 
-> Pitch : `docs/story/004-f-mapping-etapes/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/004-f-mapping-etapes/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
@@ -9,24 +11,26 @@ Le moteur est une **fonction pure** matérialisée par un service `StoryStageMap
 
 Aucune persistance : il n'existe pas d'entité `Story` (les stories sont transitoires, lues à distance), et le pitch renvoie la persistance de l'état scanné à `sync-manuelle`. La colonne est donc **recalculée à la volée** à partir du `StoryFolder`. Cette feature ne produit ni écran, ni entité, ni migration, ni câblage : c'est le moteur seul, couvert intégralement en tests unitaires. Son branchement dans une UI relève de `kanban-projet`, son déclenchement de `sync-manuelle`.
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
+
+- **Enum backed string** (`src/Enum/Type/`) : `PipelineStage` suit le patron de `VerificationStatus` (cases + `label()`), vocabulaire pur découplé de toute logique de fichiers ou de DA.
+- **Service autowiré `final readonly`** : `StoryStageMapper` suit le patron de `ProjectVerifier` (calcul pur, sans effet de bord, appliqué par le caller). Autowiring standard de `services.yaml` — aucune déclaration explicite, aucun tag.
+- **Value object en entrée** : réutilisation directe de `App\Service\Github\StoryFolder` (identifiant + `files()`), sans re-parser ni retoucher le connecteur.
+
+### Alternatives écartées
 
 - **Entité `Story` + colonne persistée** : obligerait à persister tout l'arbre scanné (couplage fort à la sync), gros élargissement de scope que le pitch attribue explicitement à `sync-manuelle`. Prématuré.
 - **Table de mapping en méthode statique sur l'enum** (`PipelineStage::fromFiles()`) : coupler l'enum aux noms de fichiers forge le sortirait de son rôle de vocabulaire pur — le découplage enum/service existant (`VerificationStatus` ignore les readers) est préféré.
 - **Mapping track-aware avec enum `Track`** : garantirait la règle #5 en dur (une `r`-story avec seulement `pitch.md` → À vérifier), mais introduit un concept `Track` non nécessaire ici pour un cas qui viole déjà la convention forge. Écarté au profit de la simplicité ; `Track` naîtra quand `kanban-projet` en aura besoin (badge).
 - **Lecture du contenu des fichiers** pour trancher les cas ambigus : contredit la règle #1 (présence seule) et le principe « État déduit, jamais saisi ». Le nom de fichier fait foi.
 
-## Entités et modèle de données
+## Modèle de données
 
 Aucun impact modèle. Pas d'entité créée ni modifiée, pas de migration — la colonne est recalculée à la volée depuis un value object transitoire (cf. §Approche retenue).
 
-## Mécanismes framework mobilisés
+## Périmètre
 
-- **Enum backed string** (`src/Enum/Type/`) : `PipelineStage` suit le patron de `VerificationStatus` (cases + `label()`), vocabulaire pur découplé de toute logique de fichiers ou de DA.
-- **Service autowiré `final readonly`** : `StoryStageMapper` suit le patron de `ProjectVerifier` (calcul pur, sans effet de bord, appliqué par le caller). Autowiring standard de `services.yaml` — aucune déclaration explicite, aucun tag.
-- **Value object en entrée** : réutilisation directe de `App\Service\Github\StoryFolder` (identifiant + `files()`), sans re-parser ni retoucher le connecteur.
-
-## Fichiers à créer
+### Fichiers à créer
 
 | Fichier                                              | Rôle                                                                                          |
 |------------------------------------------------------|-----------------------------------------------------------------------------------------------|
@@ -35,7 +39,7 @@ Aucun impact modèle. Pas d'entité créée ni modifiée, pas de migration — l
 | `tests/Unit/Enum/PipelineStageTest.php`              | `label()` et `isOnPipeline()` par cas.                                                        |
 | `tests/Unit/Service/Mapping/StoryStageMapperTest.php`| Tous les critères d'acceptation : chaque fichier → sa colonne, précédence, absence → À vérifier, transversaux ignorés, rejeu déterministe forme `001`/`002`/`003`. |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 Aucun. La feature est purement additive : aucun fichier existant n'est touché (ni entité, ni controller, ni template, ni config — l'autowiring découvre le service et l'enum automatiquement).
 
@@ -50,7 +54,7 @@ Aucun. La feature est purement additive : aucun fichier existant n'est touché (
 - **Migration de données** : non — recalcul à la volée, aucune colonne persistée (cf. §Approche retenue).
 - **Comportement par défaut** : transparent — aucun écran produit ; l'effet du moteur devient visible avec `kanban-projet`.
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] `src/Enum/Type/PipelineStage.php` : cases en ordre de pipeline (`Cadrage`, `Planifie`, `Review`, `Livre`, `AVerifier`), `label()`, `isOnPipeline()` (`false` pour `AVerifier`).
 2. [ ] `tests/Unit/Enum/PipelineStageTest.php` : `label()` par cas + `isOnPipeline()`.
@@ -71,7 +75,7 @@ Aucun. La feature est purement additive : aucun fichier existant n'est touché (
 - Pas de test de lecture distante : l'entrée (`StoryFolder`) est déjà couverte par les tests de `003-f-connecteur-github-lecture`.
 - Pas de test de persistance : aucune (recalcul à la volée).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Évolution de la convention forge** (risque externe vision) : un renommage de livrable (`report.md` → autre) casserait le mapping. Mitigation : table de précédence en un point unique (`const` du mapper), modifiable sans toucher à la logique — exactement la règle #8.
 - **Fichiers en sous-dossier** : `StoryFolder::files()` peut contenir des chemins relatifs imbriqués (ex : `feature-map/overview.md`). Mitigation : le match se fait sur le **nom top-level exact** (`in_array('pitch.md', $files, true)`), un `sous-dossier/pitch.md` ne déclenche donc jamais une colonne — comportement testé.
@@ -81,11 +85,3 @@ Aucun. La feature est purement additive : aucun fichier existant n'est touché (
 ## Questions ouvertes
 
 Aucune côté technique — les trois arbitrages (persistance, garantie de la règle #5, emplacement de la table) ont été tranchés au cadrage du plan (recalcul à la volée / track-agnostique / `const` dans le service). Les questions ouvertes résiduelles sont fonctionnelles et documentées dans le pitch (nuance « brief seul → À vérifier », libellés définitifs), à réévaluer une fois `kanban-projet` visible.
-
----
-
-## Changelog
-
-| Date       | Type                      | Description |
-|------------|---------------------------|-------------|
-| 2026-07-05 | Sync post-implémentation  | §Risques (Déterminisme) : ajout de la validation terrain sur 30 stories réelles du repo `enao`, qui renforce le rejeu unitaire `001`/`002`/`003` prévu (bonus hors code, cf. `report.md` §Ajouts non prévus). |

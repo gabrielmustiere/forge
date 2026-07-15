@@ -1,16 +1,15 @@
 # Report — Cloner en local le repo d'un projet depuis son kanban
 
-> Pitch : `docs/story/008-f-clone-repo-local/pitch.md`
-> Plan : `docs/story/008-f-clone-repo-local/plan.md`
-> Date d'implémentation : 2026-07-10
-> Commits liés : `268bed4` (feat livré conjointement avec la story 009, briques du pivot productif fortement entrelacées sur `Project`, la fiche projet et la config)
-> Référence review : `review.md` (2026-07-09 — verdict READY TO COMMIT)
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/008-f-clone-repo-local/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
 Conformité au plan ~100 % : l'approche (job Messenger async, port `RepositoryCloner` + `GitRepositoryCloner` via `Process`/`GIT_ASKPASS`, 4 champs d'état + enum `CloneStatus` sur `Project`, Live Component polling) est livrée fidèlement, sans manque. Les seuls écarts sont mineurs et positifs : un paramètre `$at` retiré de `markCloneFailed()` (un échec n'horodate rien) et cinq ajouts issus de la review (exception dédiée, badge partagé paramétrable, exclusion CS-Fixer, transport test in-memory, double de test). Les 8 critères d'acceptation du pitch sont cochés. Review : 0 bloquant, 0 important (l'unique important — bug CS-Fixer corrompant les clones — corrigé), 2 mineurs laissés en dette POC assumée. QA finale verte (PHPStan L9, CS-Fixer, 237 PHPUnit dont ceux du clone, smoke E2E).
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

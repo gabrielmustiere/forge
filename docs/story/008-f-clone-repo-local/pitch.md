@@ -1,5 +1,10 @@
 # Cloner en local le repo d'un projet depuis son kanban
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/008-f-clone-repo-local/`
+> **Amont** : aucun
+
 > Depuis la vue kanban d'un projet, un bouton rapatrie (ou met à jour) le repo GitHub/GitLab déclaré dans `private/`, afin de disposer d'une copie locale de travail. C'est la première brique du pivot « l'app agit » : sans repo local, aucun skill de cadrage ne pourra s'exécuter par la suite.
 
 ## Contexte
@@ -69,7 +74,15 @@ Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story
 - **Migration de données** : **oui** — le projet doit persister un état de clone (statut, chemin local, horodatage, éventuelle raison d'échec) → nouveaux champs sur `Project` ou entité dédiée (tranché au plan), donc migration Doctrine.
 - **Comportement par défaut** : un projet non cloné s'affiche comme aujourd'hui, avec en plus le bouton et l'état « non cloné ». Le kanban est inchangé.
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **Identifiant du dossier de clone** : `private/<slug-du-nom>` ? `private/<id>` ? `private/<owner>-<repo>` extrait de l'URL ? Options : (a) nom humanisé — collisions possibles, (b) id numérique du projet — sûr mais peu lisible, (c) `owner/repo` de l'URL. → tranché au plan.
+- **Modèle de persistance de l'état** : champs sur `Project` (simple, relation 1-1) vs entité `Clone` dédiée (extensible pour l'exécution de skills à venir). → tranché au plan.
+- **Détection « déjà cloné »** : présence du dossier + validité du remote, ou état persisté fait foi ? → tranché au plan / implem.
+
+---
+
+## Annexe — Pistes pour le plan
 
 - **Persistance de l'état** : champs sur `Project` (`clone_status` en enum, `cloned_at`, `local_path`, `last_clone_error`) ou entité `Clone` dédiée — à trancher.
 - **Exécution asynchrone** : Symfony Messenger (déjà en place, transport Doctrine) — message `CloneRepository` + handler ; l'état transite par l'entité. Rafraîchissement UI via Live Component / Turbo sans reload.
@@ -77,9 +90,3 @@ Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story
 - **Provider → URL de clone** : dériver via `Provider::host()` + `url` du projet.
 - **Enum `CloneStatus`** dans `src/Enum/Type/` (convention projet : backed string enums).
 - **Config** : ajouter `private/*` (sauf `.gitkeep`) au `.gitignore` du Board — actuellement `private/` n'est pas ignoré.
-
-## Questions ouvertes
-
-- **Identifiant du dossier de clone** : `private/<slug-du-nom>` ? `private/<id>` ? `private/<owner>-<repo>` extrait de l'URL ? Options : (a) nom humanisé — collisions possibles, (b) id numérique du projet — sûr mais peu lisible, (c) `owner/repo` de l'URL. → tranché au plan.
-- **Modèle de persistance de l'état** : champs sur `Project` (simple, relation 1-1) vs entité `Clone` dédiée (extensible pour l'exécution de skills à venir). → tranché au plan.
-- **Détection « déjà cloné »** : présence du dossier + validité du remote, ou état persisté fait foi ? → tranché au plan / implem.

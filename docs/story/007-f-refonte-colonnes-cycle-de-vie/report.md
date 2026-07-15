@@ -1,16 +1,15 @@
 # Report — Aligner les colonnes du board sur le cycle de vie réel d'une story forge
 
-> Pitch : `docs/story/007-f-refonte-colonnes-cycle-de-vie/pitch.md`
-> Plan : `docs/story/007-f-refonte-colonnes-cycle-de-vie/plan.md`
-> Date d'implémentation : 2026-07-05
-> Commits liés : `317a029` (feat(board): refondre les colonnes et le filtre du kanban)
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/007-f-refonte-colonnes-cycle-de-vie/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
 Conformité au plan estimée à ~95 % : les 5 colonnes de cycle de vie (Idée → Besoin → Cadré → Implémenté → Livré) et l'entrée `brief.md → Idee` sont livrées exactement comme conçu, point de vérité unique (`StoryStageMapper::PRECEDENCE`) respecté. Un seul écart structurant : un fichier de test non recensé au plan (`StoryCardTest.php`) a dû être touché, débusqué par le grep de contrôle prévu au plan. Les 8/8 critères d'acceptation sont cochés. Review sans bloquant : l'unique important est une consigne de commit (scope), le mineur A11Y est corrigé, le mineur DOC retiré après vérification. Périmètre 007 : ~15 fichiers ; le commit `317a029` agrège en plus deux features de tours antérieurs (popover de filtre, rétrécissement des colonnes vides) hors périmètre du plan.
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 

@@ -1,16 +1,15 @@
 # Report — Déduire l'étape de chaque story depuis les fichiers présents
 
-> Pitch : `docs/story/004-f-mapping-etapes/pitch.md`
-> Plan : `docs/story/004-f-mapping-etapes/plan.md`
-> Date d'implémentation : 2026-07-05
-> Commits liés : working tree non commité au moment du report (4 fichiers neufs untracked)
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/004-f-mapping-etapes/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
-Conformité au plan **totale (100 %)** : les 4 fichiers prévus sont livrés à l'identique de la conception (enum `PipelineStage` pur à 5 cas, service `StoryStageMapper` `final readonly` sans dépendance, table `PRECEDENCE` en `const` privée = point unique règle #8), aucun fichier existant touché (purement additif). Les **7 critères d'acceptation** du pitch sont satisfaits. Un seul élément hors plan, favorable : une validation terrain sur 30 stories réelles du repo enao (au-delà du rejeu unitaire sur la forme `001`/`002`/`003` prévu au plan), sans écart. Review **READY TO COMMIT** (0 bloquant, 0 important, 2 mineurs corrigés). QA verte : PHPStan niveau 9 + style + build ; 100 tests PHPUnit, 228 assertions. Dette résiduelle nulle sur cette brique ; le branchement UI reste attendu en `kanban-projet`.
+Conformité au plan **totale (100 %)** : les 4 fichiers prévus sont livrés à l'identique de la conception (enum `PipelineStage` pur à 5 cas, service `StoryStageMapper` `final readonly` sans dépendance, table `PRECEDENCE` en `const` privée = point unique règle #8), aucun fichier existant touché (purement additif). Les **7 critères d'acceptation** du pitch sont satisfaits. Un seul élément hors plan, favorable : une validation terrain sur 30 stories réelles du repo enao (au-delà du rejeu unitaire sur la forme `001`/`002`/`003` prévu au plan), sans écart. Review **PRÊT À COMMITER** (0 bloquant, 0 important, 2 mineurs corrigés). QA verte : PHPStan niveau 9 + style + build ; 100 tests PHPUnit, 228 assertions. Dette résiduelle nulle sur cette brique ; le branchement UI reste attendu en `kanban-projet`.
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 
@@ -61,7 +60,7 @@ Aucun. La feature est purement additive : l'autowiring découvre l'enum et le se
 
 Issus de la review (mineurs non traités) :
 
-_(aucun — les 2 mineurs de la review ont été corrigés avant commit, cf. `review.md` §Verdict)._
+_(aucun — les 2 mineurs de la review ont été corrigés avant commit, cf. `review.md` §Synthèse)._
 
 Au-delà de la review (suites attendues, non bloquantes) :
 

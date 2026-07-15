@@ -1,5 +1,10 @@
 # Aligner les colonnes du board sur le cycle de vie réel d'une story forge
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/007-f-refonte-colonnes-cycle-de-vie/`
+> **Amont** : aucun
+
 > Renommer les colonnes du kanban et introduire une colonne « Idée » pour que chaque étape du board corresponde à un document forge concret — de la simple idée (`brief.md`) jusqu'à la livraison (`report.md`).
 
 ## Contexte
@@ -68,7 +73,13 @@ Sans rien faire, le board continue de masquer les idées en phase interview et i
 - **Migration de données** : non — aucune donnée persistée pour l'état d'une story ; tout est déduit au scan. (Vérifier toutefois si des métadonnées ou des tests figent les anciennes valeurs d'étape.)
 - **Comportement par défaut** : tous les utilisateurs (il n'y en a qu'un) voient directement le nouveau découpage ; pas de feature flag.
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- ~~**Couleur/accent de la colonne « Idée »**~~ → **tranché** : token `st-brief` (gris `#a1a1aa`) réservé à « Idée » ; « À vérifier » recoloré via un token dédié `--color-st-flag` (rose). Choix Nova validé au navigateur.
+
+---
+
+## Annexe — Pistes pour le plan
 
 > Pistes brutes — à explorer en `/forge:feature-plan`, ne rien trancher ici.
 
@@ -76,15 +87,3 @@ Sans rien faire, le board continue de masquer les idées en phase interview et i
 - Vérifier les **tokens de couleur** par étape : le template `templates/project/_board.html.twig` mappe `stageAccent`/`stageBar` sur `stage.value` (`st-pitch`, `st-plan`, `st-review`, `st-report`). Cinq colonnes → prévoir un token/couleur pour la nouvelle colonne « Idée » et réaligner le mapping sur les nouvelles `value`.
 - Impact possible sur `metadata.json` des stories et sur les fixtures/tests E2E qui vérifient les libellés ou compteurs de colonnes (`data-stage`, `column-count`) — les recenser.
 - Story fondatrice à relire : `004-f-mapping-etapes` (a livré le mapping actuel) — cette story en est l'évolution.
-
-## Questions ouvertes
-
-- ~~**Couleur/accent de la colonne « Idée »**~~ → **tranché** : token `st-brief` (gris `#a1a1aa`) réservé à « Idée » ; « À vérifier » recoloré via un token dédié `--color-st-flag` (rose). Choix Nova validé au navigateur.
-
----
-
-## Changelog
-
-| Date | Type | Description |
-|------|------|-------------|
-| 2026-07-05 | Sync post-implémentation | §Questions ouvertes : couleur de la colonne « Idée » tranchée (gris `st-brief`, « À vérifier » en `st-flag` rose). Aucune règle métier ni critère d'acceptation impacté — l'intention fonctionnelle est livrée conforme. Cf. `report.md`. |

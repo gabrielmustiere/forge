@@ -1,5 +1,10 @@
 # Enrichir chaque story de métadonnées lisibles par le Board
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/006-f-metadonnees-story/`
+> **Amont** : aucun
+
 > Chaque story forge porte désormais un bloc de métadonnées structuré (dates, tags, changelog consolidé, livraison) **écrit par les skills** dans un fichier du dossier de story. Le Board le lit pour afficher des cartes plus riches (vrai titre, âge, dernière activité, tags, badge de livraison) et permettre de **filtrer par tag** et **trier par activité récente** — sans jamais rien saisir ni intégrer git côté app.
 
 ## Contexte
@@ -89,7 +94,18 @@ Le **contrat de métadonnées** (fichier produit par les skills, lu par l'app) :
 - **Migration de données** : pas de migration de schéma BDD (les métadonnées vivent dans les fichiers, pas en base). En revanche, **backfill fichier** : générer le metadata des 5 stories existantes.
 - **Comportement par défaut** : une story / un repo sans metadata s'affiche comme aujourd'hui (slug, pas de tags/dates) — aucune régression.
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **Format du fichier** : `metadata.json` vs frontmatter. → recommandation forte `metadata.json` (track-agnostique, un seul fetch), à trancher au plan.
+- **Mécanisme de lecture groupée** : batch d'appels, GraphQL GitHub, ou cache court côté app — quelle voie garantit « instantané » sans complexité excessive ? À concevoir au plan.
+- **Schéma exact & formats** : clés précises, format de date, forme d'une entrée de changelog et d'un `delivery`. À figer au plan (schéma embarqué chez tous les utilisateurs → décision durable).
+- **Backfill** : script one-shot vs passe manuelle assistée pour les 5 stories existantes.
+- **Release en différé** : comment `release` est renseignée quand le tag arrive après la livraison (relance de `release` qui réédite le metadata ?). À préciser au plan.
+- **Vocabulaire de tags** : rester en libre-validé au MVP ; une référence de tags par projet est une évolution possible (hors scope MVP).
+
+---
+
+## Annexe — Pistes pour le plan
 
 _Pistes brutes — à trancher/concevoir en `/forge:feature-plan`, ne pas figer ici._
 
@@ -109,16 +125,4 @@ _Pistes brutes — à trancher/concevoir en `/forge:feature-plan`, ne pas figer 
 - Étendre `StoryCard` (title, âge/updated, tags, delivery) ; le builder (`ProjectBoardBuilder`) hydrate depuis le metadata lu.
 - `StoryStageMapper` : exclure explicitement le fichier metadata du calcul d'étape.
 - Rendu : carte enrichie + drawer (changelog consolidé) ; filtre par tag + tri `updated` (Live Component / Stimulus, côté serveur ou client à trancher).
-
-## Questions ouvertes
-
-- **Format du fichier** : `metadata.json` vs frontmatter. → recommandation forte `metadata.json` (track-agnostique, un seul fetch), à trancher au plan.
-- **Mécanisme de lecture groupée** : batch d'appels, GraphQL GitHub, ou cache court côté app — quelle voie garantit « instantané » sans complexité excessive ? À concevoir au plan.
-- **Schéma exact & formats** : clés précises, format de date, forme d'une entrée de changelog et d'un `delivery`. À figer au plan (schéma embarqué chez tous les utilisateurs → décision durable).
-- **Backfill** : script one-shot vs passe manuelle assistée pour les 5 stories existantes.
-- **Release en différé** : comment `release` est renseignée quand le tag arrive après la livraison (relance de `release` qui réédite le metadata ?). À préciser au plan.
-- **Vocabulaire de tags** : rester en libre-validé au MVP ; une référence de tags par projet est une évolution possible (hors scope MVP).
-
-<!-- Changelog : la timeline consolidée vit désormais dans `metadata.json` (règle métier 7),
-     plus dans une table en pied de fichier. -->
 

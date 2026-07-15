@@ -1,7 +1,9 @@
 # Plan technique — Enrichir chaque story de métadonnées lisibles par le Board
 
-> Pitch : `docs/story/006-f-metadonnees-story/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/006-f-metadonnees-story/`
+> **Amont** : `pitch.md`
 
 ## Approche retenue
 
@@ -9,14 +11,22 @@ Deux versants, un seul contrat. **Côté fichier** : chaque story porte un `meta
 
 Le point dur est la lecture « instantanée sans N appels ». On l'adresse par une **nouvelle méthode d'interface** `readStoryMetadata(url, token, storyIds): array<storyId, ?string>` sur `RepositoryReaderInterface`, dont l'implémentation GitHub fait **une seule requête GraphQL** (`POST /graphql`, un alias `object(expression: "HEAD:docs/story/<id>/metadata.json")` par story) — nombre d'appels constant, indépendant du nombre de stories. Le reader reste pur transport (renvoie le JSON brut ou `null`) ; le **décodage + validation tolérante** vit dans un `StoryMetadataParser` côté app (retourne `null` si absent/malformé → dégradation). `ProjectBoardBuilder` enchaîne : `readStoryTree` (existant, 1 appel) → `readStoryMetadata` (nouveau, 1 appel) → hydratation des `StoryCard`. Le filtre par tag et le tri par `updated` sont **client-side** (Stimulus sur cartes déjà rendues), donc zéro round-trip et instantanés. Aucune entité Doctrine, aucune migration : la donnée vit dans les fichiers, fidèle au principe « lecture seule / état déduit ».
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
+
+- **`RepositoryReaderInterface` + `AutoconfigureTag`** : on étend l'interface existante (une méthode `readStoryMetadata`), toutes les implémentations taguées la fournissent — cohérent avec `readStoryTree`/`readFile`.
+- **`symfony/http-client` (scoped client `github.client`)** : réutilisé tel quel pour le POST GraphQL (`/graphql` sur le même host `api.github.com`) — pas de nouveau client, token en `auth_bearer`.
+- **`#[AsDecorator]` (dev) + double de test** : `DevFakeRepositoryReader` et `tests/Double/StubRepositoryReader` implémentent la nouvelle méthode (fake via `FakeRepositoryCatalog`) — réseau neutralisé en dev/test, patron inchangé.
+- **Stimulus (client-side)** : nouveau `board_filter_controller` pour filtre tag + tri `updated`, opérant sur des cartes déjà rendues (data-attributes) — instantané, aucun round-trip, cohérent avec l'archi server-rendered actuelle (pas de Live Component).
+- **Référence partagée de plugin** (patron `_detection.md`/`template.md`) : `plugins/forge/references/story-metadata.md` invoquée par chaque SKILL.md producteur — mécanisme de mutualisation déjà en place dans le plugin.
+
+### Alternatives écartées
 
 - **Boucle de `readFile` par story** : N appels REST séquentiels → chargement qui dérive avec le nombre de stories, refusé au pitch (« pas N appels »).
 - **HttpClient multiplexé (fan-out `readFile` parallèle)** : wall-clock quasi constant mais N requêtes comptant contre le rate-limit ; viole la lettre de la contrainte. Conservé comme **repli documenté** : l'interface `readStoryMetadata` étant abstraite, basculer GraphQL → multiplexé ne touche que l'implémentation GitHub.
 - **Cache court + lazy** : ne résout pas le cold-load et introduit un risque de staleness, en tension avec le principe de fidélité.
 - **Frontmatter YAML dans `pitch.md`** : non track-agnostique (`pitch.md` absent des tracks `r`/`t`), impose un parsing markdown, et casserait l'isolation gratuite du mapping. `metadata.json` gagne.
 
-## Entités et modèle de données
+## Modèle de données
 
 **Aucun impact modèle Doctrine, aucune migration.** Les métadonnées vivent dans les fichiers du dépôt scanné, jamais en base. On introduit des **value objects immuables** côté app (namespace `App\Service\Board`) :
 
@@ -53,15 +63,9 @@ Le point dur est la lecture « instantanée sans N appels ». On l'adresse par u
 
 Formats : dates `YYYY-MM-DD` (aligné sur les changelogs existants) ; `delivery` absent ou `{release:null,commit:null}` toléré.
 
-## Mécanismes framework mobilisés
+## Périmètre
 
-- **`RepositoryReaderInterface` + `AutoconfigureTag`** : on étend l'interface existante (une méthode `readStoryMetadata`), toutes les implémentations taguées la fournissent — cohérent avec `readStoryTree`/`readFile`.
-- **`symfony/http-client` (scoped client `github.client`)** : réutilisé tel quel pour le POST GraphQL (`/graphql` sur le même host `api.github.com`) — pas de nouveau client, token en `auth_bearer`.
-- **`#[AsDecorator]` (dev) + double de test** : `DevFakeRepositoryReader` et `tests/Double/StubRepositoryReader` implémentent la nouvelle méthode (fake via `FakeRepositoryCatalog`) — réseau neutralisé en dev/test, patron inchangé.
-- **Stimulus (client-side)** : nouveau `board_filter_controller` pour filtre tag + tri `updated`, opérant sur des cartes déjà rendues (data-attributes) — instantané, aucun round-trip, cohérent avec l'archi server-rendered actuelle (pas de Live Component).
-- **Référence partagée de plugin** (patron `_detection.md`/`template.md`) : `plugins/forge/references/story-metadata.md` invoquée par chaque SKILL.md producteur — mécanisme de mutualisation déjà en place dans le plugin.
-
-## Fichiers à créer
+### Fichiers à créer
 
 | Fichier                                                     | Rôle                                                                       |
 |------------------------------------------------------------|----------------------------------------------------------------------------|
@@ -75,7 +79,7 @@ Formats : dates `YYYY-MM-DD` (aligné sur les changelogs existants) ; `delivery`
 | `plugins/forge/references/story-metadata.md`               | Schéma v1 + procédure d'écriture/mise à jour, invoquée par les SKILL.md.    |
 | `docs/story/001-f-login/metadata.json` … `005-…/metadata.json` | Backfill des 5 stories existantes (généré depuis H1 + changelogs actuels). |
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier                                                    | Modification                                                                        |
 |-----------------------------------------------------------|--------------------------------------------------------------------------------------|
@@ -112,7 +116,7 @@ Formats : dates `YYYY-MM-DD` (aligné sur les changelogs existants) ; `delivery`
 - **Migration de données** : aucune migration BDD. **Backfill fichier** : 5 `metadata.json` générés pour `001`→`005` (partie de l'implem, pas de SQL).
 - **Comportement par défaut** : une story/un repo sans `metadata.json` s'affiche comme aujourd'hui (slug, pas de tags/dates) — dégradation gracieuse, zéro régression.
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] **Contrat d'abord** : rédiger `plugins/forge/references/story-metadata.md` (schéma v1, formats, procédure d'écriture par étape). C'est la source des deux versants.
 2. [ ] **VO + parser (app)** : `StoryMetadata`, `StoryChangelogEntry`, `StoryDelivery`, `StoryMetadataParser` (+ tests unit : nominal / absent / malformé / version inconnue / delivery partielle).
@@ -141,7 +145,7 @@ Formats : dates `YYYY-MM-DD` (aligné sur les changelogs existants) ; `delivery`
 - **Versant skills (SKILL.md)** : non testable en PHPUnit (prompts/doc) — validé par **dogfooding** (lancer un skill, vérifier le `metadata.json` produit) et par le backfill relu.
 - Pas de test sur le rendu markdown du changelog au-delà de sa présence (déjà couvert par le pipeline de rendu du drawer existant).
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **Surface GraphQL nouvelle** : le reader devient bi-protocole (REST + GraphQL). Mitigation : GraphQL isolé dans la seule méthode `readStoryMetadata`, mêmes exceptions métier (`RepositoryUnreachable`/`AccessDenied`) que le REST, repli multiplexé possible sans toucher l'interface. **Attention détection** : GitHub GraphQL signale le rate-limit par un **HTTP 200 + `errors[].type = RATE_LIMITED`** (pas un 403 comme le REST) — traité par `guardGraphqlRateLimit()`, les autres erreurs partielles (`NOT_FOUND`) restant tolérées (règle 9). Faire cohabiter les deux protocoles pousse la classe vers la limite de complexité cognitive PHPStan level 9 : prévoir l'extraction de guards/helpers (rate-limit via `array_column`/`in_array`, aplatissement des ternaires de mapping).
 - **Limite de taille de requête GraphQL** : un alias par story ; à quelques centaines de stories la requête gonfle. Mitigation : cible « quelques dizaines » (vision) ; si dépassement, découper en lots — noté, non implémenté au MVP.
@@ -155,7 +159,4 @@ Formats : dates `YYYY-MM-DD` (aligné sur les changelogs existants) ; `delivery`
 - **Affichage de l'âge** : date brute `updated` vs libellé relatif (« il y a 3 j »). Un petit filtre Twig suffit ; pas de dépendance nouvelle. → à trancher à l'implem (cosmétique).
 - **Backfill — provenance des tags des 5 stories** : inférés puis validés manuellement à la génération (pas de skill rejoué). → tranché : génération assistée relue.
 - **`delivery.release` en différé** : `release` réédite le `metadata.json` de la story livrée pour compléter le tag après coup. → mécanique à préciser dans `story-metadata.md`.
-
-<!-- Changelog : la timeline consolidée vit désormais dans `metadata.json` (règle métier 7),
-     plus dans une table en pied de fichier. -->
 

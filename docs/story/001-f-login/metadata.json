@@ -6,7 +6,9 @@
   "tags": ["auth", "securite"],
   "changelog": [
     { "date": "2026-07-04", "type": "Création", "description": "Pitch et plan de la connexion locale mono-utilisateur." },
-    { "date": "2026-07-04", "type": "Livraison", "description": "Login/logout livré, revu et reporté." }
+    { "date": "2026-07-04", "type": "Livraison", "description": "Login/logout livré, revu et reporté." },
+    { "date": "2026-07-04", "type": "Sync", "description": "§Notes pour le plan technique : la protection des routes est vérifiée en E2E (pas de test fonctionnel PHP dédié), aligné sur le code livré. Critères d'acceptation et règles métier inchangés (tous couverts). Réf. `report.md`." },
+    { "date": "2026-07-04", "type": "Sync", "description": "Réalignement sur le code livré : retrait du test fonctionnel PHP `SecurityControllerTest` (§Fichiers à créer, §Ordre, §Stratégie de test) au profit d'une couverture 100 % E2E (6 tests) ; ajout de `templates/base.html.twig` (`data-test=\"logout\"`) et des effets de bord `config/reference.php` / `phpinsights.php` en §Fichiers à modifier. Réf. `report.md`." }
   ],
   "delivery": { "release": "v4.2.0", "commit": "a7fbea6" }
 }

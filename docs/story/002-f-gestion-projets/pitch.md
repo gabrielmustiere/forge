@@ -1,5 +1,10 @@
 # Gérer les projets forge à suivre : les déclarer, les retrouver, maintenir leurs accès
 
+> **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/002-f-gestion-projets/`
+> **Amont** : aucun
+
 > L'utilisateur déclare un repo forge (provider + URL + token de lecture), retrouve la liste de ses projets déclarés et en ouvre un, et peut corriger l'URL, renouveler le token ou retirer un projet. C'est la brique qui donne à l'app quelque chose à projeter en kanban.
 
 ## Contexte
@@ -73,7 +78,16 @@ Cette feature couvre le domaine fonctionnel **D2 — Projets** dans son intégra
 - **Migration de données** : oui — création d'une table pour persister les projets déclarés (provider, URL normalisée, nom, token chiffré, date d'ajout). Aucun backfill (nouvelle table).
 - **Comportement par défaut** : sans objet (pas de feature flag ; la gestion des projets est le point d'entrée post-login).
 
-## Notes pour le plan technique
+## Questions ouvertes
+
+- **Clé de chiffrement du token** : (a) dérivée d'`APP_SECRET`, (b) clé dédiée en variable d'environnement (`PROJECT_TOKEN_KEY`). → à trancher en plan (impacte la rotation et la portabilité de `var/data.db`).
+- **Rendu de la liste** : (a) page Twig statique, (b) Live Component (utile si suppression/édition inline sans rechargement). → à trancher en plan selon l'ambition UX.
+- **Que faire à l'« ouverture » d'un projet en D2** : la capacité C2.4 dit « ouvrir un projet », mais le kanban (D4) n'existe pas encore. Options : (a) page détail minimale du projet (métadonnées seules), (b) placeholder « kanban à venir ». → à trancher en plan.
+- **Ouverture de l'URL du repo** : la carte/liste propose-t-elle un lien sortant vers le repo (GitHub/GitLab) ? → cosmétique, à trancher en plan.
+
+---
+
+## Annexe — Pistes pour le plan
 
 > Pistes brutes — **ne pas concevoir ici**, à trancher en `/forge:feature-implem` (plan).
 
@@ -84,10 +98,3 @@ Cette feature couvre le domaine fonctionnel **D2 — Projets** dans son intégra
 - **Formulaire** : `ProjectType` avec sélecteur provider (button-group radio, cf. DA) ; à l'édition, champ token vide/masqué avec logique « inchangé si non touché » (piste : `FormEvents`/`DataMapper` pour ne pas écraser le token existant). Voir `symfony:form-type` / `symfony:form-advanced`.
 - **Liste + ouverture** : contrôleur + repository (pas de QueryBuilder hors repository) ; rendu Twig/Live Component selon la DA de référence (cf. [[design-system-nova]] et `DESIGN.md`).
 - **Suppression confirmée** : modale de confirmation (Flowbite) ; hard delete.
-
-## Questions ouvertes
-
-- **Clé de chiffrement du token** : (a) dérivée d'`APP_SECRET`, (b) clé dédiée en variable d'environnement (`PROJECT_TOKEN_KEY`). → à trancher en plan (impacte la rotation et la portabilité de `var/data.db`).
-- **Rendu de la liste** : (a) page Twig statique, (b) Live Component (utile si suppression/édition inline sans rechargement). → à trancher en plan selon l'ambition UX.
-- **Que faire à l'« ouverture » d'un projet en D2** : la capacité C2.4 dit « ouvrir un projet », mais le kanban (D4) n'existe pas encore. Options : (a) page détail minimale du projet (métadonnées seules), (b) placeholder « kanban à venir ». → à trancher en plan.
-- **Ouverture de l'URL du repo** : la carte/liste propose-t-elle un lien sortant vers le repo (GitHub/GitLab) ? → cosmétique, à trancher en plan.

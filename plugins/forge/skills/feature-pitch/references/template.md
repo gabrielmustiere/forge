@@ -21,6 +21,16 @@ Toutes les sections marquées « optionnelle » peuvent être retirées si elles
 
 > _Skill : pourquoi cette feature, pourquoi maintenant. Décrire l'état actuel (1–2 paragraphes), la friction concrète, et la conséquence si on ne fait rien. Pas de solution. C'est ici que vit le « pourquoi » de la story : le `plan.md` n'en fera pas une copie, il renverra à ce document par son en-tête (charte §5)._
 
+## Alignement vision
+
+> _Skill : section **conditionnelle** — à inclure **uniquement si `docs/vision.md` existe**, à retirer entièrement sinon (contrairement aux sections canoniques, celle-ci se supprime : son absence signifie « pas de vision projet », pas « pas regardé »). Confronter la feature aux axes de la vision : problème adressé, audience servie, principes respectés ou mis sous tension, hypothèse testée, impact North Star. Registre fonctionnel : on parle valeur et périmètre, pas mécanisme. Une feature qui ne s'aligne sur rien est un signal — le dire plutôt que broder._
+
+- **Problème adressé** : <en quoi la feature attaque le problème central de la vision>.
+- **Audience servie** : <quel segment, dans quel usage>.
+- **Principes respectés** : <principes de la vision que la feature honore — ou met sous tension, et pourquoi c'est assumé>.
+- **Hypothèse testée** : <l'hypothèse de la vision que cette feature permet de valider ou d'invalider, le cas échéant>.
+- **Impact North Star** : <direct / indirect / neutre + en quoi>.
+
 ## Utilisateurs concernés
 
 > _Skill : lister les rôles applicatifs avec ce que cette feature change pour chacun. Nommer les rôles comme le métier les nomme (« superviseur », « administrateur d'organisation », « visiteur anonyme »), pas comme le code les code. Préciser les rôles **non impactés** quand c'est utile (ex: « utilisateurs d'une organisation cliente : aucun changement perçu »)._

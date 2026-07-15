@@ -1,9 +1,19 @@
 # Review — Aligner les colonnes du board sur le cycle de vie réel d'une story forge
 
-> Date : 2026-07-05
-> Stack : symfony
-> Périmètre : working tree (13 fichiers modifiés, +351/−138) — story 007 + travail non commité des tours précédents (popover filtre, rétrécissement colonnes vides)
-> Référence d'intention : `docs/story/007-f-refonte-colonnes-cycle-de-vie/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/007-f-refonte-colonnes-cycle-de-vie/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree (13 fichiers modifiés, +351/−138) — story 007 + travail non commité des tours précédents (popover filtre, rétrécissement colonnes vides)
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 1 / 1 (consigne de commit, pas un défaut de code)
+- Mineurs restants : 0 / 2 (A11Y corrigé, DOC retiré)
+- Statut : **PRÊT À COMMITER SOUS RÉSERVE** de découper le commit
+
+L'important [SCOPE] n'est pas un défaut de code mais une consigne pour `/commit` : isoler la story 007 des deux features non commitées. Aucun correctif de code requis.
 
 ## Bloquants
 
@@ -25,15 +35,6 @@
 - **Une seule source de fixtures** : `StubRepositoryReader` (functional) et `DevFakeRepositoryReader` (dev/E2E) délèguent tous deux à `FakeRepositoryCatalog::boardTree()` — l'ajout de `012-f-idee` couvre les deux niveaux sans duplication.
 - **Popover robuste** : le piège du `stopPropagation` (bouton détaché par `renderMenu` → faux clic-extérieur) est correctement identifié et documenté ; le listener document est bien retiré en `disconnect()`.
 - **Couverture de test alignée** : mapping (`brief→Idee`), `label()`/`isOnPipeline()` des 6 cases, répartition sur 5 colonnes, refacto jamais en Besoin, et E2E ouvrant le popover avant filtrage — critères d'acceptation du pitch tous couverts.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 1 / 1 (consigne de commit, pas un défaut de code)
-- Mineurs restants : 0 / 2 (A11Y corrigé, DOC retiré)
-- Statut : **READY TO COMMIT sous réserve de découper le commit**
-
-L'important [SCOPE] n'est pas un défaut de code mais une consigne pour `/commit` : isoler la story 007 des deux features non commitées. Aucun correctif de code requis.
 
 ## Hors review (à vérifier en environnement réel)
 

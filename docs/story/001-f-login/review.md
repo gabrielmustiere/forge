@@ -1,9 +1,19 @@
 # Review — Connexion / déconnexion locale (login)
 
-> Date : 2026-07-04
-> Stack : symfony
-> Périmètre : working tree + staged (~10 fichiers de code + 1 test nouveau, ~300 lignes diff pertinentes)
-> Référence d'intention : `docs/story/001-f-login/plan.md` + `docs/story/001-f-login/pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/001-f-login/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree + staged (~10 fichiers de code + 1 test nouveau, ~300 lignes diff pertinentes)
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 0
+- Mineurs restants : 2 / 4 (les 2 restants sont des décisions assumées, pas des correctifs)
+- Statut : **PRÊT À COMMITER**
+
+`/commit` pour commit et push. Penser à `/forge:sync` pour réaligner le `plan.md` (couverture désormais 100 % E2E).
 
 ## Bloquants
 
@@ -31,15 +41,6 @@
 - **Retrait de `data-controller="csrf-protection"` sans régression** — vérifié : `assets/controllers/csrf_protection_controller.js` opère via des listeners `submit` globaux et cible aussi `input[name="_csrf_token"]` ; l'E2E de login (contre le vrai serveur) confirme le CSRF de bout en bout.
 - **Couverture E2E consolidée (6 tests)** : accès anonyme, happy-path, message neutre, remember-me coché/décoché, logout + re-protection. Sélecteurs `data-test` stables.
 - **Aucune migration, aucune entité touchée** : la feature s'appuie exclusivement sur les mécanismes natifs `security-bundle` (remember_me signature, login_throttling), remember-me sans table.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 0
-- Mineurs restants : 2 / 4 (les 2 restants sont des décisions assumées, pas des correctifs)
-- Statut : **READY TO COMMIT**
-
-`/commit` pour commit et push. Penser à `/forge:sync` pour réaligner le `plan.md` (couverture désormais 100 % E2E).
 
 ## Hors review (à vérifier en environnement réel)
 

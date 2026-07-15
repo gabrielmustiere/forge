@@ -1,9 +1,19 @@
 # Review — Connecteur GitHub (lecture) + vérification d'éligibilité forge
 
-> Date : 2026-07-05
-> Stack : symfony
-> Périmètre : working tree (10 fichiers suivis modifiés + ~15 nouveaux fichiers ; ~660 lignes)
-> Référence d'intention : `docs/story/003-f-connecteur-github-lecture/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/003-f-connecteur-github-lecture/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree (10 fichiers suivis modifiés + ~15 nouveaux fichiers ; ~660 lignes)
+
+## Synthèse
+
+- Bloquants restants : 0 / 0
+- Importants restants : 0 / 0
+- Mineurs restants : 0 / 3 (2 corrigés, 1 accepté dev-only documenté)
+- Statut : **PRÊT À COMMITER**
+
+`/forge:commit` pour commit et push.
 
 ## Bloquants
 
@@ -27,15 +37,6 @@ _(aucun)_
 - **Couverture d'erreurs exhaustive** : `MockHttpClient` couvre 401/403, rate-limit (403 + `X-RateLimit-Remaining: 0`), 404 repo vs 404 docs, transport/timeout, arbre tronqué — sans aucun réseau réel.
 - **Statut lu en base au rendu** : liste et fiche ne font aucun appel réseau (profiler : 0 `http_client`), critères #7/#8 respectés.
 - **Migration réversible** avec `DEFAULT 'unverified'` (backfill des lignes existantes) et `verified_at` nullable ; `schema:validate` en sync.
-
-## Verdict
-
-- Bloquants restants : 0 / 0
-- Importants restants : 0 / 0
-- Mineurs restants : 0 / 3 (2 corrigés, 1 accepté dev-only documenté)
-- Statut : **READY TO COMMIT**
-
-`/forge:commit` pour commit et push.
 
 ## Hors review (à vérifier en environnement réel)
 

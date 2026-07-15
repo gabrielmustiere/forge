@@ -1,8 +1,11 @@
 # Plan technique — Connexion / déconnexion locale (login)
 
-> Pitch : `docs/story/001-f-login/pitch.md`
-> Stack : symfony
-> Note : story et ligne de backlog alignées sous le slug `login` (anciennement `acces-local`).
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/001-f-login/`
+> **Amont** : `pitch.md`
+
+_Note : story et ligne de backlog alignées sous le slug `login` (anciennement `acces-local`)._
 
 ## Approche retenue
 
@@ -10,18 +13,7 @@ Aucun code métier, aucune entité, aucune migration : la story finalise la **ba
 
 On s'appuie donc exclusivement sur les mécanismes officiels du `security-bundle` : authentification par `form_login` (CSRF déjà activé), `remember_me` **par signature** (`secret`-based, sans stockage en base → pas de migration), `login_throttling` (limiteur natif par IP + identifiant, qui requiert le composant `symfony/rate-limiter`, actuellement absent). Côté UI, on crée le template de login et on aligne le layout d'auth `security.html.twig` sur la DA Nova déjà utilisée par `base.html.twig`.
 
-**Alternatives écartées** :
-
-- **`remember_me` avec `token_provider` en base (persistent)** : imposerait une table + migration pour un mono-utilisateur local — la variante par signature suffit et reste sans schéma.
-- **Authenticator custom** : inutile, `form_login` natif couvre 100 % du besoin (identifiant email + mot de passe).
-- **Commande console de provisioning du compte** : écartée au pitch (fixtures-only en V1) — laissée en dette V2.
-- **Layout de login minimal générique (gris/blanc actuel)** : rejeté pour cohérence visuelle — l'app shell est déjà en Nova, l'écran de login doit l'être aussi.
-
-## Entités et modèle de données
-
-Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration `Version20260420133408`) existent déjà et suffisent. `remember_me` par signature n'ajoute aucune colonne ni table.
-
-## Mécanismes framework mobilisés
+### Mécanismes mobilisés
 
 - **`form_login` (security-bundle)** : authentification email/mot de passe, `enable_csrf: true` déjà posé → le template **doit** émettre `csrf_token('authenticate')`.
 - **`remember_me` par signature** : cookie de session longue durée signé avec `%kernel.secret%`, sans persistance en base. Case `_remember_me` dans le formulaire.
@@ -30,7 +22,20 @@ Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration 
 - **`AuthenticationUtils`** : déjà utilisé par `SecurityController::login()` pour exposer `error` + `last_username` au template.
 - **Fixtures Doctrine (`DataFixtures\AppFixtures`)** : provisionnent l'unique compte.
 
-## Fichiers à créer
+### Alternatives écartées
+
+- **`remember_me` avec `token_provider` en base (persistent)** : imposerait une table + migration pour un mono-utilisateur local — la variante par signature suffit et reste sans schéma.
+- **Authenticator custom** : inutile, `form_login` natif couvre 100 % du besoin (identifiant email + mot de passe).
+- **Commande console de provisioning du compte** : écartée au pitch (fixtures-only en V1) — laissée en dette V2.
+- **Layout de login minimal générique (gris/blanc actuel)** : rejeté pour cohérence visuelle — l'app shell est déjà en Nova, l'écran de login doit l'être aussi.
+
+## Modèle de données
+
+Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration `Version20260420133408`) existent déjà et suffisent. `remember_me` par signature n'ajoute aucune colonne ni table.
+
+## Périmètre
+
+### Fichiers à créer
 
 | Fichier                                              | Rôle                                                              |
 |------------------------------------------------------|-------------------------------------------------------------------|
@@ -38,7 +43,7 @@ Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration 
 
 > _Note sync (2026-07-04)_ : le test fonctionnel PHP `tests/Functional/SecurityControllerTest.php`, initialement prévu ici, n'a pas été créé — couverture rapatriée à 100 % en E2E (cf. §Stratégie de test et `report.md`).
 
-## Fichiers à modifier
+### Fichiers à modifier
 
 | Fichier                                              | Modification                                                      |
 |------------------------------------------------------|-------------------------------------------------------------------|
@@ -60,7 +65,7 @@ Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration 
 - **Migration de données** : aucune. Table `user` déjà migrée ; remember-me par signature = sans schéma.
 - **Comportement par défaut** : à chaque session non mémorisée, l'utilisateur voit d'abord l'écran de login avant toute page applicative.
 
-## Ordre d'implémentation
+## Ordre d'exécution
 
 1. [ ] `composer require symfony/rate-limiter` (dépendance du throttling).
 2. [ ] `config/packages/security.yaml` : ajouter `remember_me` (lifetime 604800), `login_throttling`, `logout.target: app_login`.
@@ -84,7 +89,7 @@ Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration 
 - Pas de test fonctionnel PHP (`SecurityControllerTest`) : couverture 100 % E2E, jugé redondant avec l'E2E réel (contre le serveur Symfony CLI) qui exerce déjà accès anonyme, message neutre et logout.
 - Le throttling n'est pas testé automatiquement (dépend d'une fenêtre temporelle) — vérification manuelle notée au runbook.
 
-## Risques et points d'attention
+## Risques et mitigations
 
 - **CSRF obligatoire** : `enable_csrf: true` est déjà actif sur `form_login`. Si le template omet `csrf_token('authenticate')`, la connexion échoue silencieusement (« Invalid CSRF token »). Mitigation : l'inclure explicitement, couvert par le test E2E nominal.
 - **Contrat du test E2E existant** : `login.spec.ts` s'appuie sur les `name` `_username`/`_password` (défauts `form_login`) et un `h1` « Se connecter ». Mitigation : conserver ces `name` et ce titre dans le nouveau template ; ajouter les `data-test` en complément sans casser les sélecteurs existants.
@@ -97,11 +102,3 @@ Aucun impact modèle. L'entité `App\Entity\User` et la table `user` (migration 
 - **Durée du remember-me** : retenue à **1 semaine (604800 s)** par défaut (recommandation confirmée par défaut, l'utilisateur étant absent au moment du plan). → à confirmer/ajuster à l'implémentation si besoin.
 - **DA du login** : retenue **alignement sur Nova** (restyle de `security.html.twig`). → à confirmer si l'utilisateur préfère un layout minimal.
 - **`data-test` sur le formulaire** : ajouter les attributs `data-test` (convention CLAUDE.md) en plus des `name` — à faire tant que ça ne casse pas le `login.spec.ts` actuel basé sur `name`/`h1`.
-
----
-
-## Changelog
-
-| Date       | Type                     | Description                                       |
-|------------|--------------------------|---------------------------------------------------|
-| 2026-07-04 | Sync post-implémentation | Réalignement sur le code livré : retrait du test fonctionnel PHP `SecurityControllerTest` (§Fichiers à créer, §Ordre, §Stratégie de test) au profit d'une couverture 100 % E2E (6 tests) ; ajout de `templates/base.html.twig` (`data-test="logout"`) et des effets de bord `config/reference.php` / `phpinsights.php` en §Fichiers à modifier. Réf. `report.md`. |

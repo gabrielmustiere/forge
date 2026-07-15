@@ -1,9 +1,19 @@
 # Review — Afficher le kanban d'un projet
 
-> Date : 2026-07-05
-> Stack : symfony
-> Périmètre : working tree (7 fichiers modifiés + 17 nouveaux hors doc/lock, ~1650 lignes de code)
-> Référence d'intention : `docs/story/005-f-kanban-projet/plan.md` + `pitch.md`
+> **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
+> **Registre** : technique
+> **Story** : `docs/story/005-f-kanban-projet/`
+> **Amont** : `plan.md` · `pitch.md`
+> **Diff examiné** : working tree (7 fichiers modifiés + 17 nouveaux hors doc/lock, ~1650 lignes de code)
+
+## Synthèse
+
+- Bloquants restants : 0 / 1
+- Importants restants : 0 / 0
+- Mineurs restants : 0 / 3
+- Statut : **PRÊT À COMMITER**
+
+Tous les findings corrigés. QA repassée verte : 132 PHPUnit / 312 assertions + 11 E2E. `/commit` pour commit et push.
 
 ## Bloquants
 
@@ -26,15 +36,6 @@
 - **Anti-traversée solide** : double regex stricte (`storyId`, `filename`), chemin borné à `docs/story/{storyId}/{filename}`, token déchiffré au plus près et jamais loggé. Test 404 sur `..%2F` et sur filename sans `.md`.
 - **Fake reader dev opt-in bien isolé** : `#[When('dev')]` + flag `APP_FAKE_REPOSITORY_READER` (défaut 0) préserve le dogfooding réel ; catalogue partagé avec le stub de test (zéro duplication/drift).
 - **Couverture** : 131 PHPUnit (dont unités VO/enum, builder, reader `readFile`, Application colonnes/compteurs/bandeau/vide/erreur/sanitize/traversal) + 11 E2E verts.
-
-## Verdict
-
-- Bloquants restants : 0 / 1
-- Importants restants : 0 / 0
-- Mineurs restants : 0 / 3
-- Statut : **READY TO COMMIT**
-
-Tous les findings corrigés. QA repassée verte : 132 PHPUnit / 312 assertions + 11 E2E. `/commit` pour commit et push.
 
 ## Hors review (à vérifier en environnement réel)
 

@@ -6,7 +6,8 @@
   "tags": ["projets", "crud"],
   "changelog": [
     { "date": "2026-07-04", "type": "Création", "description": "Pitch et plan de la gestion des projets (déclarer, lister, éditer, retirer)." },
-    { "date": "2026-07-04", "type": "Livraison", "description": "CRUD projets livré, revu et reporté." }
+    { "date": "2026-07-04", "type": "Livraison", "description": "CRUD projets livré, revu et reporté." },
+    { "date": "2026-07-04", "type": "Sync", "description": "Réalignement sur le code livré (cf. `report.md`) : validation consolidée en une seule contrainte `UniqueRepositoryUrl` (validité + cohérence provider↔hôte + unicité) et provider dérivé de l'hôte (§Approche, §Entités, §Mécanismes, §Fichiers) ; confirmation de suppression via overlay Live `confirmingId` au lieu du composant `Modal` (§Approche, §Mécanismes, §Ordre 8) ; sidebar via `#[AsTwigComponent] SidebarProjects` (§Mécanismes, §Fichiers, §Ordre 9) ; `.env` non modifié → `.env.example` + garde-fou `TokenCipher` (§Fichiers à modifier) ; tie-breaker `id DESC` sur `findAllOrdered` (§Fichiers) ; PHPStan niveau 10 (§Ordre 12) ; test Live Component par instanciation directe (§Stratégie de test, §Fichiers) ; ajouts `InvalidRepositoryUrlException`, partial `_form.html.twig`, couleurs de marque du bouton provider (§Fichiers, §Mécanismes) ; questions ouvertes tranchées. Limites connues versées en dette (unicité insensible à la casse, index `created_at`, requête sidebar par page) — cf. `report.md` §Dette, non promues en engagement." }
   ],
   "delivery": { "release": "v4.2.0", "commit": "f5a8194" }
 }

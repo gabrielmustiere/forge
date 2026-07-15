@@ -1,16 +1,15 @@
 # Report — Enrichir chaque story de métadonnées lisibles par le Board
 
-> Pitch : `docs/story/006-f-metadonnees-story/pitch.md`
-> Plan : `docs/story/006-f-metadonnees-story/plan.md`
-> Date d'implémentation : 2026-07-05
-> Commits liés : working tree non commité au moment du report
-> Référence review : `review.md`
+> **But** : constater l'écart entre l'intention et le code livré — écarts, dette, suites.
+> **Registre** : factuel
+> **Story** : `docs/story/006-f-metadonnees-story/`
+> **Amont** : `pitch.md` · `plan.md` · `review.md`
 
-## Résumé
+## Synthèse
 
-Implémentation ~98 % conforme au plan : les deux versants (app Symfony + skills plugin) sont livrés tels que conçus (contrat `metadata.json` v1, VO `StoryMetadata`/`StoryChangelogEntry`/`StoryDelivery` + `StoryMetadataParser`, lecture groupée GraphQL sur `readStoryMetadata`, hydratation `StoryCard`/`ProjectBoardBuilder`, UI cartes/drawer/filtre-tri, backfill 001→005, référence partagée + édition des SKILL.md producteurs). 14/14 critères d'acceptation cochés. Review **READY TO COMMIT** : 0 bloquant, 1 important et 3 mineurs tous corrigés. Trois écarts structurants, tous des enrichissements en cours d'exécution : détection du rate-limit GraphQL, recalage des compteurs de colonne sur le filtre, simplification imposée par la complexité cognitive PHPStan. Périmètre : ~1825 insertions / 71 suppressions sur 53 fichiers.
+Implémentation ~98 % conforme au plan : les deux versants (app Symfony + skills plugin) sont livrés tels que conçus (contrat `metadata.json` v1, VO `StoryMetadata`/`StoryChangelogEntry`/`StoryDelivery` + `StoryMetadataParser`, lecture groupée GraphQL sur `readStoryMetadata`, hydratation `StoryCard`/`ProjectBoardBuilder`, UI cartes/drawer/filtre-tri, backfill 001→005, référence partagée + édition des SKILL.md producteurs). 14/14 critères d'acceptation cochés. Review **PRÊT À COMMITER** : 0 bloquant, 1 important et 3 mineurs tous corrigés. Trois écarts structurants, tous des enrichissements en cours d'exécution : détection du rate-limit GraphQL, recalage des compteurs de colonne sur le filtre, simplification imposée par la complexité cognitive PHPStan. Périmètre : ~1825 insertions / 71 suppressions sur 53 fichiers.
 
-## Ce qui a été implémenté
+## Périmètre livré
 
 ### Fichiers créés
 
@@ -94,7 +93,7 @@ QA finale verte : PHPStan level 9 OK, 158 tests PHPUnit OK, 13 E2E Playwright OK
 
 ## Dette technique identifiée
 
-Issus de la review : aucun mineur résiduel — les 3 mineurs et l'important sont **corrigés** (verdict READY TO COMMIT).
+Issus de la review : aucun mineur résiduel — les 3 mineurs et l'important sont **corrigés** (verdict PRÊT À COMMITER).
 
 Au-delà de la review :
 
