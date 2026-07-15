@@ -10,7 +10,7 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
-## [6.0.0] - 2026-07-15 — Charte de format des documents
+## [6.0.0] - 2026-07-15 — Chartes de format et de frontières
 
 ### ✨ Fonctionnel
 - **BREAKING — Une charte de format commune aux 8 documents de story** — nouvelle référence partagée `references/document-format.md`, chargée par les 8 skills producteurs (`feature-interview`, `feature-pitch`, les 3 `*-plan`, `review`, `report`, `estimate`). Elle fixe ce que chaque template appliquait jusqu'ici à sa façon : une **matrice des buts** (un document = un registre, une question, un consommateur), un **en-tête normalisé** (but / registre / story / amont — conservé après commit, contrairement aux blocs guides), un **vocabulaire canonique des sections**, un **squelette commun aux trois plans**, des **formats de table normatifs**, un **catalogue fermé de tags** et des **verdicts en français**. En cas de doute sur un titre ou un format, la charte fait foi.
@@ -180,7 +180,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/gabrielmustiere/forge/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/gabrielmustiere/forge/compare/v4.7.0...v5.0.0
 [4.7.0]: https://github.com/gabrielmustiere/forge/compare/v4.6.0...v4.7.0
 [4.6.0]: https://github.com/gabrielmustiere/forge/compare/v4.5.0...v4.6.0
