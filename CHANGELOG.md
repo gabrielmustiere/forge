@@ -10,12 +10,13 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
-## [6.1.0] - 2026-07-15 — Les skills d'implémentation reprennent leur liberté
+## [6.1.0] - 2026-07-15 — Skills d'implémentation libérés
 
 ### ✨ Fonctionnel
 
 - **Les trois skills d'implémentation (`feature-implem`, `refactor-implem`, `tech-implem`) ne déclarent plus d'`allowed-tools`.** Chacune énumérait ~45 outillages de stacks (`composer`, `cargo`, `poetry`, `gradlew`, `k6`…) : une liste infinie par nature, fausse dès le premier projet sortant des stacks prévus, et qui coûtait du contexte à chaque invocation. C'est désormais au `.claude/settings.json` du projet de pré-autoriser son propre outillage — le seul endroit où une décision de stack a sa place.
 - **Le corps des skills d'implémentation est réellement stack-agnostique.** Les commandes PHP en dur (`vendor/bin/ecs`, `vendor/bin/phpstan`, `vendor/bin/phpunit`, `npm run build`) laissent place à l'intention (style, analyse statique, build, tests du périmètre) : les commandes se lisent dans le `CLAUDE.md` du projet, la référence stack ou le manifeste de tâches réel — avec consigne explicite de **demander plutôt que deviner** une commande plausible. Idem pour les traces de debug du nettoyage et les `Stack : [symfony | sylius]` des bilans.
+- **`/forge:help` et le README documentent la contrepartie.** Une section « Outillage et autorisations » explique que c'est désormais au `.claude/settings.json` du projet de pré-autoriser son outillage — sans quoi Claude Code demande confirmation à chaque commande de build ou de test : fonctionnel, mais bavard. Exemple de configuration fourni, et mention de `permissions.deny` comme seul moyen de poser une interdiction dure.
 
 ### 🔧 Technique
 
@@ -194,7 +195,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.1.0...HEAD
+[6.1.0]: https://github.com/gabrielmustiere/forge/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/gabrielmustiere/forge/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/gabrielmustiere/forge/compare/v4.7.0...v5.0.0
 [4.7.0]: https://github.com/gabrielmustiere/forge/compare/v4.6.0...v4.7.0

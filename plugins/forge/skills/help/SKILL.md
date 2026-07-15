@@ -245,3 +245,19 @@ Le workflow détecte automatiquement le stack du projet (Symfony, Sylius) via `c
 - delta e-commerce Sylius — Resources, channels, thèmes, Twig Hooks…
 
 Les skills concernées chargent ces références automatiquement après détection — rien à lire manuellement. Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans le `CLAUDE.md` à la racine du projet — les skills le lisent en complément des références stack.
+
+## Outillage et autorisations
+
+Les skills d'implémentation (`/feature`, `/refactor`, `/tech`) **n'imposent aucun outillage** : elles ne présument ni de ton gestionnaire de paquets, ni de ton lanceur de tests. Les commandes réelles se lisent dans ton `CLAUDE.md`, la référence stack, ou ton manifeste de tâches (`Makefile`, `package.json`, `composer.json`, `justfile`…) — et si elles ne les trouvent pas, elles demandent au lieu de deviner.
+
+Conséquence pratique : **c'est à ton projet de pré-autoriser son outillage**, dans son `.claude/settings.json`. Sans ça, Claude Code demandera confirmation à chaque commande de build ou de test — c'est fonctionnel, juste bavard.
+
+```jsonc
+{
+  "permissions": {
+    "allow": ["Bash(make:*)", "Bash(vendor/bin/*:*)", "Bash(npm:*)"]
+  }
+}
+```
+
+C'est aussi le bon endroit pour poser une interdiction **dure** (`permissions.deny`) : contrairement aux `allowed-tools` d'un skill — qui ne font que pré-autoriser — un `deny` projet est souverain et ne se contourne pas.

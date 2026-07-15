@@ -114,6 +114,17 @@ Pour les modifs qui cochent **toutes** ces cases : moins de 3 fichiers, pas de m
 
 Le workflow détecte le stack (Symfony, Sylius…) via `composer.json` / `package.json` et charge les bonnes conventions de QA, sécu et perf au bon moment. Les conventions propres au projet (commandes QA exactes, credentials de test, branches…) vivent dans le `CLAUDE.md` à la racine.
 
+Les skills d'implémentation **n'imposent aucun outillage** : elles lisent les commandes réelles dans ton `CLAUDE.md`, la référence stack ou ton manifeste de tâches (`Makefile`, `package.json`, `composer.json`…), et demandent plutôt que de deviner. Corollaire : c'est à ton projet de pré-autoriser son propre outillage dans son `.claude/settings.json`, sans quoi Claude Code demandera confirmation à chaque commande de build ou de test.
+
+```jsonc
+// .claude/settings.json — exemple pour un projet Symfony
+{
+  "permissions": {
+    "allow": ["Bash(make:*)", "Bash(symfony:*)", "Bash(vendor/bin/*:*)", "Bash(npm:*)"]
+  }
+}
+```
+
 ## En savoir plus (plugin)
 
 - Inventaire complet et détaillé : [`plugins/forge/SKILLS.md`](plugins/forge/SKILLS.md)
