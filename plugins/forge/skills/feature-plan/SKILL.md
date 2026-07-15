@@ -1,6 +1,6 @@
 ---
 name: feature-plan
-description: Conçoit techniquement une feature cadrée — architecture, modèle de données, intégrations, contrats d'API, stratégie de test, impacts existants. Prérequis : `pitch.md` validé. Produit `docs/story/<NNN>-f-<slug>/plan.md`, lu par `feature`.
+description: "Conçoit techniquement une feature cadrée — architecture, modèle de données, intégrations, contrats d'API, stratégie de test, impacts existants. Prérequis : `pitch.md` validé. Produit `docs/story/<NNN>-f-<slug>/plan.md`, lu par `feature`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-feature ou chemin pitch.md]"

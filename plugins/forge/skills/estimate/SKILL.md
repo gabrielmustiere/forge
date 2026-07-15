@@ -1,6 +1,6 @@
 ---
 name: estimate
-description: Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release. Lit brief/pitch/plan. Réaliste + marge, en heures. Produit `docs/story/NNN-<f|r|t>-<slug>/estimate.md`.
+description: "Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release. Lit brief/pitch/plan. Réaliste + marge, en heures. Produit `docs/story/NNN-<f|r|t>-<slug>/estimate.md`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug de story ou chemin du dossier]"

@@ -11,7 +11,7 @@ allowed-tools:
   - Bash(ls:*)
   - Bash(find:*)
   - Bash(git log:*)
-  - Bash(git tag:*)
+  - Bash(git tag --contains:*)
   - Bash(git rev-parse:*)
   - Bash(git status:*)
   - Bash(git for-each-ref:*)

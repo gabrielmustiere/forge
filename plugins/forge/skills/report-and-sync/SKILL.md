@@ -2,8 +2,21 @@
 name: report-and-sync
 description: Enchaîne `/forge:report` puis `/forge:sync` en une passe après livraison d'une story (feature, refacto ou évolution technique) — compte rendu d'écarts intention vs code livré, puis réalignement de la doc d'intention. Court-circuite le sync si conformité totale.
 user_invocable: true
+disable-model-invocation: true
 argument-hint: "[slug-story ou chemin docs/story/NNN-<f|r|t>-<slug>/]"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - Bash(git log:*)
+  - Bash(git diff:*)
+  - Bash(git show:*)
+  - Bash(ls:*)
 ---
+
+> _Orchestrateur : ces `allowed-tools` sont l'**union exacte** de ceux de `/forge:report` et `/forge:sync`, jamais plus (contrat `references/skill-boundaries.md` §4). Si l'un des deux skills gagne une capacité, la répercuter ici ; sinon, ne rien ajouter._
 
 # /report-and-sync — Clôture documentaire en une passe
 

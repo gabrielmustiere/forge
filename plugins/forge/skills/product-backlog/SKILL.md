@@ -1,6 +1,6 @@
 ---
 name: product-backlog
-description: Traduit la vision en périmètre fonctionnel — domaines, capacités, parcours, règles, backlog priorisé MVP/V2/V3. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/product-backlog.md` avec changelog, lu par `feature-pitch`.
+description: "Traduit la vision en périmètre fonctionnel — domaines, capacités, parcours, règles, backlog priorisé MVP/V2/V3. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/product-backlog.md` avec changelog, lu par `feature-pitch`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[intention ou domaine ciblé]"

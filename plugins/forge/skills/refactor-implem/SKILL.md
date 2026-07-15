@@ -1,6 +1,6 @@
 ---
 name: refactor-implem
-description: Exécute un refacto cadré — verrou bloquant sur tests de caractérisation présents et passants, puis applique le plan étape par étape avec non-régression. Prérequis un `plan.md` sous `docs/story/<NNN>-r-<slug>/`. Argument optionnel : slug à reprendre.
+description: "Exécute un refacto cadré — verrou bloquant sur tests de caractérisation présents et passants, puis applique le plan étape par étape avec non-régression. Prérequis un `plan.md` sous `docs/story/<NNN>-r-<slug>/`. Argument optionnel : slug à reprendre."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-refacto]"
@@ -13,7 +13,10 @@ allowed-tools:
   - Bash(ls:*)
   - Bash(find:*)
   - Bash(cat:*)
-  - Bash(git:*)
+  - Bash(git status:*)
+  - Bash(git diff:*)
+  - Bash(git log:*)
+  - Bash(git show:*)
   - Bash(php:*)
   - Bash(composer:*)
   - Bash(symfony:*)
@@ -23,12 +26,36 @@ allowed-tools:
   - Bash(npm:*)
   - Bash(npx:*)
   - Bash(yarn:*)
+  - Bash(pnpm:*)
+  - Bash(bun:*)
+  - Bash(deno:*)
+  - Bash(cargo:*)
+  - Bash(go:*)
+  - Bash(python:*)
+  - Bash(python3:*)
+  - Bash(pip:*)
+  - Bash(uv:*)
+  - Bash(poetry:*)
+  - Bash(pytest:*)
+  - Bash(ruff:*)
+  - Bash(bundle:*)
+  - Bash(rake:*)
+  - Bash(rspec:*)
+  - Bash(rails:*)
+  - Bash(mvn:*)
+  - Bash(./mvnw:*)
+  - Bash(gradle:*)
+  - Bash(./gradlew:*)
+  - Bash(dotnet:*)
   - Bash(make:*)
+  - Bash(just:*)
+  - Bash(task:*)
+  - Bash(docker:*)
   - Bash(docker compose:*)
   - Bash(docker-compose:*)
 ---
 
-> _Whitelist Bash pragmatique : couvre PHP/JS/git/docker. Pour les commandes projet hors liste (`bin/foo`, `pnpm`, scripts custom), Claude Code demandera l'autorisation au cas par cas — c'est attendu._
+> _Outillage : la liste `allowed-tools` pré-autorise les outillages des stacks courants pour éviter une demande d'autorisation à chaque commande de build ou de test. Ce n'est **pas** une frontière — lancer `cargo` ou `composer` ne produit aucun artifact du pipeline, donc ça n'engage rien. Un projet dont l'outillage n'y est pas fonctionne pareil : Claude Code demandera l'autorisation, et le projet peut le pré-autoriser dans son propre `.claude/settings.json`. La vraie frontière est ailleurs : **l'historique git est le livrable de `/forge:commit`** — ce skill ne commite pas lui-même (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §2)._
 
 # /refactor — Exécution guidée d'un refacto
 
@@ -103,7 +130,7 @@ Pour chaque test de caractérisation listé dans la section "Tests à écrire AV
 
 - Écrire le test en **capturant le comportement actuel sans le juger** (entrée X → sortie Y telle qu'elle est aujourd'hui, même si ce comportement paraît bizarre). On ne décide pas ce que le code *devrait* faire, on verrouille ce qu'il *fait*.
 - Lancer le test → il doit passer (puisqu'on reflète le comportement actuel). S'il ne passe pas, c'est que tu as mal capturé — ajuster le test, pas le code de production.
-- Le commiter **immédiatement** — ces tests doivent exister en base avant la moindre modif de code de prod, pour pouvoir servir de filet.
+- Le faire commiter **immédiatement** via `/forge:commit` — ces tests doivent exister en base avant la moindre modif de code de prod, pour pouvoir servir de filet. Tu n'écris pas dans git toi-même (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §4) : le commit appartient à `/forge:commit`. Ne touche à aucun code de production tant que ce commit n'est pas fait.
 
 Checkpoint caractérisation :
 

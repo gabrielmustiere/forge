@@ -9,7 +9,6 @@ allowed-tools:
   - Grep
   - Glob
   - Bash(ls:*)
-  - Bash(curl:*)
   - mcp__chrome-devtools__*
   - mcp__playwright__*
 ---

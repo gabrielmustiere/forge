@@ -1,6 +1,6 @@
 ---
 name: vision
-description: Définit la vision projet (phase 0) — problème, audiences, North Star, principes, anti-objectifs. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/vision.md` avec changelog, lu par `product-backlog` puis `feature-pitch`.
+description: "Définit la vision projet (phase 0) — problème, audiences, North Star, principes, anti-objectifs. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/vision.md` avec changelog, lu par `product-backlog` puis `feature-pitch`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[intention libre ou angle d'attaque]"

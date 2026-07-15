@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Commit Conventional Commits v1.0.0 en français depuis le diff courant — analyse, génère `type(scope): sujet` (corps si pertinent), commit, rebase (jamais de merge), puis push. Bloque sur secrets, code de debug ou conflit de rebase.
+description: "Commit Conventional Commits v1.0.0 en français depuis le diff courant — analyse, génère `type(scope): sujet` (corps si pertinent), commit, rebase (jamais de merge), puis push. Bloque sur secrets, code de debug ou conflit de rebase."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[--no-push] [--amend]"

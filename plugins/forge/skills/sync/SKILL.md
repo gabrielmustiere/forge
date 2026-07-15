@@ -2,6 +2,7 @@
 name: sync
 description: Réaligne la doc d'intention (`pitch.md`/`plan.md`) ET les documents projet (`vision.md`/`stack.md`/`product-backlog.md`) sur le code livré — applique les écarts du `report.md` puis propage aux docs de phase 0 via leurs modes Enrichir/Éditer. À lancer après `report` quand le code a divergé.
 user_invocable: true
+disable-model-invocation: true
 argument-hint: "[slug-story ou chemin report.md]"
 allowed-tools:
   - Read

@@ -2,6 +2,7 @@
 name: report
 description: Compte rendu d'implémentation après livraison — compare l'intention (`pitch.md`+`plan.md` ou `plan.md`) au code livré, liste écarts, décisions, dettes. Écrit `docs/story/NNN-<f|r|t>-<slug>/report.md`. À lancer avant `sync`.
 user_invocable: true
+disable-model-invocation: true
 argument-hint: "[slug-story ou chemin plan.md]"
 allowed-tools:
   - Read

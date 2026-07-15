@@ -13,7 +13,10 @@ allowed-tools:
   - Bash(ls:*)
   - Bash(find:*)
   - Bash(cat:*)
-  - Bash(git:*)
+  - Bash(git status:*)
+  - Bash(git diff:*)
+  - Bash(git log:*)
+  - Bash(git show:*)
   - Bash(php:*)
   - Bash(composer:*)
   - Bash(symfony:*)
@@ -23,7 +26,31 @@ allowed-tools:
   - Bash(npm:*)
   - Bash(npx:*)
   - Bash(yarn:*)
+  - Bash(pnpm:*)
+  - Bash(bun:*)
+  - Bash(deno:*)
+  - Bash(cargo:*)
+  - Bash(go:*)
+  - Bash(python:*)
+  - Bash(python3:*)
+  - Bash(pip:*)
+  - Bash(uv:*)
+  - Bash(poetry:*)
+  - Bash(pytest:*)
+  - Bash(ruff:*)
+  - Bash(bundle:*)
+  - Bash(rake:*)
+  - Bash(rspec:*)
+  - Bash(rails:*)
+  - Bash(mvn:*)
+  - Bash(./mvnw:*)
+  - Bash(gradle:*)
+  - Bash(./gradlew:*)
+  - Bash(dotnet:*)
   - Bash(make:*)
+  - Bash(just:*)
+  - Bash(task:*)
+  - Bash(docker:*)
   - Bash(docker compose:*)
   - Bash(docker-compose:*)
   - Bash(curl:*)
@@ -32,7 +59,7 @@ allowed-tools:
   - Bash(ab:*)
 ---
 
-> _Whitelist Bash pragmatique : couvre PHP/JS/git/docker + outils de bench (curl/k6/wrk/ab) propres à une évolution tech. Pour les commandes projet hors liste, Claude Code demandera l'autorisation au cas par cas — c'est attendu._
+> _Outillage : la liste `allowed-tools` pré-autorise les outillages des stacks courants pour éviter une demande d'autorisation à chaque commande de build ou de test. Ce n'est **pas** une frontière — lancer `cargo` ou `composer` ne produit aucun artifact du pipeline, donc ça n'engage rien. Un projet dont l'outillage n'y est pas fonctionne pareil : Claude Code demandera l'autorisation, et le projet peut le pré-autoriser dans son propre `.claude/settings.json`. La vraie frontière est ailleurs : **l'historique git est le livrable de `/forge:commit`** — ce skill ne commite pas lui-même (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §2)._ _Les outils de bench (`curl`, `k6`, `wrk`, `ab`) sont propres à une évolution technique._
 
 # /tech — Exécution guidée d'une évolution technique
 

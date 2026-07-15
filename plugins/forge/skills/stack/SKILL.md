@@ -1,6 +1,6 @@
 ---
 name: stack
-description: Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0 technique. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review.
+description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0 technique. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[couche ciblée ou intention libre]"

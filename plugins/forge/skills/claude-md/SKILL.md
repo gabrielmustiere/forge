@@ -2,6 +2,7 @@
 name: claude-md
 description: Génère ou met à jour le CLAUDE.md racine — analyse du codebase (stack, archi, commandes, conventions) + principes comportementaux Karpathy. Déclenche sur « génère un CLAUDE.md », « initialise les instructions Claude », « documente le repo pour Claude ».
 user_invocable: true
+disable-model-invocation: true
 argument-hint: "[section ciblée ou intention libre]"
 allowed-tools:
   - Read
