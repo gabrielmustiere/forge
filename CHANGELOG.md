@@ -10,7 +10,7 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
-## [6.2.0] - 2026-07-15 — Des règles projet qui ne pèsent que là où elles servent
+## [6.2.0] - 2026-07-15 — Rules de projet
 
 ### ✨ Fonctionnel
 
@@ -212,7 +212,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.1.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.2.0...HEAD
+[6.2.0]: https://github.com/gabrielmustiere/forge/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/gabrielmustiere/forge/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/gabrielmustiere/forge/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/gabrielmustiere/forge/compare/v4.7.0...v5.0.0
