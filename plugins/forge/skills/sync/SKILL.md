@@ -79,20 +79,24 @@ Classe les écarts selon le type de dossier.
 
 **Cas `f-` (feature)** — 3 catégories :
 
-1. **Mises à jour pitch** — règles métier qui ont changé, user stories ajoutées/modifiées, critères d'acceptation à corriger, hors scope qui a bougé, impacts transverses différents
-2. **Mises à jour plan** — fichiers créés/modifiés différents du prévu, approche technique ajustée, stratégie de test modifiée, ordre d'implémentation réel
+1. **Mises à jour pitch** — §Règles métier qui ont changé, §User Stories ajoutées/modifiées, §Critères d'acceptation à corriger, §Hors scope qui a bougé, §Impacts transverses différents
+2. **Mises à jour plan** — §Périmètre (fichiers créés/modifiés différents du prévu), §Approche retenue ajustée, §Stratégie de test modifiée, §Ordre d'exécution réel, §Critères de sortie
 3. **Aucune mise à jour nécessaire** — écarts mineurs qui ne changent pas la documentation
+
+**Jamais réalignée** : l'§Annexe — Pistes pour le plan du `pitch.md` est **non contractuelle** (charte §3). Elle capture ce qu'on pressentait au cadrage ; la voir diverger du code livré est normal et sans conséquence. Ne la corrige pas, ne la supprime pas.
 
 **Cas `r-` (refacto)** — catégories :
 
-1. **Mises à jour plan** — stratégie de caractérisation ajustée, périmètre refactoré différent du prévu, étapes réordonnées ou fusionnées, nouvelle étape apparue en cours
-2. **Effets de bord à tracer** — si le refacto a malgré lui modifié un comportement, le documenter dans le plan (et signaler que ce n'est plus un "refacto pur")
+1. **Mises à jour plan** — §Tests de caractérisation ajustés, §Périmètre différent du prévu, §Ordre d'exécution réordonné ou fusionné, nouvelle étape apparue en cours
+2. **Effets de bord à tracer** — si le refacto a malgré lui modifié un comportement, le documenter dans le §Comportement externe à préserver du plan (et signaler que ce n'est plus un "refacto pur")
 3. **Aucune mise à jour nécessaire**
 
 **Cas `t-` (évolution technique)** — catégories :
 
-1. **Mises à jour plan** — composant choisi différent du prévu, point d'intégration déplacé, critères de succès ajustés, stratégie de rollback modifiée
+1. **Mises à jour plan** — composant choisi différent du prévu (§Approche retenue), §Métriques (baseline → cible) ajustées, §Rollback et kill switch modifié, §Critères de sortie
 2. **Aucune mise à jour nécessaire**
+
+**Vocabulaire des sections** : les titres cités ci-dessus sont les titres **canoniques** de la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md` (§4). Une story antérieure à la charte peut porter d'anciens titres (`Ordre d'implémentation`, `Critères de réussite`, `Problème adressé`…) : réaligne le contenu **sans** renommer les sections au passage — un sync n'est pas une migration de format.
 
 **Si toutes les catégories sont vides**, la doc d'intention de la story est conforme : saute les Phases 3-4 (rien à réaligner sur `pitch.md`/`plan.md`), mais **enchaîne quand même sur la Phase 5** — une story conforme à son plan peut malgré tout avoir introduit une dépendance ou une capacité que les documents projet ne reflètent pas encore. Si la Phase 5 ne trouve rien non plus, dis « tout est conforme, rien à synchroniser » et arrête-toi.
 

@@ -84,10 +84,10 @@ Présente une synthèse :
 
 Avant de planifier, valider la cible du refacto. Pioche 2-3 axes par tour selon le contexte :
 
-**Cible et approche**
+**Approche retenue**
 
-- **Pattern de refacto** : extraction de méthode / extraction de classe / introduction d'un Strategy / décomposition d'un god service / inversion de dépendance / remplacement d'un pattern par un autre du framework (ex: décorateur Symfony plutôt que héritage) / Strangler Fig pour un module legacy ?
-- **Cible précise** : qu'est-ce qui sera la "forme" du code après le refacto ? Décris-la en 3-4 lignes pour valider qu'on parle de la même chose.
+- **Pattern de refacto** : extraction de méthode / extraction de classe / introduction d'un Strategy / décomposition d'un god service / inversion de dépendance / remplacement d'un pattern par un autre du framework (ex: décorateur Symfony plutôt que héritage) / Strangler Fig pour un module legacy ? (Il se documente en §Mécanismes mobilisés du plan.)
+- **Forme cible** : qu'est-ce qui sera la "forme" du code après le refacto ? Décris-la en 3-4 lignes pour valider qu'on parle de la même chose.
 - **Alternatives écartées** : pourquoi cette approche plutôt qu'une autre ? Documenter les options envisagées.
 
 **Garde-fous**
@@ -96,13 +96,13 @@ Avant de planifier, valider la cible du refacto. Pioche 2-3 axes par tour selon 
 - **Risques principaux** : qu'est-ce qui pourrait casser silencieusement ? (Ex: un listener qui s'attache au mauvais event, un repository qui change subtilement le tri, une transaction Doctrine déplacée.)
 - **Impact transverse** : est-ce qu'un client va devoir bouger en même temps (signature changée mais à l'intérieur du périmètre du refacto) ?
 
-**Stratégie de caractérisation**
+**Stratégie de test et caractérisation**
 
 - **Couverture actuelle** : suffit-elle pour verrouiller le comportement ? Si oui, lister les tests existants comme filet de sécurité.
 - **Tests à écrire avant** : si la couverture est insuffisante, lister précisément les tests de caractérisation à écrire (entrée → sortie attendue actuelle, sans juger de la "bonne" sortie). Ces tests doivent passer **avant** qu'on touche au code.
 - **Niveau de test** : unit pour les services purs, functional avec BDD pour les repositories, E2E pour les parcours UI.
 
-**Stratégie d'exécution incrémentale**
+**Ordre d'exécution**
 
 - **Découpage en étapes réversibles** : chaque étape doit pouvoir être commitée et déployée seule sans casser quoi que ce soit. Pas de PR géant qui touche tout d'un coup.
 - **Strangler Fig si applicable** : ancien et nouveau code coexistent, on bascule progressivement les clients, on supprime l'ancien à la fin.
@@ -124,6 +124,8 @@ Quand l'utilisateur valide, écris le plan dans `docs/story/`.
 **Nom du fichier** : `plan.md` dans ce dossier.
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction.
+
+**Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
 
 **Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du plan), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`. Si tu relances ce skill pour **éditer un plan existant** (le `metadata.json` est déjà là), ne recrée rien : rebouge simplement `updated` à la date du jour et **append** une entrée de changelog décrivant la révision, sans jamais toucher `created`.
 

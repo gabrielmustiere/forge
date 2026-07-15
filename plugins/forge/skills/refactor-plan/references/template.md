@@ -1,173 +1,199 @@
-# Refacto — <Titre du refacto — ce qui change structurellement>
+# Plan technique — <Titre du refacto : ce qui change structurellement>
 
-> Date : YYYY-MM-DD
-> Stack : symfony
-> ADR : `docs/adr/<NNNN>-<slug>.md` <!-- guide: optionnel, supprimer la ligne si pas d'ADR associée -->
+> **But** : figer le comment d'un refacto — forme cible, verrou de non-régression, exécution incrémentale.
+> **Registre** : technique
+> **Story** : `docs/story/<NNN>-r-<slug>/`
+> **Amont** : aucun <!-- guide: un refacto n'a pas de pitch — ce plan porte motivation ET détail -->
+> **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
-guide: Plan d'un refacto (préfixe `-r-`). Consommé par `/forge:refactor-implem` (étape build) et `/forge:sync`.
-Un refacto ne change PAS le comportement externe. Si du métier change, c'est une feature.
-Le pitch n'existe pas pour un refacto : ce plan porte à la fois la motivation et le détail.
-Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
+guide: Plan d'un refacto (préfixe `-r-`). Produit par `/forge:refactor-plan`, consommé par `/forge:refactor-implem` (étape build), `/forge:review`, `/forge:report` et `/forge:estimate`.
+Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections. Les sections propres au track `-r-` (Forme cible, Clients identifiés, Comportement externe à préserver, Tests de caractérisation) sont additionnelles et rattachées aux sections canoniques qu'elles étendent.
+Un refacto ne change PAS le comportement externe. Si du métier change, c'est une feature. Si c'est l'infra ou un composant technique transverse, c'est une évolution technique (`-t-`).
+Pas de pitch pour un refacto : la `## Motivation` de ce plan porte le pourquoi — mais en termes techniques (dette, perf, blocage), pas en valeur métier (charte §3).
+STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Mécanismes, commandes QA et seuils viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et du `CLAUDE.md` du projet.
+L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
 ## Motivation
 
-> _Skill : pourquoi refactorer maintenant. État actuel chiffré quand possible (lignes, durée profile, hits grep, complexité cyclomatique). Lister les conséquences si on ne fait rien — la dette s'aggrave-t-elle ? Y a-t-il un déclencheur (perf, sécurité, prochaine feature bloquée) ?_
+> _Skill : pourquoi refactorer maintenant. État actuel **chiffré** quand c'est possible (lignes, durée mesurée, occurrences, complexité) — au moins un chiffre vérifiable. Conséquences si on ne fait rien : la dette s'aggrave-t-elle ? Y a-t-il un déclencheur (perf, sécurité, prochaine feature bloquée) ? Registre technique : pas de justification en valeur métier._
 
-<État actuel + friction concrète. Au moins 1 chiffre vérifiable si possible (ex : 1 807 ms cumulés, 80 occurrences résiduelles, etc.).>
+<État actuel + friction concrète. Au moins un chiffre vérifiable (ex : 1 807 ms cumulés, 80 occurrences résiduelles).>
 
 <Conséquences si on ne fait rien.>
 
-## Périmètre
+## Approche retenue
 
-### Code visé
+> _Skill : 1–2 paragraphes sur la transformation choisie, en termes architecturaux. Quelle couche apparaît, laquelle disparaît, comment les appelants basculent._
 
-> _Skill : table « fichier → lignes → ce qu'on touche ». Liste exhaustive (un reviewer doit pouvoir vérifier qu'aucun fichier n'a été oublié)._
+<Transformation retenue en 1–2 paragraphes.>
 
-| Fichier                            | Lignes | Action                                          |
-|------------------------------------|-------:|-------------------------------------------------|
-| `src/<…>.php`                      |    XXX | <verbe d'action : extraire / éclater / drop…>   |
-| `src/<…>.php`                      |    XXX | <…>                                             |
+### Forme cible
 
-### Clients identifiés
+> _Skill : section propre au track `-r-`. La structure CIBLE, telle qu'elle existera après. Arborescence si une nouvelle couche apparaît, interface(s) clé(s), contrat. Dire comment les anciens appelants consomment la nouvelle forme._
 
-> _Skill : tout ce qui consomme le code visé. Les patterns de référence (Twig `path('…')`, redirectToRoute, tests, configs sécurité, E2E). Indiquer si oui ou non chaque catégorie de client est affectée par le refacto. Si « aucun client n'est affecté », le dire — c'est un gage de sécurité._
-
-- `templates/**/*.html.twig` — <impacté ou non + raison>.
-- Tests Functional — <impacté ou non>.
-- Tests E2E Playwright — <impacté ou non>.
-- `config/packages/<…>.yaml` — <impacté ou non>.
-
-### Hors scope
-
-> _Skill : ce qui pourrait être absorbé dans ce refacto mais ne l'est pas. Préserve le périmètre face à la review._
-
-- **<Sujet>** : <raison brève (ex: refacto séparé, métier hors structurel, etc.)>.
-
-## Cible
-
-### Forme attendue après refacto
-
-> _Skill : décrire la structure CIBLE. Schéma ASCII de l'arborescence si nouvelle couche. Interface(s) clé(s). Contrat. Comment les anciens callers consomment la nouvelle forme._
-
-<Description de la forme cible. Pour un refacto qui introduit une nouvelle couche, ajouter une arborescence et l'interface principale.>
+<Description de la forme cible.>
 
 ```
 <arborescence cible>
 ```
 
-```php
-interface <…>
-{
-    public function <…>(<…>): <…>;
-}
+```
+<signature de l'interface principale, dans le langage du projet>
 ```
 
-### Pattern de refacto
+### Mécanismes mobilisés
 
-> _Skill : nommer le pattern (Strangler Fig, Extraction de classe, Move Method, Introduce Parameter Object…). Justifier pourquoi ce pattern convient à la situation. Si pas de pattern formel (« simple renommage + extraction »), le dire._
+> _Skill : nommer le pattern de refacto (Strangler Fig, extraction de classe, déplacement de méthode, objet-paramètre…) et les briques du stack mobilisées pour l'appliquer. Justifier pourquoi ce pattern convient à cette situation. Si pas de pattern formel (« renommage + extraction »), le dire — c'est une réponse valide._
 
-**<Nom du pattern>**. <Justification 1–2 phrases.>
+- **<Pattern de refacto>** : <justification en 1–2 phrases>.
+- **`<Mécanisme du stack>`** : <usage + justification courte>.
 
 ### Alternatives écartées
 
-> _Skill : table ou liste. Chaque alternative avec sa raison de rejet. Sans ce bloc, la review reposera ces questions._
+> _Skill : 2–4 options rejetées avec la raison. Sans ce bloc, la review reposera la question. Format de table normatif (charte §6)._
 
-| Alternative                                         | Pourquoi écartée                                       |
-|-----------------------------------------------------|--------------------------------------------------------|
-| <Alternative A>                                     | <raison concise>                                       |
-| <Alternative B>                                     | <…>                                                    |
+| Alternative | Pourquoi écartée |
+|---|---|
+| <Alternative A> | <raison en une phrase> |
+| <Alternative B> | <…> |
+
+## Modèle de données
+
+> _Skill : section **conditionnelle** (charte §5). Un refacto touche rarement la persistance — dans ce cas, garder le titre et écrire « Aucun impact modèle. ». S'il y a un impact (renommage de table, index déplacé), le décrire ici : c'est un signal fort pour la review, et ça ne doit pas se découvrir dans le diff._
+
+Aucun impact modèle.
+
+## Périmètre
+
+> _Skill : tables exhaustives, format normatif (charte §6) — point de jonction avec `report.md`, qui les reprend en ajoutant une colonne « Prévu dans le plan ». Un reviewer doit pouvoir vérifier qu'aucun fichier n'a été oublié. La taille des fichiers touchés (utile pour un refacto) va dans la colonne « Modification », pas dans une colonne en plus._
+
+### Fichiers à créer
+
+| Fichier | Rôle |
+|---|---|
+| `<chemin>` | <rôle en 1 phrase — souvent : la couche extraite> |
+| `<chemin de test>` | <cas couverts> |
+
+### Fichiers à modifier
+
+| Fichier | Modification |
+|---|---|
+| `<chemin>` | <verbe d'action : extraire / éclater / retirer — + volume si utile (ex: « ~800 lignes → 3 classes »)> |
+| `<chemin>` | <…> |
+
+### Clients identifiés
+
+> _Skill : section propre au track `-r-`. Tout ce qui consomme le code visé, par catégorie (vues, tests, configuration, scénarios E2E, scripts). Indiquer pour chaque catégorie si elle est affectée **ou non** : un « aucun client affecté » explicite est un gage de sécurité, une absence d'item est un trou._
+
+- <Vues / templates> — <impacté ou non + raison>.
+- <Tests fonctionnels> — <impacté ou non>.
+- <Tests E2E> — <impacté ou non>.
+- <Configuration> — <impacté ou non>.
+
+## Hors scope
+
+> _Skill : ce qui pourrait être absorbé dans ce refacto mais ne l'est pas. Préserve le périmètre face à la review — un refacto grossit toujours par les bords. Mettre `_(aucun)_` plutôt que de supprimer la section._
+
+- **<Sujet>** : <raison brève (ex: refacto séparé, métier hors structurel)>.
+
+## Impacts transverses
+
+> _Skill : un refacto n'a normalement que des « inchangé » — et c'est précisément l'information utile (charte §5). Passer les axes en revue et le dire explicitement ; tout axe qui n'est PAS « inchangé » mérite un examen : est-ce encore un refacto ?_
+
+- **Cloisonnement des données** : <inchangé / si non : pourquoi>.
+- **Déclinaisons / thèmes** : <inchangé>.
+- **Traduction / i18n** : <inchangé>.
+- **API / exposition externe** : <inchangé>.
+- **Droits d'accès** : <inchangé — mécanismes de contrôle répliqués à l'identique>.
+- **Emails / notifications** : <inchangé — mêmes déclencheurs>.
+- **Migration de données** : <aucune / nature si exception>.
 
 ## Comportement externe à préserver
 
-> _Skill : invariants observables que le refacto ne doit PAS changer. URLs, noms de routes, signatures publiques, statut HTTP, content-type, side-effects (mails, dispatch event, audit log), templates rendus, flash messages, chaîne tenant. Pour chaque, dire explicitement « inchangé ». Liste consultée à chaque étape du refacto._
+> _Skill : section propre au track `-r-`, et son cœur. Les invariants observables que le refacto ne doit PAS changer : URLs, noms de routes, signatures publiques, statuts et formats de réponse, effets de bord (envois, événements, journaux d'audit), vues rendues, messages utilisateur, chaîne de cloisonnement. Pour chacun, dire explicitement « inchangé ». Cette liste se consulte à CHAQUE étape de l'exécution._
 
-- **URLs** : <tous les paths préservés / liste des changements si non>.
-- **Noms de routes** : <tous les `name:` préservés / liste sinon>.
+- **URLs** : <tous les chemins préservés / liste des changements si non>.
+- **Noms de routes** : <tous préservés / liste sinon>.
 - **Signatures publiques** : <…>.
-- **Sécurité** : <`#[IsGranted]` répliqués / firewall inchangé / voters inchangés>.
-- **Multi-tenancy** : <chaîne `OrganizationContext` inchangée>.
-- **Side-effects** : <envois mail, audit logs, dispatch workflow — déclenchés aux mêmes endroits>.
-- **Templates rendus** : <mêmes chemins, mêmes variables>.
-- **Flash messages** : <mêmes clés, mêmes contenus>.
+- **Droits d'accès** : <contrôles répliqués à l'identique>.
+- **Cloisonnement** : <chaîne inchangée>.
+- **Effets de bord** : <envois, journaux, événements — déclenchés aux mêmes endroits>.
+- **Vues rendues** : <mêmes chemins, mêmes variables>.
+- **Messages utilisateur** : <mêmes clés, mêmes contenus>.
 
-## Stratégie de caractérisation
+## Stratégie de test
 
-> _Skill : section critique pour un refacto. Décrire AVANT le code applicatif comment on verrouille le comportement actuel. Deux blocs : (1) ce qui existe déjà et sert de filet ; (2) ce qu'il faut écrire de nouveau AVANT de toucher au code de production. Si pas de tests de caractérisation supplémentaires (cas du refacto purement structurel à risque faible), l'expliciter avec la raison._
+> _Skill : table normative « code → type → ce qu'on vérifie » (charte §6). Pour un refacto, elle se lit avec la sous-section suivante : ici les tests **existants** qui servent de filet, en dessous ceux qu'il faut **écrire avant** de toucher au code._
 
 ### Tests existants utilisés comme filet
 
-| Test                                                       | Ce qu'il couvre                              | Niveau     |
-|------------------------------------------------------------|----------------------------------------------|------------|
-| `tests/Functional/<…>Test.php`                             | <comportement couvert>                       | functional |
-| `tests/Unit/<…>Test.php`                                   | <…>                                          | unit       |
+| Code | Type | Ce qu'on vérifie |
+|---|---|---|
+| `<chemin de test>` | functional | <comportement couvert> |
+| `<chemin de test>` | unit | <…> |
 
-### Tests de caractérisation à écrire AVANT le refacto
+### Tests de caractérisation
 
-> _Skill : règle absolue — aucun code de production touché tant que ces tests ne sont pas verts et committés. Si la décision est « pas de caractérisation supplémentaire », sauter ce sous-bloc et le déclarer explicitement avec le risque accepté._
+> _Skill : section propre au track `-r-`. Les tests à écrire **AVANT** de toucher au code de production, pour verrouiller le comportement actuel. **Règle absolue** : aucun code de production touché tant que ces tests ne sont pas écrits, verts et committés. Si la décision est « pas de caractérisation supplémentaire » (refacto purement structurel à risque faible), garder le titre et l'expliciter avec le risque accepté — ne pas supprimer la section._
 
-| Test à créer                                               | Comportement à verrouiller                   | Niveau     |
-|------------------------------------------------------------|----------------------------------------------|------------|
-| `tests/<…>/<…>Test.php`                                    | <invariant>                                  | functional |
-| `tests/fixtures/<…>.json`                                  | <capture payload>                            | fixture    |
+| Test à créer | Comportement à verrouiller | Type |
+|---|---|---|
+| `<chemin>` | <invariant> | functional |
+| `<chemin de fixture>` | <capture de sortie de référence> | fixture |
 
-**Règle absolue** : aucun code de production touché tant que ces tests ne sont pas écrits, verts, et committés.
+**Règle absolue** : aucun code de production touché tant que ces tests ne sont pas écrits, verts et committés.
 
-## Stratégie d'exécution incrémentale
+**Hors scope tests** :
 
-> _Skill : décomposer en étapes commitables. Chaque étape doit être déployable seule (revert atomique). Numérotation, fichiers créés/modifiés par étape, vérification à effectuer (caractérisation verte, suite Unit verte, perf mesurée). Statuer explicitement sur Strangler Fig vs feature flag._
+- <ex: pas de caractérisation sur la zone X — non touchée par le refacto, filet existant suffisant>.
 
-### Étapes
+## Ordre d'exécution
 
-1. [ ] **Étape 0 — <nom>**
+> _Skill : étapes commitables, chacune déployable seule (revert atomique). Structure d'étape normative (charte §6). L'étape 1 est presque toujours « écrire les tests de caractérisation ». Statuer explicitement sur la coexistence ancien/nouveau dans l'étape concernée (Strangler Fig actif entre les étapes X et Y derrière l'interface I, ou « pas de coexistence : chaque étape est elle-même un toggle par revert »)._
+
+1. [ ] **<Nom de l'étape — ex: tests de caractérisation>**
+   - Objectif : <verrouiller le comportement actuel avant toute modification>.
+   - Fichiers : <créés>.
+   - Vérification : <suite verte + tests committés>.
+   - Commitable seule : oui.
+
+2. [ ] **<Nom de l'étape — ex: extraction de la nouvelle couche, ancien code intact>**
    - Objectif : <résultat attendu>.
-   - Fichiers créés : <…>.
-   - Vérification : <suite verte + critère mesurable>.
-   - Commit isolé : oui/non.
+   - Fichiers : <créés / modifiés>.
+   - Vérification : <caractérisation verte + critère mesurable>.
+   - Commitable seule : oui/non.
 
-2. [ ] **Étape 1 — <nom>**
+3. [ ] **<Nom de l'étape — ex: bascule des appelants>**
    - <…>
 
-### Strangler Fig / feature flag
+4. [ ] **<Nom de l'étape — ex: retrait de l'ancien code>**
+   - <…>
 
-> _Skill : statuer explicitement. « Strangler Fig actif : ancien et nouveau coexistent aux étapes X et Y derrière l'interface I. » OU « Pas de feature flag : chaque étape est elle-même un toggle (alias service / commit revert). »_
+## Critères de sortie
 
-<Décision + justification.>
-
-## Critères de réussite
-
-> _Skill : checkbox cochée à la livraison. Comportement préservé, perf mesurée si applicable, tests verts, qualité (PHPStan + CS-Fixer). Mesurable, pas qualitatif._
+> _Skill : checkboxes **mesurables**, pas qualitatives (charte §4). Comportement préservé, perf mesurée si applicable, tests verts, qualité. Les commandes QA et les seuils viennent du stack détecté et du `CLAUDE.md` du projet — ne rien inventer._
 
 - [ ] Tous les tests de caractérisation passent **avant ET après** chaque étape.
-- [ ] Suite complète (`symfony php bin/phpunit` + `npm run test:e2e`) sans nouvelle régression.
-- [ ] <Critère structurel : ex « 0 occurrence résiduelle de `<pattern>` mesurée par `grep …` »>.
-- [ ] <Critère perf le cas échéant : ex « panel serializer < 200 ms (vs 1 807 ms aujourd'hui) »>.
+- [ ] Suite complète du projet verte, sans nouvelle régression.
+- [ ] <Critère structurel : ex « 0 occurrence résiduelle de `<pattern>`, mesurée par `<commande de recherche>` »>.
+- [ ] <Critère de perf le cas échéant : ex « <mesure> < <cible> (vs <baseline> aujourd'hui) »>.
 - [ ] Chaque étape committée est déployable seule (revert atomique possible).
-- [ ] PHPStan level 5 : 0 nouvelle erreur. CS-Fixer clean.
+- [ ] Analyse statique et style conformes aux exigences du projet.
 
 ## Risques et mitigations
 
-> _Skill : table « risque → probabilité → mitigation ». Couvrir au minimum : isolation tenant si le code touche au filtrage, casse d'API publique, divergence comportementale subtile (valeur par défaut, conversion de type, null), perf inattendue, dépendance externe non vérifiée._
+> _Skill : table normative (charte §6). Couvrir au minimum : cloisonnement si le code touche au filtrage, casse d'API publique, divergence comportementale subtile (valeur par défaut, conversion de type, null), perf inattendue, dépendance non vérifiée._
 
-| Risque                                              | Probabilité     | Mitigation                                     |
-|-----------------------------------------------------|-----------------|------------------------------------------------|
-| <Risque 1>                                          | faible/moyen/élevé | <mitigation concrète>                       |
-| <Risque 2>                                          | <…>             | <…>                                            |
+| Risque | Probabilité | Mitigation |
+|---|---|---|
+| <Risque 1> | faible / moyenne / élevée | <mitigation concrète> |
+| <Risque 2> | <…> | <…> |
 
 ## Questions ouvertes
 
-> _Skill : décisions encore non prises. À trancher en design détaillé ou en cours d'exécution. Annoter `→ tranché : <choix>` après coup._
+> _Skill : décisions non prises. À trancher en design détaillé ou en cours d'exécution. Annoter `→ tranché : <choix>` après coup. Dernière section : un document d'intention ferme sur ses inconnues (charte §1)._
 
 - **<Question 1>** : <énoncé + options>.
 - **<Question 2>** : <…>.
-
----
-
-## Changelog
-
-> _Skill : ajouté par `/forge:sync` après livraison si le plan a divergé du code. Une ligne par sync, daté._
-
-| Date       | Type                      | Description |
-|------------|---------------------------|-------------|
-| YYYY-MM-DD | Sync post-implémentation  | <sections impactées + raison> |

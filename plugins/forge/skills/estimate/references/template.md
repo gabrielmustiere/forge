@@ -1,17 +1,21 @@
 # Estimation — <Titre de la story>
 
-> _Estimation de temps « tout compris » produite par `/estimate`. **Du temps, pas un montant** : la conversion en euros (taux horaire, remise) reste à la charge du lecteur._
-> Story : `docs/story/<NNN>-<f|r|t>-<slug>/`
-> Base d'estimation : <brief.md | pitch.md | plan.md — celui qui a servi> — fiabilité : <grossière | fonctionnelle | affinée>
+> **But** : chiffrer le temps « tout compris » de la story — du temps, jamais un montant.
+> **Registre** : économique
+> **Story** : `docs/story/<NNN>-<f|r|t>-<slug>/`
+> **Amont** : <`brief.md` | `pitch.md` | `plan.md` — celui qui a servi de base> — fiabilité : <grossière | fonctionnelle | affinée>
 
 <!--
-guide: Estimation du temps facturable d'une story, toutes phases comprises (pas seulement le code).
+guide: Estimation du temps facturable d'une story, toutes phases comprises (pas seulement le code). Produite par `/forge:estimate`, consommée par l'humain (facturation).
+Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`.
+Document de DÉCISION : il ouvre sur sa conclusion (charte §1). On doit pouvoir ne lire que la §Synthèse.
+Registre ÉCONOMIQUE (charte §3) : la conversion en euros (taux horaire, remise) reste à la charge du lecteur.
 RÈGLE D'OR — tout compris : compter cadrage, implem, tests, review, doc, release. Voir method.md. (Workflow solo : pas de phase intégration ni coordination ; release = forfait fixe 30 min.)
 DEUX COLONNES : temps de référence (sans IA) et temps réel avec assistant IA — facteur d'accélération PAR PHASE (method.md §2). L'IA n'accélère pas la release (forfait fixe 0,5 h) ; review et conception peu accélérées.
 UNITÉ : heures (fractions 0,5 / 0,25). Pas de montant en euros.
 BASE = médiane réaliste (le plus probable), pas une borne haute. L'aléa est porté UNE SEULE FOIS, par la marge — padder la base en plus, c'est ~30 % de trop (method.md §4).
-Une estimation sur brief ou pitch seul est à RECONFIRMER après le plan — le signaler dans l'en-tête.
-Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
+Une estimation sur brief ou pitch seul est à RECONFIRMER après le plan — le signaler dans l'en-tête (`fiabilité`) et en §À reconfirmer.
+L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
 ## Synthèse

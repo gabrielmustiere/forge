@@ -126,6 +126,8 @@ Quand l'utilisateur valide, écris `estimate.md` **dans le dossier de la story**
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — il contient le squelette, les guides par section et les placeholders à retirer avant commit. Note dans l'estimate **sur quelle base** elle a été produite (brief / pitch / plan) : une estimation sur brief seul devra être reconfirmée après le pitch.
 
+**Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
+
 **Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
 
 Après écriture, affiche les deux totaux (référence et avec IA, chacun avec marge) et demande si des ajustements sont nécessaires.

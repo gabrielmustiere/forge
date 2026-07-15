@@ -79,7 +79,7 @@ Affiche :
 - Stack détecté en une ligne
 - Résumé de l'évolution en 2-3 lignes (problème + brique)
 - Liste des étapes du plan
-- Critères de succès chiffrés (baseline actuelle si présente, cibles)
+- Métriques chiffrées du plan (baseline actuelle si présente, cibles)
 - État du kill switch prévu
 
 Demande confirmation : "On démarre par la mesure de baseline ?"
@@ -215,7 +215,7 @@ Plan suivi : `docs/story/NNN-t-slug/plan.md`
 Stack : [symfony | sylius]
 Étapes : M/M complétées
 
-### Critères de succès
+### Critères de sortie
 | Métrique | Baseline | Cible | Mesurée | Statut |
 |----------|----------|-------|---------|--------|
 | ... | ... | ... | ... | ✅ / ❌ |

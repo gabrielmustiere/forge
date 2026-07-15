@@ -1,17 +1,21 @@
-# <Le besoin reformulé en clair — une phrase, pas un nom de ticket>
+# Brief — <Le besoin reformulé en clair, une phrase, pas un nom de ticket>
 
-> _Matière première produite par `/feature-interview`. **Ce n'est pas un pitch validé** : `/feature-pitch` va le reprendre, le challenger et le structurer. Tout ici est une proposition à confirmer._
+> **But** : dégrossir un besoin flou par interview — matière première à challenger, pas un cadrage validé.
+> **Registre** : fonctionnel
+> **Story** : `docs/story/<NNN>-f-<slug>/`
+> **Amont** : aucun
 
 <!--
-guide: Ce fichier capture un besoin flou dégrossi par interview. Pas de solution technique, pas de cadrage formel (ni user stories rigoureuses, ni règles métier, ni critères d'acceptation — c'est le job de /feature-pitch).
-RÈGLE D'OR — ce brief est 100% fonctionnel : AUCUN nom d'entité/classe, de service, de fichier, de framework/bundle, de table, ni de stack. Toute trouvaille technique de la reconnaissance du code se traduit en capacité vécue par l'utilisateur avant d'entrer ici (« class Cart » → « le client peut remplir un panier »).
-Il est consommé par `/feature-pitch` comme pitch initial riche.
-Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
+guide: Ce fichier capture un besoin flou dégrossi par interview. Produit par `/forge:feature-interview`, consommé par `/forge:feature-pitch` comme pitch initial riche.
+Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`.
+Ce n'est PAS un pitch validé : `/forge:feature-pitch` va le reprendre, le challenger et le structurer. Pas de solution technique, pas de cadrage formel (ni user stories rigoureuses, ni règles métier, ni critères d'acceptation — c'est le job du pitch).
+RÈGLE D'OR — registre fonctionnel (charte §3) : AUCUN nom d'entité/classe, de service, de fichier, de framework/bundle, de table, ni de stack. Toute trouvaille technique de la reconnaissance du code se traduit en capacité vécue par l'utilisateur avant d'entrer ici (« class Cart » → « le client peut remplir un panier »).
+L'en-tête ci-dessus RESTE dans le fichier commité (charte §2). Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
 ## Le besoin en une phrase
 
-> _Skill : la formulation que l'utilisateur a validée en restitution. Une phrase qui dit ce qui le gêne et ce qu'il aimerait à la place. C'est ce que `/feature-pitch` reprendra en Phase 1 comme pitch initial._
+> _Skill : la formulation que l'utilisateur a validée en restitution. Une phrase qui dit ce qui le gêne et ce qu'il aimerait à la place. C'est ce que `/forge:feature-pitch` reprendra en Phase 1 comme pitch initial._
 
 <Besoin en une phrase, à challenger.>
 
@@ -37,21 +41,21 @@ Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 
 ## Ce que le produit fait déjà
 
-> _Skill : la phase 1 a lu le code, mais on ne note ici que des **capacités vues par l'utilisateur** — ce que le produit permet déjà de faire autour du besoin, en clair. Jamais de nom d'entité, de service, de fichier ni de stack (cf. règle d'or). Sert à `/feature-pitch` pour reformuler le besoin en extension de l'existant plutôt qu'en réinvention._
+> _Skill : la phase 1 a lu le code, mais on ne note ici que des **capacités vues par l'utilisateur** — ce que le produit permet déjà de faire autour du besoin, en clair. Jamais de nom d'entité, de service, de fichier ni de stack (règle d'or, charte §3). Sert à `/forge:feature-pitch` pour reformuler le besoin en extension de l'existant plutôt qu'en réinvention._
 
 - **Déjà possible aujourd'hui** : <capacité offerte, du point de vue utilisateur — ex: « le client peut remplir un panier et passer commande »>.
 - **Pas encore couvert** : <ce qui manque et que le besoin viserait — ex: « aucune relance quand un panier est abandonné »>.
 - _Mettre `_rien de probant trouvé_` si la reconnaissance n'a rien donné (besoin trop neuf, ou trop flou à ce stade)._
 
-## Ce que ce n'est PAS
+## Hors scope
 
-> _Skill : les « non, ça c'est autre chose » de l'utilisateur. Pré-cadre le hors-scope que le pitch formalisera. Évite que le pitch ou le plan élargissent par erreur._
+> _Skill : les « non, ça c'est autre chose » de l'utilisateur. Pré-cadre le hors-scope que le pitch formalisera — même titre canonique que dans le pitch et les plans (charte §4). Évite que le pitch ou le plan élargissent par erreur. Mettre `_(aucun)_` si l'utilisateur n'a rien écarté : une section vide serait indistinguable d'un oubli (charte §5)._
 
 - <Sujet voisin explicitement écarté par l'utilisateur>.
 
 ## Zones de flou à creuser au pitch
 
-> _Skill : ce qui est resté incertain malgré l'interview. Ne pas trancher ici — laisser `/feature-pitch` les challenger. Format question ouverte._
+> _Skill : ce qui est resté incertain malgré l'interview. Ne pas trancher ici — laisser `/forge:feature-pitch` les challenger. Format question ouverte._
 
 - **<Question restée ouverte>** : <ce qui n'a pas pu être tranché>.
 

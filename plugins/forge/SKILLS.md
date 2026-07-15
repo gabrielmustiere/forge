@@ -3,6 +3,8 @@
 Pipeline de développement stack-agnostique (24 skills).
 
 > **Convention métadonnées de story** : chaque skill qui écrit dans un dossier `docs/story/NNN-<f\|r\|t>-<slug>/` maintient un fichier `metadata.json` (titre réel, dates, tags, changelog consolidé, livraison) selon la référence partagée [`references/story-metadata.md`](references/story-metadata.md). Les skills de création écrivent `title`/`created`/`tags` + première entrée ; chaque passe rebouge `updated` et append au changelog ; `commit`/`release` renseignent `delivery`. La timeline vit dans ce fichier — plus de table de changelog en pied de `pitch.md`/`plan.md`. Le Forge Board lit ce fichier (jamais ne l'écrit).
+>
+> **Convention format des documents** : les 8 documents de story (`brief`, `pitch`, `plan` ×3 tracks, `review`, `report`, `estimate`) partagent un contrat de format décrit par la charte [`references/document-format.md`](references/document-format.md) — matrice des buts (un document = un registre, une question), en-tête normalisé (but / registre / story / amont ; ni date, ni SHA, ni stack en dur), vocabulaire canonique des sections, squelette commun aux trois plans, formats de table normatifs (périmètre, risques, alternatives, tests, étapes), catalogue fermé de tags et verdicts français. Les templates des skills en sont l'application ; en cas de doute, la charte fait foi. Les skills avals cherchent les sections **par leur nom canonique** — ne pas les renommer.
 
 | Skill | Rôle |
 | --- | --- |

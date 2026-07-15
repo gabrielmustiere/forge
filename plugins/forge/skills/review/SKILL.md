@@ -83,6 +83,8 @@ docs/story/NNN-t-slug/review.md   # review d'une évolution technique
 
 **Format du fichier + tags** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction.
 
+**Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
+
 **Métadonnées de story** : après avoir écrit `review.md` dans le dossier de la story (review rattachée à une story, pas standalone), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé, ex. verdict + bloquants restants). Ne modifie jamais `created`.
 
 ### Phase 4 — Présentation au développeur
@@ -95,19 +97,23 @@ Pour chaque finding bloquant, demande : "Tu veux corriger maintenant ou on note 
 
 Quand tous les findings sont traités :
 
-1. Mettre à jour `docs/story/NNN-<f|r|t>-slug/review.md` — cocher les items corrigés, mettre à jour le verdict.
-2. Afficher le verdict :
+1. Mettre à jour `docs/story/NNN-<f|r|t>-slug/review.md` — cocher les items corrigés, mettre à jour la §Synthèse.
+2. Afficher le verdict. Valeurs **fermées** et en français (charte §8) : `READY TO COMMIT` / `NEEDS FIXES` ne sont plus produits.
 
 ```
-## Verdict
+## Synthèse
 
 - Bloquants restants : 0 / N
-- Statut : READY TO COMMIT / NEEDS FIXES
+- Importants restants : 0 / N
+- Mineurs restants : N / N
+- Statut : PRÊT À COMMITER
 ```
 
-Si NEEDS FIXES, liste précisément ce qui reste à corriger.
+Statuts possibles : **PRÊT À COMMITER** (0 bloquant, 0 important non résolu) · **PRÊT À COMMITER SOUS RÉSERVE** (préciser laquelle) · **CORRECTIONS REQUISES** (bloquants ou importants non résolus).
 
-Si READY TO COMMIT :
+Si CORRECTIONS REQUISES, liste précisément ce qui reste à corriger.
+
+Si PRÊT À COMMITER :
 > Prochaine étape : `/commit` pour commit et push.
 
 ## Argument optionnel

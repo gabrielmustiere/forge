@@ -98,31 +98,36 @@ Pioche 2-3 axes par tour selon la nature du problème.
 - **Lib retenue** : préférer ce qui est déjà dans le projet ou le framework (ex: `symfony/cache`, `symfony/messenger`, `symfony/rate-limiter`, `monolog/processor`) avant d'ajouter une dépendance.
 - **Alternatives écartées** : pourquoi pas une autre approche ? Trace les options envisagées.
 
-**Point d'intégration**
+**Approche retenue — point d'ancrage**
 
 - **Où brancher le mécanisme** : décorateur sur un service existant, middleware HTTP, listener sur un event, aspect sur un repository, transport messenger ? Respect des mécanismes d'extension du framework (voir références stack — jamais de modification vendor).
 - **Impact sur les clients** : la signature publique change-t-elle ? Les réponses changent-elles ? Les timings changent-ils d'une façon que les clients observeraient ?
 
-**Critères de succès mesurables**
+**Métriques (baseline → cible)**
 
 - **Métrique cible** : laquelle on veut faire bouger (latence p50/p95/p99, taux d'erreur, taux de timeout, MTBF, MTTR, nombre de logs parsables, taux de cache hit, score Lighthouse…) ?
 - **Baseline** : valeur mesurée avant le changement. Si pas encore mesurable, ajouter une étape d'instrumentation au début du plan.
 - **Cible** : valeur attendue après. Être réaliste (ex: "latence p95 de 850 ms → < 200 ms", "taux de succès sur l'appel X : 94 % → > 99 %", "100 % des logs applicatifs parsables en JSON").
 - **Méthode de mesure** : load test, requête Prometheus, dashboard Datadog, script bench maison, tests de résilience (coupure réseau simulée…).
 
-**Rollback et compatibilité**
+**Rollback et kill switch**
 
 - **Feature flag / kill switch** : est-ce qu'on peut désactiver le mécanisme en prod sans redéployer ? (Variable d'env, paramètre de config, feature flag applicatif.) C'est quasi obligatoire pour toute évolution tech qui touche un chemin critique.
 - **Compatibilité arrière** : les clients doivent-ils bouger ? Peut-on déployer sans coordination ? Prévoir une phase de cohabitation si le format de sortie change (ex: logs plats + logs structurés en double pendant la transition).
 - **Risque de charge** : le nouveau mécanisme ajoute-t-il une dépendance d'infra (Redis, broker de queue, service externe) qui peut tomber ? Comportement en cas de panne de cette dépendance ?
 
-**Exécution incrémentale**
+**Ordre d'exécution**
 
 - **Étape 1 = instrumentation** si la baseline n'est pas déjà mesurable. On ne déploie rien d'autre avant d'avoir une mesure de référence.
 - **Étapes suivantes** : chaque étape doit être déployable seule, sous feature flag si elle modifie un chemin critique.
 - **Ordre** : par où commencer pour minimiser le risque et obtenir le plus vite une mesure utile ?
 
-Continue à itérer jusqu'à ce que l'utilisateur valide la brique, les critères de succès chiffrés, le mécanisme de rollback et le découpage.
+**Stratégie de test**
+
+- **Ce qui se teste automatiquement** : quel niveau (unit, functional, E2E) couvre quel comportement après la bascule ? Ne pas se contenter des métriques — une cible chiffrée n'est pas un test.
+- **Ce qui ne se teste qu'en environnement réel** : bascule DNS, certificat, service tiers, délivrabilité. Ça va en « Hors scope tests » du plan et se retrouve en étape de bascule dans l'ordre d'exécution.
+
+Continue à itérer jusqu'à ce que l'utilisateur valide la brique, les métriques chiffrées, le mécanisme de rollback et le découpage.
 
 ### Phase 5 — Choix du dossier et rédaction
 
@@ -137,6 +142,8 @@ Quand l'utilisateur valide, écris le plan dans `docs/story/`.
 **Nom du fichier** : `plan.md` dans ce dossier.
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction.
+
+**Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
 
 **Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du plan), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`. Si tu relances ce skill pour **éditer un plan existant** (le `metadata.json` est déjà là), ne recrée rien : rebouge simplement `updated` à la date du jour et **append** une entrée de changelog décrivant la révision, sans jamais toucher `created`.
 

@@ -95,7 +95,7 @@ Co-construis la solution en challengeant sur ces axes (2-3 par tour, en piochant
 - **Emails / notifications** : transactionnels à envoyer ?
 - **Tests** : niveaux de test (unit, functional, E2E) — qu'est-ce qu'on teste à quel niveau ?
 - **Risques** : performance (N+1, requêtes en boucle), sécurité, effets de bord, couplage ?
-- **Ordre d'implémentation** : dans quel ordre implémenter pour valider incrémentalement ?
+- **Ordre d'exécution** : dans quel ordre implémenter pour valider incrémentalement ?
 
 Continue à itérer tant que l'utilisateur n'est pas satisfait de la conception.
 
@@ -106,6 +106,8 @@ Quand l'utilisateur valide, écris le fichier de plan.
 **Nom du fichier** : `docs/story/NNN-f-slug-de-la-feature/plan.md` (dans le **même dossier** que le pitch).
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — il contient le squelette, les guides de remplissage par section et les conventions (`> _Skill : ..._`, commentaires HTML, placeholders) à retirer avant commit.
+
+**Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
 
 **Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
 

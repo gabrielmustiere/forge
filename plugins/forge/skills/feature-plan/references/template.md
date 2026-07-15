@@ -1,149 +1,168 @@
 # Plan technique — <Titre de la feature>
 
-> Pitch : `docs/story/<NNN>-f-<slug>/pitch.md`
-> Stack : symfony
+> **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
+> **Registre** : technique
+> **Story** : `docs/story/<NNN>-f-<slug>/`
+> **Amont** : `pitch.md`
+> **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
-guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Consommé par `/forge:feature-implem` (étape build) et `/forge:sync`.
-Le pitch décrit l'intention métier ; ce fichier décrit le COMMENT. Tout ce qui touche au code, aux entités, aux services, aux migrations.
-Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
+guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Produit par `/forge:feature-plan`, consommé par `/forge:feature-implem` (étape build), `/forge:review`, `/forge:report` et `/forge:estimate`.
+Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections : les skills avals les cherchent par leur nom.
+Le pitch décrit l'intention métier ; ce fichier décrit le COMMENT. Le « pourquoi » ne se recopie PAS ici : il vit dans `pitch.md` §Contexte, auquel l'en-tête renvoie (charte §5).
+STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Les mécanismes, commandes QA et conventions viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et du `CLAUDE.md` du projet — les exemples ci-dessous sont à remplacer par ceux du stack réel.
+L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
 ## Approche retenue
 
-> _Skill : 1 paragraphe qui décrit la solution choisie en termes architecturaux (pas une liste de fichiers). Mentionner les patterns mobilisés (EntityListener, Live Component, AsDecorator, etc.). Puis lister 2–4 alternatives écartées avec la raison du rejet — sans ce bloc, la review reposera la question._
+> _Skill : 1–2 paragraphes qui décrivent la solution choisie en termes architecturaux (pas une liste de fichiers). Quelle couche porte quoi, comment les pièces s'assemblent._
 
 <Solution retenue en 1–2 paragraphes.>
 
-**Alternatives écartées** :
+### Mécanismes mobilisés
 
-- **<Alternative A>** : <raison du rejet, en 1 phrase>.
-- **<Alternative B>** : <…>.
-
-## Entités et modèle de données
-
-> _Skill : section obligatoire si la feature crée/modifie une entité Doctrine. Une sous-section par entité. Préciser : champs (table type/nullable/contrainte), attributs au niveau classe (UniqueConstraint, EntityListeners, validateur custom), implémentation `OrganizationAwareInterface` ou non. Pour les relations bidirectionnelles, préciser inversedBy/mappedBy et cascade. Si la feature ne touche aucune entité, remplacer cette section par « Aucun impact modèle. »._
-
-### Nouvelle entité `<App\Entity\…>` (ou Modification de `<entité>`)
-
-`<chemin du fichier>` :
-
-| Champ           | Type                          | Nullable | Contrainte                                  |
-|-----------------|-------------------------------|----------|---------------------------------------------|
-| `id`            | int (PK auto)                 | non      |                                             |
-| `<champ>`       | <type PHP/Doctrine>           | <oui/non>| <Assert\… ou contrainte BDD>                |
-| `<relation>`    | `ManyToOne` (`<Entité>`)      | non      | `JoinColumn(name: '...', onDelete: '...')`  |
-
-Attributs au niveau classe :
-
-```php
-#[ORM\Entity(repositoryClass: <…>::class)]
-#[ORM\UniqueConstraint(name: 'UNIQ_<TABLE>_<CHAMP>', fields: ['<champ>'])]
-#[ORM\EntityListeners([<…>::class])]
-#[UniqueEntity(fields: [...], message: '...')]
-```
-
-> _Skill : préciser si l'entité implémente `OrganizationAwareInterface` ou non, et pourquoi. Mentionner les contraintes custom (constraint + validator) à créer si la règle métier ne tient pas dans un `Assert\*` standard._
-
-## Mécanismes framework mobilisés
-
-> _Skill : lister les patterns Symfony / Doctrine / EasyAdmin / projet réutilisés (pas inventés). Ex : `#[AsDoctrineListener]`, `EventSubscriber` à priorité X, Live Component, `#[AsDecorator]`, voter, repository custom, contrainte custom. Pour chaque, dire BRIÈVEMENT pourquoi ce mécanisme plutôt qu'un autre._
+> _Skill : les patterns et briques du stack détecté que la feature réutilise (jamais inventés) — hook de cycle de vie, écouteur d'événement, décorateur, composant temps réel, contrôle d'accès, requête dédiée… Pour chaque, dire BRIÈVEMENT pourquoi celui-là plutôt qu'un autre. Nommer les mécanismes avec le vocabulaire du stack réel, tel que le donnent `references/stacks/<stack>.md` et le `CLAUDE.md` du projet._
 
 - **`<Mécanisme>`** : <usage dans la feature et justification courte>.
 - **`<Mécanisme>`** : <…>.
 
-## Fichiers à créer
+### Alternatives écartées
 
-> _Skill : table exhaustive. Chaque ligne = un fichier qui n'existe pas encore. Mettre les tests en bas. Une description courte qui aide à comprendre le rôle sans lire le fichier._
+> _Skill : 2–4 options rejetées avec la raison. Sans ce bloc, la review reposera la question. Format de table normatif (charte §6)._
 
-| Fichier                                              | Rôle                                                              |
-|------------------------------------------------------|-------------------------------------------------------------------|
-| `src/<…>.php`                                        | <rôle en 1 phrase>                                                |
-| `src/Factory/<…>Factory.php`                         | Factory Foundry (états : `as<…>()`, `as<…>()`).                   |
-| `migrations/Version<YYYYMMDDHHMMSS>.php`             | <description succincte de la migration>                           |
-| `tests/Unit/<…>Test.php`                             | <cas couverts en 1 phrase>                                        |
-| `tests/Functional/<…>Test.php`                       | <cas couverts en 1 phrase>                                        |
+| Alternative | Pourquoi écartée |
+|---|---|
+| <Alternative A> | <raison en une phrase> |
+| <Alternative B> | <…> |
 
-## Fichiers à modifier
+## Modèle de données
 
-> _Skill : table exhaustive. Chaque ligne = un fichier existant. Décrire le diff conceptuel (« remplacer X par Y », « ajouter relation inverse », « drop méthode Z ») — pas le diff ligne à ligne._
+> _Skill : section **conditionnelle** (charte §5) — présente si la feature crée ou modifie une structure persistante. Sinon, garder le titre et écrire la phrase « Aucun impact modèle. » : une section supprimée est indistinguable d'un oubli._
+>
+> _Une sous-section par structure. Préciser les champs (type, nullable, contrainte), les contraintes de niveau structure (unicité, index, hooks), et le rattachement aux conventions transverses du projet (cloisonnement multi-tenant, horodatage, traduction). Pour les relations bidirectionnelles, préciser le côté propriétaire et le comportement en cascade. Utiliser les types et le vocabulaire du stack détecté._
 
-| Fichier                                              | Modification                                                      |
-|------------------------------------------------------|-------------------------------------------------------------------|
-| `src/Entity/<…>.php`                                 | <modification en 1 phrase>                                        |
-| `src/Controller/<…>.php`                             | <modification>                                                    |
-| `templates/<…>.html.twig`                            | <modification UI>                                                 |
-| `config/packages/<…>.yaml`                           | <modification config>                                             |
-| `.env`, `.env.example`                               | <variables ajoutées/retirées>                                     |
-| `tests/Unit/<…>Test.php`                             | <adaptation>                                                      |
+### <Nouvelle structure `<Nom>`> (ou <Modification de `<Nom>`>)
+
+`<chemin du fichier>` :
+
+| Champ | Type | Nullable | Contrainte |
+|---|---|---|---|
+| `id` | <identifiant, auto> | non | |
+| `<champ>` | <type du stack> | <oui/non> | <contrainte de validation ou de stockage> |
+| `<relation>` | <cardinalité> (`<Structure cible>`) | non | <comportement en cascade / suppression> |
+
+> _Skill : préciser si la structure adhère aux conventions transverses du projet (cloisonnement par organisation/canal, traçabilité, traduction) **et pourquoi**. Mentionner les contraintes de validation sur mesure à créer si une règle métier du pitch ne tient pas dans une contrainte standard du stack._
+
+## Périmètre
+
+> _Skill : tables exhaustives, format normatif (charte §6) — c'est le point de jonction avec `report.md`, qui reprend ces deux tables en y ajoutant une colonne « Prévu dans le plan ». Un reviewer doit pouvoir cocher chaque ligne contre le diff._
+
+### Fichiers à créer
+
+> _Skill : chaque ligne = un fichier qui n'existe pas encore. Mettre les tests en bas. Une description courte qui aide à comprendre le rôle sans lire le fichier._
+
+| Fichier | Rôle |
+|---|---|
+| `<chemin>` | <rôle en 1 phrase> |
+| `<chemin de migration/script de schéma>` | <description succincte> |
+| `<chemin de test unitaire>` | <cas couverts en 1 phrase> |
+| `<chemin de test fonctionnel>` | <cas couverts en 1 phrase> |
+
+### Fichiers à modifier
+
+> _Skill : chaque ligne = un fichier existant. Décrire le diff conceptuel (« remplacer X par Y », « ajouter la relation inverse », « retirer la méthode Z ») — pas le diff ligne à ligne._
+
+| Fichier | Modification |
+|---|---|
+| `<chemin>` | <modification en 1 phrase> |
+| `<template / vue>` | <modification UI> |
+| `<fichier de configuration>` | <modification config> |
+| `<fichier d'environnement>` | <variables ajoutées/retirées> |
+
+## Hors scope
+
+> _Skill : ce que ce plan ne fait PAS, côté technique (le hors-scope métier vit dans le pitch). Refactos voisins non embarqués, optimisations remises à plus tard. Mettre `_(aucun)_` plutôt que de supprimer la section._
+
+- **<Sujet exclu>** : <raison brève>.
 
 ## Impacts transverses
 
-> _Skill : miroir du pitch §Impacts transverses, mais avec les détails techniques. Indiquer comment la feature interagit avec chaque axe systémique. « Non » explicite reste préférable à l'absence d'item._
+> _Skill : miroir **technique** du §Impacts transverses du pitch — le pitch pose la question en langage métier, le plan y répond en mécanismes. Un « non » explicite reste préférable à l'absence d'item. Nommer les mécanismes du stack réel._
 
-- **Multi-tenant** : <ex: l'entité est `OrganizationAware` et filtrée par `OrganizationFilter`. OU : entité gérée sous `/admin` uniquement, filtre désactivé.>
-- **Multi-thème** : <oui/non>.
-- **API REST/GraphQL** : <oui/non + endpoint>.
-- **i18n** : <libellés concernés, FR par défaut, structure existante>.
-- **Permissions** : <nouveau voter ou firewall existant suffisant>.
-- **Emails / notifications** : <oui/non + mailer concerné>.
-- **Migration de données** : <création table, backfill SQL ou via `app:init-data` au déploiement>.
-- **Comportement par défaut** : <pour les utilisateurs/orgs qui n'activent pas la feature>.
-
-## Ordre d'implémentation
-
-> _Skill : checklist exécutable, des fondations vers l'UI. Modèle → migration → service → contrôleur/composant → template → tests. Numéroter en respectant les dépendances. Les cases cochées au fil de l'exécution servent de fil rouge pendant `/forge:feature-implem`._
-
-1. [ ] <Étape 1 : entité + relation inverse + contrainte custom>.
-2. [ ] <Étape 2 : EntityListener / EventSubscriber>.
-3. [ ] <Étape 3 : repository custom>.
-4. [ ] <Étape 4 : service métier>.
-5. [ ] <Étape 5 : entités/contraintes drop des champs obsolètes>.
-6. [ ] <Étape 6 : adapter contrôleurs / DTOs / guards>.
-7. [ ] <Étape 7 : migration Doctrine (`make:migration`) + relue>.
-8. [ ] <Étape 8 : seed (`AppInitDataCommand`) et factories Foundry>.
-9. [ ] <Étape 9 : CRUD EasyAdmin / menu DashboardController>.
-10. [ ] <Étape 10 : templates Twig + LiveComponent>.
-11. [ ] <Étape 11 : drop config/yaml obsolète + variables `.env`>.
-12. [ ] <Étape 12 : tests unit + adaptations>.
-13. [ ] <Étape 13 : QA finale (PHPStan + CS-Fixer + phpunit + smoke E2E)>.
+- **Cloisonnement des données** : <mécanisme de filtrage touché, ou raison pour laquelle la structure y échappe>.
+- **Déclinaisons / thèmes** : <oui/non + mécanisme>.
+- **Traduction / i18n** : <libellés concernés, langue par défaut, structure existante>.
+- **API / exposition externe** : <oui/non + point d'entrée exposé ou modifié>.
+- **Droits d'accès** : <nouveau contrôle d'accès à écrire, ou mécanisme existant suffisant>.
+- **Emails / notifications** : <oui/non + brique concernée>.
+- **Migration de données** : <aucune, ou nature : création de structure, retrait de champ, reprise de l'existant>.
+- **Comportement par défaut** : <pour les utilisateurs/organisations qui n'activent pas la feature>.
 
 ## Stratégie de test
 
-> _Skill : table « code → type de test → ce qu'on vérifie ». Pas le code des tests, le contrat. Mentionner explicitement ce qui est **hors scope tests** (ex: « pas de spec E2E dédiée — MauffreyStory provisionne, les flows existants couvrent »)._
+> _Skill : table normative « code → type → ce qu'on vérifie » (charte §6). Pas le code des tests, le contrat. Les niveaux (unit / functional / E2E) et les outils viennent du stack détecté._
 
-| Code                                                        | Type            | Ce qu'on vérifie                                                  |
-|-------------------------------------------------------------|-----------------|-------------------------------------------------------------------|
-| `src/<…>.php`                                               | Unit            | <cas nominaux + cas d'erreur>                                     |
-| `src/Validator/<…>.php`                                     | Unit            | <violation A, violation B, combinaisons OK>                       |
-| `src/Security/Voter/<…>.php`                                | Unit (adapté)   | <règle de décision>                                               |
-| `src/Controller/<…>.php`                                    | Functional      | <parcours + assertions HTTP + flash>                              |
+| Code | Type | Ce qu'on vérifie |
+|---|---|---|
+| `<chemin>` | unit | <cas nominaux + cas d'erreur> |
+| `<chemin de la règle de validation>` | unit | <violation A, violation B, combinaisons OK> |
+| `<chemin du contrôle d'accès>` | unit | <règle de décision> |
+| `<chemin du point d'entrée HTTP>` | functional | <parcours + assertions de réponse> |
 
-**Hors scope tests pour cette story** :
+**Hors scope tests** :
 
-- <ex: pas de functional CRUD `/admin` — couvert par firewall global + smoke runbook>.
-- <ex: pas de spec E2E dédiée — fixture déjà en place>.
+> _Skill : ce qu'on assume de ne pas couvrir, avec la raison. Un plan sans hors-scope de test explicite est un plan qui n'a pas tranché (charte §6)._
 
-## Risques et points d'attention
+- <ex: pas de test fonctionnel sur l'écran d'administration — couvert par le contrôle d'accès global déjà testé>.
+- <ex: pas de scénario E2E dédié — les parcours existants traversent déjà la zone>.
 
-> _Skill : risques techniques (pas métier — ceux-là vont dans le pitch). Format libre, 1 puce par risque, avec mitigation explicite. Couvrir au minimum : sécurité/isolation tenant, performance, migration irréversible, dépendance externe, comportement non couvert par les tests._
+## Ordre d'exécution
 
-- **<Risque 1>** : <description + mitigation>.
-- **<Risque 2>** : <description + mitigation>.
+> _Skill : étapes exécutables des fondations vers l'UI (modèle → schéma → service → point d'entrée → vue → tests). Structure d'étape normative (charte §6). Numéroter en respectant les dépendances : les cases cochées au fil de l'eau servent de fil rouge pendant `/forge:feature-implem`._
+
+1. [ ] **<Nom de l'étape — ex: structure de données + contraintes>**
+   - Objectif : <résultat attendu>.
+   - Fichiers : <créés / modifiés>.
+   - Vérification : <commande ou critère observable>.
+   - Commitable seule : oui/non.
+
+2. [ ] **<Nom de l'étape — ex: service métier>**
+   - Objectif : <…>.
+   - Fichiers : <…>.
+   - Vérification : <…>.
+   - Commitable seule : oui/non.
+
+3. [ ] **<Nom de l'étape — ex: migration de schéma générée puis relue>**
+   - <…>
+
+4. [ ] **<Nom de l'étape — ex: point d'entrée + vue>**
+   - <…>
+
+5. [ ] **<Nom de l'étape — ex: tests + QA finale (analyse statique, style, suite de tests)>**
+   - <…>
+
+## Critères de sortie
+
+> _Skill : checkboxes **techniques et vérifiables** cochées à la livraison — le pendant des « Critères d'acceptation » observables du pitch (charte §4). Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet : ne pas inventer, ne pas écrire un outil en dur qui n'existe pas dans ce projet._
+
+- [ ] <Critère structurel ou comportemental mesurable>.
+- [ ] Suite de tests du projet verte, sans nouvelle régression.
+- [ ] Analyse statique et style conformes aux exigences du projet.
+- [ ] <Critère propre à la feature : ex « le comportement par défaut est inchangé pour les organisations qui n'activent pas l'option »>.
+
+## Risques et mitigations
+
+> _Skill : risques **techniques** (les risques métier vivent dans le pitch). Table normative (charte §6). Couvrir au minimum : cloisonnement/isolation si le code touche au filtrage, performance, migration irréversible, dépendance externe, comportement non couvert par les tests._
+
+| Risque | Probabilité | Mitigation |
+|---|---|---|
+| <Risque 1> | faible / moyenne / élevée | <mitigation concrète> |
+| <Risque 2> | <…> | <…> |
 
 ## Questions ouvertes
 
-> _Skill : décisions techniques non tranchées au moment du plan. À trancher en `/forge:feature-implem` build ou à l'implémentation. Annoter `→ tranché : <choix>` après coup. Reproduire la même question dans le pitch si elle a une dimension métier._
+> _Skill : décisions techniques non tranchées au moment du plan. À trancher en `/forge:feature-implem` ou à l'implémentation. Annoter `→ tranché : <choix>` après coup. Si la question a aussi une dimension métier, la reproduire dans le pitch. Dernière section : un document d'intention ferme sur ses inconnues (charte §1)._
 
 - **<Question 1>** : <énoncé + options techniques>.
 - **<Question 2>** : <…>.
-
----
-
-## Changelog
-
-> _Skill : ajouté par `/forge:sync` après livraison si le plan a divergé du code livré. Une ligne par sync, daté. Décrire les sections modifiées (§Entités, §Fichiers à modifier, §Ordre item N, §Questions ouvertes) avec la justification._
-
-| Date       | Type                      | Description |
-|------------|---------------------------|-------------|
-| YYYY-MM-DD | Sync post-implémentation  | <sections impactées + raison> |

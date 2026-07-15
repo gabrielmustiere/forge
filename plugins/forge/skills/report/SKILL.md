@@ -103,8 +103,8 @@ Présente tes constats par catégorie et demande des précisions sur les écarts
 
 **Cas `t-` (évolution technique)** — catégories :
 
-1. **Brique livrée** — composant technique ajouté/modifié, point d'intégration, config
-2. **Critères de succès** — mesures avant/après (perf, taux d'erreur, latence, couverture…) : atteints / partiels / non mesurés
+1. **Brique livrée** — composant technique ajouté/modifié, point d'ancrage, config
+2. **Critères de sortie** — mesures avant/après (perf, taux d'erreur, latence, couverture…) : atteints / partiels / non mesurés
 3. **Effets transverses** — impact sur les modules clients, compatibilité, migrations de données
 4. **Rollback** — mécanisme prévu et testé (feature flag, env var, kill switch)
 5. **Dette résiduelle**
@@ -119,10 +119,14 @@ Quand la revue est complète et validée, écris le fichier.
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — un seul template unifié qui couvre les 3 types (feature, refacto, tech). Les guides `> _Skill : ..._` du template précisent les adaptations selon le préfixe :
 
-- Pour `-r-` / `-t-` : supprimer la ligne `> Pitch : …` du frontmatter, remplacer `## Critères d'acceptation` par `## Critères de succès` (repris du `plan.md`).
-- Pour `-f-` : conserver le frontmatter complet et reprendre les critères du `pitch.md`.
+- Pour `-r-` / `-t-` : retirer `pitch.md` de la ligne `> **Amont**` de l'en-tête (pas de pitch sur ces tracks), et renommer `## Critères d'acceptation` en `## Critères de sortie` — repris du `plan.md` §Critères de sortie, section **unique** de critères quel que soit le track (charte §4).
+- Pour `-f-` : conserver l'en-tête complet et reprendre les critères du `pitch.md` §Critères d'acceptation, **à l'identique** (c'est ce que `/forge:sync` réaligne).
 
-Retirer tous les blocs guides et commentaires HTML avant commit.
+**Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
+
+**Point de jonction plan → report** (charte §6) : les tables du §Périmètre livré reprennent **exactement** celles du `plan.md` §Périmètre (mêmes colonnes, même ordre) + une colonne finale « Prévu dans le plan ». Ce contrat vaut pour les trois tracks : un `-r-` ou un `-t-` se confronte à son plan comme une feature. Les findings de review repris en dette gardent leur tag et leur format à l'identique (charte §7).
+
+Retirer tous les blocs guides et commentaires HTML avant commit — l'en-tête normalisé, lui, reste (charte §2).
 
 **Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
 
