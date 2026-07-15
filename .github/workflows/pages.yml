@@ -5,7 +5,11 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'tools/check-site-version.py'
       - '.github/workflows/pages.yml'
+      # Une release bumpe le manifeste sans toucher au site : sans ce chemin,
+      # la dérive de version ne serait jamais détectée.
+      - 'plugins/forge/.claude-plugin/plugin.json'
   workflow_dispatch:
 
 permissions:
@@ -19,12 +23,18 @@ concurrency:
 
 jobs:
   deploy:
+    name: Vérifier et déployer le site
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+
+      # Le site annonce une version en dur que /forge:release ne met pas à jour :
+      # on refuse de déployer un site qui ment sur la version du plugin.
+      - name: Version affichée par le site vs plugin.json
+        run: python3 tools/check-site-version.py
 
       - uses: actions/configure-pages@v5
 
