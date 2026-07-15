@@ -25,7 +25,7 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 
 ## Utilisateurs concernés
 
-- **Utilisateur local connecté** (l'unique utilisateur, mono-utilisateur — cf. anti-objectif vision « backend partagé ») — il voit désormais, pour chaque projet, un **statut d'éligibilité** et peut re-déclencher sa vérification. Toute la feature vit derrière le firewall de `login`.
+- **Utilisateur local connecté** (l'unique utilisateur, mono-utilisateur — cf. anti-objectif vision « backend partagé ») — il voit désormais, pour chaque projet, un **statut d'éligibilité** et peut re-déclencher sa vérification. Toute la feature exige d'être connecté.
 
 ## User Stories
 
@@ -33,19 +33,19 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 - En tant qu'**utilisateur connecté**, je veux savoir si un repo **utilise réellement forge** (présence d'au moins une story sous `docs/story/`), afin de ne pas suivre un repo qui n'a rien à projeter en kanban.
 - En tant qu'**utilisateur connecté**, je veux **re-déclencher la vérification** d'un projet via un bouton dédié, afin de confirmer qu'un accès réparé (nouveau token, URL corrigée) fonctionne, sans re-créer le projet.
 - En tant qu'**utilisateur connecté**, je veux **voir le statut de chaque projet** (badge) et la **date de sa dernière vérification**, afin de repérer d'un coup d'œil ce qui est cassé, vide ou pas encore vérifié.
-- En tant qu'**utilisateur connecté**, je veux que mon **token ne fuite jamais** (écran, HTML, logs) pendant la vérification, afin que ce secret reste protégé même lors d'un appel réseau.
+- En tant qu'**utilisateur connecté**, je veux que mon **token ne fuite jamais** (écran, page envoyée au navigateur, logs) pendant la vérification, afin que ce secret reste protégé même lors d'un appel réseau.
 
 ## Règles métier
 
 1. La vérification lit **uniquement l'arborescence** de `docs/story/` du repo distant, en **lecture seule** — jamais le contenu des fichiers à ce stade, jamais aucune écriture (aligné anti-objectif vision « intégration profonde »).
 2. Un repo est déclaré **éligible forge** s'il expose au moins un dossier respectant la convention `docs/story/NNN-<f|r|t>-<slug>/`. À défaut → statut **non-forge**.
-3. Les statuts distingués sont : `éligible`, `non-forge`, `token invalide` (réponse 401/403), `injoignable` (404 / erreur réseau / URL invalide), `provider non scannable` (projet GitLab, tant que `connecteur-gitlab-lecture` V2 n'existe pas), et `non vérifié` (état initial avant toute vérification).
+3. Les statuts distingués sont : `éligible`, `non-forge`, `token invalide` (le repo refuse l'accès avec ce token), `injoignable` (repo introuvable, URL invalide ou réseau en échec), `provider non scannable` (projet GitLab, tant que `connecteur-gitlab-lecture` V2 n'existe pas), et `non vérifié` (état initial avant toute vérification).
 4. Un projet **GitLab n'est jamais appelé** : il prend directement le statut `provider non scannable` (le connecteur GitLab arrive en V2).
-5. Le **token est déchiffré en mémoire** au seul moment de l'appel réseau (via le `TokenCipher` existant), n'est **jamais renvoyé au navigateur** (HTML/JS) et **n'apparaît jamais dans les logs** — prolonge la règle sécurité de D2.
+5. Le token **reste chiffré tant qu'il est stocké** et n'est ramené en clair, en mémoire, qu'au seul instant de l'appel au repo distant ; il n'est **jamais renvoyé au navigateur** et **n'apparaît jamais dans les logs** — prolonge la règle sécurité de D2.
 6. La vérification **ne bloque ni ne supprime jamais** un projet : elle *signale* le résultat. La déclaration reste instantanée et locale (principe « zéro friction »).
-7. Le **statut et son horodatage sont persistés** sur le projet ; l'affichage de la liste et de la fiche projet les lit **en base**, sans rappeler GitHub à chaque rendu (protège du rate-limit et découple l'UI du réseau).
+7. Le **statut et son horodatage sont conservés** sur le projet ; la liste et la fiche projet affichent ce **dernier résultat connu**, sans rappeler GitHub à chaque affichage (préserve le quota d'appels autorisé par GitHub et rend l'affichage indépendant du réseau).
 8. La vérification est déclenchée **automatiquement** à la déclaration et à l'édition d'un projet GitHub, et **manuellement** via un bouton « vérifier l'accès ». Aucun déclenchement **périodique** (relève de `sync-periodique`, V2).
-9. Un échec de vérification (token invalide, injoignable) **n'est pas une erreur applicative** : c'est un statut légitime, affiché calmement, jamais une page d'erreur ni une exception remontée à l'utilisateur.
+9. Un échec de vérification (token invalide, injoignable) **n'est pas une erreur applicative** : c'est un statut légitime, affiché calmement, jamais une page d'erreur ni un plantage exposé à l'utilisateur.
 
 ## Critères d'acceptation
 
@@ -55,8 +55,8 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 - [ ] Un token invalide donne le statut **token invalide** ; un repo/URL inexistant ou une erreur réseau donne **injoignable**.
 - [ ] Un bouton « vérifier l'accès » sur un projet re-déclenche la vérification et met à jour statut + horodatage sans re-créer le projet.
 - [ ] Un projet GitLab affiche **provider non scannable** sans qu'aucun appel réseau ne soit tenté.
-- [ ] Le token n'apparaît ni dans le HTML servi, ni dans les logs applicatifs, à aucune étape de la vérification (vérifiable).
-- [ ] La liste des projets s'affiche **sans appel réseau** : les badges sont lus depuis la base (dernier statut connu + date).
+- [ ] Le token n'apparaît ni dans la page envoyée au navigateur, ni dans les logs applicatifs, à aucune étape de la vérification (vérifiable).
+- [ ] La liste des projets s'affiche **sans contacter GitHub** : les badges montrent le dernier résultat connu (statut + date).
 
 ## Hors scope
 
@@ -69,21 +69,20 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (outil mono-utilisateur).
-- **Multi-thème** : non.
-- **i18n / traduction** : libellés UI en français (badges de statut, bouton « vérifier l'accès », messages) — pas de contenu multilingue.
-- **API** : non (aucune ressource API exposée ; l'app reste server-rendered). L'app *consomme* l'API GitHub en lecture, elle n'en expose aucune.
-- **Permissions** : inchangé — toute la feature vit derrière le firewall de `login`, sans nouveau rôle ni voter.
+- **Traduction / langues** : libellés en français (badges de statut, bouton « vérifier l'accès », messages) — pas de contenu multilingue.
+- **Droits d'accès** : inchangé — toute la feature exige d'être connecté, et aucun niveau d'autorisation supplémentaire n'est introduit.
+- **Cloisonnement des données** : non (outil mono-utilisateur : personne d'autre ne consulte ces projets).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non — rien de ce que produit la vérification n'est consultable hors de l'interface. C'est l'app qui *va lire* GitHub, jamais l'inverse.
 - **Emails / notifications** : non.
-- **Migration de données** : oui — ajout d'un statut de vérification et d'une date de dernière vérification sur la table `project` (colonnes nullable, backfill implicite en `non vérifié`).
+- **Données existantes** : les projets déjà déclarés sont conservés tels quels et se voient simplement attribuer un statut `non vérifié` et une date de vérification vide, jusqu'à leur première vérification.
 - **Comportement par défaut** : un projet existant non encore vérifié s'affiche en statut `non vérifié` jusqu'à la première vérification (auto à la prochaine édition, ou manuelle via le bouton).
 
 ## Questions ouvertes
 
-- **Granularité de l'appel** : lister `docs/story/` via l'API contents (un appel par niveau) vs l'API git tree (arbre récursif en un appel, filtré ensuite). Options : (a) contents, plus simple mais bavard ; (b) git tree, un appel mais nécessite le SHA de la branche par défaut. → à trancher en plan (impacte le rate-limit).
-- **Vérification synchrone vs asynchrone à la déclaration** : (a) appel réseau bloquant pendant l'enregistrement (statut connu immédiatement, mais formulaire suspendu au réseau) ; (b) enregistrement instantané puis vérification déclenchée juste après (statut `non vérifié` fugace). → à trancher en plan selon l'UX voulue (le principe « zéro friction » penche vers (b)).
+- **Attente à la déclaration** : (a) l'enregistrement attend le résultat de la vérification (statut connu immédiatement, mais l'utilisateur patiente le temps de joindre GitHub) ; (b) enregistrement instantané puis vérification juste après (statut `non vérifié` fugace). → à trancher en plan selon l'expérience voulue (le principe « zéro friction » penche vers (b)).
 - **Branche lue** : lit-on la branche par défaut du repo, ou une branche configurable par projet ? → défaut proposé : branche par défaut du repo ; configurabilité repoussée si le besoin émerge.
-- **Retour visuel du bouton « vérifier »** : rechargement simple vs Live Component (statut mis à jour sans reload). → cosmétique, à trancher en plan selon l'ambition UX.
+- **Retour visuel du bouton « vérifier »** : la page se recharge, ou le statut se met à jour tout seul sous les yeux de l'utilisateur ? → cosmétique, à trancher en plan selon l'ambition d'expérience.
 
 ---
 
@@ -98,4 +97,4 @@ Cette feature couvre **C3.1** (lire l'arborescence de `docs/story/` d'un repo Gi
 - **Rate-limit GitHub** : prévoir la gestion des quotas (en-têtes `X-RateLimit-*`), un timeout raisonnable, et la traduction d'un dépassement en statut lisible plutôt qu'une exception.
 - **Exceptions typées** : le connecteur remonte des cas typés (non trouvé, non autorisé, réseau), la couche appelante (manager/controller) les traduit en statut persisté. S'appuyer sur les skills `symfony:http-client-*`.
 - **Déclenchement** : brancher la vérification dans le `ProjectManager` (create/update) existant + une action controller dédiée pour le bouton « vérifier l'accès ». Envisager Live Component pour un retour sans rechargement (à trancher au plan).
-- **Détection de l'arborescence** : GitHub permet de lister un sous-dossier (`docs/story/`) sans rapatrier tout le repo (contents API / git tree API) — à cadrer au plan pour rester économe.
+- **Détection de l'arborescence** : GitHub permet de lister un sous-dossier (`docs/story/`) sans rapatrier tout le repo — à cadrer au plan pour rester économe. Granularité à trancher : (a) contents API, plus simple mais bavard (un appel par niveau) ; (b) git tree API, arbre récursif en un appel puis filtré, mais nécessite le SHA de la branche par défaut. Impacte le rate-limit.

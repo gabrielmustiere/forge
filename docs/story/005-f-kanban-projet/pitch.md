@@ -23,8 +23,8 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 
 ## Utilisateurs concernés
 
-- **Utilisateur local connecté** (l'unique utilisateur — outil mono-utilisateur, cf. anti-objectif vision « backend partagé ») — bénéficiaire direct : c'est le premier écran qui lui rend l'avancement lisible. Toute la feature vit derrière le firewall de `login`.
-- **Aucun autre rôle** — pas de nouveau rôle ni voter ; périmètre de permissions inchangé.
+- **Utilisateur local connecté** (l'unique utilisateur — outil mono-utilisateur, cf. anti-objectif vision « backend partagé ») — bénéficiaire direct : c'est le premier écran qui lui rend l'avancement lisible. Toute la feature exige d'être connecté pour être atteinte.
+- **Aucun autre rôle** — pas de nouveau rôle ni de nouveau niveau d'autorisation ; périmètre des droits d'accès inchangé.
 
 ## User Stories
 
@@ -39,7 +39,7 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 1. **Pipeline unifié à quatre colonnes ordonnées** : Cadrage → Planifié → Review → Livré, dans cet ordre de gauche à droite, communes aux trois tracks. La colonne de chaque story est celle fournie par le moteur `004` — l'écran ne recalcule aucune position.
 2. **Voie « À vérifier » en bandeau** : les stories classées « À vérifier » par `004` (aucun fichier de pipeline reconnu) sont regroupées dans un **bandeau distinct, sous les quatre colonnes**, visuellement séparé du pipeline pour ne jamais se lire comme une étape. Si aucune story n'est « À vérifier », le bandeau n'apparaît pas.
 3. **Identité de carte** : chaque carte affiche trois éléments — un **badge de track** (feature / refacto / tech, déduit de la lettre `f`/`r`/`t` de l'identifiant), l'**identifiant** `NNN-slug`, et un **titre**.
-4. **Titre de carte** : la carte affiche le **slug humanisé** (`mapping-etapes` → « Mapping etapes »), sans lecture de contenu — le tableau reste rapide et robuste au chargement. Le **titre réel (`# H1`)** de la story n'est pas lu sur la carte mais apparaît naturellement en tête du document rendu **dans le drawer** à son ouverture. Le titre ne modifie jamais la position de la carte (déduite des seuls noms de fichiers par `004`). _(Arbitré au plan : lire le H1 de chaque story au chargement imposerait un appel réseau par carte ; on privilégie la vitesse d'ouverture et on montre le vrai titre au moment du détail.)_
+4. **Titre de carte** : la carte affiche le **slug humanisé** (`mapping-etapes` → « Mapping etapes »), sans lecture de contenu — le tableau reste rapide et robuste au chargement. Le **titre réel (`# H1`)** de la story n'est pas lu sur la carte mais apparaît naturellement en tête du document rendu **dans le drawer** à son ouverture. Le titre ne modifie jamais la position de la carte (déduite des seuls noms de fichiers par `004`). _(Arbitré au plan : lire le titre de chaque story au chargement imposerait d'aller chercher à distance le contenu d'un document par carte ; on privilégie la vitesse d'ouverture et on montre le vrai titre au moment du détail.)_
 5. **Ordre des cartes dans une colonne** : par identifiant `NNN` **décroissant** (la story la plus récente en haut), afin de servir le réflexe « se resituer sur ce qui bouge ». Ordre déterministe, identique à chaque rendu.
 6. **Ouverture d'un document** : au clic sur une carte, ouvrir ses documents **dans l'app**, dans un **drawer latéral** (panneau glissant qui garde le tableau visible en fond), sans quitter la page. Le drawer présente **toujours d'abord la liste des documents présents** (dans l'ordre de précédence `report` > `review` > `plan` > `pitch`, puis transversaux), même si un seul document existe — comportement uniforme ; le contenu markdown du document choisi s'affiche ensuite. Aucune modification possible — lecture seule stricte.
 7. **Compteur par colonne** : chaque colonne affiche en tête un **compteur du nombre de cartes** qu'elle contient (ex. « Livré (7) »), pour jauger la répartition d'un coup d'œil. Le bandeau « À vérifier » affiche de même son compte.
@@ -70,18 +70,18 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 - **Calcul de la position d'une story** : déjà livré par `004-f-mapping-etapes` ; l'écran consomme le résultat, il ne le recalcule pas.
 - **Lecture distante / éligibilité forge** : déjà livrées par `003-f-connecteur-github-lecture`.
 - **Édition de document, déplacement de carte, déclenchement de skill** : anti-objectif vision (lecture seule) — jamais.
-- **Direction artistique moderne** : le socle « Paper » (Flowbite/Tailwind) est utilisé tel quel ; une DA propre au Board est un chantier design distinct (cf. `docs/stack.md`).
+- **Direction artistique moderne** : le socle « Paper » est utilisé tel quel ; une DA propre au Board est un chantier design distinct (cf. `docs/stack.md`).
 - **Colonne « En cours d'implémentation »** : écartée en `004` (l'implémentation ne produit pas de fichier) — non réintroduite ici.
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (outil mono-utilisateur).
-- **Multi-thème** : non.
-- **i18n / traduction** : libellés d'écran en français (colonnes Cadrage / Planifié / Review / Livré, bandeau « À vérifier », badges track, états vides et d'erreur). Pas de contenu multilingue.
-- **API** : non (aucune ressource exposée ; l'écran est server-rendered).
-- **Permissions** : inchangé — firewall `login` existant, ni rôle ni voter nouveau.
+- **Traduction / langues** : libellés d'écran en français (colonnes Cadrage / Planifié / Review / Livré, bandeau « À vérifier », badges track, états vides et d'erreur). Pas de contenu multilingue.
+- **Droits d'accès** : inchangé — la barrière d'authentification existante suffit, ni rôle ni niveau d'autorisation nouveau.
+- **Cloisonnement des données** : non (outil mono-utilisateur).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non — les données ne sont consultables que dans l'écran lui-même, rien n'est mis à disposition d'une application extérieure.
 - **Emails / notifications** : non.
-- **Migration de données** : à confirmer au plan selon la décision de persistance héritée de `004` (si les positions sont recalculées à la volée → aucune migration ; si un état scanné est stocké → migration). Le scan live à l'ouverture (règle 7) penche vers « aucune persistance nouvelle », à trancher au plan.
+- **Données existantes** : à confirmer au plan selon la décision, héritée de `004`, de conserver ou non l'état d'un affichage à l'autre (si les positions sont recalculées à chaque ouverture → rien à reprendre ; si l'état scanné est conservé, une reprise est à prévoir). Le scan live à l'ouverture (règle 7) penche vers « rien de conservé en plus », à trancher au plan.
 - **Comportement par défaut** : c'est le premier écran de valeur du produit ; il devient l'écran principal après ouverture d'un projet.
 
 ## Questions ouvertes
@@ -89,8 +89,8 @@ C'est le trou que cette feature comble — et c'est **l'écran du North Star**. 
 - **Rendu du document** : drawer latéral, avec liste des documents toujours affichée d'abord. → tranché : drawer + liste systématique.
 - **Ordre des cartes** : `NNN` décroissant (plus récent en haut). → tranché.
 - **Compteur par colonne** : affiché en tête de chaque colonne et du bandeau. → tranché : oui.
-- **Persistance des positions** : héritée de `004` (recalcul à la volée vs stockage). → tranché au plan : **recalcul à la volée, aucune persistance ni migration** (cf. `plan.md`).
-- **Titre de carte** : H1 lu par carte vs slug humanisé. → tranché au plan : **slug sur la carte, H1 dans le drawer** (évite un appel réseau par carte ; règle 4 mise à jour ci-dessus, cf. changelog).
+- **Conservation des positions** : héritée de `004` (recalcul à chaque ouverture vs état conservé d'une fois sur l'autre). → tranché au plan : **recalcul à chaque ouverture, rien de conservé ni de repris** (cf. `plan.md`).
+- **Titre de carte** : `# H1` lu pour chaque carte vs slug humanisé. → tranché au plan : **slug sur la carte, `# H1` dans le drawer** (évite d'aller chercher un document à distance pour chaque carte ; règle 4 mise à jour ci-dessus, cf. changelog).
 
 ---
 

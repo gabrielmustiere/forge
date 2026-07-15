@@ -23,8 +23,8 @@ C'est précisément le trou que cette feature comble. Sans moteur de mapping, il
 
 ## Utilisateurs concernés
 
-- **Utilisateur local connecté** (l'unique utilisateur — outil mono-utilisateur, cf. anti-objectif vision « backend partagé ») — bénéficiaire indirect : cette feature ne produit pas encore d'écran (le rendu est `kanban-projet`), mais elle calcule la position que chaque carte occupera. Toute la feature vit derrière le firewall de `login`.
-- **Aucun autre rôle** — pas de nouveau rôle ni voter ; périmètre inchangé côté permissions.
+- **Utilisateur local connecté** (l'unique utilisateur — outil mono-utilisateur, cf. anti-objectif vision « backend partagé ») — bénéficiaire indirect : cette feature ne produit pas encore d'écran (le rendu est `kanban-projet`), mais elle calcule la position que chaque carte occupera. Toute la feature vit derrière la connexion.
+- **Aucun autre rôle** — pas de nouveau rôle ni niveau d'autorisation supplémentaire ; périmètre inchangé côté droits d'accès.
 
 ## User Stories
 
@@ -60,26 +60,26 @@ C'est précisément le trou que cette feature comble. Sans moteur de mapping, il
 - **Rendu du kanban** (colonnes, cartes, badges de track, couleurs, ordre d'affichage) : relève de `kanban-projet` (C4.1–C4.3). Ici on calcule une position, on ne dessine rien.
 - **Identité de carte** (titre lu dans un fichier, identifiant affiché) : le mapping ne lit pas le contenu ; l'extraction du titre relève de `kanban-projet` (C4.2).
 - **Déclenchement du scan / rafraîchissement** (bouton, périodicité, signalement d'erreurs de sync) : relève de `sync-manuelle` (C3.3, C3.4).
-- **Persistance de l'état calculé** (stocker la colonne en base vs recalculer à la volée) : décision technique, tranchée en `/feature-plan`.
+- **Mémorisation de l'état calculé** (conserver la colonne d'une consultation à l'autre vs la recalculer à chaque affichage) : décision technique, tranchée en `/feature-plan`.
 - **Lecture du contenu des fichiers** : le moteur travaille sur les noms de fichiers seuls ; aucune analyse de contenu.
 - **Colonne « En cours d'implémentation »** : l'implémentation ne produit aucun fichier ; une story en cours de code reste en « Planifié » jusqu'à l'apparition de `review.md`. Pas de signal git (écarté : sort de « l'état vit dans les fichiers » et frôle l'anti-objectif « intégration profonde git »).
 - **Éligibilité forge / lecture distante** : déjà livrées par `003-f-connecteur-github-lecture`.
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (outil mono-utilisateur).
-- **Multi-thème** : non.
-- **i18n / traduction** : libellés de colonnes en français (Cadrage / Planifié / Review / Livré / À vérifier). Pas de contenu multilingue.
-- **API** : non (aucune ressource exposée).
-- **Permissions** : inchangé — firewall `login` existant, ni rôle ni voter nouveau.
+- **Traduction / langues** : libellés de colonnes en français (Cadrage / Planifié / Review / Livré / À vérifier). Pas de contenu multilingue.
+- **Droits d'accès** : inchangé — la barrière de connexion existante suffit, ni rôle ni niveau d'autorisation nouveau.
+- **Cloisonnement des données** : non (outil mono-utilisateur).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non (rien n'est mis à disposition hors de l'interface).
 - **Emails / notifications** : non.
-- **Migration de données** : à confirmer au plan selon la décision de persistance (si la colonne est stockée sur la story → migration ; si recalculée à la volée → aucune). Non tranché ici.
+- **Données existantes** : à confirmer au plan selon la décision de mémorisation (si la colonne est conservée sur la story → reprise des stories déjà enregistrées ; si elle est recalculée à chaque affichage → aucune). Non tranché ici.
 - **Comportement par défaut** : transparent — la feature ne produit pas d'écran à elle seule ; son effet devient visible avec `kanban-projet`.
 
 ## Questions ouvertes
 
 - **`brief.md` seul → « À vérifier »** : retenu (cohérent avec la voie dédiée), mais une story avec uniquement `brief.md` est légitimement précoce, pas anormale. Option future : une colonne/entrée « Découverte » distincte de « À vérifier » si le mélange « précoce » vs « anomalie » gêne à l'usage. → à réévaluer une fois le kanban visible.
-- **Persistance de la colonne** : (a) stockée sur la story (attribut + migration, recalculée à la sync) ; (b) recalculée à la volée à chaque rendu (pas de migration, dépend de la fraîcheur du scan). → tranché en `/feature-plan`, en lien avec `sync-manuelle`.
+- **Mémorisation de la colonne** : (a) conservée sur la story et rafraîchie à chaque sync (implique de reprendre les stories déjà enregistrées) ; (b) recalculée à chaque affichage (rien à reprendre, mais la colonne dépend de la fraîcheur du dernier scan). → tranché en `/feature-plan`, en lien avec `sync-manuelle`.
 - **Libellés définitifs des colonnes** : Cadrage / Planifié / Review / Livré retenus par défaut ; ré-ajustables à la mise en place du kanban selon la lisibilité réelle.
 
 ---

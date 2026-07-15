@@ -20,7 +20,7 @@ Sans rien faire, le board continue de masquer les idées en phase interview et i
 
 ## Alignement vision
 
-- **Problème adressé** : renforce le cœur de la vision — « déduire l'état d'une story depuis les fichiers réels ». On étend le moteur de mapping fichiers → colonne à un document jusque-là ignoré (`brief.md`) et on clarifie l'échelle.
+- **Problème adressé** : renforce le cœur de la vision — « déduire l'état d'une story depuis les fichiers réels ». On étend la règle qui déduit la colonne depuis les fichiers présents à un document jusque-là ignoré (`brief.md`) et on clarifie l'échelle.
 - **Audience servie** : l'utilisateur principal (développeur/PO solo qui pilote ses stories), directement.
 - **Principes respectés** : #2 « état déduit, jamais saisi » (la colonne reste calculée depuis les fichiers) et #3 « sync fidèle » (une idée en interview cesse d'être faussement rangée en « À vérifier »). Sert l'hypothèse critique #1 (mapping fichiers → étape déterministe) en la complétant.
 - **Impact North Star** : améliore le « temps pour se resituer » — une colonne de plus en amont rend l'antichambre des stories immédiatement lisible, sans ouvrir les dossiers.
@@ -64,18 +64,18 @@ Sans rien faire, le board continue de masquer les idées en phase interview et i
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (outil mono-utilisateur).
-- **Multi-thème** : non.
-- **i18n / traduction** : non — libellés en français en dur, comme l'existant.
-- **API** : non.
-- **Permissions** : inchangé.
+- **Traduction / langues** : non — les libellés des colonnes restent en français, comme le reste du board.
+- **Droits d'accès** : inchangé.
+- **Cloisonnement des données** : non (outil mono-utilisateur).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non.
 - **Emails / notifications** : non.
-- **Migration de données** : non — aucune donnée persistée pour l'état d'une story ; tout est déduit au scan. (Vérifier toutefois si des métadonnées ou des tests figent les anciennes valeurs d'étape.)
-- **Comportement par défaut** : tous les utilisateurs (il n'y en a qu'un) voient directement le nouveau découpage ; pas de feature flag.
+- **Données existantes** : non — l'état d'une story n'est jamais conservé quelque part ; il est recalculé à chaque lecture des dossiers. (Vérifier toutefois qu'aucune trace des anciens noms d'étape ne subsiste ailleurs.)
+- **Comportement par défaut** : tous les utilisateurs (il n'y en a qu'un) voient directement le nouveau découpage ; le nouveau vocabulaire n'est ni optionnel ni activable au cas par cas.
 
 ## Questions ouvertes
 
-- ~~**Couleur/accent de la colonne « Idée »**~~ → **tranché** : token `st-brief` (gris `#a1a1aa`) réservé à « Idée » ; « À vérifier » recoloré via un token dédié `--color-st-flag` (rose). Choix Nova validé au navigateur.
+- ~~**Couleur/accent de la colonne « Idée »**~~ → **tranché** : « Idée » porte une couleur qui lui est propre, un gris neutre ; « À vérifier » est recolorée en rose pour rester visuellement distincte des colonnes du pipeline. Couleurs prises dans la DA « Nova », rendu validé à l'écran.
 
 ---
 

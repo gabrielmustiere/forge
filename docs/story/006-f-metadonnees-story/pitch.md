@@ -9,7 +9,7 @@
 
 ## Contexte
 
-Le socle du Board est livré : il scanne `docs/story/` d'un repo, déduit la colonne de chaque story depuis les fichiers présents, et rend un kanban. Mais une carte ne sait presque rien d'elle-même : au chargement, le builder ne lit que les **noms de fichiers** de chaque story (`StoryFolder::files()`), jamais leur contenu — le contenu n'est lu qu'à l'ouverture d'un document dans le drawer. Résultat : une carte affiche un slug technique, sans date, sans étiquette, sans historique, sans lien vers ce qui l'a livrée.
+Le socle du Board est livré : il scanne `docs/story/` d'un repo, déduit la colonne de chaque story depuis les fichiers présents, et rend un kanban. Mais une carte ne sait presque rien d'elle-même : au chargement, le board ne regarde que les **noms des fichiers** présents dans chaque story, jamais ce qu'ils contiennent — le contenu n'est lu qu'à l'ouverture d'un document dans le drawer. Résultat : une carte affiche un slug technique, sans date, sans étiquette, sans historique, sans lien vers ce qui l'a livrée.
 
 Or l'information *existe déjà*, mais éparpillée et non exploitable : des dates et des tables de changelog dorment en pied de `pitch.md`/`plan.md`, le track se devine du nom de dossier, la release qui a livré une story n'est reliée nulle part. Pour savoir « quand cette story a-t-elle bougé pour la dernière fois ? » ou « dans quelle version est-elle partie ? », il faut rouvrir les fichiers un par un — exactement l'exploration manuelle que le Board est censé supprimer.
 
@@ -19,7 +19,7 @@ Sans métadonnées, le Board reste un affichage de positions : il montre *où* e
 
 - **Problème adressé** : approfondit le problème central (« l'invisibilité de l'avancement des stories ») — on passe de « quelle colonne ? » à « quelle histoire ? » sans rouvrir les dossiers.
 - **Audience servie** : l'utilisateur principal (dev / PO solo), directement — se resituer plus vite et plus finement.
-- **Principes respectés** : `#1 lecture seule` (l'app ne fait que lire le fichier metadata, jamais l'écrire), `#2 état déduit jamais saisi` (les métadonnées viennent des fichiers produits par les skills ; la colonne reste déduite, indépendante du metadata), `#3 fidélité` (règle de maintenance de `updated` par chaque skill + validation stricte à la lecture, sinon dégradation), `#4 zéro friction` (lecture du metadata en un appel groupé, chargement instantané non-négociable).
+- **Principes respectés** : `#1 lecture seule` (l'app ne fait que lire le fichier metadata, jamais l'écrire), `#2 état déduit jamais saisi` (les métadonnées viennent des fichiers produits par les skills ; la colonne reste déduite, indépendante du metadata), `#3 fidélité` (règle de maintenance de `updated` par chaque skill + validation stricte à la lecture, sinon dégradation), `#4 zéro friction` (le metadata de toutes les stories est récupéré en une seule fois, chargement instantané non-négociable).
 - **Principe tendu → résolu** : « intégration git profonde » est un anti-objectif. On le respecte car le lien release/commit est une **chaîne écrite par le skill de livraison** dans le fichier metadata, pas une intégration git côté app.
 - **Impact North Star** (« temps pour se resituer ») : le fait bouger vers le bas — la carte répond à plus de questions sans ouvrir un seul document.
 - **Portée du standard** : la convention metadata part chez **tous** les utilisateurs forge (le fichier est produit par le plugin distribué). Elle renforce l'unfair advantage « connaissance intime de la convention forge », mais impose de figer le schéma correctement du premier coup.
@@ -47,14 +47,14 @@ Le **contrat de métadonnées** (fichier produit par les skills, lu par l'app) :
 
 1. **Source de vérité unique = un fichier de métadonnées par story**, produit par les skills dans le dossier `docs/story/NNN-<f|r|t>-<slug>/`. L'app ne l'écrit jamais, ne le modifie jamais : lecture seule.
 2. Le fichier porte au minimum : **`title`** (le H1 réel de la story), **`created`** (date de création, figée), **`updated`** (date de dernière activité), **`tags`** (liste d'étiquettes kebab-case), **`changelog`** (timeline consolidée), **`delivery`** (release + commit de livraison, quand la story est livrée).
-3. **La colonne du pipeline n'est JAMAIS dans le metadata.** L'étape reste déduite des fichiers présents par le moteur de mapping (principe #2). Le fichier de métadonnées ne doit **pas** être compté comme un document de pipeline : `StoryStageMapper` l'ignore totalement — sa présence ne change aucune colonne.
+3. **La colonne du pipeline n'est JAMAIS dans le metadata.** L'étape reste déduite des fichiers présents (principe #2). Le fichier de métadonnées ne doit **pas** être compté comme un document de pipeline : le calcul de l'étape d'une story l'ignore totalement — sa présence ne change aucune colonne.
 4. **`created`** est écrit une seule fois, par le skill qui crée la story (`feature-interview` ou `feature-pitch` pour un track feature ; `refactor-plan` / `tech-plan` pour les tracks `r`/`t`), et n'est plus jamais modifié.
 5. **`updated`** est rebougé par **chaque skill qui écrit dans le dossier de la story** (`feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, les trois `*-implem`, `report`, `sync`/`report-and-sync`, `adr`, `estimate`, `review`). La règle est portée par une **référence partagée** du plugin, pas par la mémoire de chaque skill, pour garantir la fidélité. Les skills opérant à la racine `docs/` (`vision`, `product-backlog`, `stack`, `claude-md`, `help`) ne sont pas concernés.
 6. **`tags` : proposés par le skill, validés par l'utilisateur.** Le skill de cadrage suggère des tags (déduits du contenu) ; l'utilisateur tranche à la rédaction. Format kebab-case. Objectif anti-dérive : ne pas générer d'étiquettes non validées.
 7. **`changelog` = source unique.** La timeline vit dans le fichier metadata ; chaque skill concerné y **append** une entrée (date, type, description). Les tables de changelog en pied de `pitch.md`/`plan.md` sont **abandonnées** au profit de cette source unique.
 8. **`delivery` (release + commit)** est écrit par les skills de livraison : **`commit`** enregistre le SHA du commit de clôture, **`release`** enregistre le tag de version (ex. `v4.3.0`). La release peut être renseignée **plus tard** que le commit (le tag arrive parfois après la livraison) : `delivery` tolère un commit présent sans release.
 9. **Dégradation gracieuse (app)** : une story **sans** fichier metadata, ou avec un fichier **malformé/invalide**, s'affiche sans erreur — la carte retombe sur le **slug humanisé** (au lieu du `title`), sans tags, sans dates, sans badge de livraison. Mieux vaut pas de donnée qu'une donnée fausse (principe #3).
-10. **Chargement instantané non-négociable (app)** : au chargement du board, le metadata de **toutes** les stories est lu en **un seul appel groupé** (ou via cache), jamais un appel par carte. La North Star (vitesse de lecture) prime : la richesse des cartes ne doit pas ralentir le board.
+10. **Chargement instantané non-négociable (app)** : au chargement du board, le metadata de **toutes** les stories est récupéré **en une seule fois**, jamais story par story. La North Star (vitesse de lecture) prime : la richesse des cartes ne doit pas ralentir le board.
 11. **Filtre & tri (app)** : le board permet de filtrer les cartes par **tag** et de trier par **date de mise à jour**. Le filtrage n'affecte que l'affichage, jamais l'état déduit — y compris les **compteurs de colonne**, qui se recalent sur les cartes visibles après filtrage et reviennent au total serveur quand le filtre est retiré.
 
 ## Critères d'acceptation
@@ -64,13 +64,13 @@ Le **contrat de métadonnées** (fichier produit par les skills, lu par l'app) :
 - [ ] Chaque skill listé en règle 5 rebooge `updated` et append une entrée de changelog quand il écrit dans le dossier.
 - [ ] `commit` écrit le SHA de clôture et `release` écrit le tag dans `delivery` ; une story livrée non taguée a un commit sans release, sans erreur.
 - [ ] Les tables de changelog en pied de `pitch.md`/`plan.md` ne sont plus produites ; la timeline vit uniquement dans le metadata.
-- [ ] Le Board lit le metadata de toutes les stories en **un seul appel groupé** (vérifiable : nombre d'appels réseau indépendant du nombre de stories).
+- [ ] Le Board récupère le metadata de toutes les stories **en une seule fois** (vérifiable : le nombre de sollicitations du dépôt ne dépend pas du nombre de stories).
 - [ ] La carte affiche le vrai titre (`title`) ; à défaut de metadata, elle retombe sur le slug humanisé.
 - [ ] La carte affiche l'âge / dernière activité, les tags, et un badge de livraison si `delivery` présent.
 - [ ] Le drawer expose le changelog consolidé de la story.
 - [ ] Le board permet de filtrer par tag et de trier par date de mise à jour.
 - [ ] Une story sans metadata, ou avec un metadata invalide, s'affiche sans erreur (dégradation gracieuse).
-- [ ] `StoryStageMapper` ignore le fichier metadata : sa présence ne modifie aucune colonne déduite.
+- [ ] Le calcul de l'étape d'une story ignore le fichier metadata : sa présence ne modifie aucune colonne déduite.
 - [ ] Les 5 stories existantes (`001`→`005`) reçoivent un metadata rétroactif (backfill) pour que le board de référence ne soit pas à moitié vide.
 - [ ] La convention est documentée pour tous les utilisateurs forge (référence partagée du plugin).
 
@@ -85,19 +85,19 @@ Le **contrat de métadonnées** (fichier produit par les skills, lu par l'app) :
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (outil mono-utilisateur).
-- **Multi-thème** : non.
-- **i18n / traduction** : marginal — quelques libellés UI (filtre, tri, badge « livré en… »). Les données metadata elles-mêmes ne sont pas traduites.
-- **API** : non (pas d'endpoint exposé ; lecture interne du repo distant).
-- **Permissions** : inchangé (accès local unique).
+- **Traduction / langues** : marginal — quelques libellés d'écran (filtre, tri, badge « livré en… »). Les métadonnées elles-mêmes ne sont pas traduites.
+- **Droits d'accès** : inchangé (accès local unique).
+- **Cloisonnement des données** : non (outil mono-utilisateur).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non (rien n'est publié vers l'extérieur ; le Board se contente de lire le dépôt distant pour lui-même).
 - **Emails / notifications** : non.
-- **Migration de données** : pas de migration de schéma BDD (les métadonnées vivent dans les fichiers, pas en base). En revanche, **backfill fichier** : générer le metadata des 5 stories existantes.
+- **Données existantes** : rien de stocké par l'app à reprendre — les métadonnées vivent dans les fichiers de chaque story. En revanche, **backfill fichier** : générer le metadata des 5 stories existantes.
 - **Comportement par défaut** : une story / un repo sans metadata s'affiche comme aujourd'hui (slug, pas de tags/dates) — aucune régression.
 
 ## Questions ouvertes
 
-- **Format du fichier** : `metadata.json` vs frontmatter. → recommandation forte `metadata.json` (track-agnostique, un seul fetch), à trancher au plan.
-- **Mécanisme de lecture groupée** : batch d'appels, GraphQL GitHub, ou cache court côté app — quelle voie garantit « instantané » sans complexité excessive ? À concevoir au plan.
+- **Format du fichier** : un fichier dédié `metadata.json` vs un bloc de métadonnées en tête d'un document existant. → recommandation forte `metadata.json` (valable pour les trois tracks, lu d'un seul coup), à trancher au plan.
+- **Lecture en une seule fois** : quelle voie garantit « instantané » sans complexité excessive ? À concevoir au plan.
 - **Schéma exact & formats** : clés précises, format de date, forme d'une entrée de changelog et d'un `delivery`. À figer au plan (schéma embarqué chez tous les utilisateurs → décision durable).
 - **Backfill** : script one-shot vs passe manuelle assistée pour les 5 stories existantes.
 - **Release en différé** : comment `release` est renseignée quand le tag arrive après la livraison (relance de `release` qui réédite le metadata ?). À préciser au plan.

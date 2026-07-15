@@ -11,7 +11,7 @@
 
 Forge Board scanne des repos forge et stocke, à terme, des **tokens d'accès en lecture** aux repos GitHub de l'utilisateur (cf. `declaration-projet`). Même pour un outil strictement personnel tournant en local, laisser ces informations accessibles sans aucune barrière est un risque : n'importe qui ayant la main sur la machine ou le navigateur ouvert accède aux projets et aux secrets stockés.
 
-Aujourd'hui le socle de sécurité Symfony est déjà scaffoldé (entité `User`, `security.yaml` avec `form_login` + `logout`, `access_control` qui protège tout sauf `/login`, `SecurityController`, fixture d'un compte `admin@example.com`), mais **l'écran de connexion n'existe pas encore** (le contrôleur rend un template absent) et le parcours n'est ni finalisé ni éprouvé. Tant que cette barrière n'est pas fermée et fonctionnelle, aucune autre feature manipulant des tokens ne peut être livrée sereinement — `login` est la première ligne du MVP, sans dépendance, et le prérequis de tout le reste.
+Aujourd'hui les fondations de la connexion sont déjà posées — un compte existe, et l'application sait déjà qu'elle doit refuser l'accès à qui n'est pas connecté — mais **l'écran de connexion n'existe pas encore** et le parcours n'est ni finalisé ni éprouvé. Tant que cette barrière n'est pas fermée et fonctionnelle, aucune autre feature manipulant des tokens ne peut être livrée sereinement — `login` est la première ligne du MVP, sans dépendance, et le prérequis de tout le reste.
 
 ## Alignement vision
 
@@ -22,7 +22,7 @@ Aujourd'hui le socle de sécurité Symfony est déjà scaffoldé (entité `User`
 
 ## Utilisateurs concernés
 
-- **Utilisateur unique** (`ROLE_USER`, le seul rôle applicatif) — accède à l'app après connexion ; sans session valide, toute URL le renvoie vers l'écran de login. C'est le seul acteur du système.
+- **Utilisateur unique** (le seul rôle du système) — accède à l'app après connexion ; tant qu'il n'est pas connecté, toute page le renvoie vers l'écran de login. C'est le seul acteur du système.
 - **Aucun autre rôle** — pas d'admin distinct, pas de visiteur anonyme autorisé, pas de multi-utilisateur (anti-objectif vision « backend partagé / multi-utilisateur »).
 
 ## User Stories
@@ -35,48 +35,48 @@ Aujourd'hui le socle de sécurité Symfony est déjà scaffoldé (entité `User`
 
 ## Règles métier
 
-1. **Barrière totale** : toutes les routes applicatives exigent `ROLE_USER`. Seuls l'écran de login et les assets statiques (+ outils de dev) sont publics.
+1. **Barrière totale** : toute page de l'application exige d'être connecté. Seuls l'écran de login et les ressources d'affichage (+ outils de dev) restent accessibles sans connexion.
 2. **Compte unique, non auto-inscriptible** : il n'existe qu'un seul compte utilisateur. Aucune page d'inscription, aucun « mot de passe oublié » en libre-service.
-3. **Provisioning par fixtures** : le compte est créé par les fixtures (`admin@example.com` / `password` en dev). C'est le mécanisme retenu pour la V1, y compris hors dev — voir la dette assumée en *Hors scope*.
+3. **Compte fourni avec l'environnement** : le compte est créé avec le jeu de données initial (`admin@example.com` / `password` en dev). C'est le mécanisme retenu pour la V1, y compris hors dev — voir la dette assumée en *Hors scope*.
 4. **Message d'erreur neutre** : en cas d'échec, le message n'indique jamais si c'est l'email ou le mot de passe qui est erroné (« Identifiants invalides »).
-5. **Anti-brute-force** : les tentatives de connexion échouées sont limitées (throttling) pour la même identité / IP.
+5. **Anti-brute-force** : les tentatives de connexion échouées sont limitées pour la même identité / IP.
 6. **Rester connecté** : une case optionnelle prolonge la session au-delà de la fermeture du navigateur (durée à fixer au plan — défaut proposé : 1 semaine). Décochée, la session suit le cycle de vie par défaut du navigateur.
 7. **Redirections** : après connexion réussie → accueil du board ; après déconnexion → écran de login ; toute tentative d'accès non authentifié → écran de login.
 8. **Le login est une barrière d'accès seule** : il n'intervient pas dans le chiffrement des tokens (voir *Hors scope*).
 
 ## Critères d'acceptation
 
-- [ ] Non connecté, une requête vers n'importe quelle URL applicative (`/`, un projet, un document) redirige vers l'écran de login.
+- [ ] Non connecté, l'accès à n'importe quelle page (accueil, un projet, un document) redirige vers l'écran de login.
 - [ ] L'écran de login s'affiche (email, mot de passe, case « rester connecté »).
 - [ ] Des identifiants valides connectent l'utilisateur et le redirigent vers l'accueil du board.
 - [ ] Des identifiants invalides restent sur l'écran de login avec un message neutre (« Identifiants invalides »), sans préciser le champ fautif.
 - [ ] La case « rester connecté » cochée maintient la session après fermeture/réouverture du navigateur ; décochée, non.
-- [ ] Après déconnexion, l'utilisateur est renvoyé à l'écran de login et les routes applicatives redeviennent inaccessibles.
+- [ ] Après déconnexion, l'utilisateur est renvoyé à l'écran de login et les pages de l'application redeviennent inaccessibles.
 - [ ] Au-delà d'un seuil de tentatives échouées, les connexions suivantes sont temporairement bloquées.
-- [ ] Les fixtures créent le compte `admin@example.com` / `password` (`ROLE_USER`) et permettent de se connecter après `make db-reset` / rechargement des fixtures.
+- [ ] Le jeu de données initial crée le compte `admin@example.com` / `password` et permet de se connecter après une réinitialisation des données.
 
 ## Hors scope
 
-- **Chiffrement des tokens au repos** : la protection cryptographique des tokens (clé dérivée d'`APP_SECRET`, non-réaffichage en clair) est cadrée dans `declaration-projet`, pas ici. `login` ne fait que garder l'accès.
-- **Commande de gestion de compte** : pas de commande console `app:user:create` / reset password en V1. **Dette assumée** : sans elle, changer le mot de passe en usage réel passe par un rechargement des fixtures, ce qui réinitialise la base (donc les projets déclarés et leurs tokens). Acceptable pour un compte quasi-fixe au MVP ; évolution V2 naturelle → commande console.
+- **Chiffrement des tokens au repos** : la protection cryptographique des tokens (chiffrement et non-réaffichage en clair) est cadrée dans `declaration-projet`, pas ici. `login` ne fait que garder l'accès.
+- **Commande de gestion de compte** : pas de commande pour créer un compte ou réinitialiser un mot de passe en V1. **Dette assumée** : sans elle, changer le mot de passe en usage réel passe par un rechargement du jeu de données initial, ce qui réinitialise tout (donc les projets déclarés et leurs tokens). Acceptable pour un compte quasi-fixe au MVP ; évolution V2 naturelle → une commande dédiée.
 - **Inscription / « mot de passe oublié » en self-service** : hors sujet pour un outil mono-utilisateur local.
-- **Rôles et permissions fines / voters** : un seul rôle, aucun besoin de granularité.
+- **Rôles et permissions fines** : un seul rôle, aucun besoin de granularité.
 - **Multi-utilisateur, comptes partagés, SSO, 2FA** : anti-objectifs vision ou surdimensionnés pour un usage personnel local.
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (mono-utilisateur par nature).
-- **Multi-thème** : non.
-- **i18n / traduction** : libellés de l'écran de login et messages d'erreur en français (pas de mécanisme i18n à introduire pour autant).
-- **API** : non (aucune ressource API exposée par cette story).
-- **Permissions** : firewall `main` déjà configuré (`form_login` + `logout` + `access_control ^/ → ROLE_USER`) ; à compléter avec `remember_me` et `login_throttling`. Aucun nouveau voter.
+- **Traduction / langues** : libellés de l'écran de login et messages d'erreur en français (pas de mécanisme de traduction à introduire pour autant).
+- **Droits d'accès** : la barrière d'authentification globale existe déjà ; elle est à compléter par le « rester connecté » et la limitation des tentatives. Aucun niveau d'autorisation supplémentaire.
+- **Cloisonnement des données** : non (mono-utilisateur par nature).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non (aucune donnée exposée hors de l'interface par cette story).
 - **Emails / notifications** : non (pas de « mot de passe oublié »).
-- **Migration de données** : la table `user` existe déjà (migration `Version20260420133408`). Aucune nouvelle migration attendue, sauf si `remember_me` impose un stockage (l'implémentation par signature n'en requiert pas).
+- **Données existantes** : le compte utilisateur est déjà stocké ; aucune reprise de données attendue.
 - **Comportement par défaut** : l'utilisateur voit d'abord l'écran de login à chaque première visite d'une session non mémorisée.
 
 ## Questions ouvertes
 
-- **Durée du « rester connecté »** : combien de temps le cookie remember-me maintient-il la session ? Options : (a) 1 semaine (défaut proposé), (b) 1 mois, (c) autre. → à trancher au plan.
+- **Durée du « rester connecté »** : combien de temps l'utilisateur reste-t-il connecté sans ressaisir ses identifiants ? Options : (a) 1 semaine (défaut proposé), (b) 1 mois, (c) autre. → à trancher au plan.
 - **DA de l'écran de login** : « Paper » (socle actuel) ou « Nova · Midnight » (DA de référence récente) ? → décision design, à trancher au plan.
 
 ---

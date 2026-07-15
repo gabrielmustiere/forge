@@ -9,7 +9,7 @@
 
 ## Contexte
 
-Le pivot de la vision fait passer Forge Board de « miroir qui observe » à « atelier qui agit » : à terme, un besoin exprimé depuis le board déclenche un skill de cadrage (interview, pitch) via Symfony AI, qui produit une story dans le repo. Mais un skill forge s'exécute **sur des fichiers**, dans un repo — pas sur un flux d'API. Il faut donc, avant tout, une **copie locale du repo** sur laquelle agir.
+Le pivot de la vision fait passer Forge Board de « miroir qui observe » à « atelier qui agit » : à terme, un besoin exprimé depuis le board déclenche un skill de cadrage (interview, pitch) confié à l'assistant IA, qui produit une story dans le repo. Mais un skill forge s'exécute **sur des fichiers**, dans un repo — pas sur un flux d'API. Il faut donc, avant tout, une **copie locale du repo** sur laquelle agir.
 
 Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story 003) pour projeter le kanban. Elle n'a jamais rapatrié un repo : aucun fichier du projet ne vit en local. Tant que cette copie n'existe pas, rien du parcours de production (exécuter un skill, produire une story) ne peut démarrer. Cette story livre **uniquement cette brique d'amorçage** : le clone. Elle est petite, démontrable, et débloque tout l'aval.
 
@@ -17,13 +17,13 @@ Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story
 
 - **Problème adressé** : première brique matérielle du pivot — sans copie locale, aucun skill de cadrage ne peut s'exécuter sur le repo. Prérequis en amont de la North Star primaire (« besoin exprimé → story produite »).
 - **Audience servie** : l'utilisateur local du POC (le dev, jouant les deux rôles) ; prépare l'entrée du PO non-technique (horizon 1 an).
-- **Principes respectés** : « l'app agit mais reste bornée » (le clone est une action **locale**) ; « cadrage only » (aucune écriture dans `src/`, aucune génération de code) ; « projection lecture-seule préservée » (le kanban existant est inchangé) ; « prouver avant d'ouvrir » (brique POC, mono-utilisateur).
+- **Principes respectés** : « l'app agit mais reste bornée » (le clone est une action **locale**) ; « cadrage only » (aucune écriture dans le code du projet, aucune génération de code) ; « projection lecture-seule préservée » (le kanban existant est inchangé) ; « prouver avant d'ouvrir » (brique POC, mono-utilisateur).
 - **Anti-objectifs honorés** : pas de génération de code ; pas de multi-utilisateur ; **pas de push distant** dans cette story (le clone/pull ne fait que lire le repo distant).
 - **Impact North Star** : indirect mais bloquant — sans copie locale, tout le parcours de production reste impossible.
 
 ## Utilisateurs concernés
 
-- **Utilisateur local connecté** (unique utilisateur au POC, derrière le firewall `login`) — voit un bouton sur la vue kanban d'un projet et peut cloner, ou mettre à jour, le repo en local. C'est le seul rôle impacté.
+- **Utilisateur local connecté** (unique utilisateur au POC, l'écran n'étant accessible qu'une fois connecté) — voit un bouton sur la vue kanban d'un projet et peut cloner, ou mettre à jour, le repo en local. C'est le seul rôle impacté.
 - Aucun autre rôle : l'app reste mono-utilisateur au POC.
 
 ## User Stories
@@ -38,10 +38,10 @@ Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story
 1. Le bouton est disponible sur **tout projet déclaré** — aucune condition de vérification forge préalable (le succès/échec du clone vaut lui-même test d'accès).
 2. Cible du clone : **`private/<identifiant-projet>/`**, un dossier par projet. L'identifiant doit éviter toute collision entre deux repos de même nom (identifiant précis tranché au plan).
 3. Si le dossier cible contient déjà un clone du repo → **`git pull`** (mise à jour), jamais un re-clone destructif.
-4. Le clone utilise le **token d'accès déjà stocké** du projet (le même que la lecture) pour les repos privés. Le token n'apparaît **jamais en clair** — ni dans les logs, ni persisté dans la config git du clone.
-5. **GitHub et GitLab** sont tous deux supportés dès cette story (l'URL de clone se dérive du provider + de l'URL déclarée).
-6. L'opération est **asynchrone** : le projet expose un état de clone (`non cloné` / `clonage…` / `cloné` / `échec` + raison + horodatage).
-7. Le contenu cloné dans `private/` (hors `.gitkeep`) **ne doit jamais être committé** dans le repo du Board — c'est un artefact local.
+4. Le clone utilise le **token d'accès déjà stocké** du projet (le même que la lecture) pour les repos privés. Le token n'apparaît **jamais en clair** — ni dans les logs, ni conservé dans la configuration du dépôt cloné.
+5. **GitHub et GitLab** sont tous deux supportés dès cette story (l'adresse de clone se déduit du fournisseur et de l'URL déclarée).
+6. L'opération se déroule **en tâche de fond** : le projet affiche l'état de sa copie locale (`non cloné` / `clonage…` / `cloné` / `échec` + raison + horodatage).
+7. Le contenu cloné dans `private/` **ne doit jamais être committé** dans le repo du Board — c'est un artefact local.
 8. Cette story **ne modifie ni ne pousse rien** sur le repo distant (clone/pull = lecture seule côté remote).
 
 ## Critères d'acceptation
@@ -51,9 +51,9 @@ Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story
 - [ ] Cliquer sur un projet déjà cloné exécute un `git pull` et l'état reflète la mise à jour.
 - [ ] Un repo **privé** se clone avec le token stocké (un repo public aussi).
 - [ ] Un échec (token invalide, repo injoignable, réseau) affiche un état « échec » avec une **raison lisible**, sans planter l'app.
-- [ ] Pendant un clone long, l'interface reste **utilisable** (opération asynchrone).
+- [ ] Pendant un clone long, l'interface reste **utilisable** (l'opération se poursuit en tâche de fond).
 - [ ] **GitHub et GitLab** fonctionnent tous les deux.
-- [ ] Le contenu cloné dans `private/` n'est pas committé au repo du Board (`.gitignore` en place).
+- [ ] Le contenu cloné dans `private/` n'est pas committé au repo du Board.
 
 ## Hors scope
 
@@ -65,20 +65,19 @@ Aujourd'hui, l'app ne fait que *lire* `docs/story/` à distance via l'API (story
 
 ## Impacts transverses
 
-- **Multi-tenant** : non (mono-utilisateur au POC).
-- **Multi-thème** : non.
-- **i18n / traduction** : oui — libellés du bouton et des états (`clonage…`, `cloné`, `échec`) à traduire selon la config i18n du projet.
-- **API** : non — action interne déclenchée depuis l'UI, aucun endpoint public exposé.
-- **Permissions** : inchangé — l'action vit derrière le firewall `login` existant.
+- **Traduction / langues** : oui — libellés du bouton et des états (`clonage…`, `cloné`, `échec`) à traduire comme le reste de l'interface.
+- **Droits d'accès** : inchangé — l'action reste réservée à l'utilisateur connecté, au même titre que les écrans existants.
+- **Cloisonnement des données** : non (mono-utilisateur au POC).
+- **Apparence / déclinaisons** : non.
+- **Exposition à des tiers** : non — l'action se déclenche depuis l'écran du projet ; rien n'est exposé hors de l'interface.
 - **Emails / notifications** : non.
-- **Migration de données** : **oui** — le projet doit persister un état de clone (statut, chemin local, horodatage, éventuelle raison d'échec) → nouveaux champs sur `Project` ou entité dédiée (tranché au plan), donc migration Doctrine.
+- **Données existantes** : **oui** — chaque projet doit désormais mémoriser l'état de sa copie locale (statut, emplacement local, horodatage, éventuelle raison d'échec) ; les projets déjà déclarés n'ont aucune reprise à subir, ils démarrent sans copie locale. La façon de le mémoriser est tranchée au plan.
 - **Comportement par défaut** : un projet non cloné s'affiche comme aujourd'hui, avec en plus le bouton et l'état « non cloné ». Le kanban est inchangé.
 
 ## Questions ouvertes
 
-- **Identifiant du dossier de clone** : `private/<slug-du-nom>` ? `private/<id>` ? `private/<owner>-<repo>` extrait de l'URL ? Options : (a) nom humanisé — collisions possibles, (b) id numérique du projet — sûr mais peu lisible, (c) `owner/repo` de l'URL. → tranché au plan.
-- **Modèle de persistance de l'état** : champs sur `Project` (simple, relation 1-1) vs entité `Clone` dédiée (extensible pour l'exécution de skills à venir). → tranché au plan.
-- **Détection « déjà cloné »** : présence du dossier + validité du remote, ou état persisté fait foi ? → tranché au plan / implem.
+- **Identifiant du dossier de clone** : `private/<slug-du-nom>` ? `private/<id>` ? `private/<owner>-<repo>` extrait de l'URL ? Options : (a) nom humanisé — collisions possibles, (b) identifiant interne du projet — sûr mais peu lisible, (c) `owner/repo` de l'URL. → tranché au plan.
+- **Détection « déjà cloné »** : présence du dossier et de son dépôt distant, ou l'état mémorisé fait foi ? → tranché au plan / implem.
 
 ---
 
