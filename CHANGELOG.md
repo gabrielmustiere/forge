@@ -10,6 +10,23 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.2.0] - 2026-07-15 — Des règles projet qui ne pèsent que là où elles servent
+
+### ✨ Fonctionnel
+
+- **Nouveau skill `/forge:rules`** — écrit et entretient les **règles projet** dans `.claude/rules/`, un mécanisme natif de Claude Code : des instructions **paths-scopées**, que le harness ne charge que lorsque Claude ouvre un fichier de la zone concernée. Le gain est là et nulle part ailleurs — une règle **sans** `paths` est chargée au lancement avec la même priorité que `.claude/CLAUDE.md`, donc n'apporte rien qu'une section du `CLAUDE.md` n'apporterait déjà. Trois modes (Création / Enrichir / Éditer, le **retrait** faisant partie d'Éditer, parce qu'une règle périmée continue d'être obéie).
+- **Deux tests appliqués à chaque règle candidate, et c'est tout le skill.** Le **test du `paths`** : quels fichiers Claude doit-il être en train de lire pour que cette règle serve ? Pas de glob honnête → ce n'est pas une règle de zone. C'est le cas de toutes les règles d'**outillage** (« toujours le binaire `symfony` », « passer par le Makefile ») : lancer une commande n'est pas lire un fichier, donc aucun `paths` ne les déclencherait au bon moment — elles restent dans le `CLAUDE.md`, ou deviennent un **hook `PreToolUse`** si l'utilisateur veut une garantie plutôt qu'un conseil. La **règle de preuve** : une règle ne s'écrit qu'attestée par un fichier, un diff ou un finding — comptée, jamais récitée, et **jamais prescrite plus large que ce qui a été mesuré**.
+- **`/forge:rules` retire du `CLAUDE.md` ce qu'il en emporte** — troisième exception assumée du contrat de frontières (§3), **en soustraction seule** : ce qui part en règle en est retiré (le doublon se cherche par le sens, pas par les mots — les règles sont écrites depuis le code et ne reprennent jamais la formulation d'origine), un renvoi de deux lignes le remplace. Un déplacement laissé à moitié produirait exactement le mal que l'invariant I1 veut éviter : deux énoncés de la même convention, qui divergeront. Ajouter, restructurer ou réécrire reste à `/forge:claude-md`.
+- **Pas de changelog dans les fichiers de règles**, contrairement à `vision.md`/`stack.md`/`product-backlog.md` : une règle est injectée en contexte à chaque session où son `paths` matche — un historique dedans serait payé en tokens à chaque fois pour un contenu qui n'aide personne à écrire du code. `git log` fait le travail.
+- **Préséance posée dans `_detection.md`** : `.claude/rules/` scopées > `CLAUDE.md` > références stack. Les skills n'ont **rien à faire** pour obtenir les règles — le harness les charge ; les lire à la main les payerait deux fois.
+
+### 🔧 Technique
+
+- **Trois pièges de glob documentés dans `references/template.md`**, tous silencieux, découverts en évaluant le skill contre un Claude sans skill : le `*` simple qui ne descend pas dans les sous-dossiers ; le chemin inexistant ; et surtout **les dossiers en point** — `**` ne fabrique jamais un composant commençant par `.`, donc `plugins/**/*` rate `plugins/forge/.claude-plugin/plugin.json`, précisément le fichier que la règle marketplace vise. Le glob n'est pas vide, il a l'air juste, et il rate sa cible.
+- **Phase 5 de vérification durcie** : vérifier avec l'outil `Glob`, jamais avec `find`/`ls` (qui **rassurent à tort** — sémantique divergente) ni avec `bash` (qui **alarme à tort** — le bash de macOS est en 3.2, sans `globstar` : `**` y dégénère en `*` et renvoie 0 sur un motif valide). Repli documenté sur `python3 -m glob` ou zsh. Et trois contrôles au lieu d'un : le glob matche-t-il, **couvre-t-il ce que la règle prétend couvrir**, et le scope est-il honnête.
+- **Contrat de frontières amendé** : `.claude/rules/**` entre dans la table §2 avec `rules` pour écrivain unique ; `CLAUDE.md` passe à `claude-md (+ rules, voir §3)` ; les « deux exceptions assumées » deviennent trois, la nouvelle étant encadrée par trois garde-fous calqués sur ceux de `sync`.
+- **`references/zones-catalog.md`** — catalogue d'amorce des zones par famille de projet (PHP/Symfony, JS/TS, Python, transverses), avec les trois lignes de découpe par ordre de rendement (par sujet, par couche, par nature de fichier) et la liste de ce qui **n'est pas** une zone.
+
 ## [6.1.0] - 2026-07-15 — Skills d'implémentation libérés
 
 ### ✨ Fonctionnel

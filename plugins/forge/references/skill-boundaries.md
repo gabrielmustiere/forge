@@ -15,7 +15,7 @@ service : il crée une deuxième source de vérité, et deux sources de vérité
 
 - [1. Les trois invariants](#1-les-trois-invariants)
 - [2. Propriété d'écriture : un artifact, un écrivain](#2-propriété-décriture--un-artifact-un-écrivain)
-- [3. Les deux exceptions assumées](#3-les-deux-exceptions-assumées)
+- [3. Les trois exceptions assumées](#3-les-trois-exceptions-assumées)
 - [4. Ce qui est une frontière, et ce qui n'en est pas](#4-ce-qui-est-une-frontière-et-ce-qui-nen-est-pas)
 - [5. Invocation : jamais automatique](#5-invocation--jamais-automatique)
 - [6. Déclarer sa frontière dans un SKILL.md](#6-déclarer-sa-frontière-dans-un-skillmd)
@@ -65,7 +65,8 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `CHANGELOG.md` + tags de version | `release` | — |
 | Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `report`, `doc-feature`, `stack` |
 | L'historique git (commits, push) | `commit` (+ `release` pour le commit de version) | — |
-| `CLAUDE.md` racine | `claude-md` | tous |
+| `CLAUDE.md` racine | `claude-md` (+ `rules`, voir §3) | tous |
+| `.claude/rules/**` | `rules` | tous (chargées par le harness, pas lues par les skills) |
 
 **Le corollaire le plus important** : un skill qui a besoin d'un artifact qu'il ne possède pas
 **ne l'écrit pas** — il renvoie vers son propriétaire. `feature-implem` qui découvre que le plan
@@ -74,9 +75,9 @@ est faux ne corrige pas le plan : il remonte à l'utilisateur et propose `/forge
 `[PLAN]`, et c'est `sync` qui réalignera. C'est plus lent d'un tour, et c'est le prix de la
 traçabilité.
 
-## 3. Les deux exceptions assumées
+## 3. Les trois exceptions assumées
 
-Deux artifacts ont plusieurs écrivains. Ce sont des exceptions **délibérées, encadrées et
+Trois artifacts ont plusieurs écrivains. Ce sont des exceptions **délibérées, encadrées et
 documentées** — pas des zones grises.
 
 ### `metadata.json` — un contrat, pas une intention
@@ -104,7 +105,32 @@ rendent l'exception sûre :
    renvoie vers `/forge:vision` en mode Pivot. La frontière est là — `sync` constate ce que le
    code a fait à la doc, il ne décide pas de la direction du produit.
 
-Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces deux
+### Le `CLAUDE.md` — `rules` soustrait ce qu'il emporte
+
+`rules` écrit `.claude/rules/**`, qui lui appartient. Mais une règle est presque toujours un
+**déplacement** : une convention qui vivait dans le `CLAUDE.md` s'en va vivre dans un fichier
+scopé, où elle ne coûtera du contexte que dans les sessions qui la concernent. Or un déplacement
+est atomique par nature. Le laisser à moitié — règle écrite, source intacte — ce n'est pas rester
+prudent : c'est produire exactement le mal que I1 veut éviter, deux énoncés de la même convention
+qui divergeront au premier changement. Ici, le second écrivain **protège** l'invariant au lieu de
+le menacer.
+
+Trois garde-fous, calqués sur ceux de `sync` :
+
+1. **`rules` ne fait que soustraire.** Il n'ajoute aucune convention, ne réorganise pas le fichier,
+   ne touche pas à la couche comportementale. Le seul ajout admis est un renvoi de deux lignes vers
+   `.claude/rules/` — nécessaire parce qu'une règle ne se charge qu'à la **lecture** d'un fichier de
+   sa zone, et qu'une session qui démarre par une création pure ne la verrait jamais.
+2. **Il ne retire que ce qu'il vient d'emporter** — le déplacement fait foi, qu'il soit littéral ou
+   reformulé. Un passage qui a échoué au test du `paths` reste où il est : c'est le résultat du
+   test, pas un oubli.
+3. **Chaque retrait est proposé et validé** avant écriture, et appliqué par `Edit` ciblé — jamais
+   par réécriture du fichier, qui contient du savoir manuel que `rules` n'a pas produit.
+
+Pour tout le reste du `CLAUDE.md` — ajouter, restructurer, réécrire — c'est `/forge:claude-md`, et
+`rules` y renvoie.
+
+Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces trois
 cas est le signe qu'une frontière est mal placée — c'est le découpage qu'il faut corriger, pas
 le contrat qu'il faut élargir.
 

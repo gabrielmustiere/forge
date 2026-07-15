@@ -58,13 +58,22 @@ ou :
 
 > Stack non détecté automatiquement — on part sur quoi : `symfony`, `sylius`, autre, ou rien ?
 
-## Conventions projet (CLAUDE.md)
+## Conventions projet (`.claude/rules/` et `CLAUDE.md`)
 
-En plus du stack, **lire `CLAUDE.md` à la racine du projet** s'il existe. Il contient les conventions personnelles qui complètent les règles framework :
+Deux sources, à ne pas confondre.
+
+**`.claude/rules/**`** (produites par `/forge:rules`) — des règles **paths-scopées** : elles sont
+chargées par le harness, automatiquement, quand Claude ouvre un fichier de leur zone. Tu n'as donc
+**rien à faire** pour les obtenir : si elles s'appliquent, elles sont déjà dans ton contexte. Ne les
+lis pas à la main « pour vérifier » — tu les payerais deux fois. Elles sont la parole la plus précise
+du projet sur une zone donnée, donc **elles priment sur tout le reste** en cas de conflit.
+
+**`CLAUDE.md` à la racine** — à lire s'il existe. Il porte ce qui est vrai partout, quelle que soit
+la zone touchée :
 
 - Commandes QA exactes (préfixe `symfony`, `docker compose exec`, Makefile, etc.)
 - Credentials de test (admin, clients, hostnames multi-channel)
 - Noms de thèmes shop utilisés, overrides custom
 - Convention de branches, de commits scope spécifique au projet
 
-Le `CLAUDE.md` prime sur les références stack en cas de conflit — c'est la source de vérité de l'utilisateur pour son projet.
+La préséance en cas de conflit, du plus fort au plus faible : **`.claude/rules/` scopées > `CLAUDE.md` > références stack**. Les deux premières sont la source de vérité de l'utilisateur pour son projet ; les références stack ne sont qu'un défaut de framework. Et entre les deux premières, la plus spécifique gagne : une règle de zone a été écrite en regardant précisément ces fichiers-là.
