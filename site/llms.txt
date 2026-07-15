@@ -1,0 +1,70 @@
+# Forge
+
+> Forge est un plugin Claude Code stack-agnostique qui pilote tout le cycle de développement, de la vision au commit. Il découpe le travail en étapes courtes validées une à une : chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`…) qui alimente la suivante. Aucune étape ne démarre sans validation explicite de l'utilisateur.
+
+Version : 6.2.0 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
+
+Installation dans une session Claude Code :
+
+```
+/plugin marketplace add gabrielmustiere/forge
+/plugin install forge@forge
+/reload-plugins
+```
+
+Les skills sont namespacées par le nom du plugin : `/forge:help`, `/forge:feature-pitch`, etc. Mise à jour : `/plugin marketplace update forge` puis `/reload-plugins`.
+
+## Structure du pipeline
+
+Le pipeline compte 25 skills réparties en une phase amont, trois tracks symétriques et une clôture commune.
+
+- **Phase 0 — poser le décor** (une fois, documents vivants à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`.
+- **Track feature** (valeur utilisateur) : `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) → `feature-implem`.
+- **Track refacto** (comportement figé, code restructuré) : `refactor-plan` (→ `plan.md`, avec tests de caractérisation) → `refactor-implem`.
+- **Track tech** (perf, résilience, observabilité, sécu) : `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch) → `tech-implem`.
+- **Clôture commune aux trois tracks** : `review` (→ `review.md`) → `commit` → `report` (→ `report.md`) → `sync`. `report-and-sync` enchaîne les deux dernières en une passe.
+- **Track fast** : moins de 3 fichiers, pas de migration ni d'impact transverse → on code, on passe la QA du stack, puis `/forge:commit`. Pas de pitch pour un typo.
+
+Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slug>` (compteur global d'abord, puis le tag de track), pour que le tri lexicographique donne la timeline du projet. Exemple : `docs/story/042-f-checkout-express/`.
+
+## Skills
+
+- `/forge:vision` — cadre la vision projet : problème, audience, valeur, North Star, principes, anti-objectifs.
+- `/forge:product-backlog` — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3.
+- `/forge:stack` — cartographie la stack ; chaque techno prouvée par un fichier source.
+- `/forge:feature-interview` — dégrossit un besoin flou par interview guidée ancrée sur le code existant.
+- `/forge:feature-pitch` — cadre l'idée et challenge l'alignement vision/backlog.
+- `/forge:feature-plan` — plan technique : archi, données, contrats, migration, tests.
+- `/forge:feature-implem` — implémentation guidée sous-tâche par sous-tâche, QA continue.
+- `/forge:refactor-plan` — cadrage refacto et tests de caractérisation posés comme verrou.
+- `/forge:refactor-implem` — exécution verrou-tests-d'abord, étapes incrémentales réversibles.
+- `/forge:tech-plan` — cadrage avec métrique cible chiffrée, baseline et kill switch.
+- `/forge:tech-implem` — exécution mesurée après chaque étape.
+- `/forge:review` — code review du diff : sécu, qualité, conformité au plan, non-régression.
+- `/forge:commit` — message Conventional Commits en français, commit et push.
+- `/forge:report` — compte rendu honnête : fait vs prévu, écarts, dettes.
+- `/forge:sync` — réaligne les docs d'intention et les docs projet sur le code livré.
+- `/forge:report-and-sync` — enchaîne report puis sync en une passe.
+- `/forge:help` — sommaire du pipeline, tracks, skills et artefacts.
+- `/forge:claude-md` — génère ou met à jour le `CLAUDE.md` du projet.
+- `/forge:rules` — écrit les règles projet paths-scopées dans `.claude/rules/`.
+- `/forge:test-scenario` — joue un scénario utilisateur en live via Playwright MCP.
+- `/forge:adr` — rédige un Architecture Decision Record MADR léger dans `docs/adr/`.
+- `/forge:estimate` — chiffre le temps « tout compris » d'une story à facturer, en heures.
+- `/forge:doc-feature` — cartographie une feature existante (legacy) dans `docs/feature-map/`.
+- `/forge:backfill-metadata` — reconstruit le `metadata.json` des stories antérieures depuis git.
+- `/forge:release` — tag SemVer annoté, `CHANGELOG.md` Keep a Changelog et release GitHub.
+
+## Forge Board
+
+Application Symfony 8 vivant à la racine du même dépôt (la marketplace de plugins est sous `plugins/`). Kanban en lecture seule qui scanne les `docs/story/` de dépôts forge et projette chaque story en carte le long d'un pipeline visuel.
+
+Stack : Symfony 8.0, PHP 8.5+, SQLite, Symfony Messenger (transport Doctrine), Symfony UX (Stimulus, Turbo, Live Components), Tailwind CSS 4, AssetMapper, PHPUnit 13, Playwright, PHPStan level 9, PHP-CS-Fixer.
+
+## Liens
+
+- [Documentation développeur](https://forge.mustiere.fr/docs/) — prérequis, installation pas à pas, concepts, référence des 25 skills, permissions, dépannage
+- [Dépôt GitHub](https://github.com/gabrielmustiere/forge)
+- [Inventaire complet des skills](https://github.com/gabrielmustiere/forge/blob/main/plugins/forge/SKILLS.md)
+- [Releases](https://github.com/gabrielmustiere/forge/releases)
+- [Marketplace de skills framework (Symfony, Sylius, éditorial)](https://github.com/gabrielmustiere/skills)
