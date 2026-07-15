@@ -8,6 +8,6 @@
     }
   },
   "enabledPlugins": {
-    "workflow@forge": true
+    "forge@forge": true
   }
 }
