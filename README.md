@@ -2,12 +2,7 @@
 
 **Forge** est une marketplace de plugins Claude Code. Elle publie un plugin : `forge`, un pipeline de développement stack-agnostique qui pilote tout le cycle — de la vision projet jusqu'au commit — en étapes courtes, validées une à une.
 
-- **Marketplace** : `forge`
-- **Source** : `gabrielmustiere/forge`
-
-> Ce dépôt héberge aussi **Forge Board**, l'application Symfony qui visualise le workflow forge en kanban — voir la [section dédiée](#forge-board--lapplication) plus bas.
-
-> Les skills Symfony, Sylius et éditoriales vivent dans une marketplace séparée : [`gabrielmustiere/skills`](https://github.com/gabrielmustiere/skills).
+**📖 Documentation complète : [forge.mustiere.fr](https://forge.mustiere.fr)** — pipeline, tracks, référence des skills, configuration et dépannage.
 
 ## Installation
 
@@ -23,112 +18,20 @@ Les skills sont namespacées par le nom du plugin : `/forge:help`, `/forge:featu
 
 Mettre à jour : `/plugin marketplace update forge` puis `/reload-plugins`.
 
-## Principe
+Une fois installé, `/forge:help` est le GPS du pipeline. La documentation détaillée vit sur [forge.mustiere.fr/docs](https://forge.mustiere.fr/docs/).
 
-Chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`) qui alimente la suivante. **On ne passe jamais à l'étape d'après sans validation explicite** (`ok`, `go`, `validé`). Trois tracks symétriques selon la nature du changement, un même pipeline.
+## Ce que contient ce dépôt
 
-```
-PHASE 0 (une fois, documents vivants)
-  vision           → docs/vision.md            (problème, audience, North Star)
-  product-backlog  → docs/product-backlog.md   (domaines, capacités, MVP/V2/V3)
-  stack            → docs/stack.md             (langages, infra, CI — phase 0 technique)
-
-TRACK selon le changement
-  Feature (user-facing)        : (feature-interview) → feature-pitch → feature-plan → feature-implem
-  Refacto (comportement figé)  : refactor-plan → refactor-implem
-  Tech (perf/sécu/observabilité) : tech-plan → tech-implem
-
-CLÔTURE (commune aux 3 tracks)
-  review → commit → report → sync
-```
-
-Tout vit dans `docs/story/NNN-<f|r|t>-<slug>/` — compteur global, donc le tri lexicographique donne la timeline du projet. Exemple : `docs/story/042-f-checkout-express/`.
-
-Perdu en cours de route ? `/forge:help` est le GPS du pipeline.
-
-## Skills
-
-### Phase 0 — Poser le décor (documents vivants, 4 modes : Création / Enrichir / Éditer / Pivot)
-
-| Skill | Rôle |
+| Chemin | Rôle |
 | --- | --- |
-| `/forge:vision` | Cadre la vision : problème, audience, valeur, North Star, principes, anti-objectifs → `docs/vision.md` |
-| `/forge:product-backlog` | Traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3 → `docs/product-backlog.md` |
-| `/forge:stack` | Cartographie la stack technique (langages, backend, frontend, données, ops, CI) → `docs/stack.md`. Chaque techno prouvée par un fichier source |
+| `plugins/forge/` | Le plugin et ses skills — inventaire : [`SKILLS.md`](plugins/forge/SKILLS.md) |
+| `.claude-plugin/marketplace.json` | Le catalogue de la marketplace |
+| `site/` | Le site publié sur [forge.mustiere.fr](https://forge.mustiere.fr) (GitHub Pages) |
+| `src/`, `config/`, `templates/`… | **Forge Board**, l'application Symfony — voir plus bas |
 
-### Track feature — Valeur utilisateur
+> Les skills Symfony, Sylius et éditoriales vivent dans une marketplace séparée : [`gabrielmustiere/skills`](https://github.com/gabrielmustiere/skills).
 
-| Skill | Rôle |
-| --- | --- |
-| `/forge:feature-interview` | *(optionnel, amont)* Découvre un besoin flou par interview guidée, ancrée sur le code existant → `brief.md` (alimente `feature-pitch`) |
-| `/forge:feature-pitch` | Cadre l'idée et challenge l'alignement (vision/backlog) → `pitch.md` |
-| `/forge:feature-plan` | Plan technique : archi, données, contrats, migration, tests → `plan.md` |
-| `/forge:feature-implem` | Implémentation guidée sous-tâche par sous-tâche, QA continue |
-
-### Track refacto — Comportement figé, code restructuré
-
-| Skill | Rôle |
-| --- | --- |
-| `/forge:refactor-plan` | Cadrage + tests de caractérisation à poser comme verrou → `plan.md` |
-| `/forge:refactor-implem` | Exécution verrou-tests-d'abord, étapes incrémentales réversibles |
-
-### Track tech — Perf, résilience, observabilité, sécu (non user-facing)
-
-| Skill | Rôle |
-| --- | --- |
-| `/forge:tech-plan` | Cadrage avec métrique cible chiffrée + baseline + kill switch → `plan.md` |
-| `/forge:tech-implem` | Exécution : baseline, kill switch, mesure après chaque étape |
-
-### Clôture — Commune aux trois tracks
-
-| Skill | Rôle |
-| --- | --- |
-| `/forge:review` | Code review du diff : sécu, qualité, conformité au plan, non-régression → `review.md` |
-| `/forge:commit` | Message Conventional Commits en français (l'intention), commit + push |
-| `/forge:report` | Compte rendu honnête : ce qui a été fait vs prévu, écarts, dettes → `report.md` |
-| `/forge:sync` | Réaligne `pitch.md` / `plan.md` **et les docs projet** (`vision.md` / `stack.md` / `product-backlog.md`) sur le code livré, avec changelog |
-
-### Utilitaires (hors pipeline)
-
-| Skill | Rôle |
-| --- | --- |
-| `/forge:help` | Sommaire du pipeline, tracks, skills et artifacts |
-| `/forge:claude-md` | Génère ou met à jour le `CLAUDE.md` à la racine : analyse du codebase (prouvée par fichier) + principes comportementaux Karpathy. Réutilise `docs/stack.md` / `docs/vision.md` |
-| `/forge:test-scenario` | Joue un scénario utilisateur en live via Playwright MCP |
-| `/forge:adr` | Rédige un Architecture Decision Record MADR léger → `docs/adr/NNNN-slug.md` |
-| `/forge:estimate` | Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release (forfait fixe 30 min) → `estimate.md` (en heures, marge incluse, deux colonnes réf./avec IA) |
-| `/forge:doc-feature` | Cartographie une feature existante (legacy) → `docs/feature-map/NNN-slug/overview.md` |
-| `/forge:release` | Tag SemVer annoté + `CHANGELOG.md` Keep a Changelog + release GitHub |
-
-### Clôture en une passe
-
-| Skill | Rôle |
-| --- | --- |
-| `/forge:report-and-sync` | Enchaîne `report` puis `sync` en une passe dans la session courante |
-
-## Track fast — Bugfix express (hors pipeline)
-
-Pour les modifs qui cochent **toutes** ces cases : moins de 3 fichiers, pas de migration, pas de nouveau service/entité, pas d'impact transverse. On code, on lance la QA du stack, puis `/forge:review` (optionnel) et `/forge:commit`. Pas de pitch ni de plan pour un typo.
-
-## Stack-aware
-
-Le workflow détecte le stack (Symfony, Sylius…) via `composer.json` / `package.json` et charge les bonnes conventions de QA, sécu et perf au bon moment. Les conventions propres au projet (commandes QA exactes, credentials de test, branches…) vivent dans le `CLAUDE.md` à la racine.
-
-Les skills d'implémentation **n'imposent aucun outillage** : elles lisent les commandes réelles dans ton `CLAUDE.md`, la référence stack ou ton manifeste de tâches (`Makefile`, `package.json`, `composer.json`…), et demandent plutôt que de deviner. Corollaire : c'est à ton projet de pré-autoriser son propre outillage dans son `.claude/settings.json`, sans quoi Claude Code demandera confirmation à chaque commande de build ou de test.
-
-```jsonc
-// .claude/settings.json — exemple pour un projet Symfony
-{
-  "permissions": {
-    "allow": ["Bash(make:*)", "Bash(symfony:*)", "Bash(vendor/bin/*:*)", "Bash(npm:*)"]
-  }
-}
-```
-
-## En savoir plus (plugin)
-
-- Inventaire complet et détaillé : [`plugins/forge/SKILLS.md`](plugins/forge/SKILLS.md)
-- Sommaire interactif dans Claude Code : `/forge:help`
+Pour tester une modification du plugin avant publication : `claude --plugin-dir <chemin>/plugins/forge`, puis `/reload-plugins` après chaque modification.
 
 ---
 
@@ -142,8 +45,8 @@ Les skills d'implémentation **n'imposent aucun outillage** : elles lisent les c
 
 - **Framework** : Symfony 8.0 / PHP 8.5+ — serveur local via Symfony CLI (proxy HTTPS `*.wip`)
 - **Base de données** : SQLite (fichier local, zéro infra)
-- **Design system** : « Paper » (voir [`DESIGN.md`](DESIGN.md)) — Tailwind CSS 4, Flowbite 4, Symfony UX Toolkit. *Une direction artistique plus moderne est un chantier à venir.*
-- **Front** : Symfony UX (Stimulus, Icons, Live Component, Turbo) + AssetMapper
+- **Design system** : « Nova · Midnight » (voir [`DESIGN.md`](DESIGN.md)) — thème sombre dense inspiré de Linear, accent iris. Tokens dans `assets/styles/app.css`
+- **Front** : Tailwind CSS 4, Flowbite 4, Symfony UX (Stimulus, Icons, Live Component, Turbo, Toolkit) + AssetMapper
 - **Tests** : PHPUnit 13 (Unit + Functional) + Playwright (E2E)
 - **Qualité** : PHPStan level 9 + PHP-CS-Fixer
 - **Async** : Symfony Messenger (transport Doctrine)
@@ -177,9 +80,11 @@ L'application est accessible sur `https://forge-board.wip` (domaine configurable
 | `make phpunit`    | Tests PHPUnit (Unit + Functional)                          |
 | `make playwright` | Tests E2E Playwright                                       |
 | `make quality`    | CS-Fixer + PHPStan + build                                 |
-| `make ci`         | Lint + tests unitaires (reproduit la CI)                   |
+| `make ci`         | Lint + tests unitaires                                     |
 
 `make help` liste toutes les cibles.
+
+La QA de l'application tourne **en local** : la seule intégration continue du dépôt (`.github/workflows/pages.yml`) vérifie et déploie le site.
 
 ## Accès aux services
 

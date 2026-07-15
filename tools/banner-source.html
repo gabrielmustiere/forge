@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Source de la bannière README</title>
+<!--
+  Source de .github/banner.png (bannière du README, 1600x900).
+  Hors de site/ pour ne pas être publiée. Reprend la charte de site/assets/forge.css
+  (fond #0a0e12, accent #3fd6f2, Space Grotesk + JetBrains Mono).
+
+  Pour régénérer après un changement de baseline ou du nombre de skills :
+
+    python3 -m http.server 8099 --directory tools
+    # puis, dans un navigateur en 1600x720 à dpr 1, capturer la page
+    # et enregistrer le PNG dans .github/banner.png
+-->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1600px; height: 720px; overflow: hidden;
+    background: radial-gradient(ellipse 65% 55% at 50% -5%, rgba(63, 214, 242, 0.14), transparent 70%), #0a0e12;
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  .grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(63, 214, 242, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(63, 214, 242, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 68% 62% at 50% 22%, black, transparent 78%);
+  }
+  .frame {
+    position: relative; height: 100%; padding: 60px 88px 56px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+
+  /* Marque */
+  .brand { display: flex; align-items: center; gap: 16px; }
+  .dot { width: 18px; height: 18px; background: #3fd6f2; box-shadow: 0 0 22px rgba(63, 214, 242, 0.9); }
+  .name { font-size: 30px; font-weight: 700; color: #eef4f8; letter-spacing: 0.07em; }
+  .badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #3fd6f2;
+    border: 1px solid rgba(63, 214, 242, 0.3); background: rgba(63, 214, 242, 0.06);
+    padding: 5px 13px; border-radius: 100px; letter-spacing: 0.05em;
+  }
+
+  /* Accroche */
+  h1 {
+    font-size: 76px; line-height: 1.06; font-weight: 700;
+    color: #eef4f8; letter-spacing: -0.025em; max-width: 1180px;
+  }
+  h1 em { font-style: normal; color: #3fd6f2; }
+  .lead { margin-top: 24px; font-size: 26px; line-height: 1.5; color: #8fa2b0; max-width: 940px; }
+
+  /* Chaîne du pipeline */
+  .pipeline { display: flex; align-items: center; gap: 14px; margin-top: 46px; }
+  .step {
+    font-family: 'JetBrains Mono', monospace; font-size: 17px; color: #c9d4dc;
+    border: 1px solid #23303a; border-radius: 8px; padding: 12px 20px;
+    background: #0d1319;
+  }
+  .step.is-lead { border-color: rgba(63, 214, 242, 0.4); color: #3fd6f2; background: rgba(63, 214, 242, 0.05); }
+  .arrow { color: #3fd6f2; font-size: 18px; }
+
+  /* Pied */
+  .foot { display: flex; align-items: center; justify-content: space-between; }
+  .facts {
+    display: flex; gap: 28px; align-items: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 19px; color: #7d8f9c;
+  }
+  .sep { color: #2a3844; }
+  .url {
+    font-family: 'JetBrains Mono', monospace; font-size: 20px; color: #3fd6f2;
+    border: 1px solid rgba(63, 214, 242, 0.32); background: rgba(63, 214, 242, 0.07);
+    padding: 10px 20px; border-radius: 100px;
+  }
+</style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="frame">
+    <div class="brand">
+      <span class="dot"></span>
+      <span class="name">FORGE</span>
+      <span class="badge">PLUGIN CLAUDE CODE · STACK-AGNOSTIQUE</span>
+    </div>
+
+    <div>
+      <h1>Le pipeline de développement,<br><em>de la vision au commit</em>.</h1>
+      <p class="lead">Des étapes courtes, validées une à une. Chaque étape produit un artefact qui alimente la suivante.</p>
+      <div class="pipeline">
+        <span class="step is-lead">vision</span><span class="arrow">→</span>
+        <span class="step">pitch</span><span class="arrow">→</span>
+        <span class="step">plan</span><span class="arrow">→</span>
+        <span class="step">implem</span><span class="arrow">→</span>
+        <span class="step">review</span><span class="arrow">→</span>
+        <span class="step">commit</span>
+      </div>
+    </div>
+
+    <div class="foot">
+      <div class="facts">
+        <span>3 tracks symétriques</span><span class="sep">/</span>
+        <span>25 skills</span><span class="sep">/</span>
+        <span>Apache 2.0</span>
+      </div>
+      <span class="url">forge.mustiere.fr</span>
+    </div>
+  </div>
+</body>
+</html>
