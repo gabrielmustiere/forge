@@ -1,514 +1,593 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Forge — pipeline de développement Claude Code, de la vision au commit</title>
-<meta name="description" content="Forge est un plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, et un artefact markdown validé à chaque étape. De la vision projet jusqu'au commit.">
-<link rel="canonical" href="https://forge.mustiere.fr/">
-<meta name="author" content="Gabriel Mustiere">
-<meta name="theme-color" content="#0a0e12">
-<meta name="color-scheme" content="dark">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forge — pipeline de développement Claude Code, de l'idée à la release</title>
+    <meta name="description" content="Forge est un plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, et un artefact markdown validé à chaque étape. De la vision projet jusqu'au commit.">
+    <link rel="canonical" href="https://forge.mustiere.fr/">
+    <meta name="author" content="Gabriel Mustiere">
+    <meta name="theme-color" content="#0a0e12">
+    <meta name="color-scheme" content="dark">
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Forge">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:title" content="Forge — le pipeline de développement, de la vision au commit">
-<meta property="og:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, un artefact markdown validé à chaque étape.">
-<meta property="og:url" content="https://forge.mustiere.fr/">
-<meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Forge — le pipeline de développement, de la vision au commit. 3 tracks symétriques, 25 skills, stack-agnostique.">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Forge — le pipeline de développement, de la vision au commit">
-<meta name="twitter:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, un artefact markdown validé à chaque étape.">
-<meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-<meta name="twitter:image:alt" content="Forge — le pipeline de développement, de la vision au commit. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Forge">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Forge — le pipeline de développement, de l'idée à la release">
+    <meta property="og:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, un artefact markdown validé à chaque étape.">
+    <meta property="og:url" content="https://forge.mustiere.fr/">
+    <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Forge — le pipeline de développement, de l'idée à la release">
+    <meta name="twitter:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, un artefact markdown validé à chaque étape.">
+    <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "https://forge.mustiere.fr/#website",
-      "url": "https://forge.mustiere.fr/",
-      "name": "Forge",
-      "inLanguage": "fr-FR",
-      "description": "Plugin Claude Code stack-agnostique qui pilote le cycle de développement, de la vision au commit.",
-      "publisher": { "@id": "https://forge.mustiere.fr/#author" }
-    },
-    {
-      "@type": "Person",
-      "@id": "https://forge.mustiere.fr/#author",
-      "name": "Gabriel Mustiere",
-      "url": "https://github.com/gabrielmustiere"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://forge.mustiere.fr/#forge",
-      "name": "Forge",
-      "applicationCategory": "DeveloperApplication",
-      "applicationSubCategory": "Plugin Claude Code",
-      "operatingSystem": "macOS, Linux, Windows",
-      "softwareVersion": "6.2.1",
-      "url": "https://forge.mustiere.fr/",
-      "codeRepository": "https://github.com/gabrielmustiere/forge",
-      "license": "https://www.apache.org/licenses/LICENSE-2.0",
-      "inLanguage": "fr-FR",
-      "author": { "@id": "https://forge.mustiere.fr/#author" },
-      "description": "Pipeline de développement stack-agnostique pour Claude Code. Découpe le cycle en étapes courtes validées une à une, chacune produisant un artefact markdown qui alimente la suivante : vision, product-backlog, stack, puis trois tracks symétriques (feature, refacto, tech) et une clôture commune (review, commit, report, sync).",
-      "featureList": [
-        "Phase 0 : vision, product-backlog et stack en documents vivants",
-        "Track feature : feature-interview, feature-pitch, feature-plan, feature-implem",
-        "Track refacto : refactor-plan, refactor-implem",
-        "Track tech : tech-plan, tech-implem",
-        "Clôture commune : review, commit, report, sync",
-        "Artefacts unifiés dans docs/story/ au format NNN-<f|r|t>-<slug>",
-        "Détection automatique du stack (Symfony, Sylius) et chargement des conventions adaptées"
-      ],
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://forge.mustiere.fr/#faq",
-      "mainEntity": [
+    <script type="application/ld+json">
         {
-          "@type": "Question",
-          "name": "Comment installer le plugin Forge dans Claude Code ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Dans une session Claude Code, sur n'importe quel projet : /plugin marketplace add gabrielmustiere/forge, puis /plugin install forge@forge, puis /reload-plugins. Les skills sont ensuite namespacées : /forge:help, /forge:feature-pitch, etc."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Quels sont les trois tracks de Forge ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Le track feature couvre la valeur utilisateur (feature-pitch → feature-plan → feature-implem). Le track refacto restructure le code à comportement figé (refactor-plan → refactor-implem). Le track tech traite la performance, la résilience, l'observabilité et la sécurité (tech-plan → tech-implem). Les trois partagent la même clôture : review → commit → report → sync."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Faut-il passer par tout le pipeline pour un simple bugfix ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Non. Le track fast couvre les changements de moins de 3 fichiers, sans migration ni impact transverse : on code, on passe la QA du stack, puis /forge:commit. Pas de pitch pour un typo."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Forge est-il lié à un langage ou un framework ?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Non, le pipeline est stack-agnostique. Il détecte le stack du projet via composer.json ou package.json et charge les conventions QA, sécurité et performance correspondantes (Symfony, Sylius…)."
-          }
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "WebSite",
+                    "@id": "https://forge.mustiere.fr/#website",
+                    "url": "https://forge.mustiere.fr/",
+                    "name": "Forge",
+                    "inLanguage": "fr-FR",
+                    "description": "Plugin Claude Code stack-agnostique qui pilote le cycle de développement, de l'idée à la release.",
+                    "publisher": {
+                        "@id": "https://forge.mustiere.fr/#author"
+                    }
+                },
+                {
+                    "@type": "Person",
+                    "@id": "https://forge.mustiere.fr/#author",
+                    "name": "Gabriel Mustiere",
+                    "url": "https://github.com/gabrielmustiere"
+                },
+                {
+                    "@type": "SoftwareApplication",
+                    "@id": "https://forge.mustiere.fr/#forge",
+                    "name": "Forge",
+                    "applicationCategory": "DeveloperApplication",
+                    "applicationSubCategory": "Plugin Claude Code",
+                    "operatingSystem": "macOS, Linux, Windows",
+                    "softwareVersion": "6.2.1",
+                    "url": "https://forge.mustiere.fr/",
+                    "codeRepository": "https://github.com/gabrielmustiere/forge",
+                    "license": "https://www.apache.org/licenses/LICENSE-2.0",
+                    "inLanguage": "fr-FR",
+                    "author": {
+                        "@id": "https://forge.mustiere.fr/#author"
+                    },
+                    "description": "Pipeline de développement stack-agnostique pour Claude Code. Découpe le cycle en étapes courtes validées une à une, chacune produisant un artefact markdown qui alimente la suivante : quatre phases (poser le décor, cadrer, implémenter, clôturer) et trois tracks symétriques (feature, refacto, tech) qui décident des skills appelées au cadrage et à l'implémentation.",
+                    "featureList": [
+                        "Phase 0 — poser le décor : vision, product-backlog et stack en documents vivants",
+                        "Phase 1 — cadrer : feature-interview, feature-pitch, feature-plan, refactor-plan, tech-plan",
+                        "Phase 2 — implémenter : feature-implem, refactor-implem, tech-implem",
+                        "Phase 3 — clôturer : review, report, sync, commit",
+                        "Trois tracks symétriques : feature (valeur utilisateur), refacto (comportement figé), tech (perf, résilience, sécu)",
+                        "Artefacts unifiés dans docs/story/ au format NNN-<f|r|t>-<slug>",
+                        "Détection automatique du stack (Symfony, Sylius) et chargement des conventions adaptées"
+                    ],
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "EUR"
+                    }
+                },
+                {
+                    "@type": "FAQPage",
+                    "@id": "https://forge.mustiere.fr/#faq",
+                    "mainEntity": [
+                        {
+                            "@type": "Question",
+                            "name": "Comment installer le plugin Forge dans Claude Code ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Dans une session Claude Code, sur n'importe quel projet : /plugin marketplace add gabrielmustiere/forge, puis /plugin install forge@forge, puis /reload-plugins. Les skills sont ensuite namespacées : /forge:help, /forge:feature-pitch, etc."
+                            }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Quels sont les trois tracks de Forge ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Le track feature couvre la valeur utilisateur (feature-pitch → feature-plan → feature-implem). Le track refacto restructure le code à comportement figé (refactor-plan → refactor-implem). Le track tech traite la performance, la résilience, l'observabilité et la sécurité (tech-plan → tech-implem). Le track ne change pas les phases traversées, seulement les skills appelées en phase 1 (cadrer) et en phase 2 (implémenter) : les trois partagent la même phase 3 de clôture, review → report → sync → commit."
+                            }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Faut-il passer par tout le pipeline pour un simple bugfix ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Non. Le track fast couvre les changements de moins de 3 fichiers, sans migration ni impact transverse : on code, on passe la QA du stack, puis /forge:commit. Pas de pitch pour un typo."
+                            }
+                        },
+                        {
+                            "@type": "Question",
+                            "name": "Forge est-il lié à un langage ou un framework ?",
+                            "acceptedAnswer": {
+                                "@type": "Answer",
+                                "text": "Non, le pipeline est stack-agnostique. Il détecte le stack du projet via composer.json ou package.json et charge les conventions QA, sécurité et performance correspondantes (Symfony, Sylius…)."
+                            }
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
-}
-</script>
+    </script>
 
-<link rel="stylesheet" href="/assets/forge.css">
-<script src="/assets/forge.js" defer></script>
+    <link rel="stylesheet" href="assets/forge.css">
+    <script src="assets/forge.js" defer></script>
 </head>
 <body>
-  <a class="skip" href="#main">Aller au contenu</a>
+<a class="skip" href="#main">Aller au contenu</a>
 
-  <nav class="nav" aria-label="Navigation principale">
+<nav class="nav" aria-label="Navigation principale">
     <a class="nav__brand" href="#top">
-      <span class="nav__dot" aria-hidden="true"></span>
-      <span class="nav__name">FORGE</span>
-      <span class="nav__version" data-forge-version>v6.2.1</span>
+        <span class="nav__dot" aria-hidden="true"></span>
+        <span class="nav__name">FORGE</span>
+        <span class="nav__version" data-forge-version>v6.2.1</span>
     </a>
     <button class="nav__burger" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Ouvrir le menu">
-      <span class="nav__burger-bar" aria-hidden="true"></span>
-      <span class="nav__burger-bar" aria-hidden="true"></span>
-      <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
     </button>
     <div class="nav__links" id="nav-menu">
-      <a href="#pipeline">Pipeline</a>
-      <a href="#skills">Skills</a>
-      <a href="#board">Forge Board</a>
-      <a href="/docs/">Documentation</a>
-      <a class="is-mono" href="https://github.com/gabrielmustiere/forge">GitHub ↗</a>
+        <a href="#pipeline">Pipeline</a>
+        <a href="#skills">Skills</a>
+        <a href="#board">Forge Board</a>
+        <a href="/docs/">Documentation</a>
+        <a class="is-mono" href="https://github.com/gabrielmustiere/forge">GitHub ↗</a>
     </div>
-  </nav>
+</nav>
 
-  <header class="hero" id="top">
+<header class="hero" id="top">
     <div class="hero__grid" aria-hidden="true"></div>
     <div class="hero__inner">
-      <p class="hero__eyebrow">PLUGIN CLAUDE CODE · STACK-AGNOSTIQUE</p>
-      <h1>Le pipeline de développement, <em>de la vision au commit</em>.</h1>
-      <p class="hero__lead">Forge pilote tout le cycle de développement en étapes courtes, validées une à une. Chaque étape produit un artefact markdown qui alimente la suivante — on n'avance jamais sans validation explicite.</p>
-      <div class="hero__actions">
-        <a class="btn btn--primary" href="#installation">Installer le plugin</a>
-        <a class="btn btn--ghost" href="#pipeline">Voir le pipeline</a>
-      </div>
-      <ul class="hero__facts">
-        <li>3 tracks symétriques</li>
-        <li>25 skills</li>
-        <li>Apache 2.0</li>
-      </ul>
-    </div>
-  </header>
-
-  <main id="main">
-    <section class="section" id="installation" aria-labelledby="installation-title">
-      <div class="section__head">
-        <span class="section__num" aria-hidden="true">01</span>
-        <h2 id="installation-title">Installation</h2>
-      </div>
-      <p class="section__intro">Dans une session Claude Code, sur n'importe quel projet :</p>
-      <div class="terminal">
-        <div class="terminal__bar" aria-hidden="true">
-          <span class="terminal__light"></span>
-          <span class="terminal__light"></span>
-          <span class="terminal__light"></span>
-          <span class="terminal__title">claude-code — session</span>
+        <p class="hero__eyebrow"><span class="hero__dot" aria-hidden="true"></span>PLUGIN CLAUDE CODE · STACK-AGNOSTIQUE</p>
+        <h1>Le pipeline de développement, <em>de l'idée à la release</em>.</h1>
+        <p class="hero__lead">Forge pilote tout le cycle de développement en étapes courtes, validées une à une. Chaque étape produit un artefact markdown qui alimente la suivante — on n'avance jamais sans validation explicite.</p>
+        <div class="hero__cmd" aria-hidden="true">
+            <span class="hero__cmd-prompt">❯</span>
+            <span class="hero__cmd-text" data-cmd="/forge:feature-pitch checkout-express"></span>
+            <span class="hero__cmd-cursor"></span>
         </div>
-        <pre class="terminal__body"><code><span class="prompt" aria-hidden="true">❯</span> /plugin marketplace add gabrielmustiere/forge
+        <div class="hero__actions">
+            <a class="btn btn--primary" href="#installation">Installer le plugin</a>
+            <a class="btn btn--ghost" href="#pipeline">Voir le pipeline</a>
+        </div>
+        <ul class="hero__facts">
+            <li>3 tracks symétriques</li>
+            <li>25 skills</li>
+            <li>Apache 2.0</li>
+        </ul>
+    </div>
+</header>
+
+<main id="main">
+    <section class="section" id="installation" aria-labelledby="installation-title">
+        <div class="section__head">
+            <span class="section__num" aria-hidden="true">01</span>
+            <h2 id="installation-title">Installation</h2>
+        </div>
+        <p class="section__intro">Dans une session Claude Code, sur n'importe quel projet :</p>
+        <div class="terminal">
+            <div class="terminal__bar" aria-hidden="true">
+                <span class="terminal__light"></span>
+                <span class="terminal__light"></span>
+                <span class="terminal__light"></span>
+                <span class="terminal__title">claude-code — session</span>
+            </div>
+            <pre class="terminal__body"><code><span class="prompt" aria-hidden="true">❯</span> /plugin marketplace add gabrielmustiere/forge
 <span class="prompt" aria-hidden="true">❯</span> /plugin install forge@forge
 <span class="prompt" aria-hidden="true">❯</span> /reload-plugins</code></pre>
-      </div>
-      <div class="grid-2 mt-16">
-        <div class="card">
-          <h3 class="card__title">Skills namespacées</h3>
-          <p class="card__mono">/forge:help · /forge:feature-pitch …</p>
         </div>
-        <div class="card">
-          <h3 class="card__title">Mettre à jour</h3>
-          <p class="card__mono card__mono--dim">/plugin marketplace update forge → /reload-plugins</p>
+        <div class="grid-2 mt-16">
+            <div class="card">
+                <h3 class="card__title">Skills namespacées</h3>
+                <p class="card__mono">/forge:help · /forge:feature-pitch …</p>
+            </div>
+            <div class="card">
+                <h3 class="card__title">Mettre à jour</h3>
+                <p class="card__mono card__mono--dim">/plugin marketplace update forge → /reload-plugins</p>
+            </div>
         </div>
-      </div>
-      <p class="section__note">Prérequis, concepts, référence des 25 skills, configuration des permissions et dépannage : voir la <a href="/docs/">documentation complète</a>.</p>
+        <p class="section__note">Prérequis, concepts, référence des 25 skills, configuration des permissions et dépannage : voir la <a href="/docs/">documentation complète</a>.</p>
     </section>
 
     <section class="section" id="pipeline" aria-labelledby="pipeline-title">
-      <div class="section__head">
-        <span class="section__num" aria-hidden="true">02</span>
-        <h2 id="pipeline-title">Le pipeline</h2>
-      </div>
-      <p class="section__intro">Trois tracks symétriques selon la nature du changement, un même pipeline. Chaque étape produit un artefact (<code>pitch.md</code>, <code>plan.md</code>, <code>review.md</code>…) validé par un <code>ok</code> explicite avant de passer à la suivante.</p>
-
-      <div class="stage">
-        <div class="stage__head">
-          <span class="badge badge--accent">PHASE 0</span>
-          <h3 class="stage__label">Poser le décor — une fois, documents vivants</h3>
+        <div class="section__head">
+            <span class="section__num" aria-hidden="true">02</span>
+            <h2 id="pipeline-title">Le pipeline</h2>
         </div>
-        <ul class="stage__docs grid-3">
-          <li class="doc">
-            <p class="doc__name">vision</p>
-            <p class="doc__out">→ docs/vision.md</p>
-          </li>
-          <li class="doc">
-            <p class="doc__name">product-backlog</p>
-            <p class="doc__out">→ docs/product-backlog.md</p>
-          </li>
-          <li class="doc">
-            <p class="doc__name">stack</p>
-            <p class="doc__out">→ docs/stack.md</p>
-          </li>
-        </ul>
-      </div>
+        <p class="section__intro">Quatre phases dans le temps, trois tracks symétriques selon la nature du changement. Chaque étape produit un artefact (<code>pitch.md</code>, <code>plan.md</code>, <code>review.md</code>…) validé par un
+            <code>ok</code> explicite avant de passer à la suivante.</p>
 
-      <div class="arrow" aria-hidden="true">↓</div>
-
-      <ul class="tracks">
-        <li class="track track--lead">
-          <h3 class="track__name">Track Feature</h3>
-          <p class="track__sub">Valeur utilisateur (user-facing)</p>
-          <ol class="track__steps">
-            <li class="opt">(feature-interview → brief.md)</li>
-            <li>feature-pitch <span class="out">→ pitch.md</span></li>
-            <li>feature-plan <span class="out">→ plan.md</span></li>
-            <li>feature-implem</li>
-          </ol>
-        </li>
-        <li class="track">
-          <h3 class="track__name">Track Refacto</h3>
-          <p class="track__sub">Comportement figé, code restructuré</p>
-          <ol class="track__steps">
-            <li>refactor-plan <span class="out">→ plan.md</span></li>
-            <li>refactor-implem</li>
-          </ol>
-        </li>
-        <li class="track">
-          <h3 class="track__name">Track Tech</h3>
-          <p class="track__sub">Perf, résilience, observabilité, sécu</p>
-          <ol class="track__steps">
-            <li>tech-plan <span class="out">→ plan.md</span></li>
-            <li>tech-implem</li>
-          </ol>
-        </li>
-      </ul>
-
-      <div class="arrow" aria-hidden="true">↓</div>
-
-      <div class="stage">
-        <div class="stage__head">
-          <span class="badge badge--neutral">CLÔTURE</span>
-          <h3 class="stage__label">Commune aux trois tracks</h3>
+        <div class="phase">
+            <div class="phase__head">
+                <span class="badge badge--accent">PHASE 0</span>
+                <h3 class="phase__label">Poser le décor — une fois, documents vivants</h3>
+            </div>
+            <ul class="phase__items">
+                <li class="node">
+                    <p class="node__name">vision</p>
+                    <p class="node__desc">Cap produit, personas, non-négociables</p>
+                    <p class="node__out">→ docs/vision.md</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">product-backlog</p>
+                    <p class="node__desc">Stories priorisées, prêtes à cadrer</p>
+                    <p class="node__out">→ docs/product-backlog.md</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">stack</p>
+                    <p class="node__desc">Choix techniques et conventions de code</p>
+                    <p class="node__out">→ docs/stack.md</p>
+                </li>
+            </ul>
         </div>
-        <ol class="chain">
-          <li><span class="chain__step">review</span><span class="chain__arrow" aria-hidden="true">→</span></li>
-          <li><span class="chain__step">commit</span><span class="chain__arrow" aria-hidden="true">→</span></li>
-          <li><span class="chain__step">report</span><span class="chain__arrow" aria-hidden="true">→</span></li>
-          <li><span class="chain__step">sync</span></li>
-        </ol>
-      </div>
 
-      <div class="notes">
-        <div class="note">
-          <h3 class="note__title">Tout vit dans <code>docs/story/</code></h3>
-          <p>Compteur global <code>NNN-&lt;f|r|t&gt;-&lt;slug&gt;</code> : le tri lexicographique donne la timeline du projet. Ex : <code>042-f-checkout-express/</code></p>
+        <div class="arrow" aria-hidden="true">↓</div>
+
+        <div class="phase">
+            <div class="phase__head">
+                <span class="badge badge--accent">PHASE 1</span>
+                <h3 class="phase__label">Cadrer — dans un seul des trois tracks</h3>
+            </div>
+            <ul class="phase__items">
+                <li class="node">
+                    <h4 class="node__title">Track Feature</h4>
+                    <p class="node__sub">Valeur utilisateur (user-facing)</p>
+                    <ol class="node__steps">
+                        <li class="opt">(feature-interview → brief.md)</li>
+                        <li>feature-pitch <span class="out">→ pitch.md</span></li>
+                        <li>feature-plan <span class="out">→ plan.md</span></li>
+                    </ol>
+                </li>
+                <li class="node">
+                    <h4 class="node__title">Track Refacto</h4>
+                    <p class="node__sub">Comportement figé, code restructuré</p>
+                    <ol class="node__steps">
+                        <li>refactor-plan <span class="out">→ plan.md</span></li>
+                    </ol>
+                </li>
+                <li class="node">
+                    <h4 class="node__title">Track Tech</h4>
+                    <p class="node__sub">Perf, résilience, observabilité, sécu</p>
+                    <ol class="node__steps">
+                        <li>tech-plan <span class="out">→ plan.md</span></li>
+                    </ol>
+                </li>
+            </ul>
         </div>
-        <div class="note">
-          <h3 class="note__title">Track fast — bugfix express</h3>
-          <p>Moins de 3 fichiers, pas de migration ni d'impact transverse : on code, QA du stack, puis <code>/forge:commit</code>. Pas de pitch pour un typo.</p>
+
+        <div class="arrow" aria-hidden="true">↓</div>
+
+        <div class="phase">
+            <div class="phase__head">
+                <span class="badge badge--accent">PHASE 2</span>
+                <h3 class="phase__label">Implémenter — la skill du track choisi</h3>
+            </div>
+            <ul class="phase__items">
+                <li class="node">
+                    <p class="node__name">feature-implem</p>
+                    <p class="node__desc">Le plan devient code fonctionnel</p>
+                    <p class="node__out">→ code + migrations + tests</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">refactor-implem</p>
+                    <p class="node__desc">Structure revue, comportement intact</p>
+                    <p class="node__out">→ code restructuré + tests</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">tech-implem</p>
+                    <p class="node__desc">Brique posée, effet mesuré</p>
+                    <p class="node__out">→ code + mesures</p>
+                </li>
+            </ul>
         </div>
-      </div>
+
+        <div class="arrow" aria-hidden="true">↓</div>
+
+        <div class="phase">
+            <div class="phase__head">
+                <span class="badge badge--accent">PHASE 3</span>
+                <h3 class="phase__label">Clôturer — commune aux trois tracks</h3>
+            </div>
+            <ol class="phase__items phase__items--4">
+                <li class="node">
+                    <p class="node__name">review</p>
+                    <p class="node__desc">Sécu, régressions, conformité au plan</p>
+                    <p class="node__out">→ review.md</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">report</p>
+                    <p class="node__desc">L'écart entre l'intention et le livré</p>
+                    <p class="node__out">→ report.md</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">sync</p>
+                    <p class="node__desc">La doc rattrape le code réel</p>
+                    <p class="node__out">→ docs réalignées</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">commit</p>
+                    <p class="node__desc">Message conventionnel, rebase strict</p>
+                    <p class="node__out">→ commit + push</p>
+                </li>
+            </ol>
+        </div>
+
+        <div class="notes">
+            <div class="note">
+                <h3 class="note__title">Tout vit dans <code>docs/story/</code></h3>
+                <p>Compteur global <code>NNN-&lt;f|r|t&gt;-&lt;slug&gt;</code> : le tri lexicographique donne la timeline du projet. Ex : <code>042-f-checkout-express/</code></p>
+            </div>
+            <div class="note">
+                <h3 class="note__title">Track fast — bugfix express</h3>
+                <p>Moins de 3 fichiers, pas de migration ni d'impact transverse : on code, QA du stack, puis <code>/forge:commit</code>. Pas de pitch pour un typo.</p>
+            </div>
+        </div>
     </section>
 
     <section class="section" id="skills" aria-labelledby="skills-title">
-      <div class="section__head">
-        <span class="section__num" aria-hidden="true">03</span>
-        <h2 id="skills-title">Les skills</h2>
-      </div>
-      <p class="section__intro">Vingt-cinq skills, un point d'entrée. Perdu en cours de route ? <code>/forge:help</code> est le GPS du pipeline.</p>
-      <div class="skills">
+        <div class="section__head">
+            <span class="section__num" aria-hidden="true">03</span>
+            <h2 id="skills-title">Les skills</h2>
+        </div>
+        <p class="section__intro">Vingt-cinq skills rangées par phase — le track choisi décide desquelles vous appelez en phases 1 et 2. Perdu en cours de route ? <code>/forge:help</code> est le GPS du pipeline.</p>
+        <div class="skills">
 
-        <section class="skill-group" aria-labelledby="grp-phase0">
-          <div class="skill-group__head">
-            <h3 class="skill-group__title" id="grp-phase0">Phase 0 — Poser le décor</h3>
-            <p class="skill-group__sub">Documents vivants · 4 modes : Création / Enrichir / Éditer / Pivot</p>
-          </div>
-          <dl class="skill-group__list">
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:vision</code></dt>
-              <dd class="skill__desc">Cadre la vision : problème, audience, valeur, North Star, principes, anti-objectifs → docs/vision.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:product-backlog</code></dt>
-              <dd class="skill__desc">Traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3 → docs/product-backlog.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:stack</code></dt>
-              <dd class="skill__desc">Cartographie la stack technique — chaque techno prouvée par un fichier source → docs/stack.md</dd>
-            </div>
-          </dl>
-        </section>
+            <section class="skill-group" aria-labelledby="grp-phase0">
+                <div class="skill-group__head">
+                    <h3 class="skill-group__title" id="grp-phase0">Phase 0 — Poser le décor</h3>
+                    <p class="skill-group__sub">Documents vivants · 4 modes : Création / Enrichir / Éditer / Pivot</p>
+                </div>
+                <dl class="skill-group__list">
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:vision</code></dt>
+                        <dd class="skill__desc">Cadre la vision : problème, audience, valeur, North Star, principes, anti-objectifs → docs/vision.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:product-backlog</code></dt>
+                        <dd class="skill__desc">Traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3 → docs/product-backlog.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:stack</code></dt>
+                        <dd class="skill__desc">Cartographie la stack technique — chaque techno prouvée par un fichier source → docs/stack.md</dd>
+                    </div>
+                </dl>
+            </section>
 
-        <section class="skill-group" aria-labelledby="grp-feature">
-          <div class="skill-group__head">
-            <h3 class="skill-group__title" id="grp-feature">Track feature</h3>
-            <p class="skill-group__sub">Valeur utilisateur</p>
-          </div>
-          <dl class="skill-group__list">
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:feature-interview</code></dt>
-              <dd class="skill__desc">(optionnel) Découvre un besoin flou par interview guidée, ancrée sur le code existant → brief.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:feature-pitch</code></dt>
-              <dd class="skill__desc">Cadre l'idée et challenge l'alignement vision/backlog → pitch.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:feature-plan</code></dt>
-              <dd class="skill__desc">Plan technique : archi, données, contrats, migration, tests → plan.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:feature-implem</code></dt>
-              <dd class="skill__desc">Implémentation guidée sous-tâche par sous-tâche, QA continue</dd>
-            </div>
-          </dl>
-        </section>
+            <section class="skill-group" aria-labelledby="grp-cadrer">
+                <div class="skill-group__head">
+                    <h3 class="skill-group__title" id="grp-cadrer">Phase 1 — Cadrer</h3>
+                    <p class="skill-group__sub">Formaliser l'intention · une seule ligne selon le track choisi</p>
+                </div>
+                <dl class="skill-group__list">
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:feature-interview</code></dt>
+                        <dd class="skill__desc">Feature (optionnel) — découvre un besoin flou par interview guidée, ancrée sur le code existant → brief.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:feature-pitch</code></dt>
+                        <dd class="skill__desc">Feature — cadre l'idée et challenge l'alignement vision/backlog → pitch.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:feature-plan</code></dt>
+                        <dd class="skill__desc">Feature — plan technique : archi, données, contrats, migration, tests → plan.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:refactor-plan</code></dt>
+                        <dd class="skill__desc">Refacto — cadrage + tests de caractérisation à poser comme verrou → plan.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:tech-plan</code></dt>
+                        <dd class="skill__desc">Tech — cadrage avec métrique cible chiffrée + baseline + kill switch → plan.md</dd>
+                    </div>
+                </dl>
+            </section>
 
-        <section class="skill-group" aria-labelledby="grp-refacto">
-          <div class="skill-group__head">
-            <h3 class="skill-group__title" id="grp-refacto">Track refacto</h3>
-            <p class="skill-group__sub">Comportement figé, code restructuré</p>
-          </div>
-          <dl class="skill-group__list">
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:refactor-plan</code></dt>
-              <dd class="skill__desc">Cadrage + tests de caractérisation à poser comme verrou → plan.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:refactor-implem</code></dt>
-              <dd class="skill__desc">Exécution verrou-tests-d'abord, étapes incrémentales réversibles</dd>
-            </div>
-          </dl>
-        </section>
+            <section class="skill-group" aria-labelledby="grp-implementer">
+                <div class="skill-group__head">
+                    <h3 class="skill-group__title" id="grp-implementer">Phase 2 — Implémenter</h3>
+                    <p class="skill-group__sub">Étapes courtes, QA du projet après chacune</p>
+                </div>
+                <dl class="skill-group__list">
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:feature-implem</code></dt>
+                        <dd class="skill__desc">Feature — implémentation guidée sous-tâche par sous-tâche, QA continue</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:refactor-implem</code></dt>
+                        <dd class="skill__desc">Refacto — exécution verrou-tests-d'abord, étapes incrémentales réversibles</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:tech-implem</code></dt>
+                        <dd class="skill__desc">Tech — exécution : baseline, kill switch, mesure après chaque étape</dd>
+                    </div>
+                </dl>
+            </section>
 
-        <section class="skill-group" aria-labelledby="grp-tech">
-          <div class="skill-group__head">
-            <h3 class="skill-group__title" id="grp-tech">Track tech</h3>
-            <p class="skill-group__sub">Perf, résilience, observabilité, sécu</p>
-          </div>
-          <dl class="skill-group__list">
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:tech-plan</code></dt>
-              <dd class="skill__desc">Cadrage avec métrique cible chiffrée + baseline + kill switch → plan.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:tech-implem</code></dt>
-              <dd class="skill__desc">Exécution : baseline, kill switch, mesure après chaque étape</dd>
-            </div>
-          </dl>
-        </section>
+            <section class="skill-group" aria-labelledby="grp-cloturer">
+                <div class="skill-group__head">
+                    <h3 class="skill-group__title" id="grp-cloturer">Phase 3 — Clôturer</h3>
+                    <p class="skill-group__sub">Commune aux trois tracks</p>
+                </div>
+                <dl class="skill-group__list">
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:review</code></dt>
+                        <dd class="skill__desc">Code review du diff : sécu, qualité, conformité au plan, non-régression → review.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:report</code></dt>
+                        <dd class="skill__desc">Compte rendu honnête : fait vs prévu, écarts, dettes → report.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:sync</code></dt>
+                        <dd class="skill__desc">Réaligne pitch/plan et les docs projet (vision, stack, product-backlog) sur le code livré</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:commit</code></dt>
+                        <dd class="skill__desc">Message Conventional Commits en français (l'intention), commit + push — vient en dernier</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:report-and-sync</code></dt>
+                        <dd class="skill__desc">Enchaîne report puis sync en une passe — court-circuité si la conformité est totale</dd>
+                    </div>
+                </dl>
+            </section>
 
-        <section class="skill-group" aria-labelledby="grp-cloture">
-          <div class="skill-group__head">
-            <h3 class="skill-group__title" id="grp-cloture">Clôture</h3>
-            <p class="skill-group__sub">Commune aux trois tracks</p>
-          </div>
-          <dl class="skill-group__list">
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:review</code></dt>
-              <dd class="skill__desc">Code review du diff : sécu, qualité, conformité au plan, non-régression → review.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:commit</code></dt>
-              <dd class="skill__desc">Message Conventional Commits en français (l'intention), commit + push</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:report</code></dt>
-              <dd class="skill__desc">Compte rendu honnête : fait vs prévu, écarts, dettes → report.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:sync</code></dt>
-              <dd class="skill__desc">Réaligne pitch/plan et les docs projet (vision, stack, product-backlog) sur le code livré</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:report-and-sync</code></dt>
-              <dd class="skill__desc">Enchaîne report puis sync en une passe — court-circuité si la conformité est totale</dd>
-            </div>
-          </dl>
-        </section>
+            <section class="skill-group" aria-labelledby="grp-utils">
+                <div class="skill-group__head">
+                    <h3 class="skill-group__title" id="grp-utils">Utilitaires</h3>
+                    <p class="skill-group__sub">Hors pipeline</p>
+                </div>
+                <dl class="skill-group__list">
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:help</code></dt>
+                        <dd class="skill__desc">Sommaire du pipeline, tracks, skills et artefacts — le GPS</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:claude-md</code></dt>
+                        <dd class="skill__desc">Génère ou met à jour le CLAUDE.md : analyse du codebase + principes comportementaux</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:rules</code></dt>
+                        <dd class="skill__desc">Écrit les règles projet paths-scopées dans .claude/rules/ — chargées seulement sur la zone concernée</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:adr</code></dt>
+                        <dd class="skill__desc">Rédige un Architecture Decision Record MADR léger → docs/adr/NNNN-slug.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:estimate</code></dt>
+                        <dd class="skill__desc">Chiffre le temps « tout compris » d'une story à facturer, en heures → estimate.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:test-scenario</code></dt>
+                        <dd class="skill__desc">Joue un scénario utilisateur en live via Playwright MCP</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:doc-feature</code></dt>
+                        <dd class="skill__desc">Cartographie une feature existante (legacy) → docs/feature-map/NNN-slug/overview.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:backfill-metadata</code></dt>
+                        <dd class="skill__desc">Reconstruit le metadata.json des stories antérieures depuis l'historique git — jamais de date inventée</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:release</code></dt>
+                        <dd class="skill__desc">Tag SemVer annoté + CHANGELOG.md Keep a Changelog + release GitHub</dd>
+                    </div>
+                </dl>
+            </section>
 
-        <section class="skill-group" aria-labelledby="grp-utils">
-          <div class="skill-group__head">
-            <h3 class="skill-group__title" id="grp-utils">Utilitaires</h3>
-            <p class="skill-group__sub">Hors pipeline</p>
-          </div>
-          <dl class="skill-group__list">
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:help</code></dt>
-              <dd class="skill__desc">Sommaire du pipeline, tracks, skills et artefacts — le GPS</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:claude-md</code></dt>
-              <dd class="skill__desc">Génère ou met à jour le CLAUDE.md : analyse du codebase + principes comportementaux</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:rules</code></dt>
-              <dd class="skill__desc">Écrit les règles projet paths-scopées dans .claude/rules/ — chargées seulement sur la zone concernée</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:test-scenario</code></dt>
-              <dd class="skill__desc">Joue un scénario utilisateur en live via Playwright MCP</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:adr</code></dt>
-              <dd class="skill__desc">Rédige un Architecture Decision Record MADR léger → docs/adr/NNNN-slug.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:estimate</code></dt>
-              <dd class="skill__desc">Chiffre le temps « tout compris » d'une story à facturer, en heures → estimate.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:doc-feature</code></dt>
-              <dd class="skill__desc">Cartographie une feature existante (legacy) → docs/feature-map/NNN-slug/overview.md</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:backfill-metadata</code></dt>
-              <dd class="skill__desc">Reconstruit le metadata.json des stories antérieures depuis l'historique git — jamais de date inventée</dd>
-            </div>
-            <div class="skill">
-              <dt class="skill__cmd"><code>/forge:release</code></dt>
-              <dd class="skill__desc">Tag SemVer annoté + CHANGELOG.md Keep a Changelog + release GitHub</dd>
-            </div>
-          </dl>
-        </section>
-
-      </div>
-      <p class="section__note">Inventaire complet : <a href="https://github.com/gabrielmustiere/forge/blob/main/plugins/forge/SKILLS.md">plugins/forge/SKILLS.md</a> · Le workflow détecte le stack (Symfony, Sylius…) via <code>composer.json</code> / <code>package.json</code> et charge les bonnes conventions QA, sécu et perf.</p>
+        </div>
+        <p class="section__note">Inventaire complet : <a href="https://github.com/gabrielmustiere/forge/blob/main/plugins/forge/SKILLS.md">plugins/forge/SKILLS.md</a> · Le workflow détecte le stack (Symfony, Sylius…) via <code>composer.json</code> /
+            <code>package.json</code> et charge les bonnes conventions QA, sécu et perf.</p>
     </section>
 
     <section class="section" id="board" aria-labelledby="board-title">
-      <div class="section__head">
-        <span class="section__num" aria-hidden="true">04</span>
-        <h2 id="board-title">Forge Board — l'application</h2>
-      </div>
-      <p class="section__intro">Un tableau kanban <strong>lecture seule</strong> qui scanne les documents produits par le workflow (<code>docs/story/</code>) et projette chaque story en carte le long d'un pipeline visuel — pour répondre en quelques secondes à « où en est le projet X ? ». L'app Symfony vit à la racine du repo, la marketplace sous <code>plugins/</code>.</p>
-      <dl class="specs">
-        <div class="spec">
-          <dt class="spec__label">FRAMEWORK</dt>
-          <dd class="spec__value">Symfony 8.0 · PHP 8.5+ · Symfony CLI (proxy HTTPS *.wip)</dd>
+        <div class="section__head">
+            <span class="section__num" aria-hidden="true">04</span>
+            <h2 id="board-title">Forge Board — l'application</h2>
         </div>
-        <div class="spec">
-          <dt class="spec__label">FRONT</dt>
-          <dd class="spec__value">Symfony UX (Stimulus, Turbo, Live Component) · Tailwind 4 · AssetMapper</dd>
-        </div>
-        <div class="spec">
-          <dt class="spec__label">DONNÉES</dt>
-          <dd class="spec__value">SQLite (fichier local, zéro infra) · Messenger (transport Doctrine)</dd>
-        </div>
-        <div class="spec">
-          <dt class="spec__label">TESTS</dt>
-          <dd class="spec__value">PHPUnit 13 (Unit + Functional) · Playwright (E2E)</dd>
-        </div>
-        <div class="spec">
-          <dt class="spec__label">QUALITÉ</dt>
-          <dd class="spec__value">PHPStan level 9 · PHP-CS-Fixer</dd>
-        </div>
-        <div class="spec">
-          <dt class="spec__label">MCP</dt>
-          <dd class="spec__value">symfony-ai-mate · playwright · chrome-devtools</dd>
-        </div>
-      </dl>
+        <p class="section__intro">Un tableau kanban <strong>lecture seule</strong> qui scanne les documents produits par le workflow (<code>docs/story/</code>) et projette chaque story en carte le long d'un pipeline visuel — pour répondre en quelques
+            secondes à « où en est le projet X ? ». L'app Symfony vit à la racine du repo, la marketplace sous <code>plugins/</code>.</p>
+        <dl class="specs">
+            <div class="spec">
+                <dt class="spec__label">FRAMEWORK</dt>
+                <dd class="spec__value">Symfony 8.0 · PHP 8.5+ · Symfony CLI (proxy HTTPS *.wip)</dd>
+            </div>
+            <div class="spec">
+                <dt class="spec__label">FRONT</dt>
+                <dd class="spec__value">Symfony UX (Stimulus, Turbo, Live Component) · Tailwind 4 · AssetMapper</dd>
+            </div>
+            <div class="spec">
+                <dt class="spec__label">DONNÉES</dt>
+                <dd class="spec__value">SQLite (fichier local, zéro infra) · Messenger (transport Doctrine)</dd>
+            </div>
+            <div class="spec">
+                <dt class="spec__label">TESTS</dt>
+                <dd class="spec__value">PHPUnit 13 (Unit + Functional) · Playwright (E2E)</dd>
+            </div>
+            <div class="spec">
+                <dt class="spec__label">QUALITÉ</dt>
+                <dd class="spec__value">PHPStan level 9 · PHP-CS-Fixer</dd>
+            </div>
+            <div class="spec">
+                <dt class="spec__label">MCP</dt>
+                <dd class="spec__value">symfony-ai-mate · playwright · chrome-devtools</dd>
+            </div>
+        </dl>
 
-      <h3 class="subhead">Démarrer</h3>
-      <div class="terminal" style="margin-bottom: 20px;">
+        <h3 class="subhead">Démarrer</h3>
+        <div class="terminal" style="margin-bottom: 20px;">
         <pre class="terminal__body"><code><span class="prompt" aria-hidden="true">$</span> make init <span class="comment"># deps PHP/JS + DB + fixtures</span>
 <span class="prompt" aria-hidden="true">$</span> docker compose up -d <span class="comment"># Mailpit (capture des e-mails)</span>
 <span class="prompt" aria-hidden="true">$</span> make serve <span class="comment"># → https://forge-board.wip</span></code></pre>
-      </div>
-      <dl class="make">
-        <div class="make__row"><dt class="make__cmd"><code>make init</code></dt><dd class="make__desc">Installation complète (deps + DB + fixtures)</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make serve</code></dt><dd class="make__desc">Lance le serveur Symfony</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make db-reset</code></dt><dd class="make__desc">Recrée la base from scratch</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make migration</code></dt><dd class="make__desc">Migration depuis le diff d'entités</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make phpunit</code></dt><dd class="make__desc">Tests PHPUnit (Unit + Functional)</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make playwright</code></dt><dd class="make__desc">Tests E2E Playwright</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make quality</code></dt><dd class="make__desc">CS-Fixer + PHPStan + build</dd></div>
-        <div class="make__row"><dt class="make__cmd"><code>make ci</code></dt><dd class="make__desc">Lint + tests unitaires (reproduit la CI)</dd></div>
-      </dl>
-      <p class="section__note">Prérequis : PHP 8.5+, Composer, Symfony CLI, Docker (Mailpit), Node.js 22+. Mailpit UI : <code>localhost:8027</code> · identifiants de test : <code>admin@example.com / password</code></p>
+        </div>
+        <dl class="make">
+            <div class="make__row">
+                <dt class="make__cmd"><code>make init</code></dt>
+                <dd class="make__desc">Installation complète (deps + DB + fixtures)</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make serve</code></dt>
+                <dd class="make__desc">Lance le serveur Symfony</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make db-reset</code></dt>
+                <dd class="make__desc">Recrée la base from scratch</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make migration</code></dt>
+                <dd class="make__desc">Migration depuis le diff d'entités</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make phpunit</code></dt>
+                <dd class="make__desc">Tests PHPUnit (Unit + Functional)</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make playwright</code></dt>
+                <dd class="make__desc">Tests E2E Playwright</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make quality</code></dt>
+                <dd class="make__desc">CS-Fixer + PHPStan + build</dd>
+            </div>
+            <div class="make__row">
+                <dt class="make__cmd"><code>make ci</code></dt>
+                <dd class="make__desc">Lint + tests unitaires (reproduit la CI)</dd>
+            </div>
+        </dl>
+        <p class="section__note">Prérequis : PHP 8.5+, Composer, Symfony CLI, Docker (Mailpit), Node.js 22+. Mailpit UI : <code>localhost:8027</code> · identifiants de test : <code>admin@example.com / password</code></p>
     </section>
-  </main>
+</main>
 
-  <footer class="footer">
+<footer class="footer">
     <p class="footer__brand">
-      <span class="footer__dot" aria-hidden="true"></span>
-      <span>Forge · Apache 2.0 · © 2026 Gabriel Mustiere</span>
+        <span class="footer__dot" aria-hidden="true"></span>
+        <span>Forge · Apache 2.0 · © 2026 Gabriel Mustiere</span>
     </p>
     <ul class="footer__links">
-      <li><a href="/docs/">Documentation</a></li>
-      <li><a href="https://github.com/gabrielmustiere/forge">GitHub</a></li>
-      <li><a href="https://github.com/gabrielmustiere/skills">Marketplace skills</a></li>
-      <li><a href="https://github.com/gabrielmustiere/forge/releases">Releases</a></li>
+        <li><a href="/docs/">Documentation</a></li>
+        <li><a href="https://github.com/gabrielmustiere/forge">GitHub</a></li>
+        <li><a href="https://github.com/gabrielmustiere/skills">Marketplace skills</a></li>
+        <li><a href="https://github.com/gabrielmustiere/forge/releases">Releases</a></li>
     </ul>
-  </footer>
+</footer>
 
 </body>
 </html>

@@ -33,6 +33,22 @@
     });
   }
 
+  // --- Ligne de commande auto-typée du hero (page d'accueil uniquement) ---
+  var cmd = document.querySelector('.hero__cmd-text');
+  if (cmd) {
+    var full = cmd.getAttribute('data-cmd') || '';
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cmd.textContent = full;
+    } else {
+      var i = 0;
+      var type = function () {
+        cmd.textContent = full.slice(0, i);
+        if (i++ < full.length) window.setTimeout(type, 55 + Math.random() * 45);
+      };
+      window.setTimeout(type, 650); // laisse la cascade d'entrée se poser
+    }
+  }
+
   // --- Sommaire de la documentation (page /docs/ uniquement) ---
   var toc = document.getElementById('toc');
   if (!toc) return;
