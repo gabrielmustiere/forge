@@ -10,8 +10,9 @@ allowed-tools:
   - Edit
   - Grep
   - Glob
-  - Bash(git log:*)
+  - Bash(git status:*)
   - Bash(git diff:*)
+  - Bash(git log:*)
   - Bash(git show:*)
   - Bash(ls:*)
 ---
@@ -131,7 +132,7 @@ Une story livrée fait souvent dériver les documents de **phase 0**, pas seulem
 
 **Principe commun aux trois documents.** Ce sont des **reflets vivants** de ce que le produit est devenu : ils **suivent** le code livré, ils ne le jugent ni ne le bloquent jamais. Le code livré fait foi — quand un document le contredit, c'est le **document** qui est en retard et qu'on met à jour, pas la livraison qu'on remet en cause. Trois gestes seulement : **Enrichir** quand la livraison ajoute (dépendance, capacité, audience, territoire produit), **Éditer** quand elle rend une entrée caduque (version, anti-objectif, principe, capacité obsolète), **ne rien faire** quand elle reste dans le cadre déjà décrit (pas de bruit sur un bugfix). La seule chose qu'on ne bricole pas en inline, c'est une divergence **stratégique et large** → on renvoie vers le skill dédié en mode Pivot.
 
-Pour repérer les fichiers réellement touchés par la story, appuie-toi sur la section « Fichiers créés/modifiés » du `report.md`, ou sur `git diff --name-only` sur les commits de la story.
+Pour repérer les fichiers réellement touchés par la story, appuie-toi d'abord sur la section « Fichiers créés/modifiés » du `report.md`. À défaut, le `sync` tourne en phase 3 **avant** le commit : lis le working tree avec `git status --porcelain` et `git diff --name-only` (staged + unstaged, plus les fichiers untracked listés par `git status`), pas l'historique. Repli sur `git log`/`git diff <base>...HEAD` seulement si le working tree est déjà propre (story committée).
 
 Applique l'attitude adaptée au profil de chaque document :
 
@@ -169,6 +170,7 @@ Affiche le résumé des modifications :
 > - Divergence stratégique détectée : <suggestion de Pivot, ou « aucune »>
 >
 > Documentation réalignée avec l'implémentation, docs projet propagés.
+> Prochaine étape : `/commit` — dernière étape de la phase 3, il embarque d'un coup le code, le `report.md` et les documents réalignés.
 
 ## Argument optionnel
 

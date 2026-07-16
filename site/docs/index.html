@@ -1,563 +1,754 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Documentation — Forge, plugin Claude Code</title>
-<meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage.">
-<link rel="canonical" href="https://forge.mustiere.fr/docs/">
-<meta name="author" content="Gabriel Mustiere">
-<meta name="theme-color" content="#0a0e12">
-<meta name="color-scheme" content="dark">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Documentation — Forge, plugin Claude Code</title>
+    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage.">
+    <link rel="canonical" href="https://forge.mustiere.fr/docs/">
+    <meta name="author" content="Gabriel Mustiere">
+    <meta name="theme-color" content="#0a0e12">
+    <meta name="color-scheme" content="dark">
 
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="Forge">
-<meta property="og:locale" content="fr_FR">
-<meta property="og:title" content="Documentation — Forge, plugin Claude Code">
-<meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
-<meta property="og:url" content="https://forge.mustiere.fr/docs/">
-<meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Forge — le pipeline de développement, de la vision au commit. 3 tracks symétriques, 25 skills, stack-agnostique.">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Documentation — Forge, plugin Claude Code">
-<meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
-<meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-<meta name="twitter:image:alt" content="Forge — le pipeline de développement, de la vision au commit. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Forge">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Documentation — Forge, plugin Claude Code">
+    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
+    <meta property="og:url" content="https://forge.mustiere.fr/docs/">
+    <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Documentation — Forge, plugin Claude Code">
+    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
+    <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
 
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/forge.css">
-<script src="/assets/forge.js" defer></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/forge.css">
+    <script src="../assets/forge.js" defer></script>
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "TechArticle",
-      "@id": "https://forge.mustiere.fr/docs/#article",
-      "headline": "Documentation du plugin Claude Code Forge",
-      "description": "Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage du plugin Forge.",
-      "url": "https://forge.mustiere.fr/docs/",
-      "inLanguage": "fr-FR",
-      "proficiencyLevel": "Beginner",
-      "author": { "@type": "Person", "name": "Gabriel Mustiere", "url": "https://github.com/gabrielmustiere" },
-      "about": {
-        "@type": "SoftwareApplication",
-        "name": "Forge",
-        "softwareVersion": "6.2.1",
-        "url": "https://forge.mustiere.fr/"
-      },
-      "license": "https://www.apache.org/licenses/LICENSE-2.0"
-    },
-    {
-      "@type": "HowTo",
-      "@id": "https://forge.mustiere.fr/docs/#install",
-      "name": "Installer le plugin Forge dans Claude Code",
-      "description": "Ajouter la marketplace forge, installer le plugin et recharger les plugins dans une session Claude Code.",
-      "inLanguage": "fr-FR",
-      "totalTime": "PT2M",
-      "tool": [{ "@type": "HowToTool", "name": "Claude Code" }],
-      "step": [
+    <script type="application/ld+json">
         {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Ajouter la marketplace",
-          "text": "Dans une session Claude Code, exécuter /plugin marketplace add gabrielmustiere/forge pour enregistrer le catalogue."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "Installer le plugin",
-          "text": "Exécuter /plugin install forge@forge. La syntaxe est plugin@marketplace : le plugin forge provient de la marketplace forge."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "Recharger les plugins",
-          "text": "Exécuter /reload-plugins pour que les 25 skills soient disponibles sous le préfixe /forge:."
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "TechArticle",
+                    "@id": "https://forge.mustiere.fr/docs/#article",
+                    "headline": "Documentation du plugin Claude Code Forge",
+                    "description": "Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage du plugin Forge.",
+                    "url": "https://forge.mustiere.fr/docs/",
+                    "inLanguage": "fr-FR",
+                    "proficiencyLevel": "Beginner",
+                    "author": {
+                        "@type": "Person",
+                        "name": "Gabriel Mustiere",
+                        "url": "https://github.com/gabrielmustiere"
+                    },
+                    "about": {
+                        "@type": "SoftwareApplication",
+                        "name": "Forge",
+                        "softwareVersion": "6.2.1",
+                        "url": "https://forge.mustiere.fr/"
+                    },
+                    "license": "https://www.apache.org/licenses/LICENSE-2.0"
+                },
+                {
+                    "@type": "HowTo",
+                    "@id": "https://forge.mustiere.fr/docs/#install",
+                    "name": "Installer le plugin Forge dans Claude Code",
+                    "description": "Ajouter la marketplace forge, installer le plugin et recharger les plugins dans une session Claude Code.",
+                    "inLanguage": "fr-FR",
+                    "totalTime": "PT2M",
+                    "tool": [
+                        {
+                            "@type": "HowToTool",
+                            "name": "Claude Code"
+                        }
+                    ],
+                    "step": [
+                        {
+                            "@type": "HowToStep",
+                            "position": 1,
+                            "name": "Ajouter la marketplace",
+                            "text": "Dans une session Claude Code, exécuter /plugin marketplace add gabrielmustiere/forge pour enregistrer le catalogue."
+                        },
+                        {
+                            "@type": "HowToStep",
+                            "position": 2,
+                            "name": "Installer le plugin",
+                            "text": "Exécuter /plugin install forge@forge. La syntaxe est plugin@marketplace : le plugin forge provient de la marketplace forge."
+                        },
+                        {
+                            "@type": "HowToStep",
+                            "position": 3,
+                            "name": "Recharger les plugins",
+                            "text": "Exécuter /reload-plugins pour que les 25 skills soient disponibles sous le préfixe /forge:."
+                        }
+                    ]
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "@id": "https://forge.mustiere.fr/docs/#breadcrumb",
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": 1,
+                            "name": "Forge",
+                            "item": "https://forge.mustiere.fr/"
+                        },
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "Documentation",
+                            "item": "https://forge.mustiere.fr/docs/"
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://forge.mustiere.fr/docs/#breadcrumb",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Forge", "item": "https://forge.mustiere.fr/" },
-        { "@type": "ListItem", "position": 2, "name": "Documentation", "item": "https://forge.mustiere.fr/docs/" }
-      ]
-    }
-  ]
-}
-</script>
+    </script>
 </head>
 <body>
-  <a class="skip" href="#doc-main">Aller au contenu</a>
+<a class="skip" href="#doc-main">Aller au contenu</a>
 
-  <nav class="nav" aria-label="Navigation principale">
+<nav class="nav" aria-label="Navigation principale">
     <a class="nav__brand" href="/">
-      <span class="nav__dot" aria-hidden="true"></span>
-      <span class="nav__name">FORGE</span>
-      <span class="nav__version" data-forge-version>v6.2.1</span>
+        <span class="nav__dot" aria-hidden="true"></span>
+        <span class="nav__name">FORGE</span>
+        <span class="nav__version" data-forge-version>v6.2.1</span>
     </a>
     <button class="nav__burger" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Ouvrir le menu">
-      <span class="nav__burger-bar" aria-hidden="true"></span>
-      <span class="nav__burger-bar" aria-hidden="true"></span>
-      <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
+        <span class="nav__burger-bar" aria-hidden="true"></span>
     </button>
     <div class="nav__links" id="nav-menu">
-      <a href="/#pipeline">Pipeline</a>
-      <a href="/#skills">Skills</a>
-      <a href="/#board">Forge Board</a>
-      <a href="/docs/" aria-current="page">Documentation</a>
-      <a class="is-mono" href="https://github.com/gabrielmustiere/forge">GitHub ↗</a>
+        <a href="/#pipeline">Pipeline</a>
+        <a href="/#skills">Skills</a>
+        <a href="/#board">Forge Board</a>
+        <a href="/docs/" aria-current="page">Documentation</a>
+        <a class="is-mono" href="https://github.com/gabrielmustiere/forge">GitHub ↗</a>
     </div>
-  </nav>
+</nav>
 
-  <div class="doc-layout">
+<div class="doc-layout">
     <header class="doc-header">
-      <p class="doc-header__eyebrow">DOCUMENTATION</p>
-      <h1>Installer et utiliser Forge</h1>
-      <p class="doc-header__lead">Forge est un plugin Claude Code stack-agnostique. Il découpe le cycle de développement en étapes courtes, chacune produisant un artefact markdown qui alimente la suivante. Cette page couvre l'installation, les concepts, la référence des 25 skills et la configuration.</p>
+        <p class="doc-header__eyebrow">DOCUMENTATION</p>
+        <h1>Installer et utiliser Forge</h1>
+        <p class="doc-header__lead">Forge est un plugin Claude Code stack-agnostique. Il découpe le cycle de développement en étapes courtes, chacune produisant un artefact markdown qui alimente la suivante. Cette page couvre l'installation, les
+            concepts, la référence des 25 skills et la configuration.</p>
     </header>
 
     <div class="doc-body">
-      <details class="toc" id="toc">
-        <summary>Sommaire</summary>
-        <div class="toc__inner">
-          <nav aria-label="Sommaire de la documentation">
-            <div class="toc__group">
-              <p class="toc__label">DÉMARRER</p>
-              <ul class="toc__list">
-                <li><a href="#prerequis">Prérequis</a></li>
-                <li><a href="#installation">Installation</a></li>
-                <li><a href="#verifier">Vérifier l'installation</a></li>
-                <li><a href="#maintenir">Mettre à jour</a></li>
-              </ul>
+        <details class="toc" id="toc">
+            <summary>Sommaire</summary>
+            <div class="toc__inner">
+                <nav aria-label="Sommaire de la documentation">
+                    <div class="toc__group">
+                        <p class="toc__label">DÉMARRER</p>
+                        <ul class="toc__list">
+                            <li><a href="#prerequis">Prérequis</a></li>
+                            <li><a href="#installation">Installation</a></li>
+                            <li><a href="#verifier">Vérifier l'installation</a></li>
+                            <li><a href="#maintenir">Mettre à jour</a></li>
+                        </ul>
+                    </div>
+                    <div class="toc__group">
+                        <p class="toc__label">CONCEPTS</p>
+                        <ul class="toc__list">
+                            <li><a href="#regle-or">La règle d'or</a></li>
+                            <li><a href="#artefacts">Artefacts et docs/story</a></li>
+                            <li><a href="#choisir-track">Choisir son track</a></li>
+                            <li><a href="#track-fast">Le track fast</a></li>
+                        </ul>
+                    </div>
+                    <div class="toc__group">
+                        <p class="toc__label">RÉFÉRENCE DES SKILLS</p>
+                        <ul class="toc__list">
+                            <li><a href="#ref-phase0">Phase 0 — poser le décor</a></li>
+                            <li><a href="#ref-cadrer">Phase 1 — cadrer</a></li>
+                            <li><a href="#ref-implementer">Phase 2 — implémenter</a></li>
+                            <li><a href="#ref-cloturer">Phase 3 — clôturer</a></li>
+                            <li><a href="#ref-utilitaires">Utilitaires</a></li>
+                        </ul>
+                    </div>
+                    <div class="toc__group">
+                        <p class="toc__label">CONFIGURATION</p>
+                        <ul class="toc__list">
+                            <li><a href="#permissions">Permissions et outillage</a></li>
+                            <li><a href="#claude-md">Le CLAUDE.md du projet</a></li>
+                            <li><a href="#stacks">Règles framework</a></li>
+                        </ul>
+                    </div>
+                    <div class="toc__group">
+                        <p class="toc__label">AIDE</p>
+                        <ul class="toc__list">
+                            <li><a href="#depannage">Dépannage</a></li>
+                            <li><a href="#contribuer">Développer le plugin</a></li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
-            <div class="toc__group">
-              <p class="toc__label">CONCEPTS</p>
-              <ul class="toc__list">
-                <li><a href="#regle-or">La règle d'or</a></li>
-                <li><a href="#artefacts">Artefacts et docs/story</a></li>
-                <li><a href="#choisir-track">Choisir son track</a></li>
-                <li><a href="#track-fast">Le track fast</a></li>
-              </ul>
-            </div>
-            <div class="toc__group">
-              <p class="toc__label">RÉFÉRENCE DES SKILLS</p>
-              <ul class="toc__list">
-                <li><a href="#ref-phase0">Phase 0 — le décor</a></li>
-                <li><a href="#ref-feature">Track feature</a></li>
-                <li><a href="#ref-refacto">Track refacto</a></li>
-                <li><a href="#ref-tech">Track tech</a></li>
-                <li><a href="#ref-cloture">Clôture</a></li>
-                <li><a href="#ref-utilitaires">Utilitaires</a></li>
-              </ul>
-            </div>
-            <div class="toc__group">
-              <p class="toc__label">CONFIGURATION</p>
-              <ul class="toc__list">
-                <li><a href="#permissions">Permissions et outillage</a></li>
-                <li><a href="#claude-md">Le CLAUDE.md du projet</a></li>
-                <li><a href="#stacks">Règles framework</a></li>
-              </ul>
-            </div>
-            <div class="toc__group">
-              <p class="toc__label">AIDE</p>
-              <ul class="toc__list">
-                <li><a href="#depannage">Dépannage</a></li>
-                <li><a href="#contribuer">Développer le plugin</a></li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-      </details>
+        </details>
 
-      <main class="doc-main" id="doc-main">
+        <main class="doc-main" id="doc-main">
 
-        <section class="doc-section" aria-labelledby="demarrer-title">
-          <h2 id="demarrer-title">Démarrer</h2>
+            <section class="doc-section" aria-labelledby="demarrer-title">
+                <h2 id="demarrer-title">Démarrer</h2>
 
-          <div class="doc-block" id="prerequis">
-            <h3>Prérequis</h3>
-            <p>Forge n'est ni un binaire ni une dépendance de votre projet : c'est un ensemble d'instructions markdown que Claude Code charge. Il n'y a donc rien à compiler et aucun runtime à installer.</p>
-            <ul>
-              <li><strong>Claude Code</strong>, dans n'importe laquelle de ses formes (CLI, application desktop, web ou extension IDE).</li>
-              <li><strong>Un dépôt git initialisé.</strong> Les skills <code>/forge:commit</code> et <code>/forge:release</code> écrivent dans git ; les autres se contentent de lire le code et d'écrire des fichiers markdown.</li>
-              <li><strong>Le CLI <code>gh</code> authentifié</strong>, uniquement pour <code>/forge:release</code>, qui publie la release sur GitHub.</li>
-              <li><strong>Un serveur MCP Playwright</strong>, uniquement pour <code>/forge:test-scenario</code>, qui pilote un navigateur en live.</li>
-            </ul>
-            <p>Aucune contrainte de langage ou de framework : le pipeline est stack-agnostique. Il détecte Symfony et Sylius pour charger des règles plus précises, mais fonctionne sur n'importe quelle base de code.</p>
-          </div>
-
-          <div class="doc-block" id="installation">
-            <h3>Installation</h3>
-            <p>Les trois commandes se tapent <strong>dans une session Claude Code</strong>, pas dans un terminal. Elles valent pour n'importe quel projet.</p>
-            <ol class="doc-steps">
-              <li>
-                <h4>Ajouter la marketplace</h4>
-                <p>Enregistre le catalogue de plugins depuis GitHub. Rien n'est installé à ce stade.</p>
-                <div class="code">
-                  <pre><code><span class="prompt" aria-hidden="true">❯ </span>/plugin marketplace add gabrielmustiere/forge</code></pre>
+                <div class="doc-block" id="prerequis">
+                    <h3>Prérequis</h3>
+                    <p>Forge n'est ni un binaire ni une dépendance de votre projet : c'est un ensemble d'instructions markdown que Claude Code charge. Il n'y a donc rien à compiler et aucun runtime à installer.</p>
+                    <ul>
+                        <li><strong>Claude Code</strong>, dans n'importe laquelle de ses formes (CLI, application desktop, web ou extension IDE).</li>
+                        <li><strong>Un dépôt git initialisé.</strong> Les skills <code>/forge:commit</code> et <code>/forge:release</code> écrivent dans git ; les autres se contentent de lire le code et d'écrire des fichiers markdown.</li>
+                        <li><strong>Le CLI <code>gh</code> authentifié</strong>, uniquement pour <code>/forge:release</code>, qui publie la release sur GitHub.</li>
+                        <li><strong>Un serveur MCP Playwright</strong>, uniquement pour <code>/forge:test-scenario</code>, qui pilote un navigateur en live.</li>
+                    </ul>
+                    <p>Aucune contrainte de langage ou de framework : le pipeline est stack-agnostique. Il détecte Symfony et Sylius pour charger des règles plus précises, mais fonctionne sur n'importe quelle base de code.</p>
                 </div>
-              </li>
-              <li>
-                <h4>Installer le plugin</h4>
-                <p>La syntaxe est <code>plugin@marketplace</code>. Le plugin <code>forge</code> et la marketplace <code>forge</code> portent le même nom — la répétition est normale.</p>
-                <div class="code">
-                  <pre><code><span class="prompt" aria-hidden="true">❯ </span>/plugin install forge@forge</code></pre>
-                </div>
-              </li>
-              <li>
-                <h4>Recharger les plugins</h4>
-                <p>Rend les 25 skills disponibles dans la session courante.</p>
-                <div class="code">
-                  <pre><code><span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
-                </div>
-              </li>
-            </ol>
-          </div>
 
-          <div class="doc-block" id="verifier">
-            <h3>Vérifier l'installation</h3>
-            <p>Lancez le sommaire du pipeline. S'il répond, tout est en place.</p>
-            <div class="code">
-              <div class="code__label">session claude-code</div>
-              <pre><code><span class="prompt" aria-hidden="true">❯ </span>/forge:help</code></pre>
-            </div>
-            <div class="callout callout--accent">
-              <p class="callout__title">Toutes les skills sont préfixées</p>
-              <p>Le préfixe vient du nom du plugin : on écrit <code>/forge:feature-pitch</code>, jamais <code>/feature-pitch</code>. Si votre session ne connaît que <code>/help</code>, c'est le <code>/help</code> natif de Claude Code — pas celui de Forge.</p>
-            </div>
-            <p>Aucune skill ne se déclenche toute seule : c'est un choix de conception. Le triage automatique entre skills voisines est probabiliste, donc faux un jour sur N — et un mauvais aiguillage produit le mauvais document. C'est vous qui appelez la skill.</p>
-          </div>
+                <div class="doc-block" id="installation">
+                    <h3>Installation</h3>
+                    <p>Les trois commandes se tapent <strong>dans une session Claude Code</strong>, pas dans un terminal. Elles valent pour n'importe quel projet.</p>
+                    <ol class="doc-steps">
+                        <li>
+                            <h4>Ajouter la marketplace</h4>
+                            <p>Enregistre le catalogue de plugins depuis GitHub. Rien n'est installé à ce stade.</p>
+                            <div class="code">
+                                <pre><code><span class="prompt" aria-hidden="true">❯ </span>/plugin marketplace add gabrielmustiere/forge</code></pre>
+                            </div>
+                        </li>
+                        <li>
+                            <h4>Installer le plugin</h4>
+                            <p>La syntaxe est <code>plugin@marketplace</code>. Le plugin <code>forge</code> et la marketplace <code>forge</code> portent le même nom — la répétition est normale.</p>
+                            <div class="code">
+                                <pre><code><span class="prompt" aria-hidden="true">❯ </span>/plugin install forge@forge</code></pre>
+                            </div>
+                        </li>
+                        <li>
+                            <h4>Recharger les plugins</h4>
+                            <p>Rend les 25 skills disponibles dans la session courante.</p>
+                            <div class="code">
+                                <pre><code><span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
 
-          <div class="doc-block" id="maintenir">
-            <h3>Mettre à jour</h3>
-            <p>Forge évolue en continu. Pour récupérer la dernière version publiée :</p>
-            <div class="code">
-              <div class="code__label">session claude-code</div>
-              <pre><code><span class="prompt" aria-hidden="true">❯ </span>/plugin marketplace update forge
+                <div class="doc-block" id="verifier">
+                    <h3>Vérifier l'installation</h3>
+                    <p>Lancez le sommaire du pipeline. S'il répond, tout est en place.</p>
+                    <div class="code">
+                        <div class="code__label">session claude-code</div>
+                        <pre><code><span class="prompt" aria-hidden="true">❯ </span>/forge:help</code></pre>
+                    </div>
+                    <div class="callout callout--accent">
+                        <p class="callout__title">Toutes les skills sont préfixées</p>
+                        <p>Le préfixe vient du nom du plugin : on écrit <code>/forge:feature-pitch</code>, jamais <code>/feature-pitch</code>. Si votre session ne connaît que <code>/help</code>, c'est le <code>/help</code> natif de Claude Code — pas
+                            celui de Forge.</p>
+                    </div>
+                    <p>Aucune skill ne se déclenche toute seule : c'est un choix de conception. Le triage automatique entre skills voisines est probabiliste, donc faux un jour sur N — et un mauvais aiguillage produit le mauvais document. C'est vous
+                        qui appelez la skill.</p>
+                </div>
+
+                <div class="doc-block" id="maintenir">
+                    <h3>Mettre à jour</h3>
+                    <p>Forge évolue en continu. Pour récupérer la dernière version publiée :</p>
+                    <div class="code">
+                        <div class="code__label">session claude-code</div>
+                        <pre><code><span class="prompt" aria-hidden="true">❯ </span>/plugin marketplace update forge
 <span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
-            </div>
-            <p>Les versions suivent le SemVer et sont annoncées dans le <a href="https://github.com/gabrielmustiere/forge/blob/main/CHANGELOG.md">CHANGELOG</a> au format Keep a Changelog.</p>
-          </div>
-        </section>
+                    </div>
+                    <p>Les versions suivent le SemVer et sont annoncées dans le <a href="https://github.com/gabrielmustiere/forge/blob/main/CHANGELOG.md">CHANGELOG</a> au format Keep a Changelog.</p>
+                </div>
+            </section>
 
-        <section class="doc-section" aria-labelledby="concepts-title">
-          <h2 id="concepts-title">Concepts</h2>
+            <section class="doc-section" aria-labelledby="concepts-title">
+                <h2 id="concepts-title">Concepts</h2>
 
-          <div class="doc-block" id="regle-or">
-            <h3>La règle d'or</h3>
-            <div class="callout callout--accent">
-              <p class="callout__title">Jamais d'étape suivante sans validation explicite</p>
-              <p>Chaque skill s'arrête et attend un « ok », « go », « validé » avant de continuer. C'est ce qui distingue le pipeline d'un agent qui part seul : vous relisez chaque artefact avant qu'il ne serve d'entrée au suivant.</p>
-            </div>
-            <p>La conséquence pratique : un artefact bancal se corrige à l'étape où il naît, pas trois étapes plus loin dans du code déjà écrit.</p>
-          </div>
+                <div class="doc-block" id="regle-or">
+                    <h3>La règle d'or</h3>
+                    <div class="callout callout--accent">
+                        <p class="callout__title">Jamais d'étape suivante sans validation explicite</p>
+                        <p>Chaque skill s'arrête et attend un « ok », « go », « validé » avant de continuer. C'est ce qui distingue le pipeline d'un agent qui part seul : vous relisez chaque artefact avant qu'il ne serve d'entrée au suivant.</p>
+                    </div>
+                    <p>La conséquence pratique : un artefact bancal se corrige à l'étape où il naît, pas trois étapes plus loin dans du code déjà écrit.</p>
+                </div>
 
-          <div class="doc-block" id="artefacts">
-            <h3>Artefacts et <code>docs/story/</code></h3>
-            <p>Tous les artefacts vivent à plat dans <code>docs/story/</code>, numérotés globalement puis taggés par track. Le numéro vient <strong>en premier</strong> pour que le tri lexicographique d'un simple <code>ls</code> donne la timeline du projet.</p>
-            <div class="code">
-              <div class="code__label">arborescence</div>
-              <pre><code>docs/story/042-f-checkout-express/   <span class="comment"># f = feature</span>
+                <div class="doc-block" id="artefacts">
+                    <h3>Artefacts et <code>docs/story/</code></h3>
+                    <p>Tous les artefacts vivent à plat dans <code>docs/story/</code>, numérotés globalement puis taggés par track. Le numéro vient <strong>en premier</strong> pour que le tri lexicographique d'un simple <code>ls</code> donne la
+                        timeline du projet.</p>
+                    <div class="code">
+                        <div class="code__label">arborescence</div>
+                        <pre><code>docs/story/042-f-checkout-express/   <span class="comment"># f = feature</span>
 docs/story/043-r-extract-pricing/    <span class="comment"># r = refacto</span>
 docs/story/044-t-redis-cache/        <span class="comment"># t = évolution technique</span></code></pre>
-            </div>
-            <p>Le format est <code>NNN-&lt;f|r|t&gt;-&lt;slug&gt;</code>. Les numéros s'incrémentent globalement, tous tracks confondus : 042-f → 043-r → 044-t → 045-f.</p>
+                    </div>
+                    <p>Le format est <code>NNN-&lt;f|r|t&gt;-&lt;slug&gt;</code>. Les numéros s'incrémentent globalement, tous tracks confondus : 042-f → 043-r → 044-t → 045-f.</p>
 
-            <h4>Les documents d'une story</h4>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">Fichier</th><th scope="col">Registre</th><th scope="col">Question à laquelle il répond</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><code>brief.md</code></td><td>Fonctionnel</td><td>Quel est le besoin, encore flou ?</td></tr>
-                  <tr><td><code>pitch.md</code></td><td>Fonctionnel</td><td>Quel problème utilisateur, pour qui, pourquoi maintenant ?</td></tr>
-                  <tr><td><code>plan.md</code></td><td>Technique</td><td>Comment on le construit, étape par étape ?</td></tr>
-                  <tr><td><code>review.md</code></td><td>Technique</td><td>Le diff est-il sûr, propre et conforme au plan ?</td></tr>
-                  <tr><td><code>report.md</code></td><td>Factuel</td><td>Qu'a-t-on livré, comparé à ce qui était prévu ?</td></tr>
-                  <tr><td><code>estimate.md</code></td><td>Économique</td><td>Combien de temps « tout compris » à facturer ?</td></tr>
-                  <tr><td><code>metadata.json</code></td><td>—</td><td>Titre, dates, tags, changelog, livraison (lu par le Forge Board)</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p>Un document sert <strong>un seul but, dans un seul registre</strong>, annoncé dans son en-tête. Le brief et le pitch sont fonctionnels : aucun nom de classe, de service ou de framework n'y a sa place. Les plans et la review sont techniques. Les documents de décision (review, report, estimation) ouvrent sur leur section <code>## Synthèse</code> — on doit pouvoir ne lire qu'elle.</p>
-            <div class="callout">
-              <p class="callout__title">Un artefact, un seul écrivain</p>
-              <p>Chaque document a une skill propriétaire ; les autres le lisent. Deux exceptions assumées : <code>metadata.json</code>, append-only par construction, et les documents projet que <code>/forge:sync</code> co-écrit via les modes de leurs propriétaires.</p>
-            </div>
-          </div>
+                    <h4>Les documents d'une story</h4>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Fichier</th>
+                                <th scope="col">Registre</th>
+                                <th scope="col">Question à laquelle il répond</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><code>brief.md</code></td>
+                                <td>Fonctionnel</td>
+                                <td>Quel est le besoin, encore flou ?</td>
+                            </tr>
+                            <tr>
+                                <td><code>pitch.md</code></td>
+                                <td>Fonctionnel</td>
+                                <td>Quel problème utilisateur, pour qui, pourquoi maintenant ?</td>
+                            </tr>
+                            <tr>
+                                <td><code>plan.md</code></td>
+                                <td>Technique</td>
+                                <td>Comment on le construit, étape par étape ?</td>
+                            </tr>
+                            <tr>
+                                <td><code>review.md</code></td>
+                                <td>Technique</td>
+                                <td>Le diff est-il sûr, propre et conforme au plan ?</td>
+                            </tr>
+                            <tr>
+                                <td><code>report.md</code></td>
+                                <td>Factuel</td>
+                                <td>Qu'a-t-on livré, comparé à ce qui était prévu ?</td>
+                            </tr>
+                            <tr>
+                                <td><code>estimate.md</code></td>
+                                <td>Économique</td>
+                                <td>Combien de temps « tout compris » à facturer ?</td>
+                            </tr>
+                            <tr>
+                                <td><code>metadata.json</code></td>
+                                <td>—</td>
+                                <td>Titre, dates, tags, changelog, livraison (lu par le Forge Board)</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Un document sert <strong>un seul but, dans un seul registre</strong>, annoncé dans son en-tête. Le brief et le pitch sont fonctionnels : aucun nom de classe, de service ou de framework n'y a sa place. Les plans et la review
+                        sont techniques. Les documents de décision (review, report, estimation) ouvrent sur leur section <code>## Synthèse</code> — on doit pouvoir ne lire qu'elle.</p>
+                    <div class="callout">
+                        <p class="callout__title">Un artefact, un seul écrivain</p>
+                        <p>Chaque document a une skill propriétaire ; les autres le lisent. Deux exceptions assumées : <code>metadata.json</code>, append-only par construction, et les documents projet que <code>/forge:sync</code> co-écrit via les
+                            modes de leurs propriétaires.</p>
+                    </div>
+                </div>
 
-          <div class="doc-block" id="choisir-track">
-            <h3>Choisir son track</h3>
-            <p>Quatre questions, dans l'ordre. La première qui répond « oui » donne le track.</p>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">Question</th><th scope="col">Si oui</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Un utilisateur final ou un admin peut décrire ce qu'il voit de nouveau ?</td><td><strong>Feature</strong> (<code>f-</code>)</td></tr>
-                  <tr><td>Le comportement externe reste <strong>strictement</strong> identique (mêmes réponses, events, logs, timings) et on restructure juste le code ?</td><td><strong>Refacto</strong> (<code>r-</code>)</td></tr>
-                  <tr><td>Un observateur externe peut détecter la différence, mais c'est pour <strong>mieux</strong> (plus rapide, plus résilient, plus observable, plus sûr) sans nouvelle valeur utilisateur ?</td><td><strong>Tech</strong> (<code>t-</code>)</td></tr>
-                  <tr><td>Moins de 3 fichiers, pas de migration, pas d'impact transverse ?</td><td><strong>Fast</strong></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="callout callout--warn">
-              <p class="callout__title">Piège : le changement qui mélange les catégories</p>
-              <p>Si vous ne pouvez pas scinder votre diff en commits distincts — le refacto pur, puis l'ajout de la brique technique, puis la feature qui s'en sert — vous avez probablement mélangé deux tracks. Séparez.</p>
-            </div>
-          </div>
+                <div class="doc-block" id="choisir-track">
+                    <h3>Choisir son track</h3>
+                    <p>Quatre questions, dans l'ordre. La première qui répond « oui » donne le track.</p>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Question</th>
+                                <th scope="col">Si oui</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Un utilisateur final ou un admin peut décrire ce qu'il voit de nouveau ?</td>
+                                <td><strong>Feature</strong> (<code>f-</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>Le comportement externe reste <strong>strictement</strong> identique (mêmes réponses, events, logs, timings) et on restructure juste le code ?</td>
+                                <td><strong>Refacto</strong> (<code>r-</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>Un observateur externe peut détecter la différence, mais c'est pour <strong>mieux</strong> (plus rapide, plus résilient, plus observable, plus sûr) sans nouvelle valeur utilisateur ?</td>
+                                <td><strong>Tech</strong> (<code>t-</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>Moins de 3 fichiers, pas de migration, pas d'impact transverse ?</td>
+                                <td><strong>Fast</strong></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="callout callout--warn">
+                        <p class="callout__title">Piège : le changement qui mélange les catégories</p>
+                        <p>Si vous ne pouvez pas scinder votre diff en commits distincts — le refacto pur, puis l'ajout de la brique technique, puis la feature qui s'en sert — vous avez probablement mélangé deux tracks. Séparez.</p>
+                    </div>
 
-          <div class="doc-block" id="track-fast">
-            <h3>Le track fast</h3>
-            <p>Tout ne mérite pas un pitch. Le track fast couvre les bugfixes et petits changements, sous <strong>trois conditions cumulatives</strong> :</p>
-            <ul>
-              <li>Moins de 3 fichiers modifiés ;</li>
-              <li>Pas de changement de schéma (migration) ni de nouveau service ou entité ;</li>
-              <li>Pas d'impact transverse (multi-channel, multi-thème, API publique…).</li>
-            </ul>
-            <div class="code">
-              <div class="code__label">processus</div>
-              <pre><code>coder → QA du stack → tests ciblés → /forge:review <span class="comment">(optionnel)</span> → /forge:commit</code></pre>
-            </div>
-            <p>En cas de doute, partez sur le track approprié : on peut toujours basculer du structurant vers le fast si l'analyse révèle que c'est trivial. L'inverse coûte plus cher.</p>
-          </div>
-        </section>
+                    <h4>Ce que chaque track impose</h4>
+                    <ul>
+                        <li><strong>Feature</strong> — un cadrage fonctionnel (<code>pitch.md</code>) avant tout plan technique : quel problème utilisateur, pour qui, pourquoi maintenant. C'est le seul track à passer par cette étape.</li>
+                        <li><strong>Refacto</strong> — comportement externe strictement préservé, verrou de tests de caractérisation posé <strong>avant</strong> de toucher au code, exécution incrémentale et réversible — souvent un commit par étape.
+                        </li>
+                        <li><strong>Tech</strong> — une métrique cible chiffrée, une baseline mesurée <strong>avant</strong> toute modification, un kill switch activable, et une mesure après chaque étape.</li>
+                    </ul>
+                    <p>Le track ne change pas les phases que vous traversez : il change les skills que vous appelez à l'intérieur de chacune. Voir la <a href="#reference-title">référence des skills</a>.</p>
+                </div>
 
-        <section class="doc-section" aria-labelledby="reference-title">
-          <h2 id="reference-title">Référence des skills</h2>
-          <p>Vingt-cinq skills. Perdu en cours de route ? <code>/forge:help</code> réaffiche le pipeline complet et oriente vers la bonne.</p>
+                <div class="doc-block" id="track-fast">
+                    <h3>Le track fast</h3>
+                    <p>Tout ne mérite pas un pitch. Le track fast couvre les bugfixes et petits changements, sous <strong>trois conditions cumulatives</strong> :</p>
+                    <ul>
+                        <li>Moins de 3 fichiers modifiés ;</li>
+                        <li>Pas de changement de schéma (migration) ni de nouveau service ou entité ;</li>
+                        <li>Pas d'impact transverse (multi-channel, multi-thème, API publique…).</li>
+                    </ul>
+                    <div class="code">
+                        <div class="code__label">processus</div>
+                        <pre><code>coder → QA du stack → tests ciblés → /forge:review <span class="comment">(optionnel)</span> → /forge:commit</code></pre>
+                    </div>
+                    <p>En cas de doute, partez sur le track approprié : on peut toujours basculer du structurant vers le fast si l'analyse révèle que c'est trivial. L'inverse coûte plus cher.</p>
+                </div>
+            </section>
 
-          <div class="doc-block" id="ref-phase0">
-            <h3>Phase 0 — poser le décor</h3>
-            <p>Une fois en début de projet, puis révisé lors d'un pivot. Ces trois documents sont <strong>vivants</strong> : ils supportent quatre modes (Création, Enrichir, Éditer, Pivot) et tiennent leur propre changelog.</p>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">Skill</th><th scope="col">Rôle</th><th scope="col">Produit</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><code>/forge:vision</code></td><td>Atelier challengeur : problème, audience, valeur, North Star, principes, anti-objectifs</td><td><code>docs/vision.md</code></td></tr>
-                  <tr><td><code>/forge:product-backlog</code></td><td>Domaines → capacités → parcours → règles transverses → backlog priorisé MVP/V2/V3</td><td><code>docs/product-backlog.md</code></td></tr>
-                  <tr><td><code>/forge:stack</code></td><td>Scanne les manifestes, interroge pour combler les trous, prouve chaque techno par un fichier source</td><td><code>docs/stack.md</code></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <p><code>docs/vision.md</code> est lu par <code>/forge:product-backlog</code> puis par <code>/forge:feature-pitch</code> à chaque feature, pour challenger l'alignement. <code>docs/stack.md</code> est lu en priorité par les skills techniques. Il <strong>constate</strong> l'existant — il ne justifie pas un choix (c'est <code>/forge:adr</code>) ni ne décide d'une évolution (c'est <code>/forge:tech-plan</code>).</p>
-            <p><code>/forge:product-backlog</code> est facultatif : on peut aller directement de la vision au pitch. Il devient recommandé dès qu'on a plus de trois ou quatre features pressenties.</p>
-          </div>
+            <section class="doc-section" aria-labelledby="reference-title">
+                <h2 id="reference-title">Référence des skills</h2>
+                <p>Vingt-cinq skills, quatre phases. La <strong>phase</strong> dit <em>quand</em> : on pose le décor une fois pour le projet, puis chaque story traverse le cadrage, l'implémentation et la clôture, dans cet ordre. Le <a
+                    href="#choisir-track">track</a> dit <em>avec quelles skills</em> : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Perdu en cours de route ? <code>/forge:help</code> réaffiche le
+                    pipeline complet et oriente vers la bonne.</p>
 
-          <div class="doc-block" id="ref-feature">
-            <h3>Track feature — valeur utilisateur</h3>
-            <p>Pour tout changement qui introduit une fonctionnalité ou modifie un comportement observable par l'utilisateur.</p>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">#</th><th scope="col">Skill</th><th scope="col">Rôle</th><th scope="col">Produit</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td class="num">0*</td><td><code>/forge:feature-interview</code></td><td><em>Optionnel</em> — découvrir un besoin flou par interview avant de pouvoir le pitcher</td><td><code>brief.md</code></td></tr>
-                  <tr><td class="num">1</td><td><code>/forge:feature-pitch</code></td><td>Cadrer et challenger la fonctionnalité (lit le brief s'il existe)</td><td><code>pitch.md</code></td></tr>
-                  <tr><td class="num">2</td><td><code>/forge:feature-plan</code></td><td>Concevoir la solution technique à partir du pitch</td><td><code>plan.md</code></td></tr>
-                  <tr><td class="num">3</td><td><code>/forge:feature-implem</code></td><td>Implémenter sous-tâche par sous-tâche avec QA continue</td><td>Code + migrations + tests</td></tr>
-                  <tr><td class="num">4</td><td><code>/forge:review</code></td><td>Code review : sécu, perf, qualité, conformité au plan</td><td><code>review.md</code></td></tr>
-                  <tr><td class="num">5</td><td><code>/forge:commit</code></td><td>Conventional Commits en français + push</td><td>Commit</td></tr>
-                  <tr><td class="num">6</td><td><code>/forge:report</code></td><td>Documenter ce qui a été fait vs ce qui était prévu</td><td><code>report.md</code></td></tr>
-                  <tr><td class="num">7</td><td><code>/forge:sync</code></td><td>Réaligner pitch et plan avec la réalité du code</td><td>Mise à jour des docs</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+                <div class="doc-block" id="ref-phase0">
+                    <h3>Phase 0 — poser le décor</h3>
+                    <p>Une fois en début de projet, puis révisé lors d'un pivot. Ces trois documents sont <strong>vivants</strong> : ils supportent quatre modes (Création, Enrichir, Éditer, Pivot) et tiennent leur propre changelog.</p>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Skill</th>
+                                <th scope="col">Rôle</th>
+                                <th scope="col">Produit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><code>/forge:vision</code></td>
+                                <td>Atelier challengeur : problème, audience, valeur, North Star, principes, anti-objectifs</td>
+                                <td><code>docs/vision.md</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:product-backlog</code></td>
+                                <td>Domaines → capacités → parcours → règles transverses → backlog priorisé MVP/V2/V3</td>
+                                <td><code>docs/product-backlog.md</code></td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:stack</code></td>
+                                <td>Scanne les manifestes, interroge pour combler les trous, prouve chaque techno par un fichier source</td>
+                                <td><code>docs/stack.md</code></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p><code>docs/vision.md</code> est lu par <code>/forge:product-backlog</code> puis par <code>/forge:feature-pitch</code> à chaque feature, pour challenger l'alignement. <code>docs/stack.md</code> est lu en priorité par les skills
+                        techniques. Il <strong>constate</strong> l'existant — il ne justifie pas un choix (c'est <code>/forge:adr</code>) ni ne décide d'une évolution (c'est <code>/forge:tech-plan</code>).</p>
+                    <p><code>/forge:product-backlog</code> est facultatif : on peut aller directement de la vision au pitch. Il devient recommandé dès qu'on a plus de trois ou quatre features pressenties.</p>
+                </div>
 
-          <div class="doc-block" id="ref-refacto">
-            <h3>Track refacto — comportement figé</h3>
-            <p>Pour restructurer sans toucher au comportement externe : dette, couplage, extraction d'un service, décomposition d'une god class, préparation d'une feature à venir.</p>
-            <div class="callout">
-              <p class="callout__title">Principe</p>
-              <p>Comportement externe strictement préservé. Verrou de tests de caractérisation posé <strong>avant</strong> de toucher au code. Exécution incrémentale et réversible — souvent un commit par étape.</p>
-            </div>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">#</th><th scope="col">Skill</th><th scope="col">Rôle</th><th scope="col">Produit</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td class="num">1</td><td><code>/forge:refactor-plan</code></td><td>Cadrer le refacto : motivation, cible, tests de caractérisation</td><td><code>plan.md</code></td></tr>
-                  <tr><td class="num">2</td><td><code>/forge:refactor-implem</code></td><td>Exécuter verrou-tests-d'abord, par étapes réversibles</td><td>Code + tests</td></tr>
-                  <tr><td class="num">3</td><td colspan="3"><code>/forge:review</code> → <code>/forge:commit</code> → <code>/forge:report</code> → <code>/forge:sync</code></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+                <div class="doc-block" id="ref-cadrer">
+                    <h3>Phase 1 — cadrer</h3>
+                    <p>Le point d'entrée de toute story : on choisit son track, puis on formalise l'intention avant d'écrire la moindre ligne. C'est la phase où un désaccord coûte le moins cher — corriger un pitch prend cinq minutes, corriger le code
+                        qui en découle prend la journée.</p>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Track</th>
+                                <th scope="col">Skill</th>
+                                <th scope="col">Rôle</th>
+                                <th scope="col">Produit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Feature</td>
+                                <td class="cmd"><code>/forge:feature-interview</code></td>
+                                <td><em>Optionnel</em> — découvrir un besoin flou par interview avant de pouvoir le pitcher</td>
+                                <td><code>brief.md</code></td>
+                            </tr>
+                            <tr>
+                                <td>Feature</td>
+                                <td class="cmd"><code>/forge:feature-pitch</code></td>
+                                <td>Cadrer et challenger la fonctionnalité (lit le brief s'il existe)</td>
+                                <td><code>pitch.md</code></td>
+                            </tr>
+                            <tr>
+                                <td>Feature</td>
+                                <td class="cmd"><code>/forge:feature-plan</code></td>
+                                <td>Concevoir la solution technique à partir du pitch</td>
+                                <td><code>plan.md</code></td>
+                            </tr>
+                            <tr>
+                                <td>Refacto</td>
+                                <td class="cmd"><code>/forge:refactor-plan</code></td>
+                                <td>Cadrer le refacto : motivation, cible, tests de caractérisation</td>
+                                <td><code>plan.md</code></td>
+                            </tr>
+                            <tr>
+                                <td>Tech</td>
+                                <td class="cmd"><code>/forge:tech-plan</code></td>
+                                <td>Cadrer avec une métrique cible chiffrée, une baseline et un kill switch</td>
+                                <td><code>plan.md</code></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Les trois tracks produisent un <code>plan.md</code> — le cadrage technique exécutable — et partagent le même squelette de sections ; leurs spécificités (caractérisation d'un refacto, kill switch d'un tech) s'y ajoutent. Seul le
+                        track feature intercale un <code>pitch.md</code> en amont, parce que lui seul doit d'abord répondre à une question fonctionnelle.</p>
+                </div>
 
-          <div class="doc-block" id="ref-tech">
-            <h3>Track tech — perf, résilience, sécu</h3>
-            <p>Pour les évolutions qu'un observateur externe peut détecter, mais qui n'apportent pas de valeur utilisateur nouvelle : performance, résilience, observabilité, sécurité.</p>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">#</th><th scope="col">Skill</th><th scope="col">Rôle</th><th scope="col">Produit</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td class="num">1</td><td><code>/forge:tech-plan</code></td><td>Cadrer avec une métrique cible chiffrée, une baseline et un kill switch</td><td><code>plan.md</code></td></tr>
-                  <tr><td class="num">2</td><td><code>/forge:tech-implem</code></td><td>Exécuter : baseline, kill switch, mesure après chaque étape</td><td>Code + mesures</td></tr>
-                  <tr><td class="num">3</td><td colspan="3"><code>/forge:review</code> (kill switch, compatibilité, non-régression) → <code>/forge:commit</code> → <code>/forge:report</code> (cible vs mesuré) → <code>/forge:sync</code></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+                <div class="doc-block" id="ref-implementer">
+                    <h3>Phase 2 — implémenter</h3>
+                    <p>Une skill par track, toutes bâties sur le même principe : avancer par étapes courtes, avec la QA du projet après chacune, plutôt que produire un gros diff à vérifier à la fin.</p>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Track</th>
+                                <th scope="col">Skill</th>
+                                <th scope="col">Rôle</th>
+                                <th scope="col">Produit</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Feature</td>
+                                <td class="cmd"><code>/forge:feature-implem</code></td>
+                                <td>Implémenter sous-tâche par sous-tâche avec QA continue</td>
+                                <td>Code + migrations + tests</td>
+                            </tr>
+                            <tr>
+                                <td>Refacto</td>
+                                <td class="cmd"><code>/forge:refactor-implem</code></td>
+                                <td>Exécuter verrou-tests-d'abord, par étapes réversibles</td>
+                                <td>Code + tests</td>
+                            </tr>
+                            <tr>
+                                <td>Tech</td>
+                                <td class="cmd"><code>/forge:tech-implem</code></td>
+                                <td>Exécuter : baseline, kill switch, mesure après chaque étape</td>
+                                <td>Code + mesures</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-          <div class="doc-block" id="ref-cloture">
-            <h3>Clôture — commune aux trois tracks</h3>
-            <p>Après l'implémentation, les trois tracks partagent les mêmes étapes. Seuls le contenu et le ton des artefacts changent.</p>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">Skill</th><th scope="col">Ce qu'elle fait</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><code>/forge:review</code></td><td>Code review du diff : sécurité, qualité, conformité au plan, non-régression.</td></tr>
-                  <tr><td><code>/forge:commit</code></td><td>Lit le diff, regroupe les changements en lots cohérents, propose des messages Conventional Commits en français, demande validation, commit et push.</td></tr>
-                  <tr><td><code>/forge:report</code></td><td>La mémoire factuelle de la livraison : écart entre intention et exécution, ajouts non prévus, dette laissée, métriques obtenues. Écrit une fois pour toutes.</td></tr>
-                  <tr><td><code>/forge:sync</code></td><td>Met à jour les documents d'intention <strong>en place</strong>, comme une révision documentaire, ainsi que les docs projet (vision, stack, product-backlog).</td></tr>
-                  <tr><td><code>/forge:report-and-sync</code></td><td>Enchaîne les deux en une passe. Court-circuite le sync si le report conclut à une conformité totale.</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="callout">
-              <p class="callout__title">report et sync sont complémentaires</p>
-              <p><code>/forge:report</code> fige la trace de ce qui s'est passé ; <code>/forge:sync</code> rend les documents d'intention à nouveau fiables pour les futurs lecteurs. On garde les deux.</p>
-            </div>
-          </div>
+                <div class="doc-block" id="ref-cloturer">
+                    <h3>Phase 3 — clôturer</h3>
+                    <p>Commune aux trois tracks : les mêmes skills, quel que soit le chemin parcouru en phases 1 et 2. Seuls le contenu et le ton des artefacts changent — la review d'un track tech s'intéresse au kill switch, celle d'un refacto à la
+                        non-régression.</p>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Skill</th>
+                                <th scope="col">Ce qu'elle fait</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><code>/forge:review</code></td>
+                                <td>Code review du diff : sécurité, qualité, conformité au plan, non-régression.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:report</code></td>
+                                <td>La mémoire factuelle de la livraison : écart entre intention et exécution, ajouts non prévus, dette laissée, métriques obtenues. Écrit une fois pour toutes.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:sync</code></td>
+                                <td>Met à jour les documents d'intention <strong>en place</strong>, comme une révision documentaire, ainsi que les docs projet (vision, stack, product-backlog).</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:commit</code></td>
+                                <td>Vient en dernier pour embarquer d'un coup le code, le <code>report.md</code> et les docs réalignées : lit le diff, regroupe les changements en lots cohérents, propose des messages Conventional Commits en français, demande validation, commit et push.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:report-and-sync</code></td>
+                                <td>Enchaîne report puis sync en une passe, avant le commit. Court-circuite le sync si le report conclut à une conformité totale.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="callout">
+                        <p class="callout__title">report et sync sont complémentaires</p>
+                        <p><code>/forge:report</code> fige la trace de ce qui s'est passé ; <code>/forge:sync</code> rend les documents d'intention à nouveau fiables pour les futurs lecteurs. On garde les deux.</p>
+                    </div>
+                </div>
 
-          <div class="doc-block" id="ref-utilitaires">
-            <h3>Utilitaires — hors pipeline</h3>
-            <div class="table-wrap">
-              <table class="doc-table">
-                <thead>
-                  <tr><th scope="col">Skill</th><th scope="col">Rôle</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><code>/forge:help</code></td><td>Le sommaire du pipeline, des tracks, des skills et des artefacts.</td></tr>
-                  <tr><td><code>/forge:claude-md</code></td><td>Génère ou met à jour le <code>CLAUDE.md</code> : analyse du codebase prouvée par fichier — aucune commande inventée — et injection des principes comportementaux.</td></tr>
-                  <tr><td><code>/forge:rules</code></td><td>Écrit les règles projet dans <code>.claude/rules/</code>, chargées seulement quand Claude ouvre un fichier de la zone concernée.</td></tr>
-                  <tr><td><code>/forge:adr</code></td><td>Rédige un Architecture Decision Record (format MADR léger) depuis un artefact ou un topic libre, avec backlinks et index automatiques. Produit <code>docs/adr/NNNN-slug.md</code>.</td></tr>
-                  <tr><td><code>/forge:estimate</code></td><td>Chiffre le temps « tout compris » à facturer — cadrage, implémentation, tests, review, doc, release — en heures, sur deux colonnes : référence sans IA et temps réel avec assistant. Du temps, jamais de montant.</td></tr>
-                  <tr><td><code>/forge:test-scenario</code></td><td>Joue un scénario utilisateur en live via Playwright MCP.</td></tr>
-                  <tr><td><code>/forge:doc-feature</code></td><td>Cartographie une feature existante en lisant le code (entités, flux, routes, services, points d'extension). Produit <code>docs/feature-map/NNN-slug/overview.md</code>.</td></tr>
-                  <tr><td><code>/forge:backfill-metadata</code></td><td>Reconstruit rétroactivement le <code>metadata.json</code> des stories antérieures depuis l'historique git. N'écrit que des valeurs vraies — jamais de date inventée.</td></tr>
-                  <tr><td><code>/forge:release</code></td><td>Détermine le bump SemVer depuis les Conventional Commits, met à jour le <code>CHANGELOG.md</code>, crée un tag annoté, push et publie la release GitHub via <code>gh</code>. Demande validation avant toute action publique.</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="callout callout--warn">
-              <p class="callout__title">Ne pas confondre sync et doc-feature</p>
-              <p><code>/forge:sync</code> recale un document d'intention récent que vous venez de modifier dans un track structuré. <code>/forge:doc-feature</code> cartographie une feature <strong>ancienne ou jamais passée par le pipeline</strong>, en partant du code livré, sans dossier de track préalable.</p>
-            </div>
-          </div>
-        </section>
+                <div class="doc-block" id="ref-utilitaires">
+                    <h3>Utilitaires — hors pipeline</h3>
+                    <div class="table-wrap">
+                        <table class="doc-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Skill</th>
+                                <th scope="col">Rôle</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><code>/forge:help</code></td>
+                                <td>Le sommaire du pipeline, des tracks, des skills et des artefacts.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:claude-md</code></td>
+                                <td>Génère ou met à jour le <code>CLAUDE.md</code> : analyse du codebase prouvée par fichier — aucune commande inventée — et injection des principes comportementaux.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:rules</code></td>
+                                <td>Écrit les règles projet dans <code>.claude/rules/</code>, chargées seulement quand Claude ouvre un fichier de la zone concernée.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:adr</code></td>
+                                <td>Rédige un Architecture Decision Record (format MADR léger) depuis un artefact ou un topic libre, avec backlinks et index automatiques. Produit <code>docs/adr/NNNN-slug.md</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:estimate</code></td>
+                                <td>Chiffre le temps « tout compris » à facturer — cadrage, implémentation, tests, review, doc, release — en heures, sur deux colonnes : référence sans IA et temps réel avec assistant. Du temps, jamais de montant.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:test-scenario</code></td>
+                                <td>Joue un scénario utilisateur en live via Playwright MCP.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:doc-feature</code></td>
+                                <td>Cartographie une feature existante en lisant le code (entités, flux, routes, services, points d'extension). Produit <code>docs/feature-map/NNN-slug/overview.md</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:backfill-metadata</code></td>
+                                <td>Reconstruit rétroactivement le <code>metadata.json</code> des stories antérieures depuis l'historique git. N'écrit que des valeurs vraies — jamais de date inventée.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:release</code></td>
+                                <td>Détermine le bump SemVer depuis les Conventional Commits, met à jour le <code>CHANGELOG.md</code>, crée un tag annoté, push et publie la release GitHub via <code>gh</code>. Demande validation avant toute action
+                                    publique.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="callout callout--warn">
+                        <p class="callout__title">Ne pas confondre sync et doc-feature</p>
+                        <p><code>/forge:sync</code> recale un document d'intention récent que vous venez de modifier dans un track structuré. <code>/forge:doc-feature</code> cartographie une feature <strong>ancienne ou jamais passée par le
+                            pipeline</strong>, en partant du code livré, sans dossier de track préalable.</p>
+                    </div>
+                </div>
+            </section>
 
-        <section class="doc-section" aria-labelledby="config-title">
-          <h2 id="config-title">Configuration</h2>
+            <section class="doc-section" aria-labelledby="config-title">
+                <h2 id="config-title">Configuration</h2>
 
-          <div class="doc-block" id="permissions">
-            <h3>Permissions et outillage</h3>
-            <p>Les skills d'implémentation <strong>n'imposent aucun outillage</strong> : elles ne présument ni de votre gestionnaire de paquets, ni de votre lanceur de tests. Elles lisent les commandes réelles dans votre <code>CLAUDE.md</code>, la référence stack, ou votre manifeste de tâches (<code>Makefile</code>, <code>package.json</code>, <code>composer.json</code>, <code>justfile</code>…) — et si elles ne les trouvent pas, elles demandent au lieu de deviner.</p>
-            <p>Conséquence pratique : c'est à votre projet de <strong>pré-autoriser son outillage</strong> dans son <code>.claude/settings.json</code>. Sans ça, Claude Code demandera confirmation à chaque commande de build ou de test — c'est fonctionnel, juste bavard.</p>
-            <div class="code">
-              <div class="code__label">.claude/settings.json</div>
-              <pre><code>{
+                <div class="doc-block" id="permissions">
+                    <h3>Permissions et outillage</h3>
+                    <p>Les skills d'implémentation <strong>n'imposent aucun outillage</strong> : elles ne présument ni de votre gestionnaire de paquets, ni de votre lanceur de tests. Elles lisent les commandes réelles dans votre
+                        <code>CLAUDE.md</code>, la référence stack, ou votre manifeste de tâches (<code>Makefile</code>, <code>package.json</code>, <code>composer.json</code>, <code>justfile</code>…) — et si elles ne les trouvent pas, elles demandent
+                        au lieu de deviner.</p>
+                    <p>Conséquence pratique : c'est à votre projet de <strong>pré-autoriser son outillage</strong> dans son <code>.claude/settings.json</code>. Sans ça, Claude Code demandera confirmation à chaque commande de build ou de test — c'est
+                        fonctionnel, juste bavard.</p>
+                    <div class="code">
+                        <div class="code__label">.claude/settings.json</div>
+                        <pre><code>{
   <span class="key">"permissions"</span>: {
     <span class="key">"allow"</span>: [<span class="str">"Bash(make:*)"</span>, <span class="str">"Bash(vendor/bin/*:*)"</span>, <span class="str">"Bash(npm:*)"</span>]
   }
 }</code></pre>
-            </div>
-            <p>C'est aussi le bon endroit pour poser une interdiction <strong>dure</strong> via <code>permissions.deny</code> : contrairement aux <code>allowed-tools</code> d'une skill — qui ne font que pré-autoriser — un <code>deny</code> projet est souverain et ne se contourne pas.</p>
-          </div>
+                    </div>
+                    <p>C'est aussi le bon endroit pour poser une interdiction <strong>dure</strong> via <code>permissions.deny</code> : contrairement aux <code>allowed-tools</code> d'une skill — qui ne font que pré-autoriser — un <code>deny</code>
+                        projet est souverain et ne se contourne pas.</p>
+                </div>
 
-          <div class="doc-block" id="claude-md">
-            <h3>Le <code>CLAUDE.md</code> du projet</h3>
-            <p>Les références stack embarquées dans le plugin couvrent le générique. Ce qui est propre à votre projet — commandes QA exactes, identifiants de test, noms de thèmes, conventions de branches — vit dans le <code>CLAUDE.md</code> à la racine. Les skills le lisent en complément.</p>
-            <p><code>/forge:claude-md</code> le génère pour vous, en prouvant chaque affirmation par un fichier du dépôt. Si une règle est <strong>scopable à une zone du code</strong>, préférez <code>/forge:rules</code> : elle produit un fichier dans <code>.claude/rules/</code> qui n'est chargé que quand Claude ouvre un fichier concerné — le contexte reste léger.</p>
-          </div>
+                <div class="doc-block" id="claude-md">
+                    <h3>Le <code>CLAUDE.md</code> du projet</h3>
+                    <p>Les références stack embarquées dans le plugin couvrent le générique. Ce qui est propre à votre projet — commandes QA exactes, identifiants de test, noms de thèmes, conventions de branches — vit dans le <code>CLAUDE.md</code> à
+                        la racine. Les skills le lisent en complément.</p>
+                    <p><code>/forge:claude-md</code> le génère pour vous, en prouvant chaque affirmation par un fichier du dépôt. Si une règle est <strong>scopable à une zone du code</strong>, préférez <code>/forge:rules</code> : elle produit un
+                        fichier dans <code>.claude/rules/</code> qui n'est chargé que quand Claude ouvre un fichier concerné — le contexte reste léger.</p>
+                </div>
 
-          <div class="doc-block" id="stacks">
-            <h3>Règles framework</h3>
-            <p>Le workflow détecte le stack via <code>composer.json</code> / <code>package.json</code> et charge les références correspondantes, bundlées avec le plugin :</p>
-            <ul>
-              <li>la procédure de détection du stack ;</li>
-              <li>les règles <strong>Symfony</strong> — Doctrine, services, forms, Twig, QA, sécu, perf ;</li>
-              <li>le delta e-commerce <strong>Sylius</strong> — Resources, channels, thèmes, Twig Hooks…</li>
-            </ul>
-            <p>Le chargement est automatique après détection : rien à lire manuellement. Des marketplaces complémentaires (par exemple <a href="https://github.com/gabrielmustiere/skills">gabrielmustiere/skills</a>) exposent des skills plus tactiques, propres à un framework, qui se combinent naturellement avec le pipeline.</p>
-          </div>
-        </section>
+                <div class="doc-block" id="stacks">
+                    <h3>Règles framework</h3>
+                    <p>Le workflow détecte le stack via <code>composer.json</code> / <code>package.json</code> et charge les références correspondantes, bundlées avec le plugin :</p>
+                    <ul>
+                        <li>la procédure de détection du stack ;</li>
+                        <li>les règles <strong>Symfony</strong> — Doctrine, services, forms, Twig, QA, sécu, perf ;</li>
+                        <li>le delta e-commerce <strong>Sylius</strong> — Resources, channels, thèmes, Twig Hooks…</li>
+                    </ul>
+                    <p>Le chargement est automatique après détection : rien à lire manuellement. Des marketplaces complémentaires (par exemple <a href="https://github.com/gabrielmustiere/skills">gabrielmustiere/skills</a>) exposent des skills plus
+                        tactiques, propres à un framework, qui se combinent naturellement avec le pipeline.</p>
+                </div>
+            </section>
 
-        <section class="doc-section" aria-labelledby="aide-title">
-          <h2 id="aide-title">Aide</h2>
+            <section class="doc-section" aria-labelledby="aide-title">
+                <h2 id="aide-title">Aide</h2>
 
-          <div class="doc-block" id="depannage">
-            <h3>Dépannage</h3>
+                <div class="doc-block" id="depannage">
+                    <h3>Dépannage</h3>
 
-            <h4><code>/forge:xxx</code> est introuvable</h4>
-            <p>Lancez <code>/reload-plugins</code>. C'est nécessaire après l'installation et après chaque mise à jour de la marketplace. Vérifiez aussi le préfixe : c'est <code>/forge:help</code>, pas <code>/help</code>.</p>
+                    <h4><code>/forge:xxx</code> est introuvable</h4>
+                    <p>Lancez <code>/reload-plugins</code>. C'est nécessaire après l'installation et après chaque mise à jour de la marketplace. Vérifiez aussi le préfixe : c'est <code>/forge:help</code>, pas <code>/help</code>.</p>
 
-            <h4>Une skill ne se déclenche pas toute seule</h4>
-            <p>C'est le comportement attendu, pas un bug : <strong>aucune skill Forge ne s'auto-déclenche</strong>. Le triage automatique entre skills voisines est probabiliste, et un mauvais aiguillage produirait le mauvais document. Appelez la skill explicitement.</p>
+                    <h4>Une skill ne se déclenche pas toute seule</h4>
+                    <p>C'est le comportement attendu, pas un bug : <strong>aucune skill Forge ne s'auto-déclenche</strong>. Le triage automatique entre skills voisines est probabiliste, et un mauvais aiguillage produirait le mauvais document. Appelez
+                        la skill explicitement.</p>
 
-            <h4>Claude demande confirmation à chaque commande</h4>
-            <p>Votre projet n'a pas pré-autorisé son outillage. Voir <a href="#permissions">Permissions et outillage</a>.</p>
+                    <h4>Claude demande confirmation à chaque commande</h4>
+                    <p>Votre projet n'a pas pré-autorisé son outillage. Voir <a href="#permissions">Permissions et outillage</a>.</p>
 
-            <h4>Le Forge Board n'affiche pas mes stories correctement</h4>
-            <p>Le Board lit le <code>metadata.json</code> de chaque story et ne l'écrit jamais. Sur des stories antérieures à cette convention, le fichier n'existe pas : lancez <code>/forge:backfill-metadata</code> pour le reconstruire depuis l'historique git.</p>
-          </div>
+                    <h4>Le Forge Board n'affiche pas mes stories correctement</h4>
+                    <p>Le Board lit le <code>metadata.json</code> de chaque story et ne l'écrit jamais. Sur des stories antérieures à cette convention, le fichier n'existe pas : lancez <code>/forge:backfill-metadata</code> pour le reconstruire depuis
+                        l'historique git.</p>
+                </div>
 
-          <div class="doc-block" id="contribuer">
-            <h3>Développer le plugin</h3>
-            <p>Pour tester une modification locale du plugin avant publication, lancez Claude Code depuis n'importe quel projet en pointant le dossier du plugin :</p>
-            <div class="code">
-              <div class="code__label">terminal</div>
-              <pre><code><span class="prompt" aria-hidden="true">$ </span>claude --plugin-dir /chemin/vers/forge/plugins/forge</code></pre>
-            </div>
-            <p>Pendant la session, <code>/reload-plugins</code> recharge après chaque modification.</p>
-            <div class="callout callout--warn">
-              <p class="callout__title">Le piège classique</p>
-              <p>Une skill qui ne se déclenche pas comme prévu, c'est presque toujours sa <code>description</code> : trop vague, ou sans les mots-clés que l'utilisateur emploierait naturellement. Rendez-la plus spécifique et incluez les phrases déclencheurs. Au-delà de 250 caractères, la description est tronquée dans la liste chargée en contexte.</p>
-            </div>
-            <p>Structure d'une skill : un dossier <code>skills/&lt;nom&gt;/SKILL.md</code>, dont le <code>name</code> en frontmatter YAML doit matcher le nom du dossier. Les dossiers <code>skills/</code>, <code>commands/</code>, <code>agents/</code> et <code>hooks/</code> vivent à la racine du plugin — seul <code>plugin.json</code> habite <code>.claude-plugin/</code>.</p>
-            <p>Le code, l'inventaire complet des skills et le changelog sont sur <a href="https://github.com/gabrielmustiere/forge">GitHub</a>.</p>
-          </div>
-        </section>
+                <div class="doc-block" id="contribuer">
+                    <h3>Développer le plugin</h3>
+                    <p>Pour tester une modification locale du plugin avant publication, lancez Claude Code depuis n'importe quel projet en pointant le dossier du plugin :</p>
+                    <div class="code">
+                        <div class="code__label">terminal</div>
+                        <pre><code><span class="prompt" aria-hidden="true">$ </span>claude --plugin-dir /chemin/vers/forge/plugins/forge</code></pre>
+                    </div>
+                    <p>Pendant la session, <code>/reload-plugins</code> recharge après chaque modification.</p>
+                    <div class="callout callout--warn">
+                        <p class="callout__title">Le piège classique</p>
+                        <p>Une skill qui ne se déclenche pas comme prévu, c'est presque toujours sa <code>description</code> : trop vague, ou sans les mots-clés que l'utilisateur emploierait naturellement. Rendez-la plus spécifique et incluez les
+                            phrases déclencheurs. Au-delà de 250 caractères, la description est tronquée dans la liste chargée en contexte.</p>
+                    </div>
+                    <p>Structure d'une skill : un dossier <code>skills/&lt;nom&gt;/SKILL.md</code>, dont le <code>name</code> en frontmatter YAML doit matcher le nom du dossier. Les dossiers <code>skills/</code>, <code>commands/</code>,
+                        <code>agents/</code> et <code>hooks/</code> vivent à la racine du plugin — seul <code>plugin.json</code> habite <code>.claude-plugin/</code>.</p>
+                    <p>Le code, l'inventaire complet des skills et le changelog sont sur <a href="https://github.com/gabrielmustiere/forge">GitHub</a>.</p>
+                </div>
+            </section>
 
-        <nav class="doc-footer-nav" aria-label="Navigation de fin de page">
-          <a class="btn btn--ghost" href="/">← Retour à l'accueil</a>
-          <a class="btn btn--primary" href="https://github.com/gabrielmustiere/forge">Voir sur GitHub</a>
-        </nav>
-      </main>
+            <nav class="doc-footer-nav" aria-label="Navigation de fin de page">
+                <a class="btn btn--ghost" href="/">← Retour à l'accueil</a>
+                <a class="btn btn--primary" href="https://github.com/gabrielmustiere/forge">Voir sur GitHub</a>
+            </nav>
+        </main>
     </div>
-  </div>
+</div>
 
-  <footer class="footer">
+<footer class="footer">
     <p class="footer__brand">
-      <span class="footer__dot" aria-hidden="true"></span>
-      <span>Forge · Apache 2.0 · © 2026 Gabriel Mustiere</span>
+        <span class="footer__dot" aria-hidden="true"></span>
+        <span>Forge · Apache 2.0 · © 2026 Gabriel Mustiere</span>
     </p>
     <ul class="footer__links">
-      <li><a href="https://github.com/gabrielmustiere/forge">GitHub</a></li>
-      <li><a href="https://github.com/gabrielmustiere/skills">Marketplace skills</a></li>
-      <li><a href="https://github.com/gabrielmustiere/forge/releases">Releases</a></li>
+        <li><a href="https://github.com/gabrielmustiere/forge">GitHub</a></li>
+        <li><a href="https://github.com/gabrielmustiere/skills">Marketplace skills</a></li>
+        <li><a href="https://github.com/gabrielmustiere/forge/releases">Releases</a></li>
     </ul>
-  </footer>
+</footer>
 
 </body>
 </html>

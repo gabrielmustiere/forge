@@ -1,6 +1,6 @@
 ---
 name: stack
-description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0 technique. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
+description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[couche ciblée ou intention libre]"
@@ -31,7 +31,7 @@ Si l'utilisateur dérive vers « est-ce qu'on devrait migrer vers X » ou « que
 
 **Quand lancer ce skill** :
 
-- **Création** — démarrage de l'accompagnement d'un projet (neuf ou legacy) dont la stack n'a jamais été cartographiée. C'est le geste de **phase 0 technique** : avant de cadrer la moindre feature ou évolution, on sait sur quoi on marche.
+- **Création** — démarrage de l'accompagnement d'un projet (neuf ou legacy) dont la stack n'a jamais été cartographiée. C'est le geste de **phase 0** : avant de cadrer la moindre feature ou évolution, on sait sur quoi on marche.
 - **Enrichir** — le projet gagne une brique (nouvelle lib structurante, nouveau service docker, nouveau job CI, nouvel hébergement) ; on l'ajoute sans tout reprendre.
 - **Éditer** — une entrée existante est devenue fausse ou imprécise (version bumpée, techno remplacée à la marge, correction d'une erreur de détection) ; on corrige en place.
 - **Pivot** — refonte technique majeure (changement de framework, de langage backend, de modèle d'hébergement) ; l'ancien fichier est archivé et on recartographie.

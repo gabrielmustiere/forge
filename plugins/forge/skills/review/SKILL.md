@@ -114,7 +114,7 @@ Statuts possibles : **PRÊT À COMMITER** (0 bloquant, 0 important non résolu) 
 Si CORRECTIONS REQUISES, liste précisément ce qui reste à corriger.
 
 Si PRÊT À COMMITER :
-> Prochaine étape : `/commit` pour commit et push.
+> Prochaine étape : `/report` pour documenter la livraison, puis `/sync` et enfin `/commit`. Dans le pipeline, le commit vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. (En dehors du pipeline, `/commit` directement.)
 
 ## Argument optionnel
 

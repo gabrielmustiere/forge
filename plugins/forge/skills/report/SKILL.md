@@ -10,8 +10,9 @@ allowed-tools:
   - Glob
   - Write
   - Edit
-  - Bash(git log:*)
+  - Bash(git status:*)
   - Bash(git diff:*)
+  - Bash(git log:*)
   - Bash(git show:*)
   - Bash(ls:*)
 ---
@@ -69,10 +70,17 @@ Affiche un résumé en 3-4 lignes pour confirmer le périmètre (type, intention
 
 ### Phase 2 — Analyse du code implémenté
 
-Explore le code réellement produit :
+**Source du code livré.** Le report tourne en phase 3 **avant** le commit : le code vit dans le *working tree*, pas encore dans l'historique. Ne t'appuie donc pas sur `git log` en premier. Inspecte, dans cet ordre, ce qui est en cours de livraison :
 
-- **Git** : `git log --oneline` et `git diff` pour identifier les commits liés. Si possible, filtrer par scope/slug : `git log --grep=<slug-fragment>`.
-- **Fichiers créés / modifiés** : compare avec ce qui était prévu (plan).
+1. `git status --porcelain` — vue d'ensemble : fichiers staged, unstaged et non suivis (untracked).
+2. `git diff --cached` puis `git diff` — le diff réel des fichiers suivis (staged + unstaged). C'est la source de vérité des tables du §Périmètre livré.
+3. Les fichiers **untracked** listés par `git status` : nouveaux fichiers non encore ajoutés. `git diff` ne les montre pas — lis-les via `Read`/`git diff --no-index /dev/null <fichier>` pour ne rien manquer.
+
+**Repli** : si le working tree est propre (rien de staged ni d'unstaged, aucun untracked), c'est que la story a déjà été committée — dans ce cas seulement, retombe sur `git log --oneline`/`git diff <base>...HEAD`, en filtrant par scope/slug si possible (`git log --grep=<slug-fragment>`).
+
+Puis explore le code réellement produit :
+
+- **Fichiers créés / modifiés** : compare le diff (staged + unstaged + untracked) avec ce qui était prévu (plan).
 - **Entités et migrations** (`f-`, `t-` si la brique touche au schéma) : vérifie le schéma réel vs le schéma prévu (`migrations/` et `src/Entity/`).
 - **Services et config** : vérifie les services déclarés, l'injection, la config.
 - **Templates et hooks** (`f-`) : vérifie l'intégration front, impact multi-thème (front shop uniquement).

@@ -1,6 +1,6 @@
 ---
 name: help
-description: Affiche le sommaire du workflow et oriente vers le bon skill — phases amont (vision, product-backlog), trois tracks (feature, refacto, tech), enchaînement et artifacts. À utiliser quand tu ne sais pas par où commencer ou quel skill correspond.
+description: Affiche le sommaire du workflow et oriente vers le bon skill — quatre phases (décor, cadrage, implem, clôture), trois tracks (feature, refacto, tech) et leurs artifacts. À utiliser quand tu ne sais pas par où commencer ou quel skill correspond.
 user_invocable: true
 disable-model-invocation: true
 allowed-tools:
@@ -13,23 +13,23 @@ allowed-tools:
 ## Schéma global du pipeline
 
 ```
-                       PHASE 0 — VISION PROJET (une fois, ou pivot)
+                       PHASE 0 — POSER LE DÉCOR (une fois par projet, ou pivot)
                        ┌────────┐
                        │ vision │──▶ docs/vision.md (problème, audience, valeur,
                        └────────┘    North Star, principes, anti-objectifs)
                                      Lu par product-backlog puis feature-pitch.
-
-                       PHASE 0.5 — PÉRIMÈTRE FONCTIONNEL & BACKLOG
                        ┌────────────────┐
                        │ product-backlog│──▶ docs/product-backlog.md (domaines, capacités,
                        └────────────────┘    parcours, règles transverses, backlog priorisé MVP/V2/V3)
                                            Lu par feature-pitch pour situer chaque feature.
-
-                       PHASE 0 TECHNIQUE — CARTOGRAPHIE DE LA STACK
                        ┌───────┐
                        │ stack │──▶ docs/stack.md (langages, backend, frontend, données,
                        └───────┘    ops, CI — chaque techno prouvée par un fichier source)
                                     Lu par feature-implem/refactor-implem/tech-implem/review.
+
+     PHASES 1 À 3 — CADRER, IMPLÉMENTER, CLÔTURER : une story emprunte UN SEUL des trois tracks.
+     La phase dit quand ; le track dit avec quelles skills. Dans chaque track ci-dessous :
+     les plans = phase 1, l'implem = phase 2, review → report → sync → commit = phase 3.
 
                         TRACK FEATURE (valeur utilisateur, structurante)
  (optionnel : besoin flou)
@@ -37,29 +37,29 @@ allowed-tools:
  │ feature-interview │┄┐
  └─────────┬─────────┘ ┊ brief.md
            ▼           ▼
- ┌───────────────┐   ┌──────────────┐   ┌────────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
- │ feature-pitch │──▶│ feature-plan │──▶│ feature-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
- └───────┬───────┘   └───────┬──────┘   └────────┬───────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
-         │                   │                   │                │            │            │           │
-     pitch.md             plan.md         code+migrations     review.md     commit      report.md   doc sync
-                                          +nouveaux tests                    +push                 +changelog
+ ┌───────────────┐   ┌──────────────┐   ┌────────────────┐   ┌────────┐   ┌────────┐   ┌──────┐   ┌────────┐
+ │ feature-pitch │──▶│ feature-plan │──▶│ feature-implem │──▶│ review │──▶│ report │──▶│ sync │──▶│ commit │
+ └───────┬───────┘   └───────┬──────┘   └────────┬───────┘   └────┬───┘   └────┬───┘   └───┬──┘   └────┬───┘
+         │                   │                   │                │            │           │           │
+     pitch.md             plan.md         code+migrations     review.md    report.md    doc sync    commit
+                                          +nouveaux tests                              +changelog    +push
 
                     TRACK REFACTO (comportement figé, code restructuré)
- ┌───────────────┐   ┌─────────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
- │ refactor-plan │──▶│ refactor-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
- └───────┬───────┘   └────────┬────────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
-         │                    │                 │            │            │           │
-      plan.md           verrou tests        review.md     commit      report.md   doc sync
-                          + étapes                         +push
+ ┌───────────────┐   ┌─────────────────┐   ┌────────┐   ┌────────┐   ┌──────┐   ┌────────┐
+ │ refactor-plan │──▶│ refactor-implem │──▶│ review │──▶│ report │──▶│ sync │──▶│ commit │
+ └───────┬───────┘   └────────┬────────┘   └────┬───┘   └────┬───┘   └───┬──┘   └────┬───┘
+         │                    │                 │            │           │           │
+      plan.md           verrou tests        review.md    report.md    doc sync    commit
+                          + étapes                                   +changelog    +push
                         incrémentales
 
                TRACK TECH (perf, résilience, observabilité, sécu — non user-facing)
- ┌───────────┐   ┌─────────────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌──────┐
- │ tech-plan │──▶│ tech-implem │──▶│ review │──▶│ commit │──▶│ report │──▶│ sync │
- └─────┬─────┘   └──────┬──────┘   └────┬───┘   └────┬───┘   └────┬───┘   └───┬──┘
-       │                │               │            │            │           │
-    plan.md         baseline        review.md     commit      report.md   doc sync
-                  + kill switch                    +push
+ ┌───────────┐   ┌─────────────┐   ┌────────┐   ┌────────┐   ┌──────┐   ┌────────┐
+ │ tech-plan │──▶│ tech-implem │──▶│ review │──▶│ report │──▶│ sync │──▶│ commit │
+ └─────┬─────┘   └──────┬──────┘   └────┬───┘   └────┬───┘   └───┬──┘   └────┬───┘
+       │                │               │            │           │           │
+    plan.md         baseline        review.md    report.md    doc sync    commit
+                  + kill switch                              +changelog    +push
                 + étapes mesurées
 
                        UTILITAIRES (hors pipeline, à la demande)
@@ -101,33 +101,28 @@ Les numéros s'incrémentent globalement (042-f → 043-r → 044-t → 045-f…
 
 **Un format commun à tous les documents** : `brief.md`, `pitch.md`, `plan.md`, `review.md`, `report.md` et `estimate.md` partagent un contrat de format unique (`references/document-format.md`). Chaque document sert **un seul but**, dans **un seul registre** — annoncé dans son en-tête : le brief et le pitch sont **fonctionnels** (aucun nom de classe, de service ou de framework), les plans et la review sont **techniques**, le report est **factuel**, l'estimation est **économique**. Les documents de décision (review, report, estimation) ouvrent sur leur `## Synthèse` : on doit pouvoir ne lire qu'elle. Les trois plans partagent le même squelette de sections, quel que soit le track — leurs spécificités (caractérisation d'un refacto, kill switch d'un tech) sont des sections additionnelles. La timeline, elle, ne vit dans aucun `.md` : elle est dans le `metadata.json` de la story.
 
-## Phase 0 — Vision projet
+## Les deux axes : phases et tracks
 
-Avant le premier track, en tout début de projet (ou lors d'un pivot stratégique), poser la **vision** une fois pour toutes : pourquoi ce produit existe, pour qui, quelle valeur il crée, comment on mesure le succès, et ce qu'on refuse explicitement de faire.
+Le pipeline se lit sur deux axes qu'il ne faut pas confondre :
 
-| #  | Skill      | Rôle                                                              | Produit          |
-|----|------------|-------------------------------------------------------------------|------------------|
-| 0  | `/vision` | Atelier challengeur sur problème, audience, valeur, North Star, principes, anti-objectifs | `docs/vision.md` |
+- **La phase dit *quand*.** Quatre phases, dans l'ordre : **0** poser le décor (une fois par projet), puis **1** cadrer, **2** implémenter, **3** clôturer — traversées par chaque story.
+- **Le track dit *avec quelles skills*.** À phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes skills. Le track se choisit à l'entrée de la phase 1 et ne change pas les phases traversées : la phase 3 est identique pour les trois.
 
-`docs/vision.md` est lu par `/product-backlog` (en phase 0.5) puis par `/feature-pitch` à chaque nouvelle feature pour challenger l'alignement (problème adressé, audience, principes, impact North Star). Pas de lancement à chaque feature : la vision est un document fondateur, révisé seulement lors d'un pivot.
+## Phase 0 — Poser le décor
 
-## Phase 0.5 — Périmètre fonctionnel et backlog
+Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le décor **une fois pour toutes** : pourquoi ce produit existe, ce qu'on va construire, et sur quoi on marche. Les trois documents sont **vivants** (4 modes : Création / Enrichir / Éditer / Pivot, avec changelog) et vivent à la racine de `docs/`, pas dans une story.
 
-Une fois la vision validée, traduire la vision en **carte des capacités fonctionnelles** + **backlog priorisé de features candidates**. Ce livrable est le pont entre la stratégie (vision) et le cadrage feature par feature (`/feature-pitch`).
+| Skill              | Rôle                                                                                                | Produit                   |
+|--------------------|-----------------------------------------------------------------------------------------------------|---------------------------|
+| `/vision`          | Atelier challengeur sur problème, audience, valeur, North Star, principes, anti-objectifs            | `docs/vision.md`          |
+| `/product-backlog` | Atelier fonctionnel : domaines → capacités → parcours → règles transverses → backlog MVP/V2/V3       | `docs/product-backlog.md` |
+| `/stack`           | Scanne tous les manifestes (langages, backend, frontend, données, ops, CI), interroge pour combler les trous, prouve chaque techno par un fichier source | `docs/stack.md` |
 
-| #   | Skill              | Rôle                                                                                                | Produit                      |
-|-----|--------------------|-----------------------------------------------------------------------------------------------------|------------------------------|
-| 0.5 | `/product-backlog` | Atelier fonctionnel : domaines → capacités → parcours → règles transverses → backlog MVP/V2/V3       | `docs/product-backlog.md`    |
+**Vision** — pourquoi ce produit existe, pour qui, quelle valeur il crée, comment on mesure le succès, et ce qu'on refuse explicitement de faire. Lue par `/product-backlog` puis par `/feature-pitch` à chaque nouvelle feature pour challenger l'alignement (problème adressé, audience, principes, impact North Star). Pas de lancement à chaque feature : c'est un document fondateur, révisé seulement lors d'un pivot.
 
-`docs/product-backlog.md` est document **vivant** : on le révise quand le périmètre fonctionnel évolue (nouvelle capacité identifiée, repriorisation, pivot). `/feature-pitch` le lit pour reprendre le pitch initial d'une ligne de backlog, ses capacités couvertes et ses dépendances. Ce skill est facultatif (on peut aller direct vision → feature-pitch), mais recommandé dès qu'on a plus de 3-4 features pressenties.
+**Product-backlog** — le pont entre la stratégie (vision) et le cadrage feature par feature : carte des capacités fonctionnelles + backlog priorisé de features candidates. On le révise quand le périmètre évolue (nouvelle capacité, repriorisation, pivot). `/feature-pitch` le lit pour reprendre le pitch initial d'une ligne de backlog, ses capacités couvertes et ses dépendances. **Facultatif** (on peut aller direct vision → feature-pitch), mais recommandé dès qu'on a plus de 3-4 features pressenties.
 
-## Phase 0 technique — Cartographie de la stack
-
-En parallèle des phases vision/backlog, cartographier **une fois** la stack technique du projet : sur quoi on marche avant de cadrer la moindre évolution. Indispensable sur un legacy non documenté, utile sur un projet neuf dès que la stack se stabilise.
-
-| #  | Skill    | Rôle                                                                          | Produit         |
-|----|----------|-------------------------------------------------------------------------------|-----------------|
-| 0t | `/stack` | Scanne tous les manifestes (langages, backend, frontend, données, ops, CI), interroge pour combler les trous, prouve chaque techno par un fichier source | `docs/stack.md` |
+**Stack** — sur quoi on marche, avant de cadrer la moindre évolution. Indispensable sur un legacy non documenté, utile sur un projet neuf dès que la stack se stabilise. Lu **en priorité par les skills techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il **constate** l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
 
 `docs/stack.md` est un document **vivant** (mêmes 4 modes que vision/backlog : Création / Enrichir / Éditer / Pivot, avec changelog). Il est lu **en priorité par les tracks techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il constate l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
 
@@ -146,16 +141,16 @@ En parallèle des phases vision/backlog, cartographier **une fois** la stack tec
 
 Pour tout changement qui introduit une nouvelle fonctionnalité ou modifie un comportement observable par l'utilisateur.
 
-| #  | Skill                | Rôle                                                                             | Produit                            |
-|----|----------------------|----------------------------------------------------------------------------------|------------------------------------|
-| 0* | `/feature-interview` | *(optionnel)* Découvrir un besoin flou par interview avant de pouvoir le pitcher | `docs/story/NNN-f-slug/brief.md`   |
-| 1  | `/feature-pitch`     | Cadrer et challenger une fonctionnalité (lit le `brief.md` amont s'il existe)    | `docs/story/NNN-f-slug/pitch.md`   |
-| 2  | `/feature-plan`      | Concevoir la solution technique à partir du pitch                                | `docs/story/NNN-f-slug/plan.md`    |
-| 3  | `/feature-implem`    | Implémenter sous-tâche par sous-tâche avec QA continue                           | Code + migrations + tests          |
-| 4  | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | `docs/story/NNN-f-slug/review.md`  |
-| 5  | `/commit`            | Commit Conventional Commits en français + push                                   | Commit                             |
-| 6  | `/report`            | Documenter ce qui a été fait vs ce qui était prévu                               | `docs/story/NNN-f-slug/report.md`  |
-| 7  | `/sync`              | Réaligner pitch et plan avec la réalité du code                                  | Mise à jour `pitch.md` + `plan.md` |
+| Phase | Skill                | Rôle                                                                             | Produit                            |
+|-------|----------------------|----------------------------------------------------------------------------------|------------------------------------|
+| 1     | `/feature-interview` | *(optionnel)* Découvrir un besoin flou par interview avant de pouvoir le pitcher | `docs/story/NNN-f-slug/brief.md`   |
+| 1     | `/feature-pitch`     | Cadrer et challenger une fonctionnalité (lit le `brief.md` amont s'il existe)    | `docs/story/NNN-f-slug/pitch.md`   |
+| 1     | `/feature-plan`      | Concevoir la solution technique à partir du pitch                                | `docs/story/NNN-f-slug/plan.md`    |
+| 2     | `/feature-implem`    | Implémenter sous-tâche par sous-tâche avec QA continue                           | Code + migrations + tests          |
+| 3     | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | `docs/story/NNN-f-slug/review.md`  |
+| 3     | `/report`            | Documenter ce qui a été fait vs ce qui était prévu                               | `docs/story/NNN-f-slug/report.md`  |
+| 3     | `/sync`              | Réaligner pitch et plan avec la réalité du code                                  | Mise à jour `pitch.md` + `plan.md` |
+| 3     | `/commit`            | En dernier : embarque code + report + docs réalignées, Conventional Commits + push | Commit                           |
 
 ## Track refacto — Comportement figé, code restructuré
 
@@ -163,14 +158,14 @@ Pour restructurer du code sans toucher au comportement externe (dette, couplage,
 
 **Principe** : comportement externe strictement préservé, verrou tests de caractérisation AVANT de toucher, exécution incrémentale réversible.
 
-| #  | Skill             | Rôle                                                              | Produit                           |
-|----|-------------------|-------------------------------------------------------------------|-----------------------------------|
-| 1  | `/refactor-plan`  | Cadrer un refacto (motivation, cible, caractérisation, étapes)   | `docs/story/NNN-r-slug/plan.md`   |
-| 2  | `/refactor-implem`| Exécuter : verrou tests puis étapes incrémentales, non-régression | Code restructuré + tests          |
-| 3  | `/review`         | Code review focus non-régression                                  | `docs/story/NNN-r-slug/review.md` |
-| 4  | `/commit`         | Commit + push (souvent un commit par étape)                       | Commits                           |
-| 5  | `/report`         | Documenter l'exécution vs le plan                                 | `docs/story/NNN-r-slug/report.md` |
-| 6  | `/sync`           | Réaligner le plan si la stratégie a dévié                         | Mise à jour `plan.md`             |
+| Phase | Skill             | Rôle                                                              | Produit                           |
+|-------|-------------------|-------------------------------------------------------------------|-----------------------------------|
+| 1     | `/refactor-plan`  | Cadrer un refacto (motivation, cible, caractérisation, étapes)   | `docs/story/NNN-r-slug/plan.md`   |
+| 2     | `/refactor-implem`| Exécuter : verrou tests puis étapes incrémentales, non-régression | Code restructuré + tests          |
+| 3     | `/review`         | Code review focus non-régression                                  | `docs/story/NNN-r-slug/review.md` |
+| 3     | `/report`         | Documenter l'exécution vs le plan                                 | `docs/story/NNN-r-slug/report.md` |
+| 3     | `/sync`           | Réaligner le plan si la stratégie a dévié                         | Mise à jour `plan.md`             |
+| 3     | `/commit`         | En dernier : embarque tout, souvent un commit par étape           | Commits                           |
 
 ## Track tech — Perf, résilience, observabilité, sécu (non user-facing)
 
@@ -178,14 +173,14 @@ Pour ajouter ou modifier une brique technique observable (latence, taux d'erreur
 
 **Principe** : métrique cible chiffrée obligatoire, baseline mesurée AVANT toute modif, kill switch activable, étapes incrémentales avec mesure après chaque.
 
-| #  | Skill          | Rôle                                                               | Produit                           |
-|----|----------------|--------------------------------------------------------------------|-----------------------------------|
-| 1  | `/tech-plan`   | Cadrer l'évolution (problème, brique, métriques cibles, rollback) | `docs/story/NNN-t-slug/plan.md`   |
-| 2  | `/tech-implem` | Exécuter : baseline, kill switch, étapes mesurées, validation      | Code + config + observabilité     |
-| 3  | `/review`      | Code review (kill switch, compatibilité, non-régression)          | `docs/story/NNN-t-slug/review.md` |
-| 4  | `/commit`      | Commit + push                                                      | Commits                           |
-| 5  | `/report`      | Documenter les critères atteints / non atteints vs le plan         | `docs/story/NNN-t-slug/report.md` |
-| 6  | `/sync`        | Réaligner le plan si la stratégie a dévié                          | Mise à jour `plan.md`             |
+| Phase | Skill          | Rôle                                                               | Produit                           |
+|-------|----------------|--------------------------------------------------------------------|-----------------------------------|
+| 1     | `/tech-plan`   | Cadrer l'évolution (problème, brique, métriques cibles, rollback) | `docs/story/NNN-t-slug/plan.md`   |
+| 2     | `/tech-implem` | Exécuter : baseline, kill switch, étapes mesurées, validation      | Code + config + observabilité     |
+| 3     | `/review`      | Code review (kill switch, compatibilité, non-régression)          | `docs/story/NNN-t-slug/review.md` |
+| 3     | `/report`      | Documenter les critères atteints / non atteints vs le plan         | `docs/story/NNN-t-slug/report.md` |
+| 3     | `/sync`        | Réaligner le plan si la stratégie a dévié                          | Mise à jour `plan.md`             |
+| 3     | `/commit`      | En dernier : embarque code + report + docs réalignées, + push      | Commits                           |
 
 ## Track fast — Bugfixes et petits changements
 
@@ -203,12 +198,9 @@ coder → QA du stack → tests ciblés → /review (optionnel) → /commit
 
 En cas de doute → partir sur le track approprié (feature, refacto ou tech). Il est toujours possible de basculer du structurant vers le fast si l'analyse révèle que c'est trivial.
 
-## Clôture de track — `/commit`, `/report`, `/sync`
+## Phase 3 — Clôturer (`/review`, `/report`, `/sync`, `/commit`)
 
-Les trois tracks (feature, refacto, tech) partagent les mêmes étapes de clôture après l'implémentation et la review. Ce sont des skills communs : seuls le contenu et le ton des artifacts changent selon le track.
-
-### `/commit` — Construire et pousser les commits
-Lit le diff git, regroupe les changements en lots cohérents, propose des messages au format **Conventional Commits en français** (`feat(scope): …`, `fix(scope): …`, `refactor(scope): …`, etc.), demande validation, commit et push. Sur un track refacto, on a souvent **un commit par étape** pour préserver la réversibilité.
+Les trois tracks (feature, refacto, tech) partagent les mêmes étapes de clôture après l'implémentation, **dans cet ordre**. Ce sont des skills communs : seuls le contenu et le ton des artifacts changent selon le track. Le `/commit` vient **en dernier** : review, report et sync travaillent tous sur le diff du working tree (non committé), puis le commit embarque d'un coup le code, le `report.md` et les documents réalignés.
 
 ### `/report` — Documenter la livraison réelle
 Crée `report.md` dans le dossier de track (`docs/story/NNN-<f|r|t>-slug/`). Documente **ce qui a été fait vs ce qui était prévu** : écart entre intention (`pitch.md`/`plan.md`) et exécution réelle — ajouts non prévus, choix qui ont dévié, dette laissée, métriques effectivement obtenues (en track tech : valeur cible vs mesurée, kill switch armé ou non). C'est la **mémoire factuelle** de la livraison, utile pour les rétros, l'onboarding futur et la traçabilité produit.
@@ -219,7 +211,10 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 **Différence `/report` vs `/sync`** : `/report` raconte l'histoire de la livraison **une fois pour toutes** (document figé, lecture chronologique). `/sync` met à jour le document d'intention **en place**, comme une révision documentaire. Les deux sont complémentaires : on garde la trace dans `report.md` et on rend les docs d'intention à nouveau fiables pour les futurs lecteurs.
 
 ### `/report-and-sync` — Les deux en une passe
-Enchaîne `/report` puis `/sync` sur une même story, dans la foulée. Court-circuite le `/sync` si le report conclut à une conformité totale. Pratique juste après une livraison pour clôturer la doc en une seule commande.
+Enchaîne `/report` puis `/sync` sur une même story, dans la foulée, **avant le commit**. Court-circuite le `/sync` si le report conclut à une conformité totale. Pratique juste après une livraison pour préparer la doc en une seule commande.
+
+### `/commit` — Construire et pousser les commits
+**Dernière étape** : une fois report et sync passés, lit le diff git, regroupe les changements en lots cohérents, propose des messages au format **Conventional Commits en français** (`feat(scope): …`, `fix(scope): …`, `refactor(scope): …`, etc.), demande validation, commit et push. Le commit embarque ainsi le code, le `report.md` et les docs réalignées en une fois. Sur un track refacto, on a souvent **un commit par étape** pour préserver la réversibilité.
 
 > **Ne pas confondre `/sync` avec `/doc-feature`** : `/sync` recale un document d'intention récent que tu viens de modifier dans un track structuré. `/doc-feature` (voir Utilitaires) cartographie une feature **ancienne ou jamais passée par le pipeline**, en partant du code livré, sans dossier de track préalable.
 

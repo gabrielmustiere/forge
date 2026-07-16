@@ -1,6 +1,6 @@
 # Forge
 
-> Forge est un plugin Claude Code stack-agnostique qui pilote tout le cycle de développement, de la vision au commit. Il découpe le travail en étapes courtes validées une à une : chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`…) qui alimente la suivante. Aucune étape ne démarre sans validation explicite de l'utilisateur.
+> Forge est un plugin Claude Code stack-agnostique qui pilote tout le cycle de développement, de l'idée à la release. Il découpe le travail en étapes courtes validées une à une : chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`…) qui alimente la suivante. Aucune étape ne démarre sans validation explicite de l'utilisateur.
 
 Version : 6.2.1 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
 
@@ -16,14 +16,14 @@ Les skills sont namespacées par le nom du plugin : `/forge:help`, `/forge:featu
 
 ## Structure du pipeline
 
-Le pipeline compte 25 skills réparties en une phase amont, trois tracks symétriques et une clôture commune.
+Le pipeline compte 25 skills et se lit sur deux axes. La **phase** dit *quand* : quatre phases, dans l'ordre. Le **track** dit *avec quelles skills* : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Le track se choisit à l'entrée de la phase 1 et ne modifie pas les phases traversées.
 
-- **Phase 0 — poser le décor** (une fois, documents vivants à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`.
-- **Track feature** (valeur utilisateur) : `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) → `feature-implem`.
-- **Track refacto** (comportement figé, code restructuré) : `refactor-plan` (→ `plan.md`, avec tests de caractérisation) → `refactor-implem`.
-- **Track tech** (perf, résilience, observabilité, sécu) : `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch) → `tech-implem`.
-- **Clôture commune aux trois tracks** : `review` (→ `review.md`) → `commit` → `report` (→ `report.md`) → `sync`. `report-and-sync` enchaîne les deux dernières en une passe.
-- **Track fast** : moins de 3 fichiers, pas de migration ni d'impact transverse → on code, on passe la QA du stack, puis `/forge:commit`. Pas de pitch pour un typo.
+- **Phase 0 — poser le décor** (une fois pour le projet, documents vivants à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`.
+- **Phase 1 — cadrer** : selon le track, `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) ; ou `refactor-plan` (→ `plan.md`, avec tests de caractérisation) ; ou `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch). Les trois tracks produisent un `plan.md` ; seul le track feature intercale un `pitch.md` fonctionnel en amont.
+- **Phase 2 — implémenter** : `feature-implem`, `refactor-implem` ou `tech-implem`. Étapes courtes, QA du projet après chacune.
+- **Phase 3 — clôturer**, commune aux trois tracks : `review` (→ `review.md`) → `report` (→ `report.md`) → `sync` → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. `report-and-sync` enchaîne report puis sync en une passe, avant le commit.
+
+Les trois tracks : **feature** (valeur utilisateur observable), **refacto** (comportement externe strictement figé, verrou de tests de caractérisation avant toute modification), **tech** (perf, résilience, observabilité, sécu — métrique cible chiffrée, baseline, kill switch). Hors de ce découpage, le **track fast** couvre les bugfixes : moins de 3 fichiers, pas de migration ni d'impact transverse → on code, on passe la QA du stack, puis `/forge:commit`. Pas de pitch pour un typo.
 
 Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slug>` (compteur global d'abord, puis le tag de track), pour que le tri lexicographique donne la timeline du projet. Exemple : `docs/story/042-f-checkout-express/`.
 
