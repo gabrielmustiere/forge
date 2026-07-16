@@ -10,6 +10,19 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.3.0] - 2026-07-16 — Pipeline en quatre phases
+
+### ✨ Fonctionnel
+
+- **Nomenclature en quatre phases** — le pipeline s'articule explicitement en phases 0 (poser le décor), 1 (cadrer), 2 (implémenter) et 3 (clôturer) ; les trois tracks (feature, refacto, tech) deviennent un second axe qui décide des skills appelées en phases 1 et 2.
+- **Clôture réordonnée, commit en dernier** — la phase de clôture suit review → report → sync → commit. Le commit embarque d'un coup le code, le `report.md` et les documents réalignés, au lieu de committer avant de documenter.
+- **Vitrine enrichie** — le hero du site gagne une identité terminal (une ligne de commande qui se tape toute seule, un curseur clignotant, une entrée en cascade) et un footer harmonisé sur toute la largeur, à l'image du header.
+
+### 🔧 Technique
+
+- **Skills de clôture alignées sur le working tree** — `report`, `sync`, `review` et `commit` lisent les fichiers en cours de livraison (staged + unstaged + untracked) plutôt que l'historique git, cohérent avec le commit qui passe en dernier.
+- **Ordres de skills unifiés** — la clôture et les utilitaires sont dans le même ordre entre l'inventaire du plugin, la page de documentation et `llms.txt`.
+
 ## [6.2.1] - 2026-07-15 — Site public & documentation en ligne
 
 ### ✨ Fonctionnel
@@ -228,7 +241,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.2.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.3.0...HEAD
+[6.3.0]: https://github.com/gabrielmustiere/forge/compare/v6.2.1...v6.3.0
 [6.2.1]: https://github.com/gabrielmustiere/forge/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/gabrielmustiere/forge/compare/v6.1.0...v6.2.0
 [6.1.0]: https://github.com/gabrielmustiere/forge/compare/v6.0.0...v6.1.0
