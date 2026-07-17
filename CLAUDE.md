@@ -37,7 +37,6 @@ plugins/forge/
   SKILLS.md                            ← inventaire lisible skill / rôle
   skills/<skill-name>/SKILL.md         ← une skill, nom du dossier = nom de la skill
   references/stacks/                    ← règles framework (Symfony, Sylius) chargées par détection
-  agents/                              ← subagents (autopilot, report-and-sync)
 ```
 
 Règle structurelle critique : `skills/`, `commands/`, `agents/`, `hooks/` vont **à la racine du plugin**, jamais dans `.claude-plugin/`. Seul `plugin.json` habite `.claude-plugin/`.

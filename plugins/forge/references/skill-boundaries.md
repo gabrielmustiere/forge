@@ -182,7 +182,7 @@ une question d'outil.
 |---|---|---|---|
 | **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `claude-md`, `doc-feature`, `help` | non | ses documents (§2) |
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
-| **Clôture** | `review`, `report`, `sync`, `report-and-sync`, `backfill-metadata` | non | ses documents (§2) |
+| **Clôture** | `review`, `report`, `sync`, `backfill-metadata` | non | ses documents (§2) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
 | **Vérification** | `test-scenario` | non | **rien** — elle observe, elle ne corrige pas |
 
@@ -197,9 +197,6 @@ contraignant :
 - **Un skill dont l'outillage est fini et connu peut le déclarer** — `commit` sait qu'il fera du
   git, `vision` qu'il ne fera que lire et écrire du Markdown. C'est un confort légitime : moins
   de prompts, et une déclaration d'intention lisible. Ça reste une intention, pas une barrière.
-  Un orchestrateur (`report-and-sync`) déclare l'**union** de ce qu'il enchaîne, jamais plus :
-  non pour se brider, mais pour que sa déclaration reste le reflet fidèle des deux skills dont
-  il tient lieu.
 - **`Bash(git:*)` est à éviter chez qui ne livre pas.** Non parce que le joker « donnerait »
   `commit` et `push` — il sont disponibles de toute façon — mais parce qu'il les pré-autorise,
   et supprime ainsi la demande de confirmation qui est, en pratique, le dernier signal avant
@@ -214,10 +211,10 @@ pas de frontière. Ne pas y consacrer d'énergie : elle se dépense mieux sur le
 **Tous les skills du plugin portent `disable-model-invocation: true`.** Sans exception.
 
 La raison n'est pas la prudence, c'est le voisinage : le pipeline aligne des skills dont les
-descriptions se ressemblent nécessairement (`report` « compte rendu d'écarts », `sync`
-« réalignement de la doc », `report-and-sync` « compte rendu **puis** réalignement »). Aucune
-formulation ne rendra ce triage fiable — trois skills qui décrivent trois découpages du même
-moment du cycle sont *intrinsèquement* ambigus pour un classifieur. Le seul aiguillage sûr est
+descriptions se ressemblent nécessairement (`report` « compte rendu d'écarts » et `sync`
+« réalignement de la doc » découpent le même moment du cycle). Aucune
+formulation ne rendra ce triage fiable — des skills aussi voisines sont *intrinsèquement*
+ambiguës pour un classifieur. Le seul aiguillage sûr est
 celui de l'utilisateur qui tape le nom.
 
 C'est aussi ce qui autorise les descriptions à être **riches et honnêtes** plutôt que

@@ -12,9 +12,7 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ### 🔧 Technique
 
-- **`/forge:report-and-sync` ne plante plus au démarrage** — l'orchestrateur tentait d'appeler `/forge:report` puis `/forge:sync` via l'outil `Skill`, qui les refuse : les deux sont `disable-model-invocation: true`, donc réservées à l'invocation humaine. La clôture échouait dès la phase REPORT. Il charge désormais leur procédure avec `Read` et la déroule dans la session courante — même mécanisme que les références du plugin, et la source de vérité reste unique.
-- **Chemins de skill corrigés dans `report-and-sync`** — les renvois passent par `${CLAUDE_SKILL_DIR}` au lieu de chemins relatifs au repo, qui n'existent pas chez l'utilisateur (le plugin est installé hors du projet).
-- **`Bash(git status:*)` rétabli dans `report-and-sync`** — il manquait à ses `allowed-tools`, qui doivent être l'union exacte de celles de `report` et `sync` ; les deux phases lisent le working tree via `git status` depuis la 6.3.0.
+- **`/forge:report-and-sync` retiré** — l'orchestrateur enchaînait `/forge:report` puis `/forge:sync`, mais aucun skill du pipeline ne peut en invoquer un autre : tous portent `disable-model-invocation: true` (contrat de frontières §5), que l'outil `Skill` refuse. Le contournement — lire puis dérouler leur procédure à la main — restait fragile : le modèle tentait quand même `Skill(forge:report)` en première action. Plutôt que d'entretenir cette indirection, la skill est supprimée ; la clôture s'enchaîne désormais à la main, `/forge:report` puis `/forge:sync`. Le pipeline et son contrat « invocation toujours explicite » restent intacts.
 
 ## [6.3.0] - 2026-07-16 — Pipeline en quatre phases
 

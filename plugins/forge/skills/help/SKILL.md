@@ -210,9 +210,6 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 
 **Différence `/report` vs `/sync`** : `/report` raconte l'histoire de la livraison **une fois pour toutes** (document figé, lecture chronologique). `/sync` met à jour le document d'intention **en place**, comme une révision documentaire. Les deux sont complémentaires : on garde la trace dans `report.md` et on rend les docs d'intention à nouveau fiables pour les futurs lecteurs.
 
-### `/report-and-sync` — Les deux en une passe
-Enchaîne `/report` puis `/sync` sur une même story, dans la foulée, **avant le commit**. Court-circuite le `/sync` si le report conclut à une conformité totale. Pratique juste après une livraison pour préparer la doc en une seule commande.
-
 ### `/commit` — Construire et pousser les commits
 **Dernière étape** : une fois report et sync passés, lit le diff git, regroupe les changements en lots cohérents, propose des messages au format **Conventional Commits en français** (`feat(scope): …`, `fix(scope): …`, `refactor(scope): …`, etc.), demande validation, commit et push. Le commit embarque ainsi le code, le `report.md` et les docs réalignées en une fois. Sur un track refacto, on a souvent **un commit par étape** pour préserver la réversibilité.
 

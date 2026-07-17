@@ -21,7 +21,7 @@ Le pipeline compte 25 skills et se lit sur deux axes. La **phase** dit *quand* :
 - **Phase 0 — poser le décor** (une fois pour le projet, documents vivants à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`.
 - **Phase 1 — cadrer** : selon le track, `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) ; ou `refactor-plan` (→ `plan.md`, avec tests de caractérisation) ; ou `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch). Les trois tracks produisent un `plan.md` ; seul le track feature intercale un `pitch.md` fonctionnel en amont.
 - **Phase 2 — implémenter** : `feature-implem`, `refactor-implem` ou `tech-implem`. Étapes courtes, QA du projet après chacune.
-- **Phase 3 — clôturer**, commune aux trois tracks : `review` (→ `review.md`) → `report` (→ `report.md`) → `sync` → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. `report-and-sync` enchaîne report puis sync en une passe, avant le commit.
+- **Phase 3 — clôturer**, commune aux trois tracks : `review` (→ `review.md`) → `report` (→ `report.md`) → `sync` → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées.
 
 Les trois tracks : **feature** (valeur utilisateur observable), **refacto** (comportement externe strictement figé, verrou de tests de caractérisation avant toute modification), **tech** (perf, résilience, observabilité, sécu — métrique cible chiffrée, baseline, kill switch). Hors de ce découpage, le **track fast** couvre les bugfixes : moins de 3 fichiers, pas de migration ni d'impact transverse → on code, on passe la QA du stack, puis `/forge:commit`. Pas de pitch pour un typo.
 
@@ -44,7 +44,6 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 - `/forge:commit` — message Conventional Commits en français, commit et push.
 - `/forge:report` — compte rendu honnête : fait vs prévu, écarts, dettes.
 - `/forge:sync` — réaligne les docs d'intention et les docs projet sur le code livré.
-- `/forge:report-and-sync` — enchaîne report puis sync en une passe.
 - `/forge:help` — sommaire du pipeline, tracks, skills et artefacts.
 - `/forge:claude-md` — génère ou met à jour le `CLAUDE.md` du projet.
 - `/forge:rules` — écrit les règles projet paths-scopées dans `.claude/rules/`.
