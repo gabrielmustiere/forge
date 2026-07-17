@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.4.0] - 2026-07-17 — Retrait de report-and-sync
+
 ### 🔧 Technique
 
 - **`/forge:report-and-sync` retiré** — l'orchestrateur enchaînait `/forge:report` puis `/forge:sync`, mais aucun skill du pipeline ne peut en invoquer un autre : tous portent `disable-model-invocation: true` (contrat de frontières §5), que l'outil `Skill` refuse. Le contournement — lire puis dérouler leur procédure à la main — restait fragile : le modèle tentait quand même `Skill(forge:report)` en première action. Plutôt que d'entretenir cette indirection, la skill est supprimée ; la clôture s'enchaîne désormais à la main, `/forge:report` puis `/forge:sync`. Le pipeline et son contrat « invocation toujours explicite » restent intacts.
@@ -245,7 +247,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.4.0...HEAD
+[6.4.0]: https://github.com/gabrielmustiere/forge/compare/v6.3.0...v6.4.0
 [6.3.0]: https://github.com/gabrielmustiere/forge/compare/v6.2.1...v6.3.0
 [6.2.1]: https://github.com/gabrielmustiere/forge/compare/v6.2.0...v6.2.1
 [6.2.0]: https://github.com/gabrielmustiere/forge/compare/v6.1.0...v6.2.0
