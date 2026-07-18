@@ -10,6 +10,15 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### 🔧 Technique
+
+- **`commit` — `allowed-tools` complétés** : ajout de `Write` et `Edit`, absents alors que la
+  Phase 6 du skill écrit `delivery.commit`, `updated` et le changelog dans le `metadata.json` de
+  la story (et le crée au besoin). `commit` déclenchait donc une demande d'autorisation à chaque
+  livraison, là où `report` et `sync` — qui écrivent le même fichier — les déclaraient déjà.
+  Écrire le champ `delivery` de `metadata.json` est la part légitime de `commit` dans l'exception
+  multi-écrivain du contrat de frontières (§3).
+
 ## [6.5.0] - 2026-07-18 — Amorçage greenfield dans `stack`
 
 ### ✨ Fonctionnel

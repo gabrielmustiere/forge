@@ -6,6 +6,8 @@ disable-model-invocation: true
 argument-hint: "[--no-push] [--amend]"
 allowed-tools:
   - Read
+  - Write
+  - Edit
   - Bash(git status:*)
   - Bash(git diff:*)
   - Bash(git log:*)
