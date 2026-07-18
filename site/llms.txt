@@ -2,7 +2,7 @@
 
 > Forge est un plugin Claude Code stack-agnostique qui pilote tout le cycle de développement, de l'idée à la release. Il découpe le travail en étapes courtes validées une à une : chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`…) qui alimente la suivante. Aucune étape ne démarre sans validation explicite de l'utilisateur.
 
-Version : 6.5.0 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
+Version : 6.5.1 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
 
 Installation dans une session Claude Code :
 
