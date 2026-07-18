@@ -10,6 +10,23 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.5.0] - 2026-07-18 — Amorçage greenfield dans `stack`
+
+### ✨ Fonctionnel
+
+- **`stack` — cas greenfield** : en mode Création, quand aucune brique technique n'est détectée
+  et qu'aucun choix n'a encore été fait, le skill ne grave plus un `docs/stack.md` vide. Il propose
+  par défaut d'**amorcer le projet depuis `gabrielmustiere/symfony-template`**, puis **personnalise
+  les variables d'identité** au nom du projet (`.symfony.local.yaml`, `.env`, `.env.dev` avec
+  régénération de `APP_SECRET`, `compose.yaml`, `README.md`, `CLAUDE.md`). La stack existe alors
+  réellement sur disque et est cartographiée par la détection normale.
+
+### 🔧 Technique
+
+- Nouvelle référence `skills/stack/references/bootstrap-template.md` (carte des variables du template
+  et procédure de récupération sûre préservant les artefacts forge).
+- `stack` : nouvelle Phase 2bis, `allowed-tools` étendus (`git clone`, `cp`, `rm`, `mv`, `php`).
+
 ## [6.4.0] - 2026-07-17 — Retrait de report-and-sync
 
 ### 🔧 Technique

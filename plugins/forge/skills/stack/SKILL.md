@@ -1,6 +1,6 @@
 ---
 name: stack
-description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
+description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Cas greenfield : si rien n'est encore choisi, propose d'amorcer depuis le template Symfony par défaut et le personnalise. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[couche ciblée ou intention libre]"
@@ -13,6 +13,11 @@ allowed-tools:
   - Bash(ls:*)
   - Bash(find:*)
   - Bash(mkdir:*)
+  - Bash(git clone:*)
+  - Bash(cp:*)
+  - Bash(rm:*)
+  - Bash(mv:*)
+  - Bash(php:*)
 ---
 
 # /stack — Inventaire de la stack technique du projet
@@ -96,6 +101,41 @@ Présente ce que tu as **prouvé**, couche par couche, avec la source entre pare
 - Stratégie de secrets / déploiement : ?
 ```
 
+### Phase 2bis — Cas greenfield : amorçage depuis le template (mode Création uniquement)
+
+Déclencheur : **mode Création** *et* la Phase 1 n'a prouvé **aucune brique technique** — pas de
+manifeste de dépendances (ni `composer.json`, ni `package.json`, ni `go.mod`, ni `pyproject.toml`…),
+pas de `docker-compose`/`compose.yaml`, pas de CI. Le dépôt est vide ou purement documentaire
+(il ne contient guère que les artefacts forge : `docs/vision.md`, `docs/product-backlog.md`).
+Autrement dit : **aucun choix technique n'a encore été fait**.
+
+Dans ce cas, ne rédige pas un `docs/stack.md` vide — il n'y a rien à cartographier. Propose
+l'**amorçage**. Via `AskUserQuestion` (récupère l'outil par `ToolSearch` s'il n'est pas chargé) :
+
+- **Amorcer depuis le template Symfony (recommandé)** — `gabrielmustiere/symfony-template` :
+  Symfony 8, SQLite, Tailwind 4, PHPUnit + Playwright, MCP mate, design system Paper. Le skill
+  récupère le template et le personnalise au nom du projet. **Défaut** quand l'utilisateur n'a pas
+  de contrainte de stack particulière.
+- **J'ai déjà mes choix (autre stack)** — l'utilisateur part sur un autre langage/framework.
+  Recueille ses choix (3 questions max) et documente une **intention** dans `docs/stack.md` (statut
+  « cible, non encore amorcée ») ; le scaffolding relève alors de l'écosystème choisi, pas de ce skill.
+- **Juste documenter, ne rien amorcer** — cas rare (on veut un `stack.md` d'intention sans toucher
+  au dépôt).
+
+Ne devine pas — pose la question. Si l'utilisateur choisit le template, **confirme le nom du projet**
+(slug kebab-case, ex. `mon-app`) puis suis intégralement
+`${CLAUDE_SKILL_DIR}/references/bootstrap-template.md` : récupération sûre (sans écraser les
+artefacts forge), puis substitution de **toutes** les variables d'identité (`.symfony.local.yaml`,
+`.env`, `.env.dev` avec régénération de `APP_SECRET`, `compose.yaml`, `README.md`, `CLAUDE.md`).
+
+Conformément à la règle 1, montre le plan d'amorçage (fichiers récupérés + table des variables à
+remplacer) et **attends validation** avant toute écriture ou clonage.
+
+Une fois le template posé et personnalisé, la stack existe enfin sur disque : **rejoue la Phase 1**
+de détection (elle prouvera Symfony 8, SQLite, Tailwind… par les fichiers qu'on vient d'écrire), puis
+enchaîne sur la rédaction (Phase 4, mode Création). Le changelog note l'origine :
+`AAAA-MM-JJ — Création — amorcé depuis gabrielmustiere/symfony-template`.
+
 ### Phase 3 — Combler les trous (boucle interactive)
 
 Pour chaque trou, pose une question ciblée (3 max par tour) via `AskUserQuestion`. Concentre-toi sur ce que les fichiers ne disent presque jamais :
@@ -132,6 +172,8 @@ Adapte le message au mode :
   > Stack cartographiée : `docs/stack.md`
   > Ce document est lu par `/feature-plan`, `/refactor-plan`, `/tech-plan`, `/tech-implem`, `/refactor-implem`, `/feature-implem` et `/review` : ils s'appuient dessus pour proposer des solutions cohérentes avec ton stack réel plutôt que de re-détecter à chaque fois.
   > *(Mode Pivot)* L'ancienne cartographie est archivée sous `docs/stack.md.archive-AAAA-MM-JJ`.
+  > *(Cas amorçage)* Le projet a été amorcé depuis `gabrielmustiere/symfony-template`. Pour démarrer :
+  > `make init` (deps + DB + fixtures), `docker compose up -d` (Mailpit), puis `make serve` (→ `https://<projet>.wip`). `APP_SECRET` a été régénéré ; ne réutilise jamais celui du template.
 
 - **Enrichir** / **Éditer** :
   > Stack mise à jour : `docs/stack.md` (mode <Enrichir|Éditer>, couche(s) : <liste>). Changelog enrichi.
