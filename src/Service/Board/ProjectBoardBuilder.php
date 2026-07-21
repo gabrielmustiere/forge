@@ -28,8 +28,8 @@ use App\Service\TokenCipher;
  */
 final readonly class ProjectBoardBuilder
 {
-    /** Documents mis en tête du drawer, du plus avancé au moins avancé (règle 6). */
-    private const array DOC_PRECEDENCE = ['report.md', 'review.md', 'plan.md', 'pitch.md'];
+    /** Documents mis en tête du drawer, dans l'ordre chronologique du workflow forge (amont → aval, règle 6). */
+    private const array DOC_PRECEDENCE = ['brief.md', 'pitch.md', 'plan.md', 'estimate.md', 'review.md', 'report.md'];
 
     /**
      * Charset autorisé pour un document servable par le drawer. **Doit rester aligné** sur
@@ -129,8 +129,9 @@ final readonly class ProjectBoardBuilder
     }
 
     /**
-     * Ordonne les documents d'une story pour le drawer : précédence forge d'abord,
-     * puis les transversaux restants par ordre alphabétique. Ne garde que les fichiers
+     * Ordonne les documents d'une story pour le drawer : ordre chronologique du
+     * workflow forge d'abord, puis les transversaux restants par ordre alphabétique.
+     * Ne garde que les fichiers
      * `.md` à la racine du dossier de story dont le nom est servable par la route
      * (cf. {@see DOCUMENT_NAME}) — le motif exclut aussi les sous-chemins (pas de `/`).
      *

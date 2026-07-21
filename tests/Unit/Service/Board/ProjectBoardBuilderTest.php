@@ -88,9 +88,9 @@ final class ProjectBoardBuilderTest extends TestCase
 
         $board = $result->board;
         self::assertNotNull($board);
-        // Précédence forge d'abord, transversaux `.md` ensuite (alpha), non-`.md` exclus.
+        // Ordre du workflow d'abord, transversaux `.md` ensuite (alpha), non-`.md` exclus.
         self::assertSame(
-            ['report.md', 'review.md', 'plan.md', 'pitch.md', 'notes.md'],
+            ['pitch.md', 'plan.md', 'review.md', 'report.md', 'notes.md'],
             $board->cardsFor(PipelineStage::Livre)[0]->documents,
         );
     }

@@ -90,7 +90,7 @@ export default class extends Controller {
             button.addEventListener('click', () => this.select(button, doc));
             this.docListTarget.appendChild(button);
 
-            // Charge d'emblée le document le plus avancé (liste d'abord, contenu ensuite).
+            // Charge d'emblée le premier document du workflow (liste d'abord, contenu ensuite).
             if (index === 0) {
                 this.select(button, doc);
             }

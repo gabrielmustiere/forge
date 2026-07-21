@@ -12,7 +12,8 @@ use App\Enum\Type\PipelineStage;
  * Value object immuable produit par {@see ProjectBoardBuilder}. L'identité vient de
  * {@see StoryId} (numéro, track, slug, titre humanisé) ; la colonne vient du moteur
  * de mapping (`004`) ; {@see documents} liste les documents présents ordonnés pour le
- * drawer (`report` > `review` > `plan` > `pitch`, puis les transversaux). {@see metadata}
+ * drawer (ordre chronologique du workflow : `brief` → `pitch` → `plan` → `estimate` →
+ * `review` → `report`, puis les transversaux). {@see metadata}
  * porte les métadonnées lues dans le `metadata.json` de la story — `null` quand le fichier
  * est absent ou invalide, auquel cas la carte dégrade vers le slug humanisé (règle 9).
  */
