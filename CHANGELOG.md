@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.7.0] - 2026-07-26 — ADR proposés par le pipeline
+
 ### ✨ Fonctionnel
 
 - **Les ADR viennent à toi** — neuf skills proposent désormais de graver un Architecture Decision
@@ -331,7 +333,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.6.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.7.0...HEAD
+[6.7.0]: https://github.com/gabrielmustiere/forge/compare/v6.6.0...v6.7.0
 [6.6.0]: https://github.com/gabrielmustiere/forge/compare/v6.5.1...v6.6.0
 [6.5.1]: https://github.com/gabrielmustiere/forge/compare/v6.5.0...v6.5.1
 [6.5.0]: https://github.com/gabrielmustiere/forge/compare/v6.4.0...v6.5.0
