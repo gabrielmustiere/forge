@@ -10,30 +10,36 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.6.0] - 2026-07-26 — Sync autonome
+
 ### ✨ Fonctionnel
 
-- **`sync` devient autonome** : le skill ne fait plus valider chaque changement un par un. Il
-  déduit la story à traiter du working tree (puis des commits non pushés, puis du dossier de plus
-  haut numéro), tranche chaque écart seul via une **doctrine de décision** explicite (réaligner /
-  laisser en l'état / escalader), applique les `Edit` dans la foulée — y compris les retouches
-  ciblées de `vision.md`, `stack.md` et `product-backlog.md` — et rend un **compte rendu**
-  avant/après en clôture. Il n'arbitre plus que dans quatre cas : divergence stratégique (Pivot),
-  contradiction non tranchable entre report et code, impact trop lourd pour une retouche ciblée,
-  ambiguïté sur la story cible.
-- **`sync --ask`** : mode pas-à-pas rétabli à la demande (chaque changement présenté
-  Avant / Après / Raison, par groupes de 3), pour les stories sensibles.
+- **`sync` ne pose plus de questions** — le skill déduit tout seul la story à traiter (dossier en
+  cours dans le working tree, à défaut commits non pushés, à défaut story de plus haut numéro dont
+  la clôture est engagée), tranche chaque écart entre réaligner, laisser en l'état et escalader,
+  puis applique — y compris les retouches ciblées de `vision.md`, `stack.md` et
+  `product-backlog.md`. La validation changement par changement laisse place à un **compte rendu**
+  avant/après en clôture, qui rend aussi visibles les écarts délibérément non réalignés. Il ne
+  reste que quatre situations où l'arbitrage revient à l'utilisateur : divergence stratégique
+  (Pivot), contradiction non tranchable entre le report et le code, impact trop lourd pour une
+  retouche ciblée, et ambiguïté sur la story visée.
+- **`sync --ask`** — le mode pas-à-pas reste disponible à la demande, changement par changement
+  (Avant / Après / Raison), pour une story sensible.
+- **Documents du drawer dans l'ordre du workflow** (Forge Board) — le drawer listait les documents
+  du plus avancé au moins avancé ; il suit désormais la chronologie de production (brief → pitch →
+  plan → estimate → review → report), et `brief.md` / `estimate.md` ne tombent plus dans le tri
+  alphabétique. L'ouverture automatique porte sur le premier document produit.
 
 ### 🔧 Technique
 
-- **Règle de preuve érigée en garantie non négociable de `sync`** : un réalignement ne s'écrit que
+- **Règle de preuve érigée en garantie non négociable de `sync`** — un réalignement ne s'écrit que
   s'il est attesté par une ligne du `report.md`, un hunk du diff ou un fichier lu ; le reste est
-  signalé sous « Non réaligné » plutôt qu'écrit. Ce bloc du compte rendu rend visibles les
-  décisions de ne rien faire, qui passeraient sinon pour des oublis. La sécurité de l'autonomie
-  tient à ce que `sync` n'écrit que du Markdown, avant `/commit`, donc dans un working tree
-  relisible d'un `git diff` et annulable d'un `git checkout`.
-- **Contrat de frontières mis à jour** (`references/skill-boundaries.md` §Documents projet) : le
-  deuxième garde-fou de la co-écriture n'est plus « chaque changement est validé » mais « chaque
-  changement est attesté et restitué ». `help` et `SKILLS.md` alignés.
+  signalé plutôt qu'écrit. C'est ce qui borne l'autonomie, avec la réversibilité : `sync` n'écrit
+  que du Markdown et tourne avant `/commit`, donc dans un working tree relisible d'un `git diff`
+  et annulable d'un `git checkout`.
+- **Contrat de frontières mis à jour** (`references/skill-boundaries.md`) — le deuxième garde-fou
+  de la co-écriture des documents projet n'est plus « chaque changement est proposé et validé »
+  mais « chaque changement est attesté et restitué ». `help` et `SKILLS.md` alignés.
 
 ## [6.5.1] - 2026-07-18 — Droits d'écriture de commit
 
@@ -300,7 +306,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.5.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.6.0...HEAD
+[6.6.0]: https://github.com/gabrielmustiere/forge/compare/v6.5.1...v6.6.0
 [6.5.1]: https://github.com/gabrielmustiere/forge/compare/v6.5.0...v6.5.1
 [6.5.0]: https://github.com/gabrielmustiere/forge/compare/v6.4.0...v6.5.0
 [6.4.0]: https://github.com/gabrielmustiere/forge/compare/v6.3.0...v6.4.0
