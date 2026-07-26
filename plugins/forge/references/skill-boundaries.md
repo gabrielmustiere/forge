@@ -99,8 +99,11 @@ rendent l'exception sûre :
 
 1. **`sync` n'écrit que via les modes des propriétaires** (Enrichir / Éditer) — il applique leur
    grammaire, il n'en invente pas une deuxième.
-2. **Chaque changement est proposé et validé** par l'utilisateur avant écriture. `sync` ne
-   décide jamais seul de ce que devient la vision.
+2. **Chaque changement est attesté et restitué.** `sync` applique seul les retouches ciblées,
+   mais il ne peut écrire que ce qu'une ligne du `report.md`, un hunk du diff ou un fichier
+   prouve — et il rend compte de chacune (avant / après / preuve) en clôture, dans un working
+   tree encore non commité. La sécurité ne vient pas d'une validation phrase par phrase, qui
+   noyait le signal ; elle vient de la règle de preuve et de la relecture d'un seul `git diff`.
 3. **`sync` propage, il ne cadre pas.** Une divergence stratégique large n'est pas absorbée : il
    renvoie vers `/forge:vision` en mode Pivot. La frontière est là — `sync` constate ce que le
    code a fait à la doc, il ne décide pas de la direction du produit.

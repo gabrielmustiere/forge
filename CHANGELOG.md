@@ -10,6 +10,31 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **`sync` devient autonome** : le skill ne fait plus valider chaque changement un par un. Il
+  déduit la story à traiter du working tree (puis des commits non pushés, puis du dossier de plus
+  haut numéro), tranche chaque écart seul via une **doctrine de décision** explicite (réaligner /
+  laisser en l'état / escalader), applique les `Edit` dans la foulée — y compris les retouches
+  ciblées de `vision.md`, `stack.md` et `product-backlog.md` — et rend un **compte rendu**
+  avant/après en clôture. Il n'arbitre plus que dans quatre cas : divergence stratégique (Pivot),
+  contradiction non tranchable entre report et code, impact trop lourd pour une retouche ciblée,
+  ambiguïté sur la story cible.
+- **`sync --ask`** : mode pas-à-pas rétabli à la demande (chaque changement présenté
+  Avant / Après / Raison, par groupes de 3), pour les stories sensibles.
+
+### 🔧 Technique
+
+- **Règle de preuve érigée en garantie non négociable de `sync`** : un réalignement ne s'écrit que
+  s'il est attesté par une ligne du `report.md`, un hunk du diff ou un fichier lu ; le reste est
+  signalé sous « Non réaligné » plutôt qu'écrit. Ce bloc du compte rendu rend visibles les
+  décisions de ne rien faire, qui passeraient sinon pour des oublis. La sécurité de l'autonomie
+  tient à ce que `sync` n'écrit que du Markdown, avant `/commit`, donc dans un working tree
+  relisible d'un `git diff` et annulable d'un `git checkout`.
+- **Contrat de frontières mis à jour** (`references/skill-boundaries.md` §Documents projet) : le
+  deuxième garde-fou de la co-écriture n'est plus « chaque changement est validé » mais « chaque
+  changement est attesté et restitué ». `help` et `SKILLS.md` alignés.
+
 ## [6.5.1] - 2026-07-18 — Droits d'écriture de commit
 
 ### 🔧 Technique
