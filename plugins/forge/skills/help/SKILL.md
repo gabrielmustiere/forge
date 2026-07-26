@@ -220,11 +220,23 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 | Skill                | Rôle                                                                                       |
 |----------------------|--------------------------------------------------------------------------------------------|
 | `/test-scenario`     | Tester un scénario utilisateur via Playwright MCP (navigateur piloté en live)              |
-| `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques |
+| `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : neuf skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
 | `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |
 | `/doc-feature`       | **Cartographier une feature existante** en lisant le code (entités, flux, routes, services, templates, points d'extension) — stack-agnostique avec détection auto (Sylius, Symfony, autre). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarder sur un module legacy ou documenter une zone du code jamais passée par le pipeline. À distinguer de `/sync` (qui met à jour une doc d'intention récente). |
 | `/release`           | **Créer une release versionnée bout en bout** — détermine le bump SemVer (major/minor/patch) depuis les Conventional Commits depuis le dernier tag, met à jour `CHANGELOG.md` (format Keep a Changelog), crée un tag annoté `vX.Y.Z`, push, puis publie la release sur GitHub via `gh`. Demande validation avant toute action publique. Argument-hint : `[major\|minor\|patch] [--no-push] [--draft] [--pre <suffix>]`. |
 | `/help`              | Ce sommaire — pour se rappeler le workflow et les skills disponibles                       |
+
+### Les ADR viennent à toi
+
+Un ADR ne se perd pas au moment où on prend la décision — il se perd au moment où on passe à la suite. C'est pourquoi **neuf skills proposent** d'en graver un, chacun au moment où il voit passer une décision d'architecture :
+
+| Quand | Qui propose | Ce qu'il a sous les yeux |
+|---|---|---|
+| Au cadrage | `/feature-plan`, `/refactor-plan`, `/tech-plan` | §Approche retenue et §Alternatives écartées — le plan a déjà fait le travail d'argumentation |
+| À l'exécution | `/feature-implem`, `/refactor-implem`, `/tech-implem` | Un choix tranché **hors plan**, en cours de route : le cas le plus précieux, rien d'autre ne le trace |
+| À la clôture | `/review`, `/report`, `/sync` | Une décision jamais justifiée, un écart d'approche assumé, un réalignement durable |
+
+La proposition tient en **une ligne**, arrive **en clôture**, et n'attend **aucune réponse** : tu lances `/adr` si tu veux, sinon tu continues. Elle n'apparaît que si la décision passe le test d'ADR-ité (structurante · coûteuse à inverser · alternative sérieuse écartée · question du futur lecteur — 3 sur 4 minimum) et qu'aucun ADR ne couvre déjà le sujet. Le silence est le cas normal.
 
 Des plugins complémentaires (ex: `sylius`, `symfony`) peuvent exposer des skills plus tactiques (procédures spécifiques au framework : créer une Resource, diagnostiquer un Twig Hook, etc.). Ils se combinent naturellement avec le workflow via l'auto-découverte de Claude Code.
 
