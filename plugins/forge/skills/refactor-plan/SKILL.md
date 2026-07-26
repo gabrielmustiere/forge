@@ -138,6 +138,8 @@ Annonce :
 > Plan refacto prêt : `docs/story/NNN-r-slug/plan.md`
 > Prochaine étape : `/refactor-implem` pour exécuter (verrou caractérisation d'abord, puis étapes incrémentales).
 
+**Décision candidate à un ADR.** Un refacto acte souvent un découpage ou un pattern qui lui survivra — et dont le « pourquoi » se perd une fois le code en place. Passe la structure cible au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon.
+
 ## Argument optionnel
 
 `/refactor-plan extract-pricing-service` — utilise la chaîne comme intention initiale et démarre directement sur la lecture du code.

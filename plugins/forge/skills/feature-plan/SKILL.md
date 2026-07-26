@@ -118,6 +118,8 @@ Affiche le chemin du fichier produit et propose :
 > Plan prêt : `docs/story/NNN-f-slug/plan.md`
 > Prochaine étape : `/feature-implem` pour lancer l'implémentation.
 
+**Décision candidate à un ADR.** Si le plan introduit une dépendance, un modèle de données ou une frontière de module qui survivront à la feature, passe le §Approche retenue et le §Alternatives écartées au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon — la plupart des features ne gravent rien.
+
 ## Argument optionnel
 
 `/feature-plan docs/story/007-f-ma-feature/pitch.md` — charge directement le pitch et passe à l'exploration.

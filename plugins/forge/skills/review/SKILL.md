@@ -116,6 +116,8 @@ Si CORRECTIONS REQUISES, liste précisément ce qui reste à corriger.
 Si PRÊT À COMMITER :
 > Prochaine étape : `/report` pour documenter la livraison, puis `/sync` et enfin `/commit`. Dans le pipeline, le commit vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. (En dehors du pipeline, `/commit` directement.)
 
+**Décision candidate à un ADR.** La revue est le moment où l'on voit le code sans l'avoir écrit — donc le moment où une décision structurante **jamais justifiée nulle part** saute aux yeux. Si un finding en révèle une, passe-la au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe, après le verdict. Ne transforme pas un finding en proposition d'ADR : le finding reste un finding, la proposition s'y ajoute. Silence si rien ne qualifie.
+
 ## Argument optionnel
 
 `/review docs/story/007-f-slug/plan.md` — review d'une feature avec comparaison au plan.

@@ -186,6 +186,8 @@ Sous-tâches : M/M complétées
 → `/sync` si des écarts nécessitent un réalignement de la doc
 ```
 
+**Décision candidate à un ADR.** Regarde la section §Écarts avec le plan que tu viens d'écrire : un choix tranché **en cours d'implémentation**, que le plan n'avait pas prévu, est le cas le plus précieux à graver — rien d'autre ne le trace. Passe-le au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Aucun écart, ou des écarts mineurs → silence : une exécution fidèle à un plan qui portait déjà la décision n'a rien à proposer.
+
 **Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
 
 ## Argument optionnel

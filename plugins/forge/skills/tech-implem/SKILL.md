@@ -220,6 +220,8 @@ Stack : [stack détecté]
 → `/sync` si le plan a dévié et mérite d'être réaligné
 ```
 
+**Décision candidate à un ADR.** Regarde la section §Écarts avec le plan que tu viens d'écrire : un composant substitué, un dispositif de repli conçu en cours de route ou un kill switch laissé en place à demeure sont des choix que le plan n'avait pas prévus et que rien d'autre ne trace. Passe-les au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Aucun écart → silence : le plan a déjà porté la décision.
+
 **Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
 
 ## Argument optionnel

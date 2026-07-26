@@ -154,6 +154,8 @@ Affiche le chemin du fichier et le résumé.
 > Report prêt : `docs/story/NNN-<f|r|t>-slug/report.md`
 > Conformité totale — pas de `/sync` nécessaire.
 
+**Décision candidate à un ADR.** Un écart d'approche documenté dans le report n'est pas toujours un accident de parcours : c'est souvent une décision assumée, prise sous contrainte, dont le report garde la trace factuelle mais pas la justification. Passe les écarts au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, si l'un d'eux passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon.
+
 ## Argument optionnel
 
 `/report ma-feature` — cherche le dossier par slug (préfixes `f-`, `r-`, `t-`) et démarre l'analyse.

@@ -35,7 +35,8 @@ de **produire l'artifact d'un autre** : c'est le cas de l'écriture git, et c'es
 **I3 — Invocation explicite.** Un skill du pipeline se déclenche parce que l'utilisateur l'a
 tapé, jamais parce qu'un modèle a jugé que ça ressemblait. Le triage automatique entre skills
 voisins est probabiliste — donc faux un jour sur N, et un mauvais aiguillage produit le mauvais
-document : c'est bien un défaut de livrable, pas de moyen.
+document : c'est bien un défaut de livrable, pas de moyen. **Une seule exception**, `adr`, qui
+n'a aucun voisin et n'écrase aucun artifact existant — argumentée au §5.
 
 Le corollaire de I2, qui vaut d'être dit parce qu'il est contre-intuitif : **une liste
 `allowed-tools` généreuse n'est pas un problème**, et une liste avare n'est pas une garantie.
@@ -209,9 +210,10 @@ contraignant :
 Le reste — la longueur de la liste, les binaires qui s'y trouvent — est une affaire de confort,
 pas de frontière. Ne pas y consacrer d'énergie : elle se dépense mieux sur les documents produits.
 
-## 5. Invocation : jamais automatique
+## 5. Invocation : jamais automatique (une exception)
 
-**Tous les skills du plugin portent `disable-model-invocation: true`.** Sans exception.
+**Tous les skills du pipeline portent `disable-model-invocation: true`.** Seul `adr` fait
+exception (voir plus bas).
 
 La raison n'est pas la prudence, c'est le voisinage : le pipeline aligne des skills dont les
 descriptions se ressemblent nécessairement (`report` « compte rendu d'écarts » et `sync`
@@ -219,6 +221,26 @@ descriptions se ressemblent nécessairement (`report` « compte rendu d'écarts 
 formulation ne rendra ce triage fiable — des skills aussi voisines sont *intrinsèquement*
 ambiguës pour un classifieur. Le seul aiguillage sûr est
 celui de l'utilisateur qui tape le nom.
+
+### L'exception `adr`
+
+`adr` porte `disable-model-invocation: false`. Ce qui rend l'exception tenable, c'est qu'`adr`
+**n'a pas de voisin** : aucun autre skill ne produit de `docs/adr/NNNN-*.md`, et aucun autre ne
+répond à « pourquoi ce choix ». Le risque que le §5 combat — un classifieur qui hésite entre deux
+skills adjacents et produit le mauvais document — n'existe pas ici : il n'y a rien à confondre.
+
+Deux garde-fous bornent malgré tout l'exception :
+
+1. **La voie normale reste la proposition explicite.** Neuf skills (les trois plans, les trois
+   `*-implem`, `review`, `report`, `sync`) suggèrent un ADR en clôture selon
+   [`adr-prompting.md`](adr-prompting.md) — une ligne, non bloquante, sous test d'ADR-ité.
+   C'est ce chemin qui doit rendre l'ADR visible, pas le déclenchement automatique.
+2. **Un ADR n'écrase jamais rien.** Il crée un fichier neuf sous un numéro libre. Un ADR
+   déclenché à contretemps coûte un fichier à supprimer, pas un artifact corrompu — contrairement
+   à un `sync` ou un `pitch` mal aiguillés, qui réécrivent un document existant.
+
+Si un jour un second skill écrit dans `docs/adr/`, cette exception tombe : le voisinage
+réapparaîtrait, et avec lui l'ambiguïté que le §5 interdit.
 
 C'est aussi ce qui autorise les descriptions à être **riches et honnêtes** plutôt que
 défensivement disjointes : elles servent le `/forge:help` et le choix humain, pas un

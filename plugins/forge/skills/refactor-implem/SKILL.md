@@ -199,6 +199,8 @@ Stack : [stack détecté]
 → `/sync` si le plan a dévié et mérite d'être réaligné
 ```
 
+**Décision candidate à un ADR.** Regarde la section §Écarts avec le plan que tu viens d'écrire : un découpage tranché **en cours de refacto**, que le plan n'avait pas prévu, survivra au refacto et perdra son « pourquoi ». Passe-le au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Aucun écart → silence : le plan a déjà porté la décision.
+
 **Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
 
 ## Argument optionnel

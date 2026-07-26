@@ -10,6 +10,31 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Les ADR viennent à toi** — neuf skills proposent désormais de graver un Architecture Decision
+  Record quand ils voient passer une décision qui le mérite : les trois plans (au cadrage, à
+  partir du §Alternatives écartées qu'ils écrivent déjà), les trois `*-implem` (sur un choix
+  tranché hors plan — le cas le plus précieux, que rien d'autre ne trace), puis `review`, `report`
+  et `sync` à la clôture. La proposition tient en une ligne, arrive en fin de passe et n'attend
+  aucune réponse : l'ADR reste écrit par `adr`, et seulement sur demande.
+- **`adr` déclenchable par le modèle** — le skill peut désormais être proposé sans être tapé, et
+  sa description porte les tournures qui l'appellent naturellement (« documenter cette décision »,
+  « pourquoi ce choix », « graver cet arbitrage »).
+
+### 🔧 Technique
+
+- **Nouvelle référence partagée `adr-prompting.md`** — le **test d'ADR-ité** (structurante ·
+  coûteuse à inverser · alternative sérieuse écartée · question du futur lecteur, 3 sur 4
+  minimum) et les règles anti-bruit (une seule proposition, en clôture, jamais bloquante, rien si
+  `docs/adr/` couvre déjà le sujet, silence par défaut) vivent en un seul endroit plutôt que
+  dupliqués dans neuf skills.
+- **Exception d'invocation automatique documentée** (`skill-boundaries.md` §5) — l'invariant I3
+  vaut toujours pour le pipeline ; `adr` en sort parce qu'il n'a aucun voisin dont un classifieur
+  pourrait le confondre, et parce qu'un ADR déclenché à contretemps crée un fichier neuf au lieu
+  d'écraser un artifact existant. L'exception tombe si un second skill écrit un jour dans
+  `docs/adr/`.
+
 ## [6.6.0] - 2026-07-26 — Sync autonome
 
 ### ✨ Fonctionnel

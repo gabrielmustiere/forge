@@ -223,6 +223,8 @@ Le compte rendu **remplace** la validation pas-à-pas : il doit permettre de rel
 
 Un bloc vide se supprime plutôt que de s'afficher avec « aucun ». Le bloc **Non réaligné** est ce qui rend l'autonomie acceptable : il rend visibles les décisions de ne rien faire, qui sinon passeraient pour des oublis.
 
+**Décision candidate à un ADR.** Réaligner, c'est constater qu'un choix a tenu — un `stack.md` enrichi d'une dépendance structurante, une approche réécrite parce que la livraison a tranché autrement. Passe les réalignements appliqués au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, si l'un d'eux passe, ajoute **une** ligne de proposition au format qu'il fixe, après le compte rendu. Silence sinon.
+
 ## Argument optionnel
 
 `/sync ma-feature` — cherche le dossier par slug (préfixes `f-`, `r-`, `t-`) et démarre l'analyse.

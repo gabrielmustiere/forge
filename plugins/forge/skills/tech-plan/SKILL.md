@@ -156,6 +156,8 @@ Annonce :
 > Plan évolution tech prêt : `docs/story/NNN-t-slug/plan.md`
 > Prochaine étape : `/tech-implem` pour exécuter (baseline → kill switch → implémentation incrémentale → mesure après → validation des critères).
 
+**Décision candidate à un ADR.** Une évolution technique est presque toujours un choix d'architecture : composant retenu, stratégie de résilience, dispositif de repli. Passe le §Approche retenue et le §Alternatives écartées au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon — c'est le cas normal.
+
 ## Argument optionnel
 
 `/tech-plan redis-cache-pricing` — utilise la chaîne comme intention initiale et démarre directement sur la lecture du code.

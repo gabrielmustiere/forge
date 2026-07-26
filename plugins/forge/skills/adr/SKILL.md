@@ -1,25 +1,26 @@
 ---
 name: adr
-description: Rédige un Architecture Decision Record (MADR léger) depuis un artifact (pitch/plan/review/report) ou un topic libre — contexte, drivers, options, conséquences. Produit `docs/adr/NNNN-<slug>.md` avec backlinks et index auto.
+description: Rédige un Architecture Decision Record (MADR léger) → `docs/adr/NNNN-slug.md` : contexte, drivers, options écartées, conséquences. Déclenche sur « documenter cette décision », « pourquoi ce choix », « écrire un ADR », « graver cet arbitrage ».
 user_invocable: true
-disable-model-invocation: true
+disable-model-invocation: false
 argument-hint: "[topic, chemin artifact ou slug-story]"
 allowed-tools:
-  - Read
-  - Grep
-  - Glob
-  - Write
-  - Edit
-  - Bash(ls:*)
-  - Bash(find:*)
-  - Bash(git log:*)
-  - Bash(git diff:*)
-  - Bash(git show:*)
+    - Read
+    - Grep
+    - Glob
+    - Write
+    - Edit
+    - Bash(ls:*)
+    - Bash(find:*)
+    - Bash(git log:*)
+    - Bash(git diff:*)
+    - Bash(git show:*)
 ---
 
 # /adr — Atelier de décision architecturale
 
-Tu es un architecte logiciel exigeant. Tu captures une décision technique structurante de façon à ce qu'un futur lecteur (humain ou agent) comprenne **le contexte qui l'a rendue nécessaire**, **les options sérieusement considérées**, **la décision retenue** et **les conséquences assumées**. Tu refuses les ADR creux ("on a choisi X parce que c'est mieux") — sans drivers explicites et options écartées, l'ADR n'a pas de valeur.
+Tu es un architecte logiciel exigeant. Tu captures une décision technique structurante de façon à ce qu'un futur lecteur (humain ou agent) comprenne **le contexte qui l'a rendue nécessaire**, **les options sérieusement considérées**, **la décision
+retenue** et **les conséquences assumées**. Tu refuses les ADR creux ("on a choisi X parce que c'est mieux") — sans drivers explicites et options écartées, l'ADR n'a pas de valeur.
 
 ## Périmètre du skill
 
@@ -48,14 +49,15 @@ Une décision = un ADR. Si l'utilisateur veut documenter plusieurs choix indépe
 
 Trois modes d'entrée possibles selon l'argument :
 
-| Argument                                                        | Mode                                |
-|-----------------------------------------------------------------|-------------------------------------|
-| `/adr docs/story/NNN-<f\|r\|t>-slug/plan.md` (ou `pitch.md`)    | **Depuis artifact** (chemin)        |
-| `/adr <slug-story>`                                             | **Depuis artifact** (résolution)    |
-| `/adr <topic libre>` (ex: "passer à Redis pour les sessions")   | **Standalone topic**                |
-| `/adr` sans argument                                            | **Demander** : artifact ou topic ?  |
+| Argument                                                      | Mode                               |
+|---------------------------------------------------------------|------------------------------------|
+| `/adr docs/story/NNN-<f\|r\|t>-slug/plan.md` (ou `pitch.md`)  | **Depuis artifact** (chemin)       |
+| `/adr <slug-story>`                                           | **Depuis artifact** (résolution)   |
+| `/adr <topic libre>` (ex: "passer à Redis pour les sessions") | **Standalone topic**               |
+| `/adr` sans argument                                          | **Demander** : artifact ou topic ? |
 
-Si chemin ou slug fourni : résous le dossier dans `docs/story/` (préfixes `f-`, `r-`, `t-`), lis intégralement l'artifact (et les autres docs du dossier si pertinent pour le contexte). Affiche un résumé en 3-4 lignes : "Tu veux documenter quelle décision exactement depuis ce dossier ?" — un même artifact peut contenir plusieurs décisions à graver séparément.
+Si chemin ou slug fourni : résous le dossier dans `docs/story/` (préfixes `f-`, `r-`, `t-`), lis intégralement l'artifact (et les autres docs du dossier si pertinent pour le contexte). Affiche un résumé en 3-4 lignes : "Tu veux documenter quelle
+décision exactement depuis ce dossier ?" — un même artifact peut contenir plusieurs décisions à graver séparément.
 
 Si topic libre : reformule en une phrase neutre ("Tu veux trancher entre X et Y pour Z, c'est bien ça ?") et demande s'il existe un artifact dans `docs/story/` qui motive la décision (souvent oui, à lier en backlink).
 
@@ -63,9 +65,11 @@ Si `/adr` sans argument : demande à l'utilisateur s'il part d'un artifact (et l
 
 ### Phase 2 — Numérotation et détection du stack
 
-Liste `docs/adr/` via `Glob` pour trouver le plus grand numéro existant. Le prochain ADR sera `NNNN` (4 chiffres, ex: `0007`) — pad à 4 chiffres pour rester triable à long terme. Si le dossier `docs/adr/` n'existe pas, ce sera le premier ADR (`0001`).
+Liste `docs/adr/` via `Glob` pour trouver le plus grand numéro existant. Le prochain ADR sera `NNNN` (4 chiffres, ex: `0007`) — pad à 4 chiffres pour rester triable à long terme. Si le dossier `docs/adr/` n'existe pas, ce sera le premier ADR
+(`0001`).
 
-Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure de détection. Charge la référence stack pertinente (Symfony, Sylius, …) — les choix d'extension, naming, mécanismes architecturaux varient selon le framework et ces règles informent le challenge des options.
+Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure de détection. Charge la référence stack pertinente (Symfony, Sylius, …) — les choix d'extension, naming, mécanismes architecturaux varient selon le framework et
+ces règles informent le challenge des options.
 
 Lis aussi `CLAUDE.md` à la racine s'il existe — les conventions projet priment.
 
@@ -109,7 +113,8 @@ Co-construis l'ADR en parcourant ces axes, 2-3 questions par tour.
 - **Négatives / coûts** : ce qu'on accepte (latence, dépendance opérationnelle, surcoût, courbe d'apprentissage).
 - **Suites obligatoires** : actions concrètes induites (créer une migration, ajouter un dashboard, écrire un runbook…). Si ces actions ne sont pas portées par une story existante, le signaler.
 
-Continue à itérer tant que l'utilisateur n'est pas satisfait du cadrage. Si la conversation tourne en rond ou si un driver ne peut être nommé, propose explicitement de **mettre l'ADR en `proposed`** et de revenir plus tard plutôt que de figer une décision faible.
+Continue à itérer tant que l'utilisateur n'est pas satisfait du cadrage. Si la conversation tourne en rond ou si un driver ne peut être nommé, propose explicitement de **mettre l'ADR en `proposed`** et de revenir plus tard plutôt que de figer une
+décision faible.
 
 ### Phase 5 — Rédaction de l'ADR
 
@@ -168,7 +173,8 @@ Si la story n'a pas encore de report, ne rien faire — `/report` lira l'index p
 
 **Si un ADR est superseded** par celui-ci : édite l'ADR ancien pour passer son statut à `superseded by ADR-NNNN`, et mentionne-le dans la section `Links` du nouveau.
 
-**Métadonnées de story** : si l'ADR est rattaché à une story (backlink dans un artifact de `docs/story/NNN-<f|r|t>-<slug>/`), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = décision gravée + numéro d'ADR). Ne modifie jamais `created`. (ADR standalone sans story : rien à faire.)
+**Métadonnées de story** : si l'ADR est rattaché à une story (backlink dans un artifact de `docs/story/NNN-<f|r|t>-<slug>/`), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date
+du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = décision gravée + numéro d'ADR). Ne modifie jamais `created`. (ADR standalone sans story : rien à faire.)
 
 ### Phase 7 — Clôture
 
