@@ -46,7 +46,8 @@ Le skill adapte ses questions et son template selon le type détecté.
 1. **Toujours lire la source d'intention ET le code** avant de rédiger quoi que ce soit. Sans les deux, pas de comparaison possible.
 2. **Privilégier `AskUserQuestion`** pour clarifier un écart non évident. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`.
 3. **Ne pas juger, constater** — un écart n'est pas forcément un problème. Documenter le **pourquoi**.
-4. **Maximum 3 questions par tour.**
+4. **Ne rien exécuter.** Le report lit le diff et les artifacts amont (`plan.md`, `review.md`, checkpoints d'implémentation) — il ne relance ni tests, ni analyse statique, ni build, ni aucune commande de QA. Ces checks ont déjà tourné en phase 2 (l'implem les impose après chaque sous-tâche/étape) et retourneront au `/commit` : les relancer ici ne produit aucune information neuve et sort du périmètre du skill. Si un résultat n'est disponible dans aucun artifact amont, l'écrire **« non mesuré »** plutôt que d'aller le chercher.
+5. **Maximum 3 questions par tour.**
 
 ## Déroulement
 
@@ -86,7 +87,7 @@ Puis explore le code réellement produit :
 - **Templates et hooks** (`f-`) : vérifie l'intégration front, impact multi-thème (front shop uniquement).
 - **Tests** :
   - `f-` : tests écrits vs stratégie de test prévue dans le plan.
-  - `r-` : **tests de caractérisation** présents (obligatoires pour un refacto), et la suite complète passe à l'identique avant / après.
+  - `r-` : **tests de caractérisation** présents (obligatoires pour un refacto). Pour le verdict avant / après, **reprends le résultat consigné par l'implem ou la review** — ne relance pas la suite. Absent des artifacts amont → « non mesuré ».
   - `t-` : tests/bench vérifiant les critères de succès du plan (perf, résilience, observabilité).
 
 ### Phase 3 — Revue interactive
@@ -104,7 +105,7 @@ Présente tes constats par catégorie et demande des précisions sur les écarts
 
 **Cas `r-` (refacto)** — catégories :
 
-1. **Comportement préservé** — preuves que le comportement externe n'a pas bougé (tests caractérisation verts avant/après, pas de modif de signature publique, pas d'effet de bord nouveau)
+1. **Comportement préservé** — preuves que le comportement externe n'a pas bougé, **telles que consignées en amont** (résultat des tests de caractérisation rapporté par l'implem/la review) ou lisibles dans le diff (pas de modif de signature publique, pas d'effet de bord nouveau). Ce sont des preuves qu'on collecte, pas qu'on produit.
 2. **Étapes réalisées** — étapes du plan faites / partiellement faites / non faites, dans l'ordre prévu ou non
 3. **Écarts volontaires** — stratégie ajustée en cours de route et pourquoi
 4. **Effets de bord détectés** — comportements qui ont malgré tout bougé (si oui, c'est une alerte : soit c'était un bug qu'on corrige, soit une régression)
