@@ -10,6 +10,16 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.7.1] - 2026-07-27 — Report sans relance de QA
+
+### ✨ Fonctionnel
+
+- **`/report` ne relance plus la qualité** — deux formulations du cas refacto poussaient le skill à
+  exécuter tests, analyse statique et build pour « prouver » que le comportement était préservé,
+  alors qu'il n'a qu'à constater. Il reprend désormais les résultats consignés par l'implem ou la
+  review, et écrit « non mesuré » quand aucun artifact amont ne les porte. La QA reste couverte là
+  où elle a du sens : à l'implémentation, puis au commit.
+
 ## [6.7.0] - 2026-07-26 — ADR proposés par le pipeline
 
 ### ✨ Fonctionnel
@@ -333,7 +343,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.7.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.7.1...HEAD
+[6.7.1]: https://github.com/gabrielmustiere/forge/compare/v6.7.0...v6.7.1
 [6.7.0]: https://github.com/gabrielmustiere/forge/compare/v6.6.0...v6.7.0
 [6.6.0]: https://github.com/gabrielmustiere/forge/compare/v6.5.1...v6.6.0
 [6.5.1]: https://github.com/gabrielmustiere/forge/compare/v6.5.0...v6.5.1
