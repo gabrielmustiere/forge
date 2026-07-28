@@ -10,6 +10,24 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.8.0] - 2026-07-28 — Le code d'abord, le commentaire ensuite
+
+### ✨ Fonctionnel
+
+- **Du code moins commenté** — les trois skills d'implémentation posent désormais une doctrine
+  explicite : un commentaire ne se justifie que si l'information ne peut pas vivre dans le code
+  (contrainte externe, raison d'un choix non évident, invariant que le typage n'exprime pas). Ce
+  qu'un nom de méthode ou une signature dit déjà ne se commente plus. `refactor-implem` y ajoute
+  le retrait des commentaires que la restructuration a rendus faux ; `tech-implem` garde le
+  feature flag comme exception assumée — rien dans le code ne dit qu'il est temporaire.
+- **`/review` traque le commentaire superflu** — nouvel item dans l'axe qualité du code, avec son
+  test : supprimer le commentaire mentalement, et voir si on perd une information que le code ne
+  porte pas. Le cas inverse est signalé aussi, plus rare et plus grave : le commentaire que le
+  diff a rendu faux.
+- **`/claude-md` grave la règle dans les projets** — la couche comportementale générée compte un
+  cinquième principe, « Le code d'abord, le commentaire en dernier recours ». Tout `CLAUDE.md`
+  produit par forge le porte.
+
 ## [6.7.1] - 2026-07-27 — Report sans relance de QA
 
 ### ✨ Fonctionnel
@@ -343,7 +361,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.7.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.8.0...HEAD
+[6.8.0]: https://github.com/gabrielmustiere/forge/compare/v6.7.1...v6.8.0
 [6.7.1]: https://github.com/gabrielmustiere/forge/compare/v6.7.0...v6.7.1
 [6.7.0]: https://github.com/gabrielmustiere/forge/compare/v6.6.0...v6.7.0
 [6.6.0]: https://github.com/gabrielmustiere/forge/compare/v6.5.1...v6.6.0
