@@ -92,6 +92,7 @@ App Symfony 8 à la racine du repo. Kanban **lecture seule** qui scanne les `doc
 **Réfléchir avant de coder** : énoncer les hypothèses, exposer les tradeoffs, demander en cas d'ambiguïté plutôt que choisir en silence.
 **Simplicité d'abord** : le minimum de code qui résout le problème, rien de spéculatif, aucune abstraction pour un usage unique.
 **Modifications chirurgicales** : ne toucher que ce que la demande impose, respecter le style existant, ne pas refactorer ce qui n'est pas cassé.
+**Le code d'abord, le commentaire en dernier recours** : un commentaire ne se justifie que si l'info ne peut pas vivre dans le code (contrainte externe, raison d'un choix non évident, invariant hors typage). Ce qu'un nom ou une signature dit déjà ne se commente pas. Pas de commentaire de section, pas de paraphrase, pas de docblock qui répète les types.
 **Piloté par l'objectif** : transformer chaque tâche en critère vérifiable (« corriger le bug » → « écrire un test qui le reproduit, puis le faire passer »).
 
 ## Stack (app)

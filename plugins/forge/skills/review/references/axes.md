@@ -70,6 +70,7 @@ Selon le stack détecté :
 - **DRY** : duplication de logique détectable ?
 - **Couplage** : dépendances circulaires, services qui en savent trop ?
 - **Code mort** : `dump()`, `var_dump()`, `dd()`, commentaires `// TODO` sans ticket, code commenté laissé en place.
+- **Commentaires superflus** : un commentaire qui paraphrase la ligne suivante, un commentaire de section (`// --- Validation ---`), un docblock qui ne fait que répéter les types de la signature. Test à appliquer : *supprime-le mentalement — est-ce qu'on perd une information que le code ne porte pas ?* Si non, c'est du bruit à retirer. Signaler aussi le cas inverse, plus rare et plus grave : un commentaire que le diff a rendu **faux**.
 
 ## Axe 7 — Performance (important)
 

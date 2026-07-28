@@ -110,6 +110,7 @@ Coder en respectant :
 - Les règles du stack (références stack + `CLAUDE.md`).
 - Le mécanisme d'extension du framework prévu dans le plan (décorateur, middleware, listener, transport messenger…). Jamais de modification vendor.
 - **Kill switch actif dès l'intro** : le nouveau chemin n'est activé que si le flag est ON. Par défaut le flag est OFF → comportement strictement inchangé.
+- **Le commentaire est l'exception, pas le réflexe.** Il ne se justifie que si l'information ne peut pas vivre dans le code : une contrainte externe, la raison d'un choix non évident, un invariant que le typage n'exprime pas. Ce qu'un nom ou une signature dit déjà ne se commente pas. Le flag, lui, est précisément un cas où le commentaire se justifie : rien dans le code ne dit qu'il est **temporaire** — une ligne qui nomme la story et la condition de retrait, et c'est tout.
 - Périmètre strict — pas de "tant qu'on y est" qui sortirait du plan.
 
 #### 3.4 — QA + test du kill switch

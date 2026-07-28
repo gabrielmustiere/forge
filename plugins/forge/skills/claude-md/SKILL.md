@@ -24,9 +24,9 @@ Sa valeur tient à deux choses indissociables :
 
 1. **Une analyse fidèle du projet réel** — architecture, commandes, conventions — *prouvée par
    les fichiers du dépôt*, jamais inventée.
-2. **Une couche comportementale** — les quatre principes Karpathy — qui corrige les écueils
+2. **Une couche comportementale** — les principes Karpathy — qui corrige les écueils
    récurrents du code assisté par LLM (hypothèses silencieuses, sur-ingénierie, refactos
-   sauvages, absence de critère de succès).
+   sauvages, sur-commentaire, absence de critère de succès).
 
 Un `CLAUDE.md` qui décrit bien le projet mais laisse l'agent coder n'importe comment est à
 moitié utile ; l'inverse aussi. Tu fournis les deux.
@@ -121,7 +121,7 @@ Présente, section par section, ce que tu comptes écrire — en distinguant le 
 - Pièges connus à signaler à un nouveau venu ?
 
 ## Couche comportementale
-- Les 4 principes Karpathy seront injectés en section « Principes de travail ».
+- Les principes Karpathy seront injectés en section « Principes de travail ».
 ```
 
 ### Phase 3 — Combler les trous

@@ -2,8 +2,9 @@
 
 Ce bloc est la **couche comportementale** du `CLAUDE.md`. Il distille quatre principes
 issus des observations d'Andrej Karpathy sur les écueils récurrents du code assisté par LLM
-(repo `multica-ai/andrej-karpathy-skills`). Insère-le tel quel dans le `CLAUDE.md` généré,
-en section dédiée. Adapte uniquement les exemples entre crochets au projet réel.
+(repo `multica-ai/andrej-karpathy-skills`), plus un cinquième sur les commentaires — même
+écueil, même remède. Insère-le tel quel dans le `CLAUDE.md` généré, en section dédiée.
+Adapte uniquement les exemples entre crochets au projet réel.
 
 ---
 
@@ -33,7 +34,17 @@ pas le code adjacent, ni les commentaires, ni le formatage. Préserve le style a
 supprime que les dépendances que **tes** changements ont rendues orphelines — pas les
 problèmes préexistants.
 
-### 4. Exécution pilotée par l'objectif
+### 4. Le code d'abord, le commentaire en dernier recours
+
+Un commentaire ne se justifie que si l'information **ne peut pas vivre dans le code** : une
+contrainte externe (bug d'une lib, contrat d'API imposé), la raison d'un choix non évident, un
+invariant que le typage n'exprime pas. Ce qu'un nom de méthode, une signature typée ou un test
+dit déjà ne se commente pas — le redire crée une seconde source de vérité, et c'est elle qui
+mentira dans six mois. Pas de commentaire de section, pas de paraphrase de la ligne suivante,
+pas de docblock qui répète les types. Besoin d'expliquer *ce que* fait un bloc : renomme ou
+extrais plutôt que de commenter.
+
+### 5. Exécution pilotée par l'objectif
 
 Transforme une demande floue en **critères de succès vérifiables** avant d'implémenter. Plutôt
 que « fais que ça marche », pose : « écris d'abord les tests des cas limites, puis implémente

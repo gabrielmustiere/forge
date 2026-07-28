@@ -73,6 +73,7 @@ Coder en respectant :
 
 - Les règles du stack détecté (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md`, déjà chargé via la détection).
 - Les conventions projet du `CLAUDE.md` quand elles précisent ou surchargent les règles stack.
+- **Le commentaire est l'exception, pas le réflexe.** Il ne se justifie que si l'information ne peut pas vivre dans le code : une contrainte externe (bug d'une lib, contrat d'API imposé), la raison d'un choix non évident, un invariant que le typage n'exprime pas. Ce qu'un nom de méthode, une signature typée ou un test dit déjà ne se commente pas — le redire crée une seconde source de vérité, et c'est elle qui mentira dans six mois. Concrètement : pas de commentaire de section (`// --- Validation ---`), pas de paraphrase de la ligne suivante, pas de docblock qui répète les types. Si tu ressens le besoin d'expliquer *ce que* fait un bloc, renomme ou extrais plutôt que de commenter.
 - L'ordre de développement au sein d'une sous-tâche :
   1. Modèle (entité / mapping / migration)
   2. Logique métier (service / handler / repository)

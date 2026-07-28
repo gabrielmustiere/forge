@@ -111,6 +111,7 @@ Appliquer la restructuration en respectant :
 
 - Les règles du stack détecté (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md`, déjà chargé via la détection).
 - Les conventions projet du `CLAUDE.md`.
+- **Le commentaire est l'exception, pas le réflexe.** Il ne se justifie que si l'information ne peut pas vivre dans le code : une contrainte externe, la raison d'un choix non évident, un invariant que le typage n'exprime pas. Ce qu'un nom ou une signature dit déjà ne se commente pas. Deux réflexes propres au refacto : ne pas commenter *ce qu'on vient de déplacer* (le diff le raconte déjà, et le commentaire survivra au diff), et **supprimer ou corriger les commentaires devenus faux** — ils documentent le code d'avant, ce qui est pire qu'un silence.
 - Le périmètre strict de l'étape — pas de "tant qu'on y est" qui sortirait du plan.
 - **Si un Strangler Fig est prévu** : conserver l'ancien code en place, introduire le nouveau en parallèle, basculer les clients indiqués pour cette étape.
 - **Si un feature flag est prévu** : brancher via le flag, les deux chemins doivent coexister.
