@@ -501,78 +501,11 @@
     <section class="section" id="board" aria-labelledby="board-title">
         <div class="section__head">
             <span class="section__num" aria-hidden="true">04</span>
-            <h2 id="board-title">Forge Board — l'application</h2>
+            <h2 id="board-title">Forge Board — le projet lié</h2>
         </div>
         <p class="section__intro">Un tableau kanban <strong>lecture seule</strong> qui scanne les documents produits par le workflow (<code>docs/story/</code>) et projette chaque story en carte le long d'un pipeline visuel — pour répondre en quelques
-            secondes à « où en est le projet X ? ». L'app Symfony vit à la racine du repo, la marketplace sous <code>plugins/</code>.</p>
-        <dl class="specs">
-            <div class="spec">
-                <dt class="spec__label">FRAMEWORK</dt>
-                <dd class="spec__value">Symfony 8.0 · PHP 8.5+ · Symfony CLI (proxy HTTPS *.wip)</dd>
-            </div>
-            <div class="spec">
-                <dt class="spec__label">FRONT</dt>
-                <dd class="spec__value">Symfony UX (Stimulus, Turbo, Live Component) · Tailwind 4 · AssetMapper</dd>
-            </div>
-            <div class="spec">
-                <dt class="spec__label">DONNÉES</dt>
-                <dd class="spec__value">SQLite (fichier local, zéro infra) · Messenger (transport Doctrine)</dd>
-            </div>
-            <div class="spec">
-                <dt class="spec__label">TESTS</dt>
-                <dd class="spec__value">PHPUnit 13 (Unit + Functional) · Playwright (E2E)</dd>
-            </div>
-            <div class="spec">
-                <dt class="spec__label">QUALITÉ</dt>
-                <dd class="spec__value">PHPStan level 9 · PHP-CS-Fixer</dd>
-            </div>
-            <div class="spec">
-                <dt class="spec__label">MCP</dt>
-                <dd class="spec__value">symfony-ai-mate · playwright · chrome-devtools</dd>
-            </div>
-        </dl>
-
-        <h3 class="subhead">Démarrer</h3>
-        <div class="terminal" style="margin-bottom: 20px;">
-        <pre class="terminal__body"><code><span class="prompt" aria-hidden="true">$</span> make init <span class="comment"># deps PHP/JS + DB + fixtures</span>
-<span class="prompt" aria-hidden="true">$</span> docker compose up -d <span class="comment"># Mailpit (capture des e-mails)</span>
-<span class="prompt" aria-hidden="true">$</span> make serve <span class="comment"># → https://forge-board.wip</span></code></pre>
-        </div>
-        <dl class="make">
-            <div class="make__row">
-                <dt class="make__cmd"><code>make init</code></dt>
-                <dd class="make__desc">Installation complète (deps + DB + fixtures)</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make serve</code></dt>
-                <dd class="make__desc">Lance le serveur Symfony</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make db-reset</code></dt>
-                <dd class="make__desc">Recrée la base from scratch</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make migration</code></dt>
-                <dd class="make__desc">Migration depuis le diff d'entités</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make phpunit</code></dt>
-                <dd class="make__desc">Tests PHPUnit (Unit + Functional)</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make playwright</code></dt>
-                <dd class="make__desc">Tests E2E Playwright</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make quality</code></dt>
-                <dd class="make__desc">CS-Fixer + PHPStan + build</dd>
-            </div>
-            <div class="make__row">
-                <dt class="make__cmd"><code>make ci</code></dt>
-                <dd class="make__desc">Lint + tests unitaires (reproduit la CI)</dd>
-            </div>
-        </dl>
-        <p class="section__note">Prérequis : PHP 8.5+, Composer, Symfony CLI, Docker (Mailpit), Node.js 22+. Mailpit UI : <code>localhost:8027</code> · identifiants de test : <code>admin@example.com / password</code></p>
+            secondes à « où en est le projet X ? ». Application Symfony 8 développée avec ce plugin, hébergée dans son propre dépôt.</p>
+        <p class="section__note">Code, stack et installation : <a href="https://github.com/gabrielmustiere/forge-board">gabrielmustiere/forge-board</a></p>
     </section>
 </main>
 

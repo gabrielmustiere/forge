@@ -10,6 +10,15 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### 🔧 Technique
+
+- **Forge Board extrait dans son propre dépôt** — l'application Symfony qui vivait à la racine de
+  ce dépôt migre vers [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board),
+  avec sa documentation forge (`docs/`), ses 9 stories et ses 2 ADR. Ce dépôt ne porte plus que la
+  marketplace (`plugins/`, `.claude-plugin/`) et le site public (`site/`). Les entrées de ce
+  changelog qui décrivaient l'application sont reprises dans le sien ; les versions qui lui étaient
+  entièrement consacrées gardent leur en-tête (les tags git existent) et renvoient vers lui.
+
 ## [6.9.0] - 2026-07-30 — Savoir où on en est
 
 ### ✨ Fonctionnel
@@ -99,10 +108,6 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
   retouche ciblée, et ambiguïté sur la story visée.
 - **`sync --ask`** — le mode pas-à-pas reste disponible à la demande, changement par changement
   (Avant / Après / Raison), pour une story sensible.
-- **Documents du drawer dans l'ordre du workflow** (Forge Board) — le drawer listait les documents
-  du plus avancé au moins avancé ; il suit désormais la chronologie de production (brief → pitch →
-  plan → estimate → review → report), et `brief.md` / `estimate.md` ne tombent plus dans le tri
-  alphabétique. L'ouverture automatique porte sur le premier document produit.
 
 ### 🔧 Technique
 
@@ -176,7 +181,7 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Garde-fou de version** — le déploiement échoue si le site annonce une version différente de `plugin.json`, désormais seule source de vérité. La dérive n'était pas théorique : le site a déjà affiché une version périmée sans que rien ne le signale.
 - **Intégration continue réduite au site** — les jobs PHP (CS-Fixer, PHPStan, PHPUnit, Playwright) sont retirés : rouges depuis le 4 juillet et Actions désactivées, ils ne garantissaient plus rien. La QA de l'application tourne en local via le Makefile.
 - **README recentré** — la documentation vit sur le site ; l'inventaire des skills n'y est plus dupliqué (il avait déjà deux skills de retard). Bannière refaite à la charte du site.
-- **Documentation projet réalignée** — `CLAUDE.md` et `docs/stack.md` décrivent le site comme troisième brique du dépôt, et corrigent deux affirmations fausses de longue date : la direction artistique du Board (« Nova · Midnight », pas « Paper ») et le niveau PHPStan (10, pas 9).
+- **Documentation projet réalignée** — `CLAUDE.md` et `docs/stack.md` décrivent le site comme troisième brique du dépôt, et corrigent deux affirmations fausses de longue date sur l'application (direction artistique et niveau PHPStan).
 
 ## [6.2.0] - 2026-07-15 — Rules de projet
 
@@ -252,19 +257,13 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ## [4.7.0] - 2026-07-12 — Clone local & interview de cadrage
 
 ### ✨ Fonctionnel
-- **Clone local du repo d'un projet** (Forge Board) — depuis le kanban, un bouton clone (ou met à jour via `git pull --ff-only`) le dépôt d'un projet en local, en tâche de fond (job Messenger async), avec bascule d'état en direct (Live Component, sans reload). Auth git par `GIT_ASKPASS` (token jamais en argv ni dans `.git/config`). Premier maillon du pivot productif.
-- **Expression d'un besoin en interview de cadrage** (Forge Board) — depuis un projet cloné, l'utilisateur exprime un besoin en langage libre ; le skill `feature-interview` tourne en headless (`claude -p`, ADR-0002) dans le clone local et mène l'interview tour par tour, ancrée sur le code réel. Le `brief.md` produit est présenté pour relecture puis, à validation, poussé sur une branche dédiée et ouvert en **PR draft GitHub** (jamais de merge ni d'écriture sur la branche principale). Parcours asynchrone, une interview active par projet.
 - **`feature-interview` signale sa conclusion** — le skill indique désormais explicitement quand il est prêt à conclure (Phase 3) et respecte une demande explicite de conclusion sans relancer un tour de questions — pour que l'utilisateur, qui sinon ne sait pas quand l'interview se termine, tienne clairement la fin du dialogue.
 
-### 🔧 Technique
-- **Serveur MCP `symfony-ai-mate`** — outillage MCP pour le développement du board (config `mcp.json`, worker dédié).
+_Les évolutions de **Forge Board** livrées dans cette version (clone local d'un repo, interview de cadrage, serveur MCP `symfony-ai-mate`) sont reprises dans le changelog de [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board), extrait le 2026-07-30._
 
 ## [4.6.0] - 2026-07-05 — Cycle de vie des stories sur le board
 
-### ✨ Fonctionnel
-- **Colonne « Idée » sur le board** (Forge Board) — une story qui n'a qu'un `brief.md` (idée dégrossie par interview) s'affiche désormais en première colonne du pipeline au lieu d'atterrir en « À vérifier ».
-- **Colonnes du board alignées sur le cycle de vie** (Forge Board) — le pipeline passe de « Cadrage / Planifié / Review » à cinq colonnes de cycle de vie : **Idée → Besoin → Cadré → Implémenté → Livré**. « À vérifier » ne contient plus que les dossiers réellement non reconnus et gagne une couleur d'anomalie distincte.
-- **Filtre par tag en popover recherchable** (Forge Board) — le mur de chips laisse place à un popover recherchable multi-sélection (OR), tags actifs en pills retirables. Les colonnes vidées par le filtre se rétrécissent, et les libellés de colonne se clampent si besoin.
+_Version entièrement consacrée à **Forge Board** — voir le changelog de [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board), extrait le 2026-07-30._
 
 ## [4.5.0] - 2026-07-05 — Reconstruction rétroactive des métadonnées
 
@@ -273,32 +272,23 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [4.4.0] - 2026-07-05 — Métadonnées de story & cartes enrichies
 
-### ✨ Fonctionnel
-- **Cartes de board enrichies** (Forge Board) — les cartes affichent le vrai titre, la date de dernière activité, les tags et un badge de livraison (release/commit), lus depuis le `metadata.json` des stories en **un seul appel groupé** (GraphQL GitHub, nombre d'appels indépendant du nombre de stories). Le drawer expose le changelog consolidé.
-- **Filtre par tag et tri par activité** (Forge Board) — barre d'outils client-side pour isoler un thème à travers le pipeline et réordonner les cartes par date de mise à jour, sans round-trip.
+_Les évolutions de **Forge Board** livrées dans cette version (cartes enrichies, filtre par tag et tri par activité, lecteur de dépôt bi-protocole) sont reprises dans le changelog de [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board), extrait le 2026-07-30._
 
 ### 🔧 Technique
 - **Métadonnées de story (`metadata.json`)** — chaque story forge porte désormais un fichier `metadata.json` (schéma v1 versionné : `title`, `created`, `updated`, `tags`, `changelog`, `delivery`) **produit et maintenu par les skills** via une référence partagée (`plugins/forge/references/story-metadata.md`). Les skills de création écrivent `title`/`created`/`tags`/première entrée ; chaque passe rebouge `updated` et append au changelog ; `commit`/`release` renseignent `delivery`. La timeline consolidée vit dans ce fichier — les tables de changelog en pied de `pitch.md`/`plan.md` sont abandonnées.
-- **Lecteur de dépôt bi-protocole** — le `RepositoryReaderInterface` expose `readStoryMetadata()` (lecture groupée du metadata) ; l'implémentation GitHub devient bi-protocole REST + GraphQL. Une story sans `metadata.json`, ou avec un fichier invalide, dégrade gracieusement vers le slug humanisé — aucune régression. `StoryStageMapper` ignore `metadata.json` : la colonne reste déduite des seuls `.md`.
 
 ## [4.3.0] - 2026-07-05 — Kanban lecture seule d'un projet forge
 
-### ✨ Fonctionnel
-- **Kanban d'un projet forge** (Forge Board) — à l'ouverture d'un projet, ses stories sont scannées en direct dans le dépôt et projetées en tableau lecture seule à quatre colonnes ordonnées par étape du pipeline, triées par numéro décroissant, avec un bandeau « À vérifier ». Un drawer permet de consulter les documents markdown de chaque story (pitch, plan…), rendus sanitizés. Aucun état persisté : le tableau est recalculé à chaque affichage.
-- **Déduction de l'étape d'une story depuis ses fichiers** (Forge Board) — l'étape de chaque story (pitch → plan → livraison → vérification) est déduite automatiquement des fichiers présents dans son dossier `docs/story/`, sans aucune saisie manuelle.
-- **Vérification d'accès et d'éligibilité d'un dépôt** (Forge Board) — à la déclaration ou l'édition d'un projet, l'application teste l'accès GitHub (token valide, dépôt atteignable) et confirme que le dépôt suit le workflow forge avant de l'accepter.
+_Version entièrement consacrée à **Forge Board** — voir le changelog de [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board), extrait le 2026-07-30._
 
 ## [4.2.0] - 2026-07-04 — Projets, authentification & DA Nova
 
-### ✨ Fonctionnel
-- **Gestion des projets forge** (Forge Board) — déclarer un dépôt à suivre (provider GitHub/GitLab, URL, token de lecture chiffré au repos), consulter la liste, ouvrir un projet, éditer l'URL / renouveler le token et retirer un projet derrière confirmation. Le token n'est jamais réaffiché ni renvoyé au navigateur. Liste en Live Component (suppression sans rechargement) et sélecteur de provider aux couleurs de marque.
-- **Connexion locale mono-utilisateur** (Forge Board) — l'application est protégée derrière une authentification : formulaire de login, option « rester connecté », déconnexion.
-- **Direction artistique « Nova · Midnight »** (Forge Board) — design system sombre de référence (tokens de thème, kit de composants Flowbite remappés) pilotant toutes les interfaces.
+_Version entièrement consacrée à **Forge Board** — voir le changelog de [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board), extrait le 2026-07-30._
 
 ## [4.1.0] - 2026-07-04 — Naissance de Forge Board
 
 ### ✨ Fonctionnel
-- **Forge Board** — application Symfony 8 (kanban de suivi des stories du workflow forge) instanciée à la racine du dépôt. Le repo héberge désormais deux sujets : la marketplace `forge` (`plugins/`) et l'app Forge Board (racine). Stack : Symfony 8 / PHP 8.5, Doctrine + SQLite, Symfony UX (Live Component, Turbo, Stimulus), Tailwind 4 + Flowbite 4, PHPUnit 13 + Playwright. Docs : `docs/vision.md`, `docs/stack.md`, `docs/adr/0001`.
+- **Forge Board** — application Symfony 8 (kanban de suivi des stories du workflow forge) instanciée à la racine du dépôt, dont elle a été extraite le 2026-07-30 vers [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board).
 
 ### 🔧 Technique
 - **Levée du doublon documentaire `documentation/` ↔ `docs/`** — l'inventaire des skills passe de `documentation/forge.md` à `plugins/forge/SKILLS.md` (au plus près du plugin), le banner à `.github/banner.png`. README réorganisé (skills en tête, puis section Forge Board), `CLAUDE.md` scindé en deux parties (marketplace / app Symfony).

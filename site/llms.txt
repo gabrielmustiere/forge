@@ -57,9 +57,7 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 
 ## Forge Board
 
-Application Symfony 8 vivant à la racine du même dépôt (la marketplace de plugins est sous `plugins/`). Kanban en lecture seule qui scanne les `docs/story/` de dépôts forge et projette chaque story en carte le long d'un pipeline visuel.
-
-Stack : Symfony 8.0, PHP 8.5+, SQLite, Symfony Messenger (transport Doctrine), Symfony UX (Stimulus, Turbo, Live Components), Tailwind CSS 4, AssetMapper, PHPUnit 13, Playwright, PHPStan level 9, PHP-CS-Fixer.
+Projet lié, dans son propre dépôt : https://github.com/gabrielmustiere/forge-board. Application Symfony 8 développée avec ce plugin — kanban en lecture seule qui scanne les `docs/story/` de dépôts forge et projette chaque story en carte le long d'un pipeline visuel.
 
 ## Liens
 
