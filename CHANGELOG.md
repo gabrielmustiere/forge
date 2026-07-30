@@ -10,7 +10,7 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
-## [6.9.0] - 2026-07-28 — Reprendre là où on s'est arrêté
+## [6.9.0] - 2026-07-30 — Savoir où on en est
 
 ### ✨ Fonctionnel
 
@@ -380,7 +380,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.8.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.9.0...HEAD
+[6.9.0]: https://github.com/gabrielmustiere/forge/compare/v6.8.0...v6.9.0
 [6.8.0]: https://github.com/gabrielmustiere/forge/compare/v6.7.1...v6.8.0
 [6.7.1]: https://github.com/gabrielmustiere/forge/compare/v6.7.0...v6.7.1
 [6.7.0]: https://github.com/gabrielmustiere/forge/compare/v6.6.0...v6.7.0
