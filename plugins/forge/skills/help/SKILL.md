@@ -81,6 +81,11 @@ allowed-tools:
  NNN-slug/overview.md CHANGELOG.md   (temps facturable
  (rétro-doc à partir  + tag annoté    tout compris, en
   du code livré)      + GitHub rel.   heures : réf. + IA)
+
+ ┌────────┐
+ │ status │  point de situation à la reprise : stories en cours, étape
+ └────────┘  atteinte, état du dépôt, par quoi reprendre
+             (lecture seule — n'écrit aucun fichier)
 ```
 
 Règle d'or : ne jamais passer à l'étape suivante sans validation explicite du user ("ok", "go", "validé", "c", etc.).
@@ -219,6 +224,7 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 
 | Skill                | Rôle                                                                                       |
 |----------------------|--------------------------------------------------------------------------------------------|
+| `/status`            | **Reprendre un projet après une pause** — recense les stories de `docs/story/`, déduit pour chacune l'étape atteinte (des artifacts présents et du `metadata.json`) et sa fraîcheur (active ≤ 7 j / en pause / dormante > 30 j), relève l'état du dépôt (branche, working tree, commits depuis le dernier tag, stash et commits non poussés), vérifie le décor de phase 0, puis conseille **une** reprise en nommant le skill à taper. **Lecture seule stricte** : n'écrit aucun fichier, pas même `metadata.json` — ce n'est pas une passe du pipeline. `/status <slug>` zoome sur une story, `/status --all` inclut les livrées |
 | `/test-scenario`     | Tester un scénario utilisateur via Playwright MCP (navigateur piloté en live)              |
 | `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : neuf skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
 | `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |

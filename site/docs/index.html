@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Documentation — Forge, plugin Claude Code</title>
-    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage.">
+    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 26 skills, configuration des permissions et dépannage.">
     <link rel="canonical" href="https://forge.mustiere.fr/docs/">
     <meta name="author" content="Gabriel Mustiere">
     <meta name="theme-color" content="#0a0e12">
@@ -14,17 +14,17 @@
     <meta property="og:site_name" content="Forge">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="Documentation — Forge, plugin Claude Code">
-    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
+    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 26 skills, configuration et dépannage.">
     <meta property="og:url" content="https://forge.mustiere.fr/docs/">
     <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Documentation — Forge, plugin Claude Code">
-    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
+    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 26 skills, configuration et dépannage.">
     <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
                     "@type": "TechArticle",
                     "@id": "https://forge.mustiere.fr/docs/#article",
                     "headline": "Documentation du plugin Claude Code Forge",
-                    "description": "Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage du plugin Forge.",
+                    "description": "Prérequis, installation, concepts du pipeline, référence des 26 skills, configuration des permissions et dépannage du plugin Forge.",
                     "url": "https://forge.mustiere.fr/docs/",
                     "inLanguage": "fr-FR",
                     "proficiencyLevel": "Beginner",
@@ -53,7 +53,7 @@
                     "about": {
                         "@type": "SoftwareApplication",
                         "name": "Forge",
-                        "softwareVersion": "6.8.0",
+                        "softwareVersion": "6.9.0",
                         "url": "https://forge.mustiere.fr/"
                     },
                     "license": "https://www.apache.org/licenses/LICENSE-2.0"
@@ -88,7 +88,7 @@
                             "@type": "HowToStep",
                             "position": 3,
                             "name": "Recharger les plugins",
-                            "text": "Exécuter /reload-plugins pour que les 25 skills soient disponibles sous le préfixe /forge:."
+                            "text": "Exécuter /reload-plugins pour que les 26 skills soient disponibles sous le préfixe /forge:."
                         }
                     ]
                 },
@@ -121,7 +121,7 @@
     <a class="nav__brand" href="/">
         <span class="nav__dot" aria-hidden="true"></span>
         <span class="nav__name">FORGE</span>
-        <span class="nav__version" data-forge-version>v6.8.0</span>
+        <span class="nav__version" data-forge-version>v6.9.0</span>
     </a>
     <button class="nav__burger" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Ouvrir le menu">
         <span class="nav__burger-bar" aria-hidden="true"></span>
@@ -142,7 +142,7 @@
         <p class="doc-header__eyebrow">DOCUMENTATION</p>
         <h1>Installer et utiliser Forge</h1>
         <p class="doc-header__lead">Forge est un plugin Claude Code stack-agnostique. Il découpe le cycle de développement en étapes courtes, chacune produisant un artefact markdown qui alimente la suivante. Cette page couvre l'installation, les
-            concepts, la référence des 25 skills et la configuration.</p>
+            concepts, la référence des 26 skills et la configuration.</p>
     </header>
 
     <div class="doc-body">
@@ -234,7 +234,7 @@
                         </li>
                         <li>
                             <h4>Recharger les plugins</h4>
-                            <p>Rend les 25 skills disponibles dans la session courante.</p>
+                            <p>Rend les 26 skills disponibles dans la session courante.</p>
                             <div class="code">
                                 <pre><code><span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
                             </div>
@@ -609,6 +609,12 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             <tr>
                                 <td><code>/forge:adr</code></td>
                                 <td>Rédige un Architecture Decision Record (format MADR léger) depuis un artefact ou un topic libre, avec backlinks et index automatiques. Produit <code>docs/adr/NNNN-slug.md</code>.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:status</code></td>
+                                <td>Le point de situation à la reprise d'un projet : stories en cours, étape atteinte par chacune, fraîcheur, état du dépôt (working tree, commits non poussés, stash), et <strong>une</strong> reprise conseillée. Lecture seule — n'écrit
+                                    aucun fichier.
+                                </td>
                             </tr>
                             <tr>
                                 <td><code>/forge:estimate</code></td>

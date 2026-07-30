@@ -2,7 +2,7 @@
 
 > Forge est un plugin Claude Code stack-agnostique qui pilote tout le cycle de développement, de l'idée à la release. Il découpe le travail en étapes courtes validées une à une : chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`…) qui alimente la suivante. Aucune étape ne démarre sans validation explicite de l'utilisateur.
 
-Version : 6.8.0 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
+Version : 6.9.0 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
 
 Installation dans une session Claude Code :
 
@@ -16,7 +16,7 @@ Les skills sont namespacées par le nom du plugin : `/forge:help`, `/forge:featu
 
 ## Structure du pipeline
 
-Le pipeline compte 25 skills et se lit sur deux axes. La **phase** dit *quand* : quatre phases, dans l'ordre. Le **track** dit *avec quelles skills* : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Le track se choisit à l'entrée de la phase 1 et ne modifie pas les phases traversées.
+Le pipeline compte 26 skills et se lit sur deux axes. La **phase** dit *quand* : quatre phases, dans l'ordre. Le **track** dit *avec quelles skills* : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Le track se choisit à l'entrée de la phase 1 et ne modifie pas les phases traversées.
 
 - **Phase 0 — poser le décor** (une fois pour le projet, documents vivants à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`.
 - **Phase 1 — cadrer** : selon le track, `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) ; ou `refactor-plan` (→ `plan.md`, avec tests de caractérisation) ; ou `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch). Les trois tracks produisent un `plan.md` ; seul le track feature intercale un `pitch.md` fonctionnel en amont.
@@ -47,6 +47,7 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 - `/forge:help` — sommaire du pipeline, tracks, skills et artefacts.
 - `/forge:claude-md` — génère ou met à jour le `CLAUDE.md` du projet.
 - `/forge:rules` — écrit les règles projet paths-scopées dans `.claude/rules/`.
+- `/forge:status` — point de situation à la reprise : stories en cours, étape atteinte, état du dépôt, par quoi reprendre. Lecture seule.
 - `/forge:test-scenario` — joue un scénario utilisateur en live via Playwright MCP.
 - `/forge:adr` — rédige un Architecture Decision Record MADR léger dans `docs/adr/`.
 - `/forge:estimate` — chiffre le temps « tout compris » d'une story à facturer, en heures.
@@ -62,7 +63,7 @@ Stack : Symfony 8.0, PHP 8.5+, SQLite, Symfony Messenger (transport Doctrine), S
 
 ## Liens
 
-- [Documentation développeur](https://forge.mustiere.fr/docs/) — prérequis, installation pas à pas, concepts, référence des 25 skills, permissions, dépannage
+- [Documentation développeur](https://forge.mustiere.fr/docs/) — prérequis, installation pas à pas, concepts, référence des 26 skills, permissions, dépannage
 - [Dépôt GitHub](https://github.com/gabrielmustiere/forge)
 - [Inventaire complet des skills](https://github.com/gabrielmustiere/forge/blob/main/plugins/forge/SKILLS.md)
 - [Releases](https://github.com/gabrielmustiere/forge/releases)

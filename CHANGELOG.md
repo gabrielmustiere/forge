@@ -10,6 +10,25 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.9.0] - 2026-07-28 — Reprendre là où on s'est arrêté
+
+### ✨ Fonctionnel
+
+- **Nouveau skill `/forge:status`** — le point de situation quand on rouvre un projet après une
+  pause. Il recense les stories de `docs/story/`, déduit pour chacune l'étape atteinte (des
+  artifacts présents et de la dernière entrée du `metadata.json`) et sa fraîcheur — active sous
+  7 jours, en pause jusqu'à 30, dormante au-delà, auquel cas le plan a pu périmer et se relit
+  avant de coder. Il relève l'état du dépôt (branche, working tree, commits depuis le dernier tag)
+  en remontant en tête ce qui se perd le plus vite : stash et commits non poussés. Il vérifie
+  enfin le décor de phase 0, puis conseille **une** reprise en nommant le skill à taper.
+- **Il ne laisse aucune trace** — lecture seule stricte : aucun `.md`, aucun `metadata.json`,
+  aucune commande git mutante. `/forge:status` n'est pas une passe du pipeline, il ne rebouge pas
+  `updated` et n'apparaît pas dans le changelog d'une story. Le point de situation est périssable :
+  le figer dans un document en ferait un document faux le lendemain.
+- **Deux arguments** — `/forge:status <slug>` zoome sur une story (ses artifacts, sa timeline
+  entrée par entrée, l'écart entre son plan et le working tree) ; `/forge:status --all` inclut les
+  stories livrées, pour une revue de fin de cycle ou une préparation de release.
+
 ## [6.8.0] - 2026-07-28 — Le code d'abord, le commentaire ensuite
 
 ### ✨ Fonctionnel

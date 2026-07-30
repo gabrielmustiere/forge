@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Forge — pipeline de développement Claude Code, de l'idée à la release</title>
-    <meta name="description" content="Forge est un plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, et un artefact markdown validé à chaque étape. De la vision projet jusqu'au commit.">
+    <meta name="description" content="Forge est un plugin Claude Code stack-agnostique : 3 tracks symétriques, 26 skills, et un artefact markdown validé à chaque étape. De la vision projet jusqu'au commit.">
     <link rel="canonical" href="https://forge.mustiere.fr/">
     <meta name="author" content="Gabriel Mustiere">
     <meta name="theme-color" content="#0a0e12">
@@ -14,17 +14,17 @@
     <meta property="og:site_name" content="Forge">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="Forge — le pipeline de développement, de l'idée à la release">
-    <meta property="og:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, un artefact markdown validé à chaque étape.">
+    <meta property="og:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 26 skills, un artefact markdown validé à chaque étape.">
     <meta property="og:url" content="https://forge.mustiere.fr/">
     <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Forge — le pipeline de développement, de l'idée à la release">
-    <meta name="twitter:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 25 skills, un artefact markdown validé à chaque étape.">
+    <meta name="twitter:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 26 skills, un artefact markdown validé à chaque étape.">
     <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,7 +59,7 @@
                     "applicationCategory": "DeveloperApplication",
                     "applicationSubCategory": "Plugin Claude Code",
                     "operatingSystem": "macOS, Linux, Windows",
-                    "softwareVersion": "6.8.0",
+                    "softwareVersion": "6.9.0",
                     "url": "https://forge.mustiere.fr/",
                     "codeRepository": "https://github.com/gabrielmustiere/forge",
                     "license": "https://www.apache.org/licenses/LICENSE-2.0",
@@ -135,7 +135,7 @@
     <a class="nav__brand" href="#top">
         <span class="nav__dot" aria-hidden="true"></span>
         <span class="nav__name">FORGE</span>
-        <span class="nav__version" data-forge-version>v6.8.0</span>
+        <span class="nav__version" data-forge-version>v6.9.0</span>
     </a>
     <button class="nav__burger" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Ouvrir le menu">
         <span class="nav__burger-bar" aria-hidden="true"></span>
@@ -168,7 +168,7 @@
         </div>
         <ul class="hero__facts">
             <li>3 tracks symétriques</li>
-            <li>25 skills</li>
+            <li>26 skills</li>
             <li>Apache 2.0</li>
         </ul>
     </div>
@@ -202,7 +202,7 @@
                 <p class="card__mono card__mono--dim">/plugin marketplace update forge → /reload-plugins</p>
             </div>
         </div>
-        <p class="section__note">Prérequis, concepts, référence des 25 skills, configuration des permissions et dépannage : voir la <a href="/docs/">documentation complète</a>.</p>
+        <p class="section__note">Prérequis, concepts, référence des 26 skills, configuration des permissions et dépannage : voir la <a href="/docs/">documentation complète</a>.</p>
     </section>
 
     <section class="section" id="pipeline" aria-labelledby="pipeline-title">
@@ -465,6 +465,10 @@
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:adr</code></dt>
                         <dd class="skill__desc">Rédige un Architecture Decision Record MADR léger → docs/adr/NNNN-slug.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:status</code></dt>
+                        <dd class="skill__desc">Point de situation à la reprise : ce qui est en cours, où ça s'est arrêté, par quoi reprendre</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:estimate</code></dt>
