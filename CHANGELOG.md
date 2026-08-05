@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.10.0] - 2026-08-05 — Avancement plus précis
+
 ### ✨ Fonctionnel
 
 - **Le backlog produit affiche son avancement** — `docs/product-backlog.md` ne décrivait qu'un
@@ -413,7 +415,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.9.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.10.0...HEAD
+[6.10.0]: https://github.com/gabrielmustiere/forge/compare/v6.9.0...v6.10.0
 [6.9.0]: https://github.com/gabrielmustiere/forge/compare/v6.8.0...v6.9.0
 [6.8.0]: https://github.com/gabrielmustiere/forge/compare/v6.7.1...v6.8.0
 [6.7.1]: https://github.com/gabrielmustiere/forge/compare/v6.7.0...v6.7.1
