@@ -86,6 +86,10 @@ Pour chaque ligne de backlog :
 - **Dépendances** : autres lignes du backlog à livrer avant (par slug).
 - **Justification vision** : pointeur explicite vers ce que la feature sert dans `docs/vision.md` (problème, audience, principe, North Star).
 
+**Mise en forme** : chaque ligne s'écrit en item de liste à cocher (case + slug + pitch, puis une ligne d'état, puis une ligne de rattachements) — format exact et catalogue fermé des états dans `template.md` §Format d'une ligne de backlog. Les 7 champs ci-dessus sont tous conservés, seule leur disposition change.
+
+**En Création, tout est à `[ ] Pas encore cadrée`** — sauf si une story existante prouve le contraire : en mode Pivot (ou sur un projet déjà en route), la réconciliation de la Phase 0 a déjà relevé les stories rattachées, reprends ses conclusions plutôt que de repartir de zéro. Ne coche **jamais** une case sans preuve : la case dit « livré », pas « prévu ».
+
 Règles de priorisation :
 - Une capacité MVP **doit** être couverte par au moins une feature MVP.
 - Si un parcours principal a des étapes non couvertes par le MVP, il doit être marqué « partiellement supporté » dans le backlog.
@@ -93,3 +97,13 @@ Règles de priorisation :
 - Refuser une feature qui ne se rattache à aucune capacité ni parcours — soit elle est hors périmètre, soit la phase 2/3 est incomplète (boucle de retour).
 
 Itérer la phase 5 jusqu'à ce que le backlog soit cohérent : pas de capacité orpheline, pas de feature sans rattachement, pas d'incohérence MVP / parcours.
+
+## Couverture — une section dérivée
+
+La section « Couverture » n'est **pas** de la saisie : elle se calcule intégralement à partir des lignes de backlog et de leur état. Elle ne porte donc **pas** de cases à cocher — sinon le même fait (« C1.1 est livrée ») aurait deux sources qui divergeraient.
+
+- **Capacités par horizon** : pour chaque horizon, les capacités des lignes **cochées** vont en `livrées`, les autres en `planifiées`. Une capacité couverte par deux lignes dont une seule est livrée reste `planifiée` — elle n'est acquise que quand tout ce qui la porte l'est.
+- **Capacités non couvertes** : inchangé, ce sont celles qu'aucune ligne ne sert (à challenger : anti-objectif, obsolète, oubli).
+- **Parcours supportés** : un parcours est **livré** quand toutes les capacités de ses étapes le sont, **en cours** quand une partie l'est, sinon rien de plus qu'aujourd'hui (« partiellement supporté en MVP »).
+
+Recalcule-la à chaque rédaction, en même temps que les cases et les compteurs. Le marqueur `_(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_` reste en tête de section : il prévient le lecteur que ses corrections manuelles seront écrasées.

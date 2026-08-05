@@ -31,7 +31,7 @@ badge de livraison) même pour les stories créées avant l'introduction du cont
 inventer une donnée**. Toute valeur écrite doit être vraie (déduite d'une source) ou validée par
 l'utilisateur. Mieux vaut un champ absent qu'un champ faux.
 
-Ce skill **écrit le même fichier, au même schéma v1, que les skills de cadrage** : la référence
+Ce skill **écrit le même fichier, au même schéma v2, que les skills de cadrage** : la référence
 partagée `story-metadata.md` reste la seule source de vérité du format. Ici on ne fait que
 **remplir les blancs du passé**.
 
@@ -51,11 +51,12 @@ partagée `story-metadata.md` reste la seule source de vérité du format. Ici o
 
 | Champ         | Source de reconstruction                                                                                   |
 |---------------|------------------------------------------------------------------------------------------------------------|
-| `version`     | `1` (constante du schéma).                                                                                  |
+| `version`     | `2` (constante du schéma).                                                                                  |
 | `title`       | Le **H1** (`# …`) du document principal : `pitch.md` pour un track `f`, `plan.md` pour `r`/`t`. Nettoyé des marqueurs de guide. Fallback : slug humanisé (voir §Titre). |
 | `created`     | Date du **premier** commit touchant le dossier de la story (`git log --reverse … | head -1`).               |
 | `updated`     | Date du **dernier** commit touchant le dossier de la story (`git log -1`).                                  |
 | `tags`        | **Proposés** par déduction du titre + contenu + track, en kebab-case, puis **validés** par l'utilisateur. Jamais écrits sans validation. |
+| `backlog`     | Slug de la ligne de `docs/product-backlog.md` que la story réalise — **seulement** si le rapprochement est certain (voir §Rattachement backlog). Absent sinon, et **toujours** sur un track `r`/`t`. |
 | `changelog`   | Timeline reconstruite depuis la date d'apparition des artifacts dans git, **jalons fusionnés par date** (les artifacts d'un même commit → une entrée `Création` de cadrage + une entrée `Livraison`, jamais une ligne par fichier). Détail des dates distinctes conservé. |
 | `delivery`    | `commit` = SHA court du commit de livraison **si identifiable avec confiance** ; `release` = plus ancien tag contenant ce commit. Absent si la story n'est pas livrée ou si la livraison n'est pas identifiable de façon fiable. |
 
@@ -199,6 +200,24 @@ git log --oneline --all --grep="<mots-clés du slug>" | head
 Ajoute alors une entrée de changelog `Livraison` (date du commit) si `delivery.commit` a été trouvé,
 et `Release` (date du tag) si `delivery.release` l'a été.
 
+**Rattachement backlog (`backlog`)** — ce champ fait cocher une ligne d'avancement dans
+`docs/product-backlog.md` : un rattachement faux coche la **mauvaise** ligne, ce qui est pire que
+pas de rattachement du tout. Il est donc soumis à la règle de preuve la plus stricte du skill.
+
+- **Track `r`/`t` → jamais de `backlog`.** Un refacto ou une évolution technique ne réalise pas une
+  ligne de backlog fonctionnel. N'essaie même pas le rapprochement.
+- **Pas de `docs/product-backlog.md`** dans le projet → champ absent, silencieusement.
+- **Track `f`** : lis le backlog et cherche la ligne que la story réalise. Deux niveaux de preuve :
+  - **Certain** — le slug de la story (hors préfixe `NNN-f-`) est **égal** à un slug de ligne de
+    backlog, ou le `pitch.md` cite explicitement la ligne. → propose le rattachement.
+  - **Probable** — le titre de la story et le pitch d'une ligne décrivent visiblement la même chose,
+    sans égalité de slug. → propose-le **en le marquant « à confirmer »** dans la Phase 3 ; il n'est
+    écrit que si l'utilisateur le confirme.
+  - **Rien de net** → champ absent. Ne colle pas la ligne « la plus proche ».
+- **Jamais de rattachement multiple** : le champ vaut un slug, pas une liste. Si une story semble
+  réaliser deux lignes, c'est un signal de backlog trop fin ou de story trop large : laisse absent
+  et signale-le en Phase 5.
+
 ### Phase 3 — Proposition et validation
 
 Présente, **par story**, la proposition reconstruite avant écriture :
@@ -210,6 +229,7 @@ docs/story/006-f-metadonnees-story/metadata.json  (nouveau)
   created  : 2026-07-05   (premier commit du dossier — 5f7519e)
   updated  : 2026-07-05   (dernier commit du dossier — 04c60db)
   tags     : [metadata, board]   ← PROPOSÉS, à valider
+  backlog  : `kanban-projet`   ← À CONFIRMER (titres concordants, slugs différents)
   changelog :   (jalons fusionnés par date — pas une ligne par artifact)
     2026-07-05  Création    pitch + plan posés (reconstruit depuis git)
     2026-07-05  Livraison    implémentation livrée, revue, reportée (reconstruit depuis git)
@@ -223,6 +243,9 @@ Règles de la boucle de validation :
 - **Tags** : toujours demandés. L'utilisateur peut les remplacer ou en ajouter/retirer.
 - **Titre fallback** (slug humanisé) : signale-le explicitement et invite à corriger.
 - **Delivery** : si absent faute de certitude, dis-le ; l'utilisateur peut fournir un SHA/tag.
+- **Backlog** : n'affiche la ligne que si un rattachement a été trouvé. Un rattachement **certain**
+  (slugs égaux) s'affiche sans marqueur ; un rattachement **probable** s'affiche « à confirmer » et
+  n'est écrit que sur confirmation explicite. Rien trouvé → n'affiche pas la ligne du tout.
 - **`--all`** : traite story par story. Autorise un « accepte tout » **uniquement** après avoir
   montré au moins la première proposition et fait valider une politique de tags — mais garde une
   sortie par story si une valeur paraît douteuse (titre fallback, dates incohérentes).
@@ -230,15 +253,16 @@ Règles de la boucle de validation :
 ### Phase 4 — Écriture
 
 Sur validation d'une story, **écris** son `metadata.json` (`Write`, JSON indenté 2 espaces,
-`version: 1`), au schéma exact de `story-metadata.md` :
+`version: 2`), au schéma exact de `story-metadata.md` :
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "title": "…",
   "created": "YYYY-MM-DD",
   "updated": "YYYY-MM-DD",
   "tags": ["…"],
+  "backlog": "slug-de-la-ligne",
   "changelog": [
     { "date": "YYYY-MM-DD", "type": "Création", "description": "…" }
   ],
@@ -247,6 +271,8 @@ Sur validation d'une story, **écris** son `metadata.json` (`Write`, JSON indent
 ```
 
 Omets entièrement la clé `delivery` si la story n'est pas livrée (ne mets pas `delivery: null`).
+Même règle pour `backlog` : clé **absente** si la story n'est rattachée à aucune ligne (jamais
+`"backlog": null`, jamais de chaîne vide).
 
 Sur `--force` avec un fichier existant valide : **conserve** le `created` d'origine et fusionne le
 changelog existant avec les entrées reconstruites (ne perds pas d'entrées réelles déjà présentes).
@@ -259,10 +285,15 @@ Backfill terminé :
 - M réparés (fichiers malformés)
 - P stories avec delivery renseigné, Q laissées sans delivery (livraison non identifiée)
 - R titres en fallback slug à revoir (signalés ci-dessus)
+- S stories rattachées à une ligne de backlog, T laissées sans rattachement
 
 Prochaine étape : relis le board, puis commit type
 `chore(story): reconstruire les metadata.json des stories antérieures`.
 ```
+
+Si des stories `f-` ont été rattachées à une ligne de backlog, ajoute une ligne : le backlog
+affichera l'avancement correspondant au prochain `/forge:product-backlog` (sa réconciliation de
+Phase 0 recalcule les cases à partir de ces rattachements).
 
 **Ne fais pas le commit toi-même** sans demande explicite (`/commit` s'en charge).
 
@@ -289,7 +320,10 @@ Prochaine étape : relis le board, puis commit type
 - **Rebase/squash** : sur un historique réécrit, la date du « premier commit » peut être plus
   récente que la vraie création. Si l'utilisateur le signale, préfère sa date à celle de git.
 - **`--force` destructeur** : ne re-dérive avec `--force` qu'une story explicitement ciblée, et
-  préserve toujours `created` + les entrées de changelog réelles déjà présentes.
+  préserve toujours `created` + les entrées de changelog réelles déjà présentes. Préserve aussi le
+  `backlog` d'origine s'il existe : il a pu être confirmé à la main, ta re-dérivation est moins sûre.
+- **Rattachement backlog au jugé** : deux features du même domaine se ressemblent toujours un peu.
+  Un `backlog` faux coche une ligne qui n'a rien été livrée — l'absence est toujours préférable.
 
 ## Substitutions disponibles
 

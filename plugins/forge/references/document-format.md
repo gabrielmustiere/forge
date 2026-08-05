@@ -221,6 +221,10 @@ Les tables ci-dessous sont **normatives** : mêmes colonnes, même ordre, dans t
 qui les portent. C'est ce qui permet à `/report` de confronter le livré au plan ligne à ligne,
 quel que soit le track.
 
+Les deux derniers formats de cette section (critères, ligne de backlog) ne sont pas des tables
+mais des listes à cocher ; le dernier concerne un **document projet** (`product-backlog.md`,
+hors story) et n'engage que lui.
+
 ### Périmètre — fichiers à créer
 
 | Fichier | Rôle |
@@ -276,6 +280,28 @@ Checkboxes `- [ ]`, cochées à la livraison, **une par ligne, observable ou mes
 critère qu'on ne sait pas vérifier n'est pas un critère : c'est une intention, elle va en
 `## Questions ouvertes`. Le `report.md` **reprend ces lignes à l'identique** et les coche — d'où
 l'exigence de stabilité de leur formulation.
+
+### Ligne de backlog *(document projet — `product-backlog.md`)*
+
+Le backlog priorisé n'est pas une table mais une **liste à cocher**, parce qu'une case Markdown
+n'est rendue qu'en début d'item de liste (dans une cellule de table, `- [ ]` reste du texte).
+Structure normative, trois lignes dans cet ordre :
+
+```markdown
+- [ ] `slug` — Pitch en une ligne.
+  - <état>
+  - <capacités> · <parcours> · dép. <dépendances> · Vision : <justification>
+```
+
+**La case est dérivée, jamais saisie** : elle se coche sur la seule preuve d'un `delivery.commit`
+dans le `metadata.json` d'une story rattachée (champ `backlog`, cf.
+[`story-metadata.md`](story-metadata.md)). Les états intermédiaires s'écrivent sur la ligne
+d'état, dans un **catalogue fermé** aligné sur le vocabulaire de `/status` — il est défini une
+seule fois, dans `skills/product-backlog/references/template.md` §États, et ne se redéfinit pas
+ailleurs. Le titre de l'horizon porte le compteur `n/N livrées`, recalculé avec les cases.
+
+Même règle pour la section « Couverture » du même document : **entièrement dérivée** des lignes
+et de leur état, donc sans cases à cocher — le même fait n'a qu'une source.
 
 ## 7. Criticité et tags
 

@@ -57,9 +57,9 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `docs/story/<NNN>-*/review.md` | `review` | `report`, `adr` |
 | `docs/story/<NNN>-*/report.md` | `report` | `sync`, `adr` |
 | `docs/story/<NNN>-*/estimate.md` | `estimate` | — |
-| `docs/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule) |
+| `docs/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule), `status`, `product-backlog` (avancement) |
 | `docs/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `claude-md` |
-| `docs/product-backlog.md` | `product-backlog` (+ `sync`, voir §3) | `feature-pitch` |
+| `docs/product-backlog.md` | `product-backlog` (+ `sync`, voir §3) | `feature-pitch`, `status` |
 | `docs/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `claude-md` |
 | `docs/adr/<NNNN>-<slug>.md` + `docs/adr/README.md` | `adr` | tous |
 | `docs/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
@@ -108,6 +108,15 @@ rendent l'exception sûre :
 3. **`sync` propage, il ne cadre pas.** Une divergence stratégique large n'est pas absorbée : il
    renvoie vers `/forge:vision` en mode Pivot. La frontière est là — `sync` constate ce que le
    code a fait à la doc, il ne décide pas de la direction du produit.
+
+**Cas particulier : l'avancement du backlog.** Les cases à cocher de `product-backlog.md` sont de
+la donnée **dérivée** (preuve : le `delivery` d'un `metadata.json` rattaché par son champ
+`backlog`). Que `sync` les mette à jour au passage n'ajoute donc pas un écrivain de plus : deux
+skills qui dérivent la même donnée des mêmes preuves ne peuvent pas se contredire — le dernier
+qui passe recalcule, et `product-backlog` réconcilie l'ensemble en ouverture de session. C'est
+aussi pourquoi `feature-pitch` n'écrit **pas** le rattachement dans le backlog mais dans le
+`metadata.json` de sa propre story : le lien vit du côté de celui qui le connaît, la projection
+reste chez le propriétaire du document.
 
 ### Le `CLAUDE.md` — `rules` soustrait ce qu'il emporte
 

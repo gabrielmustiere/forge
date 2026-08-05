@@ -1,6 +1,6 @@
 ---
 name: product-backlog
-description: "Traduit la vision en périmètre fonctionnel — domaines, capacités, parcours, règles, backlog priorisé MVP/V2/V3. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/product-backlog.md` avec changelog, lu par `feature-pitch`."
+description: "Traduit la vision en périmètre fonctionnel — domaines, capacités, parcours, backlog MVP/V2/V3 avec avancement coché depuis les stories. Quatre modes (Création, Enrichir, Éditer, Pivot). Produit `docs/product-backlog.md`, lu par `feature-pitch`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[intention ou domaine ciblé]"
@@ -11,6 +11,8 @@ allowed-tools:
   - Glob
   - Bash(ls:*)
   - Bash(mkdir:*)
+  - Bash(git status:*)
+  - Bash(git diff --name-only:*)
 ---
 
 # /product-backlog — Atelier de cadrage du périmètre fonctionnel
@@ -58,6 +60,7 @@ Une application a un cycle de vie long. Le backlog est un **document vivant** qu
 5. **Forcer le concret** — chaque capacité s'exprime avec un verbe d'action utilisateur (« importer », « relancer », « consulter », « valider »), pas avec un nom abstrait (« gestion », « pilotage », « supervision »).
 6. **Aligner systématiquement sur la vision** — chaque domaine, capacité et feature du backlog doit pouvoir pointer vers un élément de `docs/vision.md` (problème adressé, audience servie, principe respecté, North Star impactée). Une feature qui ne s'aligne sur rien doit être justifiée ou retirée.
 7. **Pas de compliments creux** — challenge constructif uniquement. Le silence vaut mieux qu'un « bonne idée ! ».
+8. **L'avancement se dérive, il ne se saisit pas.** Une case cochée dit « livré », et sa seule preuve recevable est un `delivery.commit` dans le `metadata.json` d'une story rattachée. Ni la parole de l'utilisateur, ni un ressenti de progression, ni une case cochée à la main dans le fichier ne cochent une case. Un backlog qui affiche un avancement faux est pire qu'un backlog sans avancement du tout.
 
 ## Déroulement
 
@@ -67,7 +70,7 @@ Avant de challenger, fais l'inventaire :
 
 1. **Vision** : lire `docs/vision.md` intégralement, **y compris son changelog**. Si absent → arrêter et proposer `/vision`. Mémoriser : problème central, audience principale, principes, anti-objectifs, North Star, horizons, et les évolutions récentes (un enrichissement de vision non répercuté sur le backlog est un signal fort).
 2. **Blueprint existant** : lire `docs/product-backlog.md` s'il existe (domaines, capacités, parcours, règles transverses, backlog, changelog).
-3. **Stories existantes** : scanner `docs/story/` (juste les noms de dossiers et titres `pitch.md` / `plan.md`) pour repérer ce qui a déjà été cadré ou livré. Le backlog ne doit pas réinventer ce qui existe — au contraire, l'enrichissement doit s'inscrire dans l'historique.
+3. **Stories existantes** : scanner `docs/story/` (noms de dossiers, `.md` présents, `metadata.json`) pour repérer ce qui a déjà été cadré ou livré. Le backlog ne doit pas réinventer ce qui existe — au contraire, l'enrichissement doit s'inscrire dans l'historique. Cette lecture alimente directement la **réconciliation de l'avancement** (Phase 0bis).
 4. **Stack** : lire `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et appliquer la procédure. Le backlog reste **fonctionnel**, mais le stack oriente le découpage en domaines (ex: e-commerce Sylius → suggérer catalogue / panier / commande / paiement / promotion / fidélité).
 5. **Contexte projet** : `CLAUDE.md` racine + `README.md` si présents — conventions, contraintes métier, stakeholders.
 
@@ -85,7 +88,32 @@ Si le changelog de `docs/vision.md` montre une évolution récente non encore r�
 
 Note le mode choisi : il pilote toute la suite. Si aucun de ces artifacts existe à part la vision, c'est normal : on est en mode Création, et on construit le backlog à partir de la vision.
 
-### Phase 0bis — Cibler l'évolution *(modes Enrichir et Éditer uniquement)*
+### Phase 0bis — Réconciliation de l'avancement *(tous les modes, dès que le fichier existe)*
+
+Les cases à cocher du backlog sont **dérivées**, jamais saisies : chacune s'adosse au `metadata.json` d'une story. Avant de discuter du périmètre, remets-les d'aplomb — un backlog qui affiche un avancement faux est pire qu'un backlog qui n'en affiche aucun.
+
+**Ce n'est pas un mode**, c'est une étape d'ouverture : elle ne remplace ni Enrichir ni Éditer, et elle ne dispense pas de la règle 1 (rien n'est écrit tant que l'utilisateur n'a pas validé la rédaction de la Phase 6).
+
+1. **Apparier.** Pour chaque `docs/story/*/metadata.json`, lis le champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). C'est **le seul** critère d'appariement : il porte le slug de la ligne d'origine, précisément parce que le slug d'une story a pu être affiné au cadrage. Champ absent → la story n'est rattachée à rien, elle ne coche aucune case. Ne rattrape **jamais** un appariement manquant en comparant des chaînes au jugé.
+2. **Dériver l'état** de chaque ligne appariée : artifacts présents dans le dossier + `delivery`, traduits selon le catalogue fermé de `${CLAUDE_SKILL_DIR}/references/template.md` §États. Case cochée **si et seulement si** `delivery.commit` est renseigné. Plusieurs stories sur une même ligne → l'état affiché est celui de la plus avancée.
+3. **Relever les écarts** entre ce que le fichier affiche et ce que les preuves disent :
+   - **Case cochée sans preuve** (quelqu'un a coché à la main dans l'éditeur ou sur GitHub — les cases sont cliquables) → à décocher.
+   - **Livraison non reflétée** (`delivery.commit` présent, case vide) → à cocher.
+   - **Story orpheline** : une story `f-` sans champ `backlog` dont le sujet recoupe visiblement le périmètre → ne l'apparie pas d'autorité ; signale-la et propose soit un **Enrichir** (la ligne manque au backlog), soit d'ajouter le rattachement via `/forge:backfill-metadata`.
+   - **Ligne fantôme** : un `backlog` pointant un slug qui n'existe plus (ligne retirée, slug renommé) → signale, ne supprime rien.
+   - **Compteurs d'horizon** faux → recalculés avec les cases, jamais séparément.
+4. **Restituer** en quelques lignes, avant toute question de périmètre :
+
+   > Avancement réconcilié : 3 lignes cochées (MVP 3/8, V2 0/5), 1 case décochée (`slug-X` : aucune story livrée), 1 story orpheline (`053-f-…`, non rattachée).
+
+   Si rien ne bouge, une ligne suffit : « Avancement à jour, rien à réconcilier. »
+5. **Pas de ligne de changelog** pour une réconciliation : le changelog du document trace le **périmètre**, pas l'avancement. La timeline de livraison vit dans les `metadata.json`. Une ligne de changelog n'est ajoutée que si la session finit par modifier réellement le périmètre (Enrichir/Éditer).
+
+**Ancien format tabulaire.** Si le backlog priorisé est encore en tables à 6 colonnes (format antérieur à l'avancement coché), propose une **conversion** : mécanique, sans perte, une ligne de table → un item à cocher (les 7 champs sont conservés, voir `template.md`). Applique-la à la rédaction de Phase 6 avec le reste. Refus de l'utilisateur → n'insiste pas et travaille au format existant, sans cases : un backlog mi-table mi-liste serait le pire des deux.
+
+**Fichier absent** (mode Création) : saute cette phase, il n'y a rien à réconcilier. Relève quand même les stories `f-` déjà cadrées — elles renseignent le backlog à construire, et leurs rattachements existants seront repris en Phase 5.
+
+### Phase 0ter — Cibler l'évolution *(modes Enrichir et Éditer uniquement)*
 
 En **Enrichir** ou **Éditer**, charge `${CLAUDE_SKILL_DIR}/references/mode-evolution.md` et déroule la procédure (3 étapes : identifier l'élément, préciser la nature, contrôle de cohérence). En sortie, saute les Phases 1 → 5 et va directement à la Phase 6.
 
@@ -103,7 +131,7 @@ En **Création** ou **Pivot**, charge `${CLAUDE_SKILL_DIR}/references/phases-cre
 
 Suis les phases dans l'ordre, en challengeant chaque proposition selon les critères listés dans la référence. Itérer jusqu'à cohérence : pas de capacité orpheline, pas de feature sans rattachement, pas d'incohérence MVP / parcours.
 
-En **Enrichir** ou **Éditer**, ne charge **pas** cette référence — la Phase 0bis suffit.
+En **Enrichir** ou **Éditer**, ne charge **pas** cette référence — la Phase 0ter suffit.
 
 ### Phase 6 — Synthèse et rédaction
 
@@ -116,9 +144,11 @@ Quand l'utilisateur valide explicitement, rédige (ou met à jour) `docs/product
 
 Mets à jour la date « dernière mise à jour » dans le sous-titre du document dans tous les modes.
 
-**Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction (Création/Pivot rédigent tout, Enrichir/Éditer s'en servent pour situer la section à modifier).
+**Avancement** : dans **tous** les modes, applique en même temps les corrections relevées en Phase 0bis — cases, lignes d'état, compteurs d'horizon, section « Couverture », et la conversion de l'ancien format tabulaire si elle a été acceptée. Elles s'écrivent avec le reste, jamais séparément, et **ne produisent aucune ligne de changelog** : le changelog trace le périmètre, l'avancement est dérivé. En Enrichir/Éditer, une ligne de backlog **ajoutée** naît toujours à `[ ] Pas encore cadrée` — aucune preuve ne peut encore exister.
 
-Après écriture, affiche un résumé (nombre de domaines, capacités, parcours, features MVP/V2/V3) et demande si des ajustements sont nécessaires.
+**Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction (Création/Pivot rédigent tout, Enrichir/Éditer s'en servent pour situer la section à modifier) — il porte aussi le format exact d'une ligne de backlog et le catalogue fermé des états.
+
+Après écriture, affiche un résumé (nombre de domaines, capacités, parcours, features MVP/V2/V3 avec leur compteur `n/N livrées`) et demande si des ajustements sont nécessaires.
 
 ### Phase 7 — Clôture
 
@@ -133,6 +163,8 @@ Adapte le message au mode :
 - **Enrichir** ou **Éditer** :
   > Backlog mis à jour : `docs/product-backlog.md` (mode <Enrichir|Éditer>, éléments : <liste>). Changelog enrichi.
   > Prochaine étape suggérée : si une nouvelle ligne de backlog a été ajoutée en MVP, lance `/feature-pitch <slug>` pour la cadrer. Si une feature en cours s'appuie sur un élément que tu viens de modifier (capacité reformulée, parcours réorganisé), relis son `pitch.md` pour vérifier la cohérence.
+
+Dans tous les modes, ajoute une ligne d'avancement si la Phase 0bis a bougé quelque chose : `Avancement : MVP n/N livrées, V2 n/N, V3 n/N.` Et si des stories orphelines ont été relevées, rappelle la sortie proposée (`/forge:backfill-metadata` pour les rattacher, ou un Enrichir pour créer la ligne manquante) — une fois, sans insister.
 
 ## Argument optionnel
 

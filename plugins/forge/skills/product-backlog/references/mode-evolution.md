@@ -1,4 +1,4 @@
-# Phase 0bis — Cibler l'évolution (modes Enrichir et Éditer)
+# Phase 0ter — Cibler l'évolution (modes Enrichir et Éditer)
 
 À utiliser **uniquement** en mode Enrichir ou Éditer. En mode Création ou Pivot, ignorer ce fichier et charger `phases-creation.md` (dans le même dossier que ce fichier).
 
@@ -17,6 +17,8 @@ Via `AskUserQuestion`, demande :
 - Ligne de backlog (nouvelle feature, repriorisation, retrait)
 - Couverture / dépendances (réorganisation des liens entre éléments)
 
+**L'avancement n'est pas une évolution.** Cocher, décocher, changer une ligne d'état ou un compteur d'horizon ne relève d'aucun de ces choix : c'est de la donnée dérivée, déjà réconciliée en Phase 0bis. Si l'utilisateur demande « marque cette feature comme livrée », ce n'est pas un Éditer : soit la story est livrée et la réconciliation l'a déjà cochée, soit elle ne l'est pas et on ne coche pas.
+
 ## Étape 2 — Préciser la nature
 
 Pour chaque élément ciblé, demande la nature précise :
@@ -34,7 +36,7 @@ Systématique avant rédaction :
 - **Doublon** : l'élément existe-t-il déjà sous un autre nom ?
 - **Trou laissé par un retrait** : si on retire une capacité, vérifier qu'elle ne casse pas un parcours ou ne laisse pas une feature orpheline (proposer alors un retrait en cascade ou un renommage).
 - **Priorisation cohérente** : une feature MVP qui dépend d'une capacité ajoutée en V2 = incohérence ; signaler.
-- **Cohérence avec features livrées** : si une capacité a déjà été livrée (vérifier `docs/story/`), un Éditer doit refléter la réalité du code, pas la réécrire en silence.
+- **Cohérence avec features livrées** : si une capacité a déjà été livrée (les lignes cochées relevées en Phase 0bis le disent), un Éditer doit refléter la réalité du code, pas la réécrire en silence. Retirer ou reformuler une ligne **cochée** demande une justification explicite : elle est en production.
 
 ## Sortie
 

@@ -2,7 +2,7 @@
 
 > Forge est un plugin Claude Code stack-agnostique qui pilote tout le cycle de développement, de l'idée à la release. Il découpe le travail en étapes courtes validées une à une : chaque étape produit un artefact markdown (`pitch.md`, `plan.md`, `review.md`, `report.md`…) qui alimente la suivante. Aucune étape ne démarre sans validation explicite de l'utilisateur.
 
-Version : 6.9.0 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
+Version : 6.10.0 · Licence : Apache-2.0 · Auteur : Gabriel Mustiere · Dépôt : https://github.com/gabrielmustiere/forge
 
 Installation dans une session Claude Code :
 
@@ -30,7 +30,7 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 ## Skills
 
 - `/forge:vision` — cadre la vision projet : problème, audience, valeur, North Star, principes, anti-objectifs.
-- `/forge:product-backlog` — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3.
+- `/forge:product-backlog` — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3, avec un avancement en cases à cocher dérivé des stories livrées.
 - `/forge:stack` — cartographie la stack ; chaque techno prouvée par un fichier source.
 - `/forge:feature-interview` — dégrossit un besoin flou par interview guidée ancrée sur le code existant.
 - `/forge:feature-pitch` — cadre l'idée et challenge l'alignement vision/backlog.

@@ -68,8 +68,9 @@ Si `docs/vision.md` n'existe pas, ce n'est pas bloquant — note que l'alignemen
 - **Si l'utilisateur a précisé une feature**, retrouve la ligne backlog correspondante (par slug ou par sujet). Récupère son pitch, ses capacités couvertes, ses parcours servis, ses dépendances et sa justification vision — ces éléments enrichissent directement le challenge (le pitch initial est déjà là, on attaque le détail). Si la feature n'apparaît dans aucun horizon, signale-le : soit le backlog est incomplet (proposer de revenir à `/product-backlog`), soit la feature est hors périmètre.
 - **Si l'utilisateur dit juste « cadrons la prochaine » ou équivalent**, propose-lui les 3 premières lignes MVP non encore cadrées (croise avec `docs/story/*-f-*` pour exclure celles déjà cadrées) et demande laquelle attaquer.
 - **Vérifie les dépendances** : si la feature à cadrer dépend d'autres lignes backlog non livrées, signale-le et demande confirmation avant de continuer.
+- **Retiens le slug de la ligne** : quand une ligne de backlog est retrouvée, **mémorise son slug tel qu'écrit dans le backlog**. Il sera enregistré dans le `metadata.json` de la story (champ `backlog`, voir Phase 5) — c'est ce lien qui fait cocher la ligne dans `docs/product-backlog.md` une fois la story livrée. Tu gardes le droit d'affiner le slug **de la story** (le nom du dossier) : c'est justement pourquoi le lien est stocké, et non redéduit plus tard par comparaison de chaînes. **N'écris rien dans `docs/product-backlog.md`** — ce fichier ne t'appartient pas.
 
-Si `docs/product-backlog.md` n'existe pas, ce n'est pas bloquant — note l'absence et propose `/product-backlog` si l'utilisateur veut une vue consolidée du périmètre. Continue ensuite normalement.
+Si `docs/product-backlog.md` n'existe pas, ce n'est pas bloquant — note l'absence et propose `/product-backlog` si l'utilisateur veut une vue consolidée du périmètre. Continue ensuite normalement (le champ `backlog` du `metadata.json` restera simplement absent).
 
 ### Phase 3 — Challenge (boucle interactive)
 
@@ -129,6 +130,8 @@ Quand l'utilisateur valide, rédige le pitch dans `docs/story/`.
 Section `## Alignement vision` : le template l'inclut, juste après `## Contexte`. Elle est **conditionnelle** — la garder **uniquement si `docs/vision.md` existe**, la retirer entièrement sinon (c'est la seule section du pitch qui se supprime : son absence signifie « pas de vision projet », pas « pas regardé »).
 
 **Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du pitch), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`.
+
+Ajoute le champ **`backlog`** = le slug de la ligne de `docs/product-backlog.md` retenue en Phase 2, **si et seulement si** une ligne a réellement été retrouvée. Pas de ligne, pas de backlog dans le projet, ou feature hors périmètre → **n'écris pas le champ** (jamais de chaîne vide, jamais de slug deviné : une valeur fausse cochera la mauvaise ligne d'avancement).
 
 Après écriture, affiche un résumé et demande si des ajustements sont nécessaires.
 

@@ -100,6 +100,8 @@ L'étape se déduit des artifacts présents, dans cet ordre — le dernier signa
 
 Vérifie la présence de `docs/vision.md`, `docs/product-backlog.md`, `docs/stack.md`. Un manquant se signale sur une ligne, sans insister — le backlog est facultatif, la vision et la stack rendent les cadrages suivants plus sûrs.
 
+**Avancement du backlog** : si `docs/product-backlog.md` existe et porte des lignes à cocher, relève les compteurs par horizon **tels qu'ils sont écrits** (`### MVP — … · \`3/8 livrées\``) et reporte-les sur la ligne « Décor ». Tu **ne recalcules rien** et tu ne corriges rien : la réconciliation appartient à `/forge:product-backlog` (règle 1, lecture seule stricte). Si tes propres relevés de Phase 3 contredisent visiblement un compteur (une story livrée dont la ligne n'est pas cochée), dis-le en une ligne — deux signaux qui se contredisent se disent — et renvoie vers `/forge:product-backlog` pour réconcilier. Backlog au format tabulaire ancien (sans cases) : pas de compteur, on n'en fabrique pas.
+
 Aucun `docs/story/` du tout : le projet n'a pas encore de story forge. Dis-le, et oriente vers `/forge:vision` (projet neuf) ou `/forge:feature-pitch` (le décor est déjà posé).
 
 ### Phase 5 — Le point
@@ -110,7 +112,7 @@ Rends un bloc unique, sur ce gabarit — les colonnes vides ne se remplissent pa
 ## Point de situation — <nom du projet>
 
 **Dépôt** — branche `<branche>`, <working tree propre | N fichiers modifiés>, <N> commits depuis `<dernier tag>`.
-**Décor** — vision ✓ · backlog ✓ · stack ✗ (absent)
+**Décor** — vision ✓ · backlog ✓ (MVP 3/8 · V2 0/5 livrées) · stack ✗ (absent)
 ⚠️ <alerte pertes potentielles : stash / commits non poussés — la ligne disparaît s'il n'y a rien à signaler>
 
 ### En cours (<N>)
@@ -139,7 +141,7 @@ Une seule, argumentée en une ligne. Les arbitrages courants :
 - **Working tree sale non rattachable à une story** → le dire franchement : du code existe sans intention documentée. Proposer de le rattacher à une story, ou `/forge:report` s'il constitue déjà une livraison.
 - **Plusieurs stories en cours** → recommander de finir **la plus avancée**, pas la plus récente. Le travail en cours non fini coûte plus cher que le travail pas commencé.
 - **Story dormante (> 30 j) avec un plan** → prévenir avant de proposer l'implem : le plan référence un code qui a bougé, une relecture s'impose.
-- **Rien en cours, working tree propre** → c'est un bon état, dis-le. Oriente vers le prochain sujet du `product-backlog.md` s'il en reste, ou vers `/forge:release` si des livraisons non taguées se sont accumulées.
+- **Rien en cours, working tree propre** → c'est un bon état, dis-le. Oriente vers la première ligne **non cochée** du `product-backlog.md` s'il en reste (l'avancement relevé en Phase 4 la désigne directement), ou vers `/forge:release` si des livraisons non taguées se sont accumulées.
 
 ## Arguments
 

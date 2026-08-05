@@ -10,7 +10,50 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Le backlog produit affiche son avancement** — `docs/product-backlog.md` ne décrivait qu'un
+  périmètre : on ne voyait pas, en le lisant, ce qui était livré. Le backlog priorisé devient une
+  **liste à cocher** — une case par ligne, l'état sur une ligne dessous, un compteur `n/N livrées`
+  par horizon. Le format liste n'est pas une préférence : une case Markdown n'est rendue qu'en
+  début d'item de liste, jamais dans une cellule de tableau. Les 7 champs d'une ligne (slug, pitch,
+  capacités, parcours, dépendances, justification vision) sont tous conservés.
+- **L'avancement est dérivé, jamais saisi** — une case ne se coche que sur la preuve d'un
+  `delivery.commit` dans le `metadata.json` d'une story rattachée. Ni la parole de l'utilisateur,
+  ni une case cliquée à la main sur GitHub ne cochent quoi que ce soit : la passe suivante les
+  recalcule. Les états intermédiaires (« cadrage technique fait », « implémentation en cours »,
+  « clôture en cours »…) reprennent le **vocabulaire de `/forge:status`** — il n'y a pas deux
+  vocabulaires d'avancement dans forge.
+- **`/forge:product-backlog` réconcilie en ouverture de session** — nouvelle Phase 0bis : avant
+  toute discussion de périmètre, il apparie les stories, recalcule les cases, et signale les
+  écarts (case cochée sans preuve, livraison non reflétée, story orpheline, ligne fantôme). Il
+  propose aussi la conversion des backlogs encore au format tabulaire — mécanique, sans perte.
+- **`/forge:sync` coche la ligne qu'il vient de synchroniser**, avec un format enfin défini : sa
+  Phase 5 disait « proposer de la marquer livrée » sans qu'aucun champ n'existe pour l'écrire.
+- **`/forge:status` affiche l'avancement du décor** — la ligne « Décor » du point de situation
+  reporte les compteurs par horizon. Il les **lit**, ne les recalcule pas (lecture seule stricte),
+  et signale une contradiction entre ses relevés et un compteur plutôt que de la corriger.
+
 ### 🔧 Technique
+
+- **`metadata.json` passe en schéma v2** — un champ `backlog` facultatif porte le slug de la ligne
+  de backlog dont la story est issue. Le lien vit **côté story**, pas côté backlog : aucun skill de
+  cadrage n'a ainsi besoin d'écrire dans `product-backlog.md`, qui reste la propriété de
+  `/forge:product-backlog` (+ `/forge:sync`). Écrit par `/forge:feature-pitch` quand la ligne a été
+  retrouvée, reconstructible par `/forge:backfill-metadata` sous preuve stricte (slugs égaux, ou
+  confirmation explicite de l'utilisateur). Rétrocompatible : un fichier en `version: 1` reste
+  valide en lecture, il se lit comme une story non rattachée.
+- **Pourquoi un champ plutôt qu'un rapprochement par slug** — le slug d'une ligne de backlog est
+  *pressenti*, et `/forge:feature-pitch` a explicitement le droit de l'affiner au cadrage. Un
+  appariement par comparaison de chaînes serait donc faux un jour sur N, et un appariement faux
+  coche la mauvaise ligne — pire qu'une absence d'avancement.
+- **La charte de format couvre la ligne de backlog** — `document-format.md` §6 en fixe la structure
+  normative et renvoie au catalogue fermé des états, défini une seule fois dans le template de
+  `product-backlog`. La section « Couverture » est déclarée **entièrement dérivée**, donc sans
+  cases : le même fait n'a qu'une source.
+- **Aucun cochage ne produit de ligne de changelog** — le changelog de `product-backlog.md` trace
+  le périmètre ; la timeline de livraison vit dans les `metadata.json`. Une ligne par feature
+  livrée aurait été du bruit et une métadonnée dupliquée.
 
 - **Forge Board extrait dans son propre dépôt** — l'application Symfony qui vivait à la racine de
   ce dépôt migre vers [`gabrielmustiere/forge-board`](https://github.com/gabrielmustiere/forge-board),

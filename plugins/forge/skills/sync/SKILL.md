@@ -183,9 +183,15 @@ Regarde si la story a touché un manifeste : `composer.json`/`composer.lock`, `p
 - Rien de structurant (juste du code applicatif) → ne touche pas `stack.md`.
 
 **`docs/product-backlog.md` — fonctionnel, ciblé.** (surtout stories `f-`)
-- Rapproche la feature livrée d'une ligne du backlog (par slug/titre). Si elle correspond → propose de la marquer **livrée** et de mettre à jour la « Couverture » impactée (**Éditer**).
-- Si la livraison a fait émerger une **capacité non prévue** au backlog → propose de l'ajouter (**Enrichir**).
-- Stories `r-`/`t-` : en général pas d'impact backlog (comportement figé / non user-facing) — ne propose rien, sauf si le report signale un changement de comportement visible.
+- **Coche la ligne livrée.** Le rattachement se lit dans le `metadata.json` de la story, champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`) — c'est le slug de la ligne d'origine, posé par `/feature-pitch`. Champ absent → pas de rattachement : ne devine pas la ligne par ressemblance de titre, passe au point suivant.
+- **Format exact** (identique à celui que `/product-backlog` maintient, voir son `references/template.md`) : trois choses à mettre à jour ensemble, jamais l'une sans les autres.
+  1. La case : `- [ ]` → `- [x]`, **uniquement** si `delivery.commit` est renseigné. `sync` tourne en général **avant** `/commit` : à ce moment la story n'est pas encore livrée, la case reste vide et tu poses seulement l'état (`clôture en cours`). C'est correct — la prochaine passe de `/product-backlog` cochera. Ne coche pas « par anticipation ».
+  2. La ligne d'état : `Story <dossier>` · **<état>**, l'état pris dans le catalogue fermé du template (les mêmes sept valeurs que `/status`). Version affichée seulement si `delivery.release` existe.
+  3. Le compteur de l'horizon dans son titre (`### MVP — … · \`n/N livrées\``), recalculé.
+- **Pas de ligne de changelog** pour un cochage ou un changement d'état : le changelog du document trace le **périmètre**, pas l'avancement (la timeline de livraison vit dans `metadata.json` — une ligne par feature livrée serait du bruit et une métadonnée dupliquée). Tu n'ajoutes une ligne de changelog que si tu ajoutes ou édites réellement une **ligne de backlog** (point suivant).
+- Si la livraison a fait émerger une **capacité non prévue** au backlog → propose de l'ajouter (**Enrichir**), avec sa ligne de changelog. Une ligne de backlog ajoutée pour une feature **déjà livrée** naît directement cochée : la preuve existe.
+- **Backlog encore en tables** (format antérieur à l'avancement coché) : ne le convertis pas au passage — la conversion appartient à `/product-backlog` (sa Phase 0bis la propose). Signale-le en Phase 6, en une ligne.
+- Stories `r-`/`t-` : en général pas d'impact backlog (comportement figé / non user-facing) — ne propose rien, sauf si le report signale un changement de comportement visible. Leur `metadata.json` n'a pas de champ `backlog`, il n'y a donc rien à cocher.
 
 **`docs/vision.md` — boussole vivante, elle suit le produit.**
 La vision n'est **pas un garde-fou** qui juge ou bloque les features : c'est un document vivant qui **évolue avec ce que le produit devient**. Une feature livrée qui déplace la direction produit doit **mettre à jour la vision**, jamais être « signalée comme non conforme ».
@@ -196,7 +202,7 @@ La vision n'est **pas un garde-fou** qui juge ou bloque les features : c'est un 
 
 **Application.** Applique directement les retouches **ciblées** (Enrichir/Éditer d'une entrée, d'une ligne, d'une version) sur les trois documents, sans les faire valider : elles sont attestées par un fichier ou par le report, et elles restent relisibles au `git diff`. Elles sont toutes restituées en Phase 6 avec leur avant/après. Ce qui reste soumis à arbitrage : le **Pivot** et la **refonte d'un domaine entier** (voir §Autonomie). Pour chaque retouche appliquée :
 - `Edit` ciblé de la section concernée du document.
-- Ajoute une ligne au **changelog natif du document** — chacun a le sien (liste de lignes datées, **pas** de table) : `AAAA-MM-JJ — <Enrichir|Éditer> — <couche|élément|axe> — sync post-livraison de la story NNN-<f|r|t>-slug`. Rebouge la date « dernière mise à jour » du sous-titre.
+- Ajoute une ligne au **changelog natif du document** — chacun a le sien (liste de lignes datées, **pas** de table) : `AAAA-MM-JJ — <Enrichir|Éditer> — <couche|élément|axe> — sync post-livraison de la story NNN-<f|r|t>-slug`. Rebouge la date « dernière mise à jour » du sous-titre. **Exception** : la mise à jour d'avancement du backlog (case, ligne d'état, compteur) ne produit pas de ligne de changelog — elle rebouge quand même la date du sous-titre.
 - N'utilise **pas** le format de changelog des Phases 1-4 pour ces docs : respecte leur convention propre.
 
 Si aucun des 3 documents n'existe, ou si rien ne dérive, dis-le en une ligne et passe à la clôture. Pour un impact trop lourd pour une retouche ciblée (refonte d'un domaine backlog, pivot de stack), ne force pas l'Édition inline : signale-le et renvoie vers le skill dédié (`/stack`, `/product-backlog`) dans le mode adéquat.
