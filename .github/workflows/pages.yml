@@ -29,18 +29,19 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Le site annonce une version en dur que /forge:release ne met pas à jour :
       # on refuse de déployer un site qui ment sur la version du plugin.
       - name: Version affichée par le site vs plugin.json
         run: python3 tools/check-site-version.py
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v3
+      # v4 a cessé d'embarquer les fichiers cachés : sans objet ici, site/ n'en a aucun.
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
