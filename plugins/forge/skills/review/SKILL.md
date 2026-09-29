@@ -50,7 +50,7 @@ Si l'utilisateur fournit un chemin (`/review docs/story/007-f-slug/plan.md`, `/r
 
 Sinon, travaille uniquement sur le diff brut.
 
-**Détecte le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack correspondantes — elles listent les axes de review spécifiques au framework.
+**Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack correspondantes — elles listent les axes de review spécifiques au framework.
 
 **Lis le `CLAUDE.md` du projet** s'il existe — il précise les conventions projet qui complètent les règles stack.
 

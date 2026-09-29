@@ -681,13 +681,13 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
 
                 <div class="doc-block" id="stacks">
                     <h3>Règles framework</h3>
-                    <p>Le workflow détecte le stack via <code>composer.json</code> / <code>package.json</code> et charge les références correspondantes, bundlées avec le plugin :</p>
+                    <p>Le workflow établit le stack du projet et charge les références correspondantes, bundlées avec le plugin. Si <code>docs/stack.md</code> existe (produit par <code>/forge:stack</code>), il le lit : un simple chargement, sans scan. Sinon, il détecte le stack via <code>composer.json</code> / <code>package.json</code>. Dans une même session, rien n'est relu deux fois.</p>
                     <ul>
-                        <li>la procédure de détection du stack ;</li>
+                        <li>la procédure de chargement / détection du stack ;</li>
                         <li>les règles <strong>Symfony</strong> — Doctrine, services, forms, Twig, QA, sécu, perf ;</li>
                         <li>le delta e-commerce <strong>Sylius</strong> — Resources, channels, thèmes, Twig Hooks…</li>
                     </ul>
-                    <p>Le chargement est automatique après détection : rien à lire manuellement. Des marketplaces complémentaires (par exemple <a href="https://github.com/gabrielmustiere/skills">gabrielmustiere/skills</a>) exposent des skills plus
+                    <p>Le chargement est automatique : rien à lire manuellement. Des marketplaces complémentaires (par exemple <a href="https://github.com/gabrielmustiere/skills">gabrielmustiere/skills</a>) exposent des skills plus
                         tactiques, propres à un framework, qui se combinent naturellement avec le pipeline.</p>
                 </div>
             </section>

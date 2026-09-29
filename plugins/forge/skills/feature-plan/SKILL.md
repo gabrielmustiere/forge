@@ -42,9 +42,9 @@ Sinon, liste les dossiers dans `docs/story/` matchant `NNN-f-*` via `Glob` et de
 
 Affiche un résumé du pitch en 3-4 lignes pour confirmer qu'on parle de la même chose.
 
-### Phase 2 — Détection du stack et chargement des règles
+### Phase 2 — Stack du projet et chargement des règles
 
-Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : identifier le stack du projet, charger la ou les références correspondantes, afficher le stack détecté en une ligne.
+Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : établir le stack du projet, charger la ou les références correspondantes, afficher en une ligne le stack retenu et sa provenance.
 
 Lis aussi le `CLAUDE.md` à la racine du projet s'il existe — il contient les conventions projet (commandes QA, credentials, thèmes, conventions perso) qui complètent et priment sur les règles framework génériques.
 

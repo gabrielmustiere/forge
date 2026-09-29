@@ -46,7 +46,7 @@ Demande à l'utilisateur de pitcher sa fonctionnalité en une phrase. S'il l'a d
 
 **Détection d'un brief amont (`/feature-interview`)** : si l'argument est un slug/numéro de story et qu'un `brief.md` existe dans le dossier correspondant — ou plus largement si `docs/story/*-f-*/` contient un `brief.md` sans `pitch.md` que l'utilisateur désigne — lis-le. Ce brief est un besoin déjà dégrossi par interview, **100% fonctionnel** (irritant, qui, résultat attendu, ce que le produit fait déjà, zones de flou). Utilise-le comme **pitch initial riche** : tu peux sauter le refus de Phase 0 (le besoin est déjà concret) et attaquer directement le challenge sur les zones de flou que le brief a listées. À la rédaction (Phase 4), **écris `pitch.md` dans CE dossier** (le même que `brief.md`) — n'alloue pas un nouveau numéro, brief et pitch cohabitent dans `NNN-f-<slug>/`.
 
-### Phase 2 — Détection du stack (contexte pour le challenge)
+### Phase 2 — Stack du projet (contexte pour le challenge)
 
 Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Le pitch produit reste **fonctionnel**, pas technique — mais connaître le stack permet d'orienter les questions de transverses (ex: un projet Sylius suggère de challenger sur multi-channel / multi-thème, un projet Symfony sans e-commerce n'a pas ces axes).
 

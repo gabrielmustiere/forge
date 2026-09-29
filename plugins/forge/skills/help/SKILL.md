@@ -248,13 +248,13 @@ Des plugins complémentaires (ex: `sylius`, `symfony`) peuvent exposer des skill
 
 ## Règles framework
 
-Le workflow détecte automatiquement le stack du projet (Symfony, Sylius) via `composer.json` / `package.json` et charge les références correspondantes, **bundlées avec le plugin** :
+Le workflow établit le stack du projet (Symfony, Sylius) et charge les références correspondantes, **bundlées avec le plugin**. Il lit `docs/stack.md` s'il existe (produit par `/forge:stack`) : c'est un simple chargement, sans scan. Sinon, il le détecte depuis `composer.json` / `package.json`. Dans une même session, il ne relit pas ce qu'une skill précédente a déjà chargé.
 
-- procédure de détection du stack
+- procédure de chargement / détection du stack
 - règles Symfony — Doctrine, services, forms, Twig, QA, sécu, perf
 - delta e-commerce Sylius — Resources, channels, thèmes, Twig Hooks…
 
-Les skills concernées chargent ces références automatiquement après détection — rien à lire manuellement. Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans le `CLAUDE.md` à la racine du projet — les skills le lisent en complément des références stack.
+Les skills concernées chargent ces références automatiquement — rien à lire manuellement. Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans le `CLAUDE.md` à la racine du projet — les skills le lisent en complément des références stack.
 
 ## Outillage et autorisations
 

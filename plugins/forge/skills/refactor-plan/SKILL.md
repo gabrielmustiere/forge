@@ -53,9 +53,9 @@ Si l'utilisateur ne sait pas répondre au "pourquoi", challenge — un refacto s
 
 Si l'argument optionnel est fourni (`/refactor-plan extract-pricing-service`), utilise-le comme intention initiale et passe au pitch validé.
 
-### Phase 2 — Détection du stack et lecture du `CLAUDE.md`
+### Phase 2 — Stack du projet et lecture du `CLAUDE.md`
 
-Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : identifier le stack, charger la ou les références correspondantes (elles contiennent les conventions et les pièges spécifiques au framework, utiles pour choisir la cible du refacto).
+Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : établir le stack, charger la ou les références correspondantes (elles contiennent les conventions et les pièges spécifiques au framework, utiles pour choisir la cible du refacto).
 
 Lis aussi le `CLAUDE.md` à la racine du projet — il précise les conventions projet, l'outillage de test et de QA, les credentials de test si tests E2E.
 

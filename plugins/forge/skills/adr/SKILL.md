@@ -63,12 +63,12 @@ Si topic libre : reformule en une phrase neutre ("Tu veux trancher entre X et Y 
 
 Si `/adr` sans argument : demande à l'utilisateur s'il part d'un artifact (et lequel) ou d'un topic brut.
 
-### Phase 2 — Numérotation et détection du stack
+### Phase 2 — Numérotation et stack du projet
 
 Liste `docs/adr/` via `Glob` pour trouver le plus grand numéro existant. Le prochain ADR sera `NNNN` (4 chiffres, ex: `0007`) — pad à 4 chiffres pour rester triable à long terme. Si le dossier `docs/adr/` n'existe pas, ce sera le premier ADR
 (`0001`).
 
-Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure de détection. Charge la référence stack pertinente (Symfony, Sylius, …) — les choix d'extension, naming, mécanismes architecturaux varient selon le framework et
+Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la référence stack pertinente (Symfony, Sylius, …) — les choix d'extension, naming, mécanismes architecturaux varient selon le framework et
 ces règles informent le challenge des options.
 
 Lis aussi `CLAUDE.md` à la racine s'il existe — les conventions projet priment.

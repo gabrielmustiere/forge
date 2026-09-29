@@ -44,13 +44,13 @@ Sinon, liste les dossiers `docs/story/*-t-*` qui contiennent un `plan.md` via `G
 
 **Si aucun `plan.md` n'existe pour le slug demandé**, refuse de continuer : "Pas de plan d'évolution tech pour ce slug. Lance `/tech-plan` d'abord."
 
-**Détecte le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack.
+**Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack.
 
 **Lis le `CLAUDE.md` du projet** s'il existe — il précise l'outillage réel, les credentials de test, et surtout **l'outillage de métriques** disponible (commandes de bench, URL de dashboards, requêtes Prometheus, etc.).
 
 Affiche :
 
-- Stack détecté en une ligne
+- Stack retenu et sa provenance, en une ligne (format de `_detection.md`)
 - Résumé de l'évolution en 2-3 lignes (problème + brique)
 - Liste des étapes du plan
 - Métriques chiffrées du plan (baseline actuelle si présente, cibles)

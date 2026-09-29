@@ -93,7 +93,7 @@ Lis **tout ce qui existe** dans le dossier, dans cet ordre de richesse croissant
 
 Affiche en 2-3 lignes ce que tu as lu et **avec quel niveau de fiabilité** tu vas pouvoir chiffrer (« j'ai le plan technique → estimation affinée » vs « j'ai juste un brief → fourchette large, à reconfirmer après le pitch »).
 
-### Phase 2 — Détection du stack et du contexte
+### Phase 2 — Stack du projet et contexte
 
 Le même volume fonctionnel ne coûte pas le même temps selon le terrain. Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis le `CLAUDE.md` racine s'il existe — il révèle les contraintes qui pèsent sur la charge : commandes QA obligatoires, multi-thème, conventions de test exigeantes, étapes de déploiement particulières.
 

@@ -10,6 +10,23 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Le stack n'est plus « détecté » quand il est simplement lu** — les skills du workflow
+  annonçaient une « détection du stack » même quand elles se contentaient de lire `docs/stack.md`,
+  laissant croire à un scan coûteux. La procédure partagée distingue désormais trois cas :
+  stack déjà établi dans la session, **chargement** depuis `docs/stack.md`, **détection** depuis
+  `composer.json` / `package.json`. La ligne affichée dit d'où vient le stack (« chargé depuis
+  `docs/stack.md` », « détecté via `composer.json` »), et les titres de phase parlent de « stack du
+  projet ».
+- **Plus de relecture dans une même session** — enchaîner `/forge:feature-pitch` puis
+  `/forge:feature-plan` ne relit plus `docs/stack.md` ni les références framework déjà en contexte.
+  Seules exceptions : un `docs/stack.md` modifié entre-temps, ou un contexte résumé qui a perdu le
+  contenu des références.
+- **Un framework sans référence dédiée ne déclenche plus de question** — si `docs/stack.md` déclare
+  un autre framework que Symfony ou Sylius, le stack est connu : la skill s'appuie sur `stack.md`
+  sans demander à l'utilisateur ce qu'il utilise.
+
 ## [6.10.0] - 2026-08-05 — Avancement plus précis
 
 ### ✨ Fonctionnel

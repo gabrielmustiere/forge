@@ -46,13 +46,13 @@ Sinon, liste les dossiers `docs/story/*-r-*` qui contiennent un `plan.md` via `G
 
 **Si aucun `plan.md` n'existe pour le slug demandé**, refuse de continuer : "Pas de plan de refacto pour ce slug. Lance `/refactor-plan` d'abord."
 
-**Détecte le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack — elles contiennent les commandes QA et les pièges à éviter.
+**Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack — elles contiennent les commandes QA et les pièges à éviter.
 
 **Lis le `CLAUDE.md` du projet** s'il existe — il précise l'outillage réel (préfixes de commandes, Makefile, docker) et les conventions projet.
 
 Affiche :
 
-- Stack détecté en une ligne
+- Stack retenu et sa provenance, en une ligne (format de `_detection.md`)
 - Résumé du refacto en 2-3 lignes (motivation + cible)
 - Liste numérotée des étapes du plan
 - État de la stratégie de caractérisation : tests existants réutilisés + tests à écrire avant

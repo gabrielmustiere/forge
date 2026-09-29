@@ -62,9 +62,9 @@ Si l'utilisateur ne sait pas quel problème il adresse concrètement, challenge 
 
 Si l'argument optionnel est fourni (`/tech-plan redis-cache-on-pricing`), utilise-le comme intention initiale.
 
-### Phase 2 — Détection du stack et lecture du `CLAUDE.md`
+### Phase 2 — Stack du projet et lecture du `CLAUDE.md`
 
-Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : identifier le stack, charger les références correspondantes (elles contiennent les mécanismes d'extension et les pièges).
+Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : établir le stack, charger les références correspondantes (elles contiennent les mécanismes d'extension et les pièges).
 
 Lis aussi le `CLAUDE.md` à la racine du projet — il précise l'outillage réel (préfixes de commandes, Makefile, docker), les conventions projet, les credentials de test et surtout **l'outillage d'observabilité / métriques** disponible (Prometheus, Datadog, Blackfire, logs structurés, Sentry…).
 

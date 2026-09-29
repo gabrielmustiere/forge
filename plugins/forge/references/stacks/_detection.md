@@ -1,32 +1,63 @@
-# Détection du stack projet
+# Stack du projet : chargement ou détection
 
-Procédure partagée par `/feature-pitch`, `/feature-plan`, `/feature-implem`, `/refactor-plan`, `/refactor-implem`, `/tech-plan`, `/tech-implem`, `/review` pour identifier le framework en usage et charger les bonnes règles. À faire **au démarrage** de ces skills, avant toute proposition technique.
+Procédure partagée par les skills du workflow (`/vision`, `/product-backlog`, `/feature-interview`,
+`/feature-pitch`, `/feature-plan`, `/feature-implem`, `/refactor-plan`, `/refactor-implem`,
+`/tech-plan`, `/tech-implem`, `/review`, `/adr`, `/estimate`) pour établir le framework en usage et
+charger les bonnes règles. À faire **au démarrage** de ces skills, avant toute proposition technique.
 
-## Raccourci : `docs/stack.md` (source riche prioritaire)
+Trois cas, du moins coûteux au plus coûteux — le premier qui s'applique gagne :
 
-**Avant la détection légère ci-dessous, vérifie la présence de `docs/stack.md`** (produit par `/stack`). S'il existe, lis-le : c'est la cartographie complète et validée par l'utilisateur (langages, backend, frontend, données, ops, devops), bien plus riche que la détection inline. Tu y trouves directement le framework, les versions, les services et l'outillage réel.
+1. **Stack déjà établi dans la session** → rien à relire.
+2. **`docs/stack.md` existe** → le lire : c'est un **chargement**, pas une détection.
+3. **Ni l'un ni l'autre** → **détection** légère depuis les manifestes.
 
-- Si `docs/stack.md` existe → utilise-le comme source principale. Tu peux sauter le scan `composer.json`/`package.json` (le fichier le résume déjà), sauf si tu as besoin de vérifier un détail absent ou de t'assurer qu'il n'est pas périmé (mtime/changelog très ancien vs deps récentes → suggérer `/stack` en mode Éditer/Enrichir).
-- Si `docs/stack.md` n'existe pas → applique la détection légère ci-dessous. Tu peux suggérer à l'utilisateur de lancer `/stack` une fois pour cartographier durablement le projet.
+## Cas 1 — Stack déjà établi dans la session
 
-La détection légère qui suit reste le **fallback** quand `docs/stack.md` est absent.
+Si une skill précédente de la même session a déjà appliqué cette procédure (ex. `/feature-pitch`
+enchaîné sur `/feature-plan`) et que son résultat est toujours dans ton contexte — `docs/stack.md`
+et la ou les références stack lus en entier —, **ne relis rien** : ni `docs/stack.md`, ni les
+références, ni ce fichier. Reprends le stack établi et affiche la ligne de résumé.
 
-## Étapes (fallback sans `docs/stack.md`)
+Relis quand même si :
+
+- `docs/stack.md` a changé depuis (ex. `/stack` lancé entre-temps dans la session) ;
+- le contexte a été résumé et tu n'as plus le contenu intégral des références — une référence
+  résumée n'est pas une référence chargée.
+
+Au moindre doute, relis : une relecture coûte moins cher qu'une règle framework appliquée de mémoire.
+
+## Cas 2 — `docs/stack.md` existe (chargement)
+
+Vérifie la présence de `docs/stack.md` (produit par `/stack`). S'il existe, lis-le : c'est la
+cartographie complète et validée par l'utilisateur (langages, backend, frontend, données, ops,
+devops), bien plus riche que la détection légère. Tu y trouves directement le framework, les
+versions, les services et l'outillage réel.
+
+Utilise-le comme source principale et **ne scanne pas** `composer.json`/`package.json` : le fichier
+les résume déjà. Exception : un détail absent de `stack.md`, ou un soupçon qu'il est périmé
+(mtime/changelog très ancien vs deps récentes → suggérer `/stack` en mode Éditer/Enrichir).
+
+## Cas 3 — Détection légère (sans `docs/stack.md`)
 
 1. **Lire `composer.json`** (`Read` à la racine du projet) s'il existe.
 2. **Lire `package.json`** (`Read` à la racine du projet) s'il existe.
 3. **Appliquer les règles de résolution** ci-dessous.
 4. **Afficher le résultat à l'utilisateur en une ligne** puis continuer.
 
+Suggère à l'utilisateur de lancer `/stack` une fois pour cartographier durablement le projet : les
+skills suivantes passeront alors par le cas 2, sans rien détecter.
+
 ## Règles de résolution
 
-Traitées dans l'ordre — la première qui matche gagne.
+Le signal est le framework backend déclaré par `docs/stack.md` (cas 2) ou, à défaut, les
+dépendances de `composer.json` (cas 3). Traitées dans l'ordre — la première qui matche gagne.
 
 | Signal                                                                    | Stack       | Références à charger                                  |
 |---------------------------------------------------------------------------|-------------|-------------------------------------------------------|
-| `composer.json` → dépendance `sylius/sylius` (ou `sylius/*-bundle` core)  | **sylius**  | `symfony.md` puis `sylius.md`                         |
-| `composer.json` → dépendance `symfony/framework-bundle` sans `sylius/...` | **symfony** | `symfony.md`                                          |
-| Aucun des deux signaux                                                    | **inconnu** | Demander à l'utilisateur quel stack, ou continuer sans référence spécifique |
+| Sylius — `sylius/sylius` (ou `sylius/*-bundle` core)                      | **sylius**  | `symfony.md` puis `sylius.md`                         |
+| Symfony — `symfony/framework-bundle` sans `sylius/...`                    | **symfony** | `symfony.md`                                          |
+| Autre framework déclaré par `docs/stack.md`                               | **autre**   | Aucune référence dédiée : `docs/stack.md` suffit, ne rien demander |
+| Aucun signal (cas 3)                                                      | **inconnu** | Demander à l'utilisateur quel stack, ou continuer sans référence spécifique |
 
 Les références (`symfony.md`, `sylius.md`) sont dans le **même dossier que ce fichier `_detection.md`**. Une fois le stack identifié, lis-les via `Read` en réutilisant le **chemin absolu du dossier d'où tu viens de lire `_detection.md`** (la skill te l'a passé via `${CLAUDE_SKILL_DIR}/../../references/stacks/`).
 
@@ -46,15 +77,24 @@ Règle : quand une sous-tâche de `/feature-implem` ou `/refactor-implem` touche
 
 ## Résumé à afficher
 
-Une ligne juste après la détection, pour que l'utilisateur sache ce qui va être appliqué :
+Une ligne, pour que l'utilisateur sache ce qui va être appliqué **et d'où ça vient**. Le verbe dit
+ce qui s'est réellement passé : « détecté » seulement quand tu as scanné les manifestes (cas 3). Ne
+parle jamais de détection quand tu as simplement lu `docs/stack.md` : l'utilisateur croirait à un
+scan coûteux qui n'a pas eu lieu.
 
-> Stack détecté : **sylius** (via `composer.json`) — j'applique Symfony + Sylius.
+Cas 1 :
 
-ou :
+> Stack déjà chargé dans la session : **sylius** — j'applique Symfony + Sylius.
 
-> Stack détecté : **symfony** — j'applique les règles Symfony.
+Cas 2 :
 
-ou :
+> Stack chargé depuis `docs/stack.md` : **sylius** — j'applique Symfony + Sylius.
+
+> Stack chargé depuis `docs/stack.md` : **Laravel 11** — pas de référence framework dédiée, je m'appuie sur `stack.md`.
+
+Cas 3 :
+
+> Stack détecté via `composer.json` : **symfony** — j'applique les règles Symfony.
 
 > Stack non détecté automatiquement — on part sur quoi : `symfony`, `sylius`, autre, ou rien ?
 

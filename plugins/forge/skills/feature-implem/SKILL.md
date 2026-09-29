@@ -38,13 +38,13 @@ Sinon, liste les dossiers dans `docs/story/` matchant `NNN-f-*` qui contiennent 
 
 Lis aussi le pitch feature lié (`pitch.md` dans le même dossier) pour avoir le contexte fonctionnel.
 
-**Détecte le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack correspondantes (elles contiennent les commandes QA à utiliser, les conventions et les pièges à éviter).
+**Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack correspondantes (elles contiennent les commandes QA à utiliser, les conventions et les pièges à éviter).
 
 **Lis le `CLAUDE.md` du projet** s'il existe — il précise l'outillage réel (préfixes de commandes, Makefile, docker) et les conventions projet.
 
 Affiche :
 
-- Stack détecté en une ligne
+- Stack retenu et sa provenance, en une ligne (format de `_detection.md`)
 - Résumé de la feature en 2-3 lignes
 - Liste numérotée des sous-tâches du plan
 - Approche technique retenue
