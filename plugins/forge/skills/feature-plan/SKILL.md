@@ -26,7 +26,7 @@ Ce skill couvre **uniquement la conception technique** : approche, mécanismes r
 
 1. **Ne jamais écrire le fichier de plan tant que l'utilisateur n'a pas explicitement validé** ("go", "on rédige", "c'est bon").
 2. **Privilégier `AskUserQuestion`** pour les questions structurées. Si l'outil n'est pas chargé dans la session, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une.
-3. **Maximum 3 questions par tour.**
+3. **Challenger en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Explorer le codebase avant de proposer** — utilise `Glob`, `Grep`, `Read` pour comprendre l'existant. Cite les fichiers et lignes que tu as lus, et résume ce que tu as vu avant de proposer.
 5. **Être direct** — pas de compliments inutiles. Challenge les choix techniques, propose des alternatives quand c'est pertinent.
 
@@ -65,7 +65,7 @@ Présente un résumé : "Voilà l'existant pertinent pour cette feature : …" �
 
 ### Phase 4 — Challenge technique (boucle interactive)
 
-Co-construis la solution en challengeant sur ces axes (2-3 par tour, en piochant ce qui est pertinent). Les règles framework spécifiques (mécanismes d'extension, conventions de naming, pièges connus) viennent de la référence stack chargée en phase 2.
+Co-construis la solution en arbre de décision (`grilling.md`) : les `## Questions ouvertes` du pitch ouvrent l'arbre, les axes ci-dessous en sont la graine. Chaque round ne pose que des questions dont les prérequis sont tranchés, chacune avec ta réponse recommandée adossée à l'existant exploré en Phase 3 ; une question à laquelle le code répond se lit, elle ne se pose pas. Les règles framework spécifiques (mécanismes d'extension, conventions de naming, pièges connus) viennent de la référence stack chargée en phase 2.
 
 **Mécanisme et architecture**
 
@@ -97,7 +97,7 @@ Co-construis la solution en challengeant sur ces axes (2-3 par tour, en piochant
 - **Risques** : performance (N+1, requêtes en boucle), sécurité, effets de bord, couplage ?
 - **Ordre d'exécution** : dans quel ordre implémenter pour valider incrémentalement ?
 
-Continue à itérer tant que l'utilisateur n'est pas satisfait de la conception.
+Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur dise « on rédige ». Une branche s'arrête à ce que l'implémentation **ne devrait pas avoir à décider seule** — le nommage et la forme interne du code restent à `/feature-implem`. Avant de rédiger, affiche les branches encore ouvertes avec leur recommandation : celles qui restent ouvertes vont en `## Questions ouvertes`.
 
 ### Phase 5 — Rédaction du plan
 

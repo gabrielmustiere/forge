@@ -175,7 +175,7 @@ Aucun impact modèle.
 
 ## Questions ouvertes
 
-> _Skill : à clarifier avant ou pendant l'exécution. Souvent : accès aux consoles externes (registrar, cloud, service d'emailing), ADR à créer ou non, tests d'entrée hostile à ajouter. Annoter `→ tranché : <choix>` après coup. Dernière section : un document d'intention ferme sur ses inconnues (charte §1)._
+> _Skill : à clarifier avant ou pendant l'exécution. Souvent : accès aux consoles externes (registrar, cloud, service d'emailing), ADR à créer ou non, tests d'entrée hostile à ajouter. Annoter `→ tranché : <choix>` après coup. Dernière section : un document d'intention ferme sur ses inconnues (charte §1). Une branche laissée ouverte au challenge garde sa réponse recommandée : « Recommandé : (a), <raison> » (`grilling.md` §Application par skill)._
 
-- **<Question 1>** : <énoncé + options>.
+- **<Question 1>** : <énoncé + options>. Recommandé : <option>, <raison>.
 - **<Question 2>** : <…>.

@@ -197,7 +197,7 @@ une question d'outil.
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
 | **Clôture** | `review`, `sync`, `backfill-metadata` | non | ses documents (§2) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
-| **Vérification** | `test-scenario` | non | **rien** — elle observe, elle ne corrige pas |
+| **Vérification** | `test-scenario`, `status`, `grill` | non | **rien** — elles observent ou éprouvent, elles ne corrigent pas |
 
 Trois règles de rédaction des `allowed-tools`, toutes de confort — puisque rien n'y est
 contraignant :

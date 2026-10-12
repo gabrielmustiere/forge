@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Documentation — Forge, plugin Claude Code</title>
-    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 24 skills, configuration des permissions et dépannage.">
+    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage.">
     <link rel="canonical" href="https://forge.mustiere.fr/docs/">
     <meta name="author" content="Gabriel Mustiere">
     <meta name="theme-color" content="#0a0e12">
@@ -14,17 +14,17 @@
     <meta property="og:site_name" content="Forge">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="Documentation — Forge, plugin Claude Code">
-    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 24 skills, configuration et dépannage.">
+    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
     <meta property="og:url" content="https://forge.mustiere.fr/docs/">
     <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 24 skills, stack-agnostique.">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Documentation — Forge, plugin Claude Code">
-    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 24 skills, configuration et dépannage.">
+    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
     <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 24 skills, stack-agnostique.">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
                     "@type": "TechArticle",
                     "@id": "https://forge.mustiere.fr/docs/#article",
                     "headline": "Documentation du plugin Claude Code Forge",
-                    "description": "Prérequis, installation, concepts du pipeline, référence des 24 skills, configuration des permissions et dépannage du plugin Forge.",
+                    "description": "Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage du plugin Forge.",
                     "url": "https://forge.mustiere.fr/docs/",
                     "inLanguage": "fr-FR",
                     "proficiencyLevel": "Beginner",
@@ -88,7 +88,7 @@
                             "@type": "HowToStep",
                             "position": 3,
                             "name": "Recharger les plugins",
-                            "text": "Exécuter /reload-plugins pour que les 24 skills soient disponibles sous le préfixe /forge:."
+                            "text": "Exécuter /reload-plugins pour que les 25 skills soient disponibles sous le préfixe /forge:."
                         }
                     ]
                 },
@@ -142,7 +142,7 @@
         <p class="doc-header__eyebrow">DOCUMENTATION</p>
         <h1>Installer et utiliser Forge</h1>
         <p class="doc-header__lead">Forge est un plugin Claude Code stack-agnostique. Il découpe le cycle de développement en étapes courtes, chacune produisant un artefact markdown qui alimente la suivante. Cette page couvre l'installation, les
-            concepts, la référence des 24 skills et la configuration.</p>
+            concepts, la référence des 25 skills et la configuration.</p>
     </header>
 
     <div class="doc-body">
@@ -234,7 +234,7 @@
                         </li>
                         <li>
                             <h4>Recharger les plugins</h4>
-                            <p>Rend les 24 skills disponibles dans la session courante.</p>
+                            <p>Rend les 25 skills disponibles dans la session courante.</p>
                             <div class="code">
                                 <pre><code><span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
                             </div>
@@ -417,7 +417,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
 
             <section class="doc-section" aria-labelledby="reference-title">
                 <h2 id="reference-title">Référence des skills</h2>
-                <p>Vingt-quatre skills, quatre phases. La <strong>phase</strong> dit <em>quand</em> : on pose le décor une fois pour le projet, puis chaque story traverse le cadrage, l'implémentation et la clôture, dans cet ordre. Le <a
+                <p>Vingt-cinq skills, quatre phases. La <strong>phase</strong> dit <em>quand</em> : on pose le décor une fois pour le projet, puis chaque story traverse le cadrage, l'implémentation et la clôture, dans cet ordre. Le <a
                     href="#choisir-track">track</a> dit <em>avec quelles skills</em> : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Perdu en cours de route ? <code>/forge:help</code> réaffiche le
                     pipeline complet et oriente vers la bonne.</p>
 
@@ -611,6 +611,12 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                                 <td><code>/forge:status</code></td>
                                 <td>Le point de situation à la reprise d'un projet : stories en cours, étape atteinte par chacune, fraîcheur, état du dépôt (working tree, commits non poussés, stash), et <strong>une</strong> reprise conseillée. Lecture seule — n'écrit
                                     aucun fichier.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:grill</code></td>
+                                <td>Passe au gril une idée, une décision ou un <code>pitch.md</code> / <code>plan.md</code> existant : arbre de décision parcouru round par round, une réponse recommandée à chaque question, le code lu avant d'interroger. N'écrit aucun fichier —
+                                    rend une synthèse et nomme le skill qui l'intégrera.
                                 </td>
                             </tr>
                             <tr>

@@ -25,7 +25,7 @@ Ce skill couvre **uniquement le cadrage fonctionnel** : le **pourquoi**, le **qu
 
 1. **Ne jamais écrire le fichier de pitch tant que l'utilisateur n'a pas explicitement dit "on rédige", "go", "c'est bon" ou équivalent.** Un pitch écrit trop tôt cristallise une idée encore floue.
 2. **Privilégier `AskUserQuestion`** pour les questions structurées — c'est une conversation, pas un monologue. Si l'outil n'est pas chargé dans la session, le récupérer via `ToolSearch` au démarrage. À défaut, poser les questions en texte libre, une à une.
-3. **Maximum 3 questions par tour** — ne noie pas l'utilisateur. Chaque tour doit faire avancer un axe précis.
+3. **Challenger en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Être direct et concret** — pas de fluff, pas de "excellente idée !". Challenge constructivement. Le silence vaut mieux qu'un compliment vide.
 
 ## Déroulement
@@ -74,7 +74,7 @@ Si `docs/product-backlog.md` n'existe pas, ce n'est pas bloquant — note l'abse
 
 ### Phase 3 — Challenge (boucle interactive)
 
-Pour chaque idée, challenge sur ces axes (pas tous en même temps, 2-3 par tour, en piochant ce qui est pertinent) :
+Les axes ci-dessous sont la **graine de l'arbre** (`grilling.md` §1) : ils disent où chercher les décisions, pas dans quel ordre les poser. Si un `brief.md` amont existe, ses zones de flou ouvrent l'arbre. Chaque round ne pose que des questions dont les prérequis sont tranchés, chacune avec ta réponse recommandée — et ce que le produit fait déjà se lit dans le code avant de se demander.
 
 **Métier et utilisateurs**
 
@@ -108,7 +108,7 @@ Les axes suivants sont à piocher en fonction du **stack détecté** — certain
 - **Dépendances métier** : ça impacte quoi d'autre ? (Commandes, paiements, stock, utilisateurs, factures, selon le domaine.)
 - **Migration de données** : si ça touche un schéma existant, faut-il un backfill des données existantes ?
 
-Continue à itérer tant que l'utilisateur n'a pas signalé qu'il est satisfait. Si un axe est explicitement non pertinent, l'écarter et le mentionner dans "Hors scope".
+Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur dise « on rédige ». Dans les deux cas, **avant de rédiger, affiche les branches encore ouvertes** avec leur recommandation : celles que l'utilisateur laisse ouvertes vont en `## Questions ouvertes`, les branches techniques en `## Annexe — Pistes pour le plan` (`grilling.md` §Où s'arrête une branche). Si un axe est explicitement non pertinent, l'écarter et le mentionner dans "Hors scope".
 
 ### Phase 4 — Synthèse et rédaction
 

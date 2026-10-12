@@ -39,7 +39,7 @@ Exemples typiques qui relèvent de `/tech-plan` : ajouter un cache Redis sur un 
 
 1. **Ne jamais écrire le fichier `plan.md` tant que l'utilisateur n'a pas explicitement validé** ("go", "on rédige", "c'est bon").
 2. **Privilégier `AskUserQuestion`** pour les questions structurées. Si l'outil n'est pas chargé dans la session, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une.
-3. **Maximum 3 questions par tour.**
+3. **Challenger en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Explorer le codebase avant de proposer** — utilise `Glob`, `Grep`, `Read`. Cite les fichiers et lignes.
 5. **Être direct** — challenge les choix de lib et de pattern, propose des alternatives. Pas de compliments inutiles.
 
@@ -90,7 +90,7 @@ Présente une synthèse :
 
 ### Phase 4 — Challenge technique
 
-Pioche 2-3 axes par tour selon la nature du problème.
+Mène-le en arbre de décision (`grilling.md`) : les axes ci-dessous en sont la graine, et la métrique cible se tranche avant la brique — on ne choisit pas un cache sans savoir quelle latence il doit faire bouger. Chaque question arrive avec ta réponse recommandée ; ce qui est déjà installé ou configuré se lit, il ne se demande pas.
 
 **Brique et pattern**
 
@@ -127,7 +127,7 @@ Pioche 2-3 axes par tour selon la nature du problème.
 - **Ce qui se teste automatiquement** : quel niveau (unit, functional, E2E) couvre quel comportement après la bascule ? Ne pas se contenter des métriques — une cible chiffrée n'est pas un test.
 - **Ce qui ne se teste qu'en environnement réel** : bascule DNS, certificat, service tiers, délivrabilité. Ça va en « Hors scope tests » du plan et se retrouve en étape de bascule dans l'ordre d'exécution.
 
-Continue à itérer jusqu'à ce que l'utilisateur valide la brique, les métriques chiffrées, le mécanisme de rollback et le découpage.
+Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur valide la brique, les métriques chiffrées, le mécanisme de rollback et le découpage. Avant de rédiger, affiche les branches encore ouvertes avec leur recommandation : celles qui restent ouvertes vont en `## Questions ouvertes`.
 
 ### Phase 5 — Choix du dossier et rédaction
 

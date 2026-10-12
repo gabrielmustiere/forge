@@ -81,9 +81,9 @@ Toutes les sections marquées « optionnelle » peuvent être retirées si elles
 
 ## Questions ouvertes
 
-> _Skill : décisions encore non prises au moment du pitch. Format « **Question** : <énoncé>. Options : (a) <…>, (b) <…>. » Tranchées au plan ou à l'implémentation — annoter `→ tranché : <choix>` après coup. Dernière section du document : un document d'intention ferme sur ses inconnues (charte §1). L'annexe qui suit n'est pas une section du pitch._
+> _Skill : décisions encore non prises au moment du pitch. Format « **Question** : <énoncé>. Options : (a) <…>, (b) <…>. » Tranchées au plan ou à l'implémentation — annoter `→ tranché : <choix>` après coup. Dernière section du document : un document d'intention ferme sur ses inconnues (charte §1). L'annexe qui suit n'est pas une section du pitch. Une branche laissée ouverte au challenge garde sa réponse recommandée : « Recommandé : (a), <raison> » (`grilling.md` §Application par skill)._
 
-- **<Question 1>** : <énoncé + options>.
+- **<Question 1>** : <énoncé + options>. Recommandé : <option>, <raison>.
 - **<Question 2>** : <…>.
 
 ---

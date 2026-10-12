@@ -87,7 +87,14 @@ allowed-tools:
  │ status │  point de situation à la reprise : stories en cours, étape
  └────────┘  atteinte, état du dépôt, par quoi reprendre
              (lecture seule — n'écrit aucun fichier)
+
+ ┌───────┐
+ │ grill │  passe au gril une idée, une décision ou un pitch/plan existant :
+ └───────┘  arbre de décision, une réponse recommandée par question
+            (n'écrit aucun fichier — rend une synthèse et nomme qui l'intègre)
 ```
+
+**Comment les ateliers te challengent.** `/feature-pitch`, les trois plans, `/vision` et `/adr` ne déroulent pas une checklist : ils remontent l'**arbre des décisions**. Chaque round ne pose que les questions dont les prérequis sont tranchés, chacune arrive avec **leur réponse recommandée** (tu valides ou tu contestes, tu n'as pas à tout formuler), ce que le code dit déjà est lu plutôt que demandé, et une ligne d'état te montre les branches encore ouvertes. Tu peux dire « on rédige » à tout moment : les branches que tu laisses ouvertes partent en `## Questions ouvertes`, avec leur recommandation.
 
 Règle d'or : ne jamais passer à l'étape suivante sans validation explicite du user ("ok", "go", "validé", "c", etc.).
 
@@ -227,6 +234,7 @@ Une seule passe, le diff lu une fois :
 | Skill                | Rôle                                                                                       |
 |----------------------|--------------------------------------------------------------------------------------------|
 | `/status`            | **Reprendre un projet après une pause** — recense les stories de `docs/story/`, déduit pour chacune l'étape atteinte (des artifacts présents et du `metadata.json`) et sa fraîcheur (active ≤ 7 j / en pause / dormante > 30 j), relève l'état du dépôt (branche, working tree, commits depuis le dernier tag, stash et commits non poussés), vérifie le décor de phase 0, puis conseille **une** reprise en nommant le skill à taper. **Lecture seule stricte** : n'écrit aucun fichier, pas même `metadata.json` — ce n'est pas une passe du pipeline. `/status <slug>` zoome sur une story, `/status --all` inclut les livrées |
+| `/grill`             | **Passer une idée au gril** — t'interroge sans relâche sur une idée, une décision ou un document existant (`/grill 047-f-filtres` éprouve son plan) jusqu'à une compréhension partagée : un arbre de décision parcouru round par round, une réponse recommandée à chaque question, le code lu avant de te demander ce qu'il dit déjà. **N'écrit aucun fichier** : rend une synthèse (tranché / lu dans le code / contredit / resté ouvert) et nomme le skill qui l'intégrera. Le moment le plus rentable : entre le plan et l'implémentation, dans une session neuve |
 | `/test-scenario`     | Tester un scénario utilisateur via Playwright MCP (navigateur piloté en live)              |
 | `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : huit skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
 | `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |

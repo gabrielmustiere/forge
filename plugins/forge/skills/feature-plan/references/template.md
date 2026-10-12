@@ -162,7 +162,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 
 ## Questions ouvertes
 
-> _Skill : décisions techniques non tranchées au moment du plan. À trancher en `/forge:feature-implem` ou à l'implémentation. Annoter `→ tranché : <choix>` après coup. Si la question a aussi une dimension métier, la reproduire dans le pitch. Dernière section : un document d'intention ferme sur ses inconnues (charte §1)._
+> _Skill : décisions techniques non tranchées au moment du plan. À trancher en `/forge:feature-implem` ou à l'implémentation. Annoter `→ tranché : <choix>` après coup. Si la question a aussi une dimension métier, la reproduire dans le pitch. Dernière section : un document d'intention ferme sur ses inconnues (charte §1). Une branche laissée ouverte au challenge garde sa réponse recommandée : « Recommandé : (a), <raison> » (`grilling.md` §Application par skill)._
 
-- **<Question 1>** : <énoncé + options techniques>.
+- **<Question 1>** : <énoncé + options techniques>. Recommandé : <option>, <raison>.
 - **<Question 2>** : <…>.

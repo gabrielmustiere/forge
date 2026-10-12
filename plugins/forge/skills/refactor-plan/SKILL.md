@@ -30,7 +30,7 @@ Ce skill couvre **uniquement le cadrage d'un refacto** : identifier ce qu'on tou
 
 1. **Ne jamais écrire le fichier `plan.md` tant que l'utilisateur n'a pas explicitement validé** ("go", "on rédige", "c'est bon").
 2. **Privilégier `AskUserQuestion`** pour les questions structurées. Si l'outil n'est pas chargé dans la session, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une.
-3. **Maximum 3 questions par tour.**
+3. **Challenger en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Explorer le codebase avant de proposer** — utilise `Glob`, `Grep`, `Read`. Cite les fichiers et lignes que tu as lus.
 5. **Être direct** — challenge les choix, propose des alternatives. Pas de compliments inutiles.
 
@@ -82,7 +82,7 @@ Présente une synthèse :
 
 ### Phase 4 — Challenge de la cible
 
-Avant de planifier, valider la cible du refacto. Pioche 2-3 axes par tour selon le contexte :
+Avant de planifier, valider la cible du refacto, en arbre de décision (`grilling.md`) : les axes ci-dessous en sont la graine — la cible se tranche avant les garde-fous, les garde-fous avant la caractérisation, la caractérisation avant le découpage. Chaque question arrive avec ta réponse recommandée ; ce que le code montre (couverture existante, appelants, side-effects) se lit, il ne se demande pas.
 
 **Approche retenue**
 
@@ -109,7 +109,7 @@ Avant de planifier, valider la cible du refacto. Pioche 2-3 axes par tour selon 
 - **Feature flag si pertinent** : utile si le refacto change un mécanisme et qu'on veut pouvoir basculer en prod.
 - **Ordre des étapes** : par où commencer pour maximiser la valeur intermédiaire et minimiser le risque ?
 
-Continue à itérer jusqu'à ce que l'utilisateur valide la cible, la stratégie de caractérisation et le découpage.
+Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur valide la cible, la stratégie de caractérisation et le découpage. Avant de rédiger, affiche les branches encore ouvertes avec leur recommandation : celles qui restent ouvertes vont en `## Questions ouvertes`.
 
 ### Phase 5 — Choix du dossier et rédaction
 

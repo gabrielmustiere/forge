@@ -193,7 +193,7 @@ Aucun impact modèle.
 
 ## Questions ouvertes
 
-> _Skill : décisions non prises. À trancher en design détaillé ou en cours d'exécution. Annoter `→ tranché : <choix>` après coup. Dernière section : un document d'intention ferme sur ses inconnues (charte §1)._
+> _Skill : décisions non prises. À trancher en design détaillé ou en cours d'exécution. Annoter `→ tranché : <choix>` après coup. Dernière section : un document d'intention ferme sur ses inconnues (charte §1). Une branche laissée ouverte au challenge garde sa réponse recommandée : « Recommandé : (a), <raison> » (`grilling.md` §Application par skill)._
 
-- **<Question 1>** : <énoncé + options>.
+- **<Question 1>** : <énoncé + options>. Recommandé : <option>, <raison>.
 - **<Question 2>** : <…>.

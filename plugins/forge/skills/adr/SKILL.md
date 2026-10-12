@@ -38,7 +38,7 @@ Une décision = un ADR. Si l'utilisateur veut documenter plusieurs choix indépe
 
 1. **Ne jamais écrire le fichier ADR tant que l'utilisateur n'a pas explicitement validé** ("go", "on rédige", "c'est bon").
 2. **Privilégier `AskUserQuestion`** pour les questions structurées (notamment le choix entre options). Si l'outil n'est pas chargé, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une.
-3. **Maximum 3 questions par tour.**
+3. **Challenger en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Explorer le code et le contexte avant de proposer** — utilise `Glob`, `Grep`, `Read` pour comprendre l'existant. Cite les fichiers et lignes que tu as lus. Si une source artifact est fournie, lis-la intégralement avant tout.
 5. **Au moins 2 options sérieuses** dans un ADR (incluant éventuellement le statu quo "on ne change rien"). Une décision sans alternative n'en est pas une — c'est une consigne.
 6. **Être direct** — challenge les choix flous, refuse les "ça dépend" non assumés. Si l'utilisateur ne peut pas nommer un driver, c'est un signal que la décision n'est pas mûre.
@@ -86,7 +86,7 @@ Présente un résumé : "Voilà l'existant pertinent pour cette décision : …"
 
 ### Phase 4 — Challenge interactif
 
-Co-construis l'ADR en parcourant ces axes, 2-3 questions par tour.
+Co-construis l'ADR en arbre de décision (`grilling.md`) — l'ordre de dépendance est celui des axes ci-dessous : le contexte avant les drivers, les drivers avant les options, les options avant la décision. Chaque question arrive avec ta réponse recommandée ; ce que le code ou un ADR existant établit se lit, il ne se demande pas. Une branche restée ouverte sur les drivers ou les options signale une décision pas mûre : statut `proposed`, et la branche citée au `## Contexte`.
 
 **Cadrer le problème**
 

@@ -40,7 +40,7 @@ Une application a un cycle de vie long. La vision n'est pas un document gravé u
 
 1. **Ne jamais écrire `docs/vision.md` tant que l'utilisateur n'a pas explicitement validé** (« on rédige », « go », « c'est bon », « valide »). Une vision écrite trop tôt cristallise du flou en marbre.
 2. **Privilégier `AskUserQuestion`** pour les questions structurées. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une.
-3. **Maximum 3 questions par tour** — chaque tour doit faire avancer un axe précis.
+3. **Challenger (Création, Pivot) en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Refuser les formulations creuses** — pas de « innover », « disrupter », « expérience exceptionnelle », « solution complète ». Demande à l'utilisateur de reformuler avec un verbe concret et un sujet identifiable.
 5. **Forcer le concret** — chaque axe (audience, valeur, métrique, principes) doit pouvoir être validé ou invalidé par un fait observable. Si on ne peut pas dire comment on saurait que c'est faux, c'est qu'on n'a rien dit.
 6. **Pas de compliments creux** — « bonne idée ! » n'aide personne. Le silence vaut mieux.
@@ -92,7 +92,7 @@ En **Création** ou **Pivot**, ignore cette phase.
 
 En **Enrichir** ou **Éditer**, cette phase a été remplacée par la Phase 1bis — ne déroule **pas** le challenge complet.
 
-En **Création** ou **Pivot**, charge `${CLAUDE_SKILL_DIR}/references/axes-challenge.md` qui contient les 7 axes (problème, audience, valeur, métriques, principes, hypothèses, horizons) avec leurs questions et tests de pertinence. Pioche 1-2 axes par tour, adapte l'ordre selon ce qui est le plus flou dans le pitch.
+En **Création** ou **Pivot**, charge `${CLAUDE_SKILL_DIR}/references/axes-challenge.md` qui contient les 7 axes (problème, audience, valeur, métriques, principes, hypothèses, horizons) avec leurs questions et tests de pertinence. Les axes sont la graine d'un arbre de décision (`grilling.md`) : le problème se tranche avant l'audience, l'audience avant la valeur, la valeur avant la métrique. Chaque question arrive avec ta réponse recommandée, et ce que le dépôt dit déjà (README, code existant, backlog) se lit avant de se demander. Avant de rédiger, affiche les branches encore ouvertes : celles que l'utilisateur laisse ouvertes deviennent des `## Hypothèses critiques` au statut « À tester ».
 
 ### Phase 3 — Synthèse et rédaction
 

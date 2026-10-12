@@ -10,6 +10,32 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Les ateliers challengent en arbre de décision** — `/forge:feature-pitch`, les trois plans,
+  `/forge:vision` (Création, Pivot) et `/forge:adr` ne parcourent plus leurs axes comme une
+  checklist, deux ou trois thèmes par tour. Ils remontent l'arbre des décisions : un round ne
+  pose que les questions dont les prérequis sont tranchés, chaque question arrive avec une
+  **réponse recommandée** et sa raison, ce que le dépôt dit déjà est lu plutôt que demandé, et
+  une ligne d'état montre les branches encore ouvertes. Dire « on rédige » reste possible à tout
+  moment : les branches laissées ouvertes partent en `## Questions ouvertes`, avec leur
+  recommandation. Sur un projet réel, une partie des écarts relevés en clôture (une règle métier
+  changée en cours d'implémentation, un cas limite trouvé par la review) étaient des branches
+  que le cadrage n'avait jamais parcourues.
+- **Nouveau `/forge:grill`** — passe au gril une idée, une décision ou un `pitch.md` / `plan.md`
+  existant, avec la même méthode, jusqu'à une compréhension partagée. Il n'écrit aucun fichier :
+  il rend une synthèse (tranché, lu dans le code, contredit, resté ouvert) et nomme le skill
+  propriétaire qui l'intégrera. Le moment le plus rentable : entre le plan et l'implémentation,
+  dans une session neuve. Inspiré du skill `grill-me` de Matt Pocock.
+
+### 🔧 Technique
+
+- **Référence partagée `references/grilling.md`** — la méthode de challenge (arbre, recommandation,
+  dépôt d'abord, frontière visible, où s'arrête une branche selon le document), chargée par les
+  six ateliers et par `grill`. Les guides `## Questions ouvertes` des quatre templates
+  accueillent la recommandation, et `grill` rejoint la famille « Vérification » du contrat de
+  frontières (aucun fichier écrit).
+
 ## [7.0.0] - 2026-10-12 — Clôture en une passe
 
 ### ✨ Fonctionnel

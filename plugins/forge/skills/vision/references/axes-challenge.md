@@ -1,6 +1,6 @@
 # Axes de challenge — modes Création et Pivot
 
-À utiliser en **Phase 2** (Création ou Pivot uniquement). **Pioche 1-2 axes par tour**, ne déroule pas tout d'un coup. Adapte l'ordre selon ce qui est le plus flou dans le pitch.
+À utiliser en **Phase 2** (Création ou Pivot uniquement). Ces axes sont la **graine** de l'arbre de décision décrit dans `../../../references/grilling.md` : ils disent où chercher, pas dans quel ordre interroger. Un round ne pose que des questions dont les prérequis sont tranchés, chacune avec une réponse recommandée — ne déroule pas tout d'un coup.
 
 ## Axe 1 — Le problème (le « pourquoi »)
 
