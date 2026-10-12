@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [6.12.0] - 2026-10-12 — doc-feature aligné sur stack.md
+
 ### ✨ Fonctionnel
 
 - **`/forge:doc-feature` lit `docs/stack.md`** — il était le seul à ignorer la cartographie
@@ -442,7 +444,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.11.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.12.0...HEAD
+[6.12.0]: https://github.com/gabrielmustiere/forge/compare/v6.11.0...v6.12.0
 [6.11.0]: https://github.com/gabrielmustiere/forge/compare/v6.10.0...v6.11.0
 [6.10.0]: https://github.com/gabrielmustiere/forge/compare/v6.9.0...v6.10.0
 [6.9.0]: https://github.com/gabrielmustiere/forge/compare/v6.8.0...v6.9.0
