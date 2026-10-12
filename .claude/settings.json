@@ -1,13 +1,14 @@
 {
+  "enabledPlugins": {
+    "forge@forge": true
+  },
   "extraKnownMarketplaces": {
     "forge": {
       "source": {
         "source": "github",
         "repo": "gabrielmustiere/forge"
-      }
+      },
+      "autoUpdate": true
     }
-  },
-  "enabledPlugins": {
-    "forge@forge": true
   }
 }

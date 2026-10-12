@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [7.0.0] - 2026-10-12 — Clôture en une passe
+
 ### ✨ Fonctionnel
 
 - **BREAKING — `/forge:report` disparaît, `/forge:sync` fait la clôture en une passe** — sur un
@@ -487,7 +489,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v6.12.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/gabrielmustiere/forge/compare/v6.12.0...v7.0.0
 [6.12.0]: https://github.com/gabrielmustiere/forge/compare/v6.11.0...v6.12.0
 [6.11.0]: https://github.com/gabrielmustiere/forge/compare/v6.10.0...v6.11.0
 [6.10.0]: https://github.com/gabrielmustiere/forge/compare/v6.9.0...v6.10.0
