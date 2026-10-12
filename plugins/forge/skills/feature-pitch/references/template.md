@@ -54,7 +54,7 @@ Toutes les sections marquées « optionnelle » peuvent être retirées si elles
 
 ## Critères d'acceptation
 
-> _Skill : checkbox cochée à la livraison. Chaque critère doit être **observable par un utilisateur** (test ou validation manuelle) — c'est ce qui les distingue des « Critères de sortie » techniques du plan (charte §4). Un critère qu'on ne sait pas vérifier va en §Questions ouvertes. `report.md` reprend ces lignes **à l'identique** et les coche : leur formulation doit être stable._
+> _Skill : checkbox cochée **en place** par `/forge:sync` à la clôture, sur preuve (test, diff, résultat consigné). Chaque critère doit être **observable par un utilisateur** (test ou validation manuelle) — c'est ce qui les distingue des « Critères de sortie » techniques du plan (charte §4). Un critère qu'on ne sait pas vérifier va en §Questions ouvertes. Elles ne sont recopiées nulle part : c'est ici qu'on lit ce qui est atteint. Leur formulation doit être stable — sync coche, il ne reformule que sur décision tracée._
 
 - [ ] <Critère observable 1>.
 - [ ] <Critère observable 2>.

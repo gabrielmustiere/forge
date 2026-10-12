@@ -14,7 +14,7 @@ Tu es un développeur senior orienté fiabilité. Tu exécutes un plan d'évolut
 
 ## Périmètre du skill
 
-Ce skill **exécute** un plan d'évolution technique existant (`docs/story/NNN-t-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal ou que la cible n'est pas atteignable, tu remontes et tu proposes de retourner à `/tech-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni le report (`/report`).
+Ce skill **exécute** un plan d'évolution technique existant (`docs/story/NNN-t-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal ou que la cible n'est pas atteignable, tu remontes et tu proposes de retourner à `/tech-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
 
 ## Principe directeur : mesurer avant, mesurer après
 
@@ -30,7 +30,7 @@ Si un cache n'améliore pas la latence, si un retry ne fait pas baisser le taux 
 4. **Une étape à la fois** — exécuter, mesurer la métrique cible, checkpoint, commit (ou point de sauvegarde), étape suivante.
 5. **Non-régression des autres métriques** — surveiller aussi les métriques qui ne sont pas la cible (on ne veut pas baisser la latence au prix d'un crash ailleurs).
 6. **Privilégier `AskUserQuestion`** au moindre doute. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`.
-7. **Documenter tout écart avec le plan** — ça servira au `/report`.
+7. **Documenter tout écart avec le plan** — ça servira au `/sync`, qui en tirera la raison des écarts.
 8. **Respecter les mécanismes du framework** — jamais de modification vendor.
 9. **Ne jamais contourner un problème en silence** — si la cible n'est pas atteinte, c'est un signal, pas un détail à cacher.
 
@@ -216,14 +216,13 @@ Stack : [stack détecté]
 
 ### Prochaines étapes
 → `/review` pour la code review
-→ `/commit` pour commit et push
-→ `/report` pour documenter l'exécution
-→ `/sync` si le plan a dévié et mérite d'être réaligné
+→ `/sync` pour relever les écarts, réaligner le plan et écrire le `report.md`
+→ `/commit` en dernier, pour commit et push
 ```
 
 **Décision candidate à un ADR.** Regarde la section §Écarts avec le plan que tu viens d'écrire : un composant substitué, un dispositif de repli conçu en cours de route ou un kill switch laissé en place à demeure sont des choix que le plan n'avait pas prévus et que rien d'autre ne trace. Passe-les au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Aucun écart → silence : le plan a déjà porté la décision.
 
-**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée `type: "Implémentation"`. Sa description donne le résultat (étapes livrées, QA) puis **énumère les écarts avec le plan et leur raison**, en résumés courts : c'est la trace où `/sync` ira chercher le pourquoi de chaque écart à la clôture — un écart dont la raison n'est écrite nulle part finira « non tracé » dans le `report.md`. Ne modifie jamais `created`.
 
 ## Argument optionnel
 

@@ -7,7 +7,7 @@
 > **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
-guide: Plan d'un refacto (préfixe `-r-`). Produit par `/forge:refactor-plan`, consommé par `/forge:refactor-implem` (étape build), `/forge:review`, `/forge:report` et `/forge:estimate`.
+guide: Plan d'un refacto (préfixe `-r-`). Produit par `/forge:refactor-plan`, consommé par `/forge:refactor-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections. Les sections propres au track `-r-` (Forme cible, Clients identifiés, Comportement externe à préserver, Tests de caractérisation) sont additionnelles et rattachées aux sections canoniques qu'elles étendent.
 Un refacto ne change PAS le comportement externe. Si du métier change, c'est une feature. Si c'est l'infra ou un composant technique transverse, c'est une évolution technique (`-t-`).
 Pas de pitch pour un refacto : la `## Motivation` de ce plan porte le pourquoi — mais en termes techniques (dette, perf, blocage), pas en valeur métier (charte §3).
@@ -67,7 +67,7 @@ Aucun impact modèle.
 
 ## Périmètre
 
-> _Skill : tables exhaustives, format normatif (charte §6) — point de jonction avec `report.md`, qui les reprend en ajoutant une colonne « Prévu dans le plan ». Un reviewer doit pouvoir vérifier qu'aucun fichier n'a été oublié. La taille des fichiers touchés (utile pour un refacto) va dans la colonne « Modification », pas dans une colonne en plus._
+> _Skill : tables exhaustives, format normatif (charte §6) — `/forge:sync` les réaligne sur le livré à la clôture : après la passe, elles **sont** le périmètre livré. Un reviewer doit pouvoir vérifier qu'aucun fichier n'a été oublié. La taille des fichiers touchés (utile pour un refacto) va dans la colonne « Modification », pas dans une colonne en plus._
 
 ### Fichiers à créer
 
@@ -173,7 +173,7 @@ Aucun impact modèle.
 
 ## Critères de sortie
 
-> _Skill : checkboxes **mesurables**, pas qualitatives (charte §4). Comportement préservé, perf mesurée si applicable, tests verts, qualité. Les commandes QA et les seuils viennent du stack détecté et du `CLAUDE.md` du projet — ne rien inventer._
+> _Skill : checkboxes **mesurables**, pas qualitatives (charte §4), cochées en place par `/forge:sync` à la clôture. Comportement préservé, perf mesurée si applicable, tests verts, qualité. Les commandes QA et les seuils viennent du stack détecté et du `CLAUDE.md` du projet — ne rien inventer._
 
 - [ ] Tous les tests de caractérisation passent **avant ET après** chaque étape.
 - [ ] Suite complète du projet verte, sans nouvelle régression.

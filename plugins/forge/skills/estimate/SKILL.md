@@ -46,7 +46,7 @@ La façon n°1 de se planter dans un devis, c'est de chiffrer le code et d'oubli
 2. **Implémentation** — code, migrations, config.
 3. **Tests** — écriture des tests automatisés **et** QA manuelle.
 4. **Review & corrections** — la review elle-même **et** la reprise des remarques.
-5. **Documentation de clôture** — report, sync, mise à jour de doc.
+5. **Documentation de clôture** — sync (écarts, réalignement, `report.md`), mise à jour de doc.
 6. **Release & déploiement** — **forfait fixe de 30 min** (changelog, tag, mise en prod, vérif post-déploiement) : opération routinière de durée constante, on ne la ré-estime pas et l'IA ne l'accélère pas.
 
 Puis tu ajoutes une **marge d'incertitude** : une estimation sans marge n'est pas une estimation, c'est un pari qui devient un engagement.

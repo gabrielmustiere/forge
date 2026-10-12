@@ -1,7 +1,7 @@
 # Proposer un ADR (référence partagée)
 
 Référence chargée par les skills qui **repèrent** une décision d'architecture sans la graver :
-les trois plans, les trois `*-implem`, `review`, `report` et `sync`. Elle répond à une question :
+les trois plans, les trois `*-implem`, `review` et `sync`. Elle répond à une question :
 quand faut-il suggérer un ADR, et comment le faire sans devenir du bruit.
 
 L'ADR reste écrit par `adr`, et par lui seul ([`skill-boundaries.md`](skill-boundaries.md) §2).
@@ -92,8 +92,7 @@ candidats laissée à l'arbitrage.
 | `tech-plan` | Presque toujours : composant retenu, stratégie de résilience, dispositif de repli. C'est le track le plus dense en ADR |
 | `feature-implem` / `refactor-implem` / `tech-implem` | Un choix **non prévu au plan**, tranché en cours d'exécution. Cas le plus précieux : rien d'autre ne le trace |
 | `review` | Un finding qui révèle une décision structurante sans justification écrite nulle part |
-| `report` | Un écart intention/réel qui est en fait un changement d'approche assumé |
-| `sync` | Une divergence durable repérée en réalignant — y compris un `stack.md` enrichi d'une dépendance structurante |
+| `sync` | Un écart intention/réel qui est en fait un changement d'approche assumé, une divergence durable repérée en réalignant — y compris un `stack.md` enrichi d'une dépendance structurante |
 
 Pour les `*-implem`, le déclencheur est **l'écart au plan**, pas la conformité : une exécution
 fidèle à un plan déjà porteur de la décision n'a rien à proposer (le plan l'a déjà fait).

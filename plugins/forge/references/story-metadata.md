@@ -2,7 +2,7 @@
 
 Référence partagée par tous les skills qui écrivent dans un dossier de story
 (`/feature-pitch`, `/feature-plan`, `/refactor-plan`, `/tech-plan`, les trois `*-implem`,
-`/report`, `/sync`, `/adr`, `/estimate`, `/review`, `/commit`, `/release`). Elle décrit le
+`/sync`, `/adr`, `/estimate`, `/review`, `/commit`, `/release`). Elle décrit le
 **contrat unique** du fichier de métadonnées d'une story : son schéma, ses formats, et la
 **procédure d'écriture/mise à jour** à appliquer.
 
@@ -24,8 +24,10 @@ docs/story/NNN-<f|r|t>-<slug>/metadata.json
 
 Un seul par story, quel que soit le track (`f`, `r`, `t`). Il cohabite avec `pitch.md`,
 `plan.md`, `report.md`, etc. Il n'est **jamais** compté comme un document de pipeline : le
-Board déduit l'étape des seuls `.md` (`pitch`/`plan`/`review`/`report`), `metadata.json` est
-ignoré par ce calcul. Ne le référence pas comme un livrable dans les autres documents.
+Board déduit l'étape des `.md` présents (`brief`/`pitch`/`plan`/`review`/`report`) et n'emprunte au
+`metadata.json` que la livraison — une story est **livrée** quand `delivery` est renseigné, jamais
+parce qu'un `report.md` existe (il est écrit *avant* le commit). Ne le référence pas comme un
+livrable dans les autres documents.
 
 ## Schéma v2
 
@@ -61,7 +63,21 @@ Le schéma est **embarqué chez tous les utilisateurs forge** : il doit rester s
 
 **Formats** : dates toujours `YYYY-MM-DD` (aligné sur les changelogs existants). `type` d'une
 entrée de changelog = un mot court capitalisé (`Création`, `Planification`, `Implémentation`,
-`Review`, `Report`, `Sync`, `ADR`, `Estimation`, `Livraison`…). `description` = une phrase.
+`Review`, `Sync`, `ADR`, `Estimation`, `Livraison`…). `Report` reste valide en lecture : les
+stories antérieures à la v7 du plugin en portent une ; aucune passe n'en produit plus.
+
+**`description` = une phrase courte** (repère : 200 caractères) qui dit le **résultat** de la passe,
+pas son détail — le détail vit dans le document produit (`plan.md`, `report.md`…). Elle ne répète
+pas ce qu'une entrée précédente dit déjà : si l'implem a énuméré ses écarts, la passe `Sync` dit
+combien elle en a réalignés, pas lesquels. **Deux passes dérogent**, parce qu'elles transmettent un
+*pourquoi* à l'aval et qu'aucun document ne le porte à leur place :
+
+- **`Implémentation`** énumère les écarts avec le plan et leur raison, en résumés courts — `/sync`
+  y cherche la raison de chaque écart.
+- **`Review`** (entrée de fin de passe) énumère les findings corrigés, tag compris — c'est la seule
+  trace de la revue quand `review.md` n'est pas conservé.
+
+Même dans ces deux cas : une énumération de résumés, pas d'explication.
 
 ### Compatibilité v1 → v2
 
@@ -114,7 +130,7 @@ Règles :
 | Skill / moment                                              | Mutations                                                                                   |
 |------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | **Création** (`feature-pitch` pour `f` ; `refactor-plan` / `tech-plan` pour `r`/`t`) | Crée le fichier : `version:2`, `title` (le H1 réel), `created` = aujourd'hui, `updated` = aujourd'hui, `tags` (proposés puis **validés** par l'utilisateur), `backlog` = slug de la ligne de backlog si elle a été retrouvée (sinon champ absent — `feature-pitch` seul, les tracks `r`/`t` ne l'écrivent pas), `changelog` = une 1re entrée `Création`, `delivery` absent. |
-| **Toute passe ultérieure** (`feature-plan`, `refactor-plan`/`tech-plan` en édition, `*-implem`, `report`, `sync`, `adr`, `estimate`, `review`) | Rebouge `updated` = aujourd'hui ; **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne touche pas `created` ni `backlog`. Peut affiner `tags` (toujours validés). Si le fichier lu est en `version: 1`, le réécrire en `version: 2` (sans inventer de `backlog`). |
+| **Toute passe ultérieure** (`feature-plan`, `refactor-plan`/`tech-plan` en édition, `*-implem`, `sync`, `adr`, `estimate`, `review`) | Rebouge `updated` = aujourd'hui ; **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne touche pas `created` ni `backlog`. Peut affiner `tags` (toujours validés). Si le fichier lu est en `version: 1`, le réécrire en `version: 2` (sans inventer de `backlog`). |
 | **`commit`**                                               | Renseigne `delivery.commit` = SHA court du commit de clôture. Rebouge `updated` + entrée `Livraison`. Si `delivery` absent, le crée avec `release: null`. |
 | **`release`**                                              | Renseigne `delivery.release` = tag de version (ex. `v4.3.0`) sur la/les story(s) livrées par la release. Peut arriver **après** le commit : édite le `metadata.json` existant pour compléter `release` sans toucher `commit`. Rebouge `updated` + entrée `Release`. |
 

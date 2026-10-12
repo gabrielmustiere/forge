@@ -35,8 +35,7 @@ Ce qu'il ne fait pas :
 |---|---|
 | Savoir **où on en est** et par quoi reprendre | `/forge:status` — tu y es |
 | Savoir **comment marche le workflow**, quel skill pour quel besoin | `/forge:help` |
-| Documenter **ce qui a été livré vs prévu** sur une story précise | `/forge:report` |
-| **Réaligner** la doc d'intention sur le code | `/forge:sync` |
+| **Clôturer** une story : écarts livré vs prévu, doc réalignée, `report.md` | `/forge:sync` |
 | Reconstruire les `metadata.json` manquants des stories anciennes | `/forge:backfill-metadata` |
 
 ## Règles
@@ -81,9 +80,8 @@ L'étape se déduit des artifacts présents, dans cet ordre — le dernier signa
 | `pitch.md` sans `plan.md` (`f-`) | Cadrage fonctionnel fait | `/forge:feature-plan` |
 | `plan.md`, working tree sans trace du périmètre | Cadrage technique fait | `/forge:feature-implem` · `/forge:refactor-implem` · `/forge:tech-implem` selon le tag |
 | `plan.md` + fichiers modifiés couvrant son §Périmètre | **Implémentation en cours** | reprendre l'implem où elle s'est arrêtée |
-| `review.md` | Revue passée | `/forge:report` |
-| `report.md` | Compte rendu écrit | `/forge:sync` |
-| Entrée de changelog `Sync` | Doc réalignée | `/forge:commit` |
+| Entrée de changelog `Review` (ou `review.md`) | Revue passée | `/forge:sync` |
+| Entrée de changelog `Sync` (ou `report.md`) | Clôture documentaire faite | `/forge:commit` |
 | `delivery.commit` renseigné | **Livrée** | rien — ou `/forge:release` si des livraisons non taguées s'accumulent |
 
 **Fraîcheur**, depuis `updated` comparé à la date du jour :
@@ -138,7 +136,7 @@ Rends un bloc unique, sur ce gabarit — les colonnes vides ne se remplissent pa
 Une seule, argumentée en une ligne. Les arbitrages courants :
 
 - **Working tree sale rattaché à une story** → reprendre celle-là : le contexte est déjà ouvert, et du code non commité qui traîne est ce qui se perd le plus vite.
-- **Working tree sale non rattachable à une story** → le dire franchement : du code existe sans intention documentée. Proposer de le rattacher à une story, ou `/forge:report` s'il constitue déjà une livraison.
+- **Working tree sale non rattachable à une story** → le dire franchement : du code existe sans intention documentée. Proposer de le rattacher à une story, ou de le traiter en track fast (`/forge:review` puis `/forge:commit`) s'il est petit.
 - **Plusieurs stories en cours** → recommander de finir **la plus avancée**, pas la plus récente. Le travail en cours non fini coûte plus cher que le travail pas commencé.
 - **Story dormante (> 30 j) avec un plan** → prévenir avant de proposer l'implem : le plan référence un code qui a bougé, une relecture s'impose.
 - **Rien en cours, working tree propre** → c'est un bon état, dis-le. Oriente vers la première ligne **non cochée** du `product-backlog.md` s'il en reste (l'avancement relevé en Phase 4 la désigne directement), ou vers `/forge:release` si des livraisons non taguées se sont accumulées.

@@ -153,7 +153,7 @@ La ligne d'état reprend **le vocabulaire de `/status`** (tableau signal → ét
 | `Story <dossier>` · **cadrage fonctionnel fait** | `pitch.md` sans `plan.md` | `[ ]` |
 | `Story <dossier>` · **cadrage technique fait** | `plan.md` | `[ ]` |
 | `Story <dossier>` · **implémentation en cours** | working tree touchant le périmètre du plan | `[ ]` |
-| `Story <dossier>` · **clôture en cours** | `review.md` ou `report.md` présent, `delivery.commit` absent | `[ ]` |
+| `Story <dossier>` · **clôture en cours** | entrée `Review` ou `Sync` au changelog du `metadata.json` (ou `review.md` / `report.md` présent), `delivery.commit` absent | `[ ]` |
 | `Story <dossier>` · **livrée** [`vX.Y.Z`] | `delivery.commit` renseigné | `[x]` |
 
 Règles :

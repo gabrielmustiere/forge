@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Forge — pipeline de développement Claude Code, de l'idée à la release</title>
-    <meta name="description" content="Forge est un plugin Claude Code stack-agnostique : 3 tracks symétriques, 26 skills, et un artefact markdown validé à chaque étape. De la vision projet jusqu'au commit.">
+    <meta name="description" content="Forge est un plugin Claude Code stack-agnostique : 3 tracks symétriques, 24 skills, et un artefact markdown validé à chaque étape. De la vision projet jusqu'au commit.">
     <link rel="canonical" href="https://forge.mustiere.fr/">
     <meta name="author" content="Gabriel Mustiere">
     <meta name="theme-color" content="#0a0e12">
@@ -14,17 +14,17 @@
     <meta property="og:site_name" content="Forge">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="Forge — le pipeline de développement, de l'idée à la release">
-    <meta property="og:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 26 skills, un artefact markdown validé à chaque étape.">
+    <meta property="og:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 24 skills, un artefact markdown validé à chaque étape.">
     <meta property="og:url" content="https://forge.mustiere.fr/">
     <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 24 skills, stack-agnostique.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Forge — le pipeline de développement, de l'idée à la release">
-    <meta name="twitter:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 26 skills, un artefact markdown validé à chaque étape.">
+    <meta name="twitter:description" content="Plugin Claude Code stack-agnostique : 3 tracks symétriques, 24 skills, un artefact markdown validé à chaque étape.">
     <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 24 skills, stack-agnostique.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +72,7 @@
                         "Phase 0 — poser le décor : vision, product-backlog et stack en documents vivants",
                         "Phase 1 — cadrer : feature-interview, feature-pitch, feature-plan, refactor-plan, tech-plan",
                         "Phase 2 — implémenter : feature-implem, refactor-implem, tech-implem",
-                        "Phase 3 — clôturer : review, report, sync, commit",
+                        "Phase 3 — clôturer : review, sync, commit",
                         "Trois tracks symétriques : feature (valeur utilisateur), refacto (comportement figé), tech (perf, résilience, sécu)",
                         "Artefacts unifiés dans docs/story/ au format NNN-<f|r|t>-<slug>",
                         "Détection automatique du stack (Symfony, Sylius) et chargement des conventions adaptées"
@@ -100,7 +100,7 @@
                             "name": "Quels sont les trois tracks de Forge ?",
                             "acceptedAnswer": {
                                 "@type": "Answer",
-                                "text": "Le track feature couvre la valeur utilisateur (feature-pitch → feature-plan → feature-implem). Le track refacto restructure le code à comportement figé (refactor-plan → refactor-implem). Le track tech traite la performance, la résilience, l'observabilité et la sécurité (tech-plan → tech-implem). Le track ne change pas les phases traversées, seulement les skills appelées en phase 1 (cadrer) et en phase 2 (implémenter) : les trois partagent la même phase 3 de clôture, review → report → sync → commit."
+                                "text": "Le track feature couvre la valeur utilisateur (feature-pitch → feature-plan → feature-implem). Le track refacto restructure le code à comportement figé (refactor-plan → refactor-implem). Le track tech traite la performance, la résilience, l'observabilité et la sécurité (tech-plan → tech-implem). Le track ne change pas les phases traversées, seulement les skills appelées en phase 1 (cadrer) et en phase 2 (implémenter) : les trois partagent la même phase 3 de clôture, review → sync → commit."
                             }
                         },
                         {
@@ -168,7 +168,7 @@
         </div>
         <ul class="hero__facts">
             <li>3 tracks symétriques</li>
-            <li>26 skills</li>
+            <li>24 skills</li>
             <li>Apache 2.0</li>
         </ul>
     </div>
@@ -202,7 +202,7 @@
                 <p class="card__mono card__mono--dim">/plugin marketplace update forge → /reload-plugins</p>
             </div>
         </div>
-        <p class="section__note">Prérequis, concepts, référence des 26 skills, configuration des permissions et dépannage : voir la <a href="/docs/">documentation complète</a>.</p>
+        <p class="section__note">Prérequis, concepts, référence des 24 skills, configuration des permissions et dépannage : voir la <a href="/docs/">documentation complète</a>.</p>
     </section>
 
     <section class="section" id="pipeline" aria-labelledby="pipeline-title">
@@ -304,21 +304,16 @@
                 <span class="badge badge--accent">PHASE 3</span>
                 <h3 class="phase__label">Clôturer — commune aux trois tracks</h3>
             </div>
-            <ol class="phase__items phase__items--4">
+            <ol class="phase__items">
                 <li class="node">
                     <p class="node__name">review</p>
                     <p class="node__desc">Sécu, régressions, conformité au plan</p>
-                    <p class="node__out">→ review.md</p>
-                </li>
-                <li class="node">
-                    <p class="node__name">report</p>
-                    <p class="node__desc">L'écart entre l'intention et le livré</p>
-                    <p class="node__out">→ report.md</p>
+                    <p class="node__out">→ verdict</p>
                 </li>
                 <li class="node">
                     <p class="node__name">sync</p>
-                    <p class="node__desc">La doc rattrape le code réel</p>
-                    <p class="node__out">→ docs réalignées</p>
+                    <p class="node__desc">Les écarts relevés, la doc rattrape le code réel</p>
+                    <p class="node__out">→ docs réalignées + report.md</p>
                 </li>
                 <li class="node">
                     <p class="node__name">commit</p>
@@ -345,7 +340,7 @@
             <span class="section__num" aria-hidden="true">03</span>
             <h2 id="skills-title">Les skills</h2>
         </div>
-        <p class="section__intro">Vingt-cinq skills rangées par phase — le track choisi décide desquelles vous appelez en phases 1 et 2. Perdu en cours de route ? <code>/forge:help</code> est le GPS du pipeline.</p>
+        <p class="section__intro">Vingt-quatre skills rangées par phase — le track choisi décide desquelles vous appelez en phases 1 et 2. Perdu en cours de route ? <code>/forge:help</code> est le GPS du pipeline.</p>
         <div class="skills">
 
             <section class="skill-group" aria-labelledby="grp-phase0">
@@ -427,15 +422,11 @@
                 <dl class="skill-group__list">
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:review</code></dt>
-                        <dd class="skill__desc">Code review du diff : sécu, qualité, conformité au plan, non-régression → review.md</dd>
-                    </div>
-                    <div class="skill">
-                        <dt class="skill__cmd"><code>/forge:report</code></dt>
-                        <dd class="skill__desc">Compte rendu honnête : fait vs prévu, écarts, dettes → report.md</dd>
+                        <dd class="skill__desc">Code review du diff : sécu, qualité, conformité au plan, non-régression → verdict (review.md si un point reste ouvert)</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:sync</code></dt>
-                        <dd class="skill__desc">Réaligne pitch/plan et les docs projet (vision, stack, product-backlog) sur le code livré</dd>
+                        <dd class="skill__desc">Relève les écarts entre l'intention et le livré, réaligne pitch/plan et les docs projet (vision, stack, product-backlog), coche les critères → écarts, dette et leçons dans report.md</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:commit</code></dt>

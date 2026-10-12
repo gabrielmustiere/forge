@@ -10,6 +10,49 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **BREAKING — `/forge:report` disparaît, `/forge:sync` fait la clôture en une passe** — sur un
+  projet réel (14 stories), les deux skills lisaient le même diff, l'un pour relever les écarts,
+  l'autre pour les réaligner, et environ 70 % du `report.md` recopiait ce qui existait déjà : le
+  périmètre livré (identique au §Périmètre du plan réaligné et au commit), les critères (copiés du
+  pitch, où ils n'étaient jamais cochés), la stratégie de test, le verdict de review. `sync` relève
+  désormais lui-même les écarts, prend leur *pourquoi* là où il est né (checkpoints et entrée
+  `Implémentation` de l'implem, findings de la review) et ne pose de question que pour un élément
+  prévu non livré sans raison tracée. La clôture devient `review → sync → commit`.
+- **Les critères se cochent là où ils vivent** — `sync` coche les critères d'acceptation dans le
+  `pitch.md` et les critères de sortie dans le `plan.md`, sur preuve. Ils ne sont plus recopiés
+  nulle part.
+- **Un `report.md` mince, écrit par `sync`** — il ne garde que ce qui n'a aucune autre place : les
+  écarts (avec une colonne « Réaligné dans »), le non-livré, la dette, les leçons. Plus de
+  §Périmètre livré, de §Tests, de §Critères ni de pourcentage de conformité : la §Synthèse donne
+  des compteurs. Pas de report du tout pour une story conforme et sans dette. Les reports existants
+  restent lisibles : `sync` les lit comme source d'écarts sans en migrer le format.
+- **Les leçons servent enfin** — une leçon restée dans un `report.md` n'était relue par aucune
+  session. `sync` propose désormais `/forge:rules` en clôture quand une leçon s'applique à une
+  zone de fichiers, avec les mêmes règles anti-bruit que la proposition d'ADR.
+- **`review.md` n'est conservé que si un point reste ouvert** — un finding non coché, une réserve
+  arbitrée ou une vérification « hors review » avant déploiement. Un fichier tout coché au verdict
+  positif ne disait rien qu'un commit ne dise déjà. Sinon la review le supprime (s'il n'est pas
+  encore suivi par git) et sa trace — statut, findings corrigés — vit dans l'entrée `Review` du
+  `metadata.json`.
+
+### 🔧 Technique
+
+- **Descriptions de `metadata.json` courtes** — une phrase (repère : 200 caractères) qui dit le
+  résultat de la passe, sans répéter les entrées précédentes. Deux exceptions argumentées :
+  `Implémentation` énumère ses écarts et leur raison, `Review` ses findings corrigés — ce sont
+  les traces où `sync` cherche le pourquoi. Le type `Report` reste valide en lecture pour les
+  stories antérieures ; aucune passe n'en produit plus.
+- **Une story n'est plus « livrée » parce qu'un `report.md` existe** — le report est écrit avant
+  le commit. `status`, la réconciliation de `product-backlog` et la charte s'appuient sur les
+  entrées `Review`/`Sync` du changelog et sur `delivery`. (Le Forge Board applique la même règle
+  dans son dépôt.)
+- **Charte, contrat de frontières et références alignés** — `report.md` change de propriétaire
+  (`sync`), la matrice des documents pose qu'un document n'est écrit que s'il a quelque chose à
+  garder et que rien ne se recopie d'un document à l'autre ; huit skills (et non plus neuf)
+  proposent un ADR.
+
 ## [6.12.0] - 2026-10-12 — doc-feature aligné sur stack.md
 
 ### ✨ Fonctionnel

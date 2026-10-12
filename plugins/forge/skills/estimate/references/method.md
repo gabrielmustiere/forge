@@ -22,7 +22,7 @@ Le principe « tout compris » : on facture la chaîne de livraison entière, pa
 | **Implémentation** | ✅ | ✅ | ✅ | Code, migrations, config. Pour tech : baseline + kill switch. |
 | **Tests** | ✅ | ✅ | ✅ | Tests automatisés + QA manuelle. Refacto : **tests de caractérisation en amont** (poste lourd, souvent oublié). |
 | **Review & corrections** | ✅ | ✅ | ✅ | La review **et** la reprise des remarques. |
-| **Documentation de clôture** | ✅ | ✅ | ✅ | Report + sync, mise à jour de doc. |
+| **Documentation de clôture** | ✅ | ✅ | ✅ | Sync de clôture (écarts, réalignement, report), mise à jour de doc. |
 | **Release & déploiement** | ✅ | ✅ | ✅ | **Forfait fixe : 0,5 h (30 min)**, quel que soit le track — changelog, tag, mise en prod, vérif. Ne pas ré-estimer. |
 
 **Contexte solo** : ce workflow est mono-développeur. Pas de phase « Intégration » dédiée (pas de merge multi-contributeurs ni de coordination de CI partagée à facturer comme poste distinct) ni de phase « Coordination & échanges » (réunions/recette ne sont pas suivies comme un poste séparé). La phase **Release & déploiement** est un **forfait fixe de 30 min** : c'est une routine de durée constante, on ne la ré-estime pas et l'IA ne l'accélère pas.
@@ -50,7 +50,7 @@ Barème indicatif — le facteur est le temps *avec IA* rapporté au temps de r�
 | Implémentation | ~0,3–0,4× | Génération de code massive, l'humain pilote et valide. Le plus gros gain. |
 | Tests (auto + QA) | ~0,3–0,4× | Tests générés vite ; la QA exploratoire manuelle reste partiellement humaine. |
 | Review & corrections | ~0,6× | Pré-revue automatique utile, mais la décision et les reprises restent pilotées. |
-| Documentation de clôture | ~0,3× | Report et sync quasi automatisables. |
+| Documentation de clôture | ~0,3× | Sync de clôture quasi automatisable. |
 | Release & déploiement | forfait fixe | **0,5 h dans les deux colonnes** — durée constante, aucune accélération. |
 
 Conséquences à garder en tête :

@@ -2,13 +2,13 @@
 
 Référence partagée par tous les skills qui **produisent un document de story**
 (`/feature-interview`, `/feature-pitch`, `/feature-plan`, `/refactor-plan`, `/tech-plan`,
-`/review`, `/report`, `/estimate`). Elle décrit le **contrat de format commun** : à quoi sert
+`/review`, `/sync`, `/estimate`). Elle décrit le **contrat de format commun** : à quoi sert
 chaque document, dans quel registre il écrit, comment il s'ouvre, et quel nom porte chaque
 section.
 
 Objectif : un lecteur qui a lu un document forge sait lire tous les autres. Un skill qui
-consomme un document en amont (`/feature-plan` lit le pitch, `/report` lit le plan, `/sync`
-lit le report) trouve les sections **au nom et au format attendus**, sans deviner.
+consomme un document en amont (`/feature-plan` lit le pitch, `/sync` lit le plan et la review)
+trouve les sections **au nom et au format attendus**, sans deviner.
 
 Le pendant de cette charte est [`story-metadata.md`](story-metadata.md) : elle régit le
 **contenu** des `.md`, l'autre régit la **timeline** dans `metadata.json`. Les deux se lisent
@@ -37,9 +37,9 @@ but : une section qui ne sert pas la question du document n'a rien à y faire �
 |---|---|---|---|---|---|
 | **Brief** | `brief.md` | fonctionnel | De quoi parle-t-on ? | `/feature-interview` | `/feature-pitch` |
 | **Pitch** | `pitch.md` | fonctionnel | Quoi livrer ? | `/feature-pitch` | `/feature-plan`, `/estimate`, `/sync` |
-| **Plan** | `plan.md` | technique | Comment livrer ? | `/feature-plan`, `/refactor-plan`, `/tech-plan` | `/*-implem`, `/review`, `/report`, `/estimate` |
-| **Review** | `review.md` | technique | On commite ou pas ? | `/review` | humain, `/report` |
-| **Report** | `report.md` | factuel | Quel écart, quelle dette ? | `/report` | `/sync`, humain |
+| **Plan** | `plan.md` | technique | Comment livrer ? | `/feature-plan`, `/refactor-plan`, `/tech-plan` | `/*-implem`, `/review`, `/sync`, `/estimate` |
+| **Review** | `review.md` | technique | On commite ou pas ? | `/review` | humain, `/sync` |
+| **Report** | `report.md` | factuel | Qu'est-ce qui a dérivé, qu'est-ce qui reste ? | `/sync` | humain, `/adr`, `/rules` |
 | **Estimation** | `estimate.md` | économique | Combien de temps ? | `/estimate` | humain (facturation) |
 
 Conséquences de format, à appliquer sans exception :
@@ -48,6 +48,14 @@ Conséquences de format, à appliquer sans exception :
   — première section `## Synthèse`. On doit pouvoir ne lire qu'elle.
 - **Les documents d'intention** (`pitch`, `plan`) ouvrent sur leur objet et **ferment sur leurs
   inconnues** — dernière section `## Questions ouvertes`.
+- **Deux documents ne sont écrits que s'ils ont quelque chose à garder.** `review.md` n'est
+  conservé que si un point reste ouvert en fin de revue (finding non coché, réserve, « Hors
+  review ») ; `report.md` n'est écrit que s'il y a un écart, un non-livré, une dette ou une leçon.
+  Sinon, l'entrée correspondante du `metadata.json` porte la trace. Un fichier qui ne contient que
+  des cases cochées et un verdict positif ne dit rien qu'un commit ne dise déjà.
+- **Rien ne se recopie d'un document à l'autre.** Le périmètre livré, c'est le §Périmètre du plan
+  réaligné par `/sync` ; les critères atteints se cochent dans le pitch ou le plan qui les porte.
+  Une copie diverge, et c'est elle qu'on lit.
 - **Le brief** n'est pas un document d'intention : c'est de la matière première non validée. Il
   le dit dans son en-tête et ne porte ni critères d'acceptation, ni règles métier arrêtées.
 
@@ -102,8 +110,8 @@ besoin métier : pour une feature, le pourquoi vit dans le pitch et le plan y re
 refacto ou une évolution technique il n'y a pas de pitch, donc le plan porte sa `## Motivation`
 — mais en termes techniques (dette, perf, blocage), pas en termes de valeur métier.
 
-**Registre factuel** (`report`) — le document constate. Il compare l'intention au livré et ne
-défend rien. Pas de projet, pas d'opinion : ce qui est, ce qui manque, ce qui a dérivé, avec la
+**Registre factuel** (`report`) — le document constate. Il dit ce qui a dérivé entre
+l'intention et le livré, et ne défend rien. Pas de projet, pas d'opinion : ce qui est, ce qui manque, ce qui a dérivé, avec la
 raison.
 
 **Registre économique** (`estimate`) — le document chiffre du **temps**, jamais un montant.
@@ -147,8 +155,10 @@ historiques ; toute nouvelle section doit s'y raccrocher ou y être ajoutée.
 | Axes systémiques | `## Impacts transverses` | pitch (fonctionnel) + les 3 plans (technique) | puces |
 | Contrat de test | `## Stratégie de test` | les 3 plans | table + « Hors scope tests » |
 | Séquence de travail | `## Ordre d'exécution` | les 3 plans | checklist d'étapes |
-| Sortie observable côté utilisateur | `## Critères d'acceptation` | pitch, report (`-f-`) | checkboxes |
-| Sortie vérifiable côté technique | `## Critères de sortie` | les 3 plans, report (`-r-`/`-t-`) | checkboxes |
+| Sortie observable côté utilisateur | `## Critères d'acceptation` | pitch | checkboxes |
+| Sortie vérifiable côté technique | `## Critères de sortie` | les 3 plans | checkboxes |
+| Ce qui a dérivé | `## Écarts avec le plan` | report | 3 sous-tables |
+| Ce qui reste | `## Dette technique identifiée` | report | liste numérotée |
 | Risques | `## Risques et mitigations` | les 3 plans | table |
 | Inconnues | `## Questions ouvertes` | pitch + les 3 plans | puces |
 
@@ -166,7 +176,8 @@ Renommages actés (l'ancien titre ne doit plus être produit) :
 | `Ordre d'implémentation` · `Stratégie d'exécution incrémentale` · `Plan d'exécution incrémental` | `Ordre d'exécution` | les 3 plans |
 | `Critères de réussite` · `Critères de succès mesurables` | `Critères de sortie` | refactor-plan · tech-plan |
 | `Résumé` | `Synthèse` | report |
-| `Ce qui a été implémenté` | `Périmètre livré` | report |
+| `Ce qui a été implémenté` · `Périmètre livré` | — (plus produit : c'est le §Périmètre du plan réaligné) | report |
+| `Tests` · `Critères d'acceptation` · `Critères de sortie` | — (plus produits : stratégie de test et critères vivent, réalignés et cochés, dans le plan et le pitch) | report |
 | `Notes pour le plan technique` | `Pistes pour le plan` | pitch |
 | `Périmètre : <N fichiers du diff>` (en-tête review) | `Diff examiné` | review |
 | `Référence d'intention` (en-tête review) | `Amont` | review |
@@ -218,7 +229,7 @@ Notes de lecture :
 ## 6. Formats partagés
 
 Les tables ci-dessous sont **normatives** : mêmes colonnes, même ordre, dans tous les documents
-qui les portent. C'est ce qui permet à `/report` de confronter le livré au plan ligne à ligne,
+qui les portent. C'est ce qui permet à `/sync` de confronter le livré au plan ligne à ligne,
 quel que soit le track.
 
 Les deux derniers formats de cette section (critères, ligne de backlog) ne sont pas des tables
@@ -237,9 +248,9 @@ hors story) et n'engage que lui.
 |---|---|
 | `<chemin>` | `<diff conceptuel : « remplacer X par Y », « ajouter la relation inverse »>` |
 
-Le `report.md` reprend ces deux tables **en y ajoutant une colonne finale** `Prévu dans le plan`
-(`Oui` / `Non (ajout)` / `Écart volontaire (cf. §)`). Aucune autre divergence de colonnes n'est
-admise : c'est le point de jonction de la chaîne `plan → report`.
+`/sync` réaligne ces deux tables sur le livré à la clôture : après sa passe, le §Périmètre du plan
+**est** la liste des fichiers livrés. Le `report.md` ne les recopie pas ; il ne garde que les écarts
+(§Écarts avec le plan, avec la colonne « Réaligné dans »).
 
 ### Risques
 
@@ -276,10 +287,13 @@ Structure unique pour les trois tracks. Une étape = une unité commitable.
 
 ### Critères (acceptation et sortie)
 
-Checkboxes `- [ ]`, cochées à la livraison, **une par ligne, observable ou mesurable**. Un
-critère qu'on ne sait pas vérifier n'est pas un critère : c'est une intention, elle va en
-`## Questions ouvertes`. Le `report.md` **reprend ces lignes à l'identique** et les coche — d'où
-l'exigence de stabilité de leur formulation.
+Checkboxes `- [ ]`, **une par ligne, observable ou mesurable**. Un critère qu'on ne sait pas
+vérifier n'est pas un critère : c'est une intention, elle va en `## Questions ouvertes`.
+`/sync` les **coche en place** à la clôture, sur preuve (test, diff, résultat consigné), dans le
+document qui les porte — pitch pour l'acceptation, plan pour la sortie. Ils ne se recopient
+nulle part. Un critère non atteint reste décoché et sa raison va au §Non implémenté du report.
+`sync` coche, il ne reformule que sur décision tracée — d'où l'exigence de stabilité de leur
+formulation.
 
 ### Ligne de backlog *(document projet — `product-backlog.md`)*
 
@@ -305,8 +319,8 @@ et de leur état, donc sans cases à cocher — le même fait n'a qu'une source.
 
 ## 7. Criticité et tags
 
-Catalogue partagé par `/review` (qui émet les findings) et `/report` (qui reprend les non
-traités en dette). Un finding = un niveau + un tag + un emplacement.
+Catalogue partagé par `/review` (qui émet les findings) et `/sync` (qui reprend les non
+traités dans la dette du `report.md`). Un finding = un niveau + un tag + un emplacement.
 
 **Niveaux** (sections de `review.md`, dans cet ordre) :
 
@@ -357,7 +371,7 @@ Le corpus forge est en français, verdicts compris. Valeurs **fermées** :
 | Document | Champ | Valeurs |
 |---|---|---|
 | `review.md` | `Statut` | **PRÊT À COMMITER** · **PRÊT À COMMITER SOUS RÉSERVE** (préciser laquelle) · **CORRECTIONS REQUISES** |
-| `report.md` | `Conformité` | un pourcentage + les écarts structurants (3 max) |
+| `report.md` | `Synthèse` | des compteurs — écarts (dont réalignés), critères atteints, non-livrés, dette — jamais un pourcentage de conformité |
 | `estimate.md` | `Total à retenir` | des heures, jamais un montant |
 
 `READY TO COMMIT` et `CHANGES REQUESTED` ne sont plus produits.

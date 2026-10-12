@@ -1,6 +1,6 @@
 ---
 name: review
-description: Relit un diff avant merge — sécurité (injections, secrets, droits), qualité, perf, conformité au `plan.md` (et au `pitch.md` pour les features), robustesse des migrations. Produit `review.md` avec verdict go/no-go et actions priorisées.
+description: Relit un diff avant merge — sécurité, qualité, perf, conformité au `plan.md` (et au `pitch.md` pour une feature), migrations. Verdict go/no-go et actions priorisées ; `review.md` conservé seulement si un point reste ouvert.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-story ou chemin plan.md]"
@@ -15,12 +15,13 @@ allowed-tools:
   - Bash(git status:*)
   - Bash(git show:*)
   - Bash(git merge-base:*)
+  - Bash(git ls-files:*)
   - Bash(gh pr:*)
 ---
 
 # /review — Code review pré-merge
 
-Tu es un reviewer senior exigeant. Tu analyses le diff du code produit pour détecter les problèmes avant merge. Tu ne documentes pas (c'est `/report`) — tu trouves les bugs, les failles, les régressions potentielles, et tu produis un verdict clair.
+Tu es un reviewer senior exigeant. Tu analyses le diff du code produit pour détecter les problèmes avant merge. Tu ne documentes pas l'écart à l'intention (c'est `/sync`) — tu trouves les bugs, les failles, les régressions potentielles, et tu produis un verdict clair.
 
 ## Périmètre du skill
 
@@ -85,7 +86,11 @@ docs/story/NNN-t-slug/review.md   # review d'une évolution technique
 
 **Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
 
-**Métadonnées de story** : après avoir écrit `review.md` dans le dossier de la story (review rattachée à une story, pas standalone), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé, ex. verdict + bloquants restants). Ne modifie jamais `created`.
+Le fichier est écrit **avant** la présentation pour survivre à une session interrompue : c'est la liste de travail de la passe. Il ne sera **conservé** qu'à la fin, si quelque chose reste ouvert (Phase 5).
+
+**Métadonnées de story** : review rattachée à une story (pas standalone), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée `type: "Review"`. Une entrée à l'ouverture (verdict initial), une seconde en Phase 5 si des corrections ont suivi. Ne modifie jamais `created`.
+
+La description de l'entrée de **fin de passe** est la seule trace durable quand le fichier n'est pas conservé, et `/sync` y cherche la raison des écarts nés d'un correctif : elle donne le statut, les compteurs, et les **résumés courts** des findings corrigés, tag compris — une énumération, pas d'explication (« Prêt à commiter ; 1 important et 2 mineurs corrigés : [PERF] requêtes en boucle sur « Mes congés », [SECU] chemin de retour `/\hôte`, [CONV] `#[CurrentUser]` »).
 
 ### Phase 4 — Présentation au développeur
 
@@ -113,8 +118,15 @@ Statuts possibles : **PRÊT À COMMITER** (0 bloquant, 0 important non résolu) 
 
 Si CORRECTIONS REQUISES, liste précisément ce qui reste à corriger.
 
+3. **Conserver le fichier, ou non.** Une fois commité, un `review.md` dont tous les items sont cochés ne dit plus rien : son verdict est positif par construction (sinon il n'y aurait pas de commit), et les corrections sont dans le diff. Le fichier n'est donc **conservé que si quelque chose reste ouvert** à la fin de la passe :
+   - un finding non coché, quel que soit son niveau (dont les mineurs laissés en dette, que `/sync` reprendra) ;
+   - un statut **CORRECTIONS REQUISES** ou **SOUS RÉSERVE** (la réserve arbitrée doit rester lisible) ;
+   - une section « Hors review » non vide (le pense-bête avant déploiement).
+
+   Sinon — tout corrigé, rien à vérifier hors du code — **supprime `review.md`**, à condition qu'il ne soit pas suivi par git (`git ls-files --error-unmatch <fichier>` échoue) : un fichier déjà commité appartient à l'historique, on n'y touche pas. Les §Points positifs se disent dans la conversation, ils ne justifient pas un fichier. L'entrée `Review` du `metadata.json` (Phase 3) porte la trace : statut, compteurs, findings corrigés. Annonce-le en une ligne (« Tout est corrigé : `review.md` non conservé, la trace est dans `metadata.json` »).
+
 Si PRÊT À COMMITER :
-> Prochaine étape : `/report` pour documenter la livraison, puis `/sync` et enfin `/commit`. Dans le pipeline, le commit vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. (En dehors du pipeline, `/commit` directement.)
+> Prochaine étape : `/sync` pour relever les écarts, réaligner la doc et écrire le `report.md`, puis `/commit`. Dans le pipeline, le commit vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. (En dehors du pipeline, `/commit` directement.)
 
 **Décision candidate à un ADR.** La revue est le moment où l'on voit le code sans l'avoir écrit — donc le moment où une décision structurante **jamais justifiée nulle part** saute aux yeux. Si un finding en révèle une, passe-la au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe, après le verdict. Ne transforme pas un finding en proposition d'ADR : le finding reste un finding, la proposition s'y ajoute. Silence si rien ne qualifie.
 

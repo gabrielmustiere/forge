@@ -7,7 +7,8 @@
 > **Diff examiné** : <ex: working tree, ~29 fichiers modifiés + 9 nouveaux, ~660 lignes>
 
 <!--
-guide: Compte rendu de revue du diff par rapport à l'intention. Produit par `/forge:review`, consommé par l'humain et par `/forge:report` (qui reprend les mineurs non traités en dette).
+guide: Compte rendu de revue du diff par rapport à l'intention. Produit par `/forge:review`, consommé par l'humain et par `/forge:sync` (qui reprend les items ouverts en dette du `report.md`).
+Fichier CONSERVÉ seulement si quelque chose reste ouvert en fin de passe (finding non coché, réserve, « Hors review » non vide) — sinon la review le supprime et la trace vit dans `metadata.json`.
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`.
 Document de DÉCISION : il ouvre sur sa conclusion (charte §1). On doit pouvoir ne lire que la §Synthèse.
 Trois niveaux de criticité, catalogue de tags fermé et format de finding : charte §7. Verdicts fermés et en français : charte §8.
@@ -24,7 +25,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 - **Mineurs restants** : N / total
 - **Statut** : **PRÊT À COMMITER** <!-- guide: ou PRÊT À COMMITER SOUS RÉSERVE <laquelle> / CORRECTIONS REQUISES -->
 
-<Une phrase sur la prochaine étape : « `/forge:commit` pour commiter et pousser. » OU « Corriger les bloquants puis relancer la review. »>
+<Une phrase sur la prochaine étape : « `/forge:sync`, puis `/forge:commit`. » OU « Corriger les bloquants puis relancer la review. »>
 
 ## Bloquants
 
@@ -43,7 +44,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 
 ## Mineurs
 
-> _Skill : améliorations utiles, non bloquantes. Tags typiques : STYLE, DOC, I18N, PERF. Peuvent rester non cochés : `/forge:report` les reprend alors **à l'identique** en dette technique (charte §7) — d'où l'importance de les garder courts et actionnables. Si aucun, mettre `_(aucun)_`._
+> _Skill : améliorations utiles, non bloquantes. Tags typiques : STYLE, DOC, I18N, PERF. Peuvent rester non cochés : `/forge:sync` les reprend alors **à l'identique** dans la dette du `report.md` (charte §7) — d'où l'importance de les garder courts et actionnables. Si aucun, mettre `_(aucun)_`._
 
 - [ ] **[STYLE] <résumé>** — `<chemin>:<ligne>` — <correction suggérée>.
 - [ ] **[DOC] <résumé>** — `<chemin>` — <correction suggérée>.

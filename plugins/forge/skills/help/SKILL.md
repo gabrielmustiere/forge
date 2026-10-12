@@ -29,7 +29,7 @@ allowed-tools:
 
      PHASES 1 À 3 — CADRER, IMPLÉMENTER, CLÔTURER : une story emprunte UN SEUL des trois tracks.
      La phase dit quand ; le track dit avec quelles skills. Dans chaque track ci-dessous :
-     les plans = phase 1, l'implem = phase 2, review → report → sync → commit = phase 3.
+     les plans = phase 1, l'implem = phase 2, review → sync → commit = phase 3.
 
                         TRACK FEATURE (valeur utilisateur, structurante)
  (optionnel : besoin flou)
@@ -37,29 +37,30 @@ allowed-tools:
  │ feature-interview │┄┐
  └─────────┬─────────┘ ┊ brief.md
            ▼           ▼
- ┌───────────────┐   ┌──────────────┐   ┌────────────────┐   ┌────────┐   ┌────────┐   ┌──────┐   ┌────────┐
- │ feature-pitch │──▶│ feature-plan │──▶│ feature-implem │──▶│ review │──▶│ report │──▶│ sync │──▶│ commit │
- └───────┬───────┘   └───────┬──────┘   └────────┬───────┘   └────┬───┘   └────┬───┘   └───┬──┘   └────┬───┘
-         │                   │                   │                │            │           │           │
-     pitch.md             plan.md         code+migrations     review.md    report.md    doc sync    commit
-                                          +nouveaux tests                              +changelog    +push
+ ┌───────────────┐   ┌──────────────┐   ┌────────────────┐   ┌────────┐   ┌──────┐   ┌────────┐
+ │ feature-pitch │──▶│ feature-plan │──▶│ feature-implem │──▶│ review │──▶│ sync │──▶│ commit │
+ └───────┬───────┘   └───────┬──────┘   └────────┬───────┘   └────┬───┘   └───┬──┘   └────┬───┘
+         │                   │                   │                │           │           │
+     pitch.md             plan.md         code+migrations     verdict      doc sync    commit
+                                          +nouveaux tests   (review.md   +report.md    +push
+                                                            si ouvert)
 
                     TRACK REFACTO (comportement figé, code restructuré)
- ┌───────────────┐   ┌─────────────────┐   ┌────────┐   ┌────────┐   ┌──────┐   ┌────────┐
- │ refactor-plan │──▶│ refactor-implem │──▶│ review │──▶│ report │──▶│ sync │──▶│ commit │
- └───────┬───────┘   └────────┬────────┘   └────┬───┘   └────┬───┘   └───┬──┘   └────┬───┘
-         │                    │                 │            │           │           │
-      plan.md           verrou tests        review.md    report.md    doc sync    commit
-                          + étapes                                   +changelog    +push
+ ┌───────────────┐   ┌─────────────────┐   ┌────────┐   ┌──────┐   ┌────────┐
+ │ refactor-plan │──▶│ refactor-implem │──▶│ review │──▶│ sync │──▶│ commit │
+ └───────┬───────┘   └────────┬────────┘   └────┬───┘   └───┬──┘   └────┬───┘
+         │                    │                 │           │           │
+      plan.md           verrou tests         verdict     doc sync    commit
+                          + étapes                      +report.md    +push
                         incrémentales
 
                TRACK TECH (perf, résilience, observabilité, sécu — non user-facing)
- ┌───────────┐   ┌─────────────┐   ┌────────┐   ┌────────┐   ┌──────┐   ┌────────┐
- │ tech-plan │──▶│ tech-implem │──▶│ review │──▶│ report │──▶│ sync │──▶│ commit │
- └─────┬─────┘   └──────┬──────┘   └────┬───┘   └────┬───┘   └───┬──┘   └────┬───┘
-       │                │               │            │           │           │
-    plan.md         baseline        review.md    report.md    doc sync    commit
-                  + kill switch                              +changelog    +push
+ ┌───────────┐   ┌─────────────┐   ┌────────┐   ┌──────┐   ┌────────┐
+ │ tech-plan │──▶│ tech-implem │──▶│ review │──▶│ sync │──▶│ commit │
+ └─────┬─────┘   └──────┬──────┘   └────┬───┘   └───┬──┘   └────┬───┘
+       │                │               │           │           │
+    plan.md         baseline         verdict     doc sync    commit
+                  + kill switch                 +report.md    +push
                 + étapes mesurées
 
                        UTILITAIRES (hors pipeline, à la demande)
@@ -104,7 +105,7 @@ Tous les tracks produisent un `plan.md` (cadrage technique exécutable). Le trac
 
 Les numéros s'incrémentent globalement (042-f → 043-r → 044-t → 045-f…), ce qui permet de lire la timeline d'évolution du projet en listant simplement `docs/story/`.
 
-**Un format commun à tous les documents** : `brief.md`, `pitch.md`, `plan.md`, `review.md`, `report.md` et `estimate.md` partagent un contrat de format unique (`references/document-format.md`). Chaque document sert **un seul but**, dans **un seul registre** — annoncé dans son en-tête : le brief et le pitch sont **fonctionnels** (aucun nom de classe, de service ou de framework), les plans et la review sont **techniques**, le report est **factuel**, l'estimation est **économique**. Les documents de décision (review, report, estimation) ouvrent sur leur `## Synthèse` : on doit pouvoir ne lire qu'elle. Les trois plans partagent le même squelette de sections, quel que soit le track — leurs spécificités (caractérisation d'un refacto, kill switch d'un tech) sont des sections additionnelles. La timeline, elle, ne vit dans aucun `.md` : elle est dans le `metadata.json` de la story.
+**Un format commun à tous les documents** : `brief.md`, `pitch.md`, `plan.md`, `review.md`, `report.md` et `estimate.md` partagent un contrat de format unique (`references/document-format.md`). Chaque document sert **un seul but**, dans **un seul registre** — annoncé dans son en-tête : le brief et le pitch sont **fonctionnels** (aucun nom de classe, de service ou de framework), les plans et la review sont **techniques**, le report est **factuel**, l'estimation est **économique**. Les documents de décision (review, report, estimation) ouvrent sur leur `## Synthèse` : on doit pouvoir ne lire qu'elle. Les trois plans partagent le même squelette de sections, quel que soit le track — leurs spécificités (caractérisation d'un refacto, kill switch d'un tech) sont des sections additionnelles. La timeline, elle, ne vit dans aucun `.md` : elle est dans le `metadata.json` de la story. Et rien ne se recopie d'un document à l'autre : `review.md` n'est conservé que si un point reste ouvert, `report.md` ne garde que les écarts, la dette et les leçons — le périmètre livré et les critères cochés vivent dans le plan et le pitch réalignés.
 
 ## Les deux axes : phases et tracks
 
@@ -152,9 +153,8 @@ Pour tout changement qui introduit une nouvelle fonctionnalité ou modifie un co
 | 1     | `/feature-pitch`     | Cadrer et challenger une fonctionnalité (lit le `brief.md` amont s'il existe)    | `docs/story/NNN-f-slug/pitch.md`   |
 | 1     | `/feature-plan`      | Concevoir la solution technique à partir du pitch                                | `docs/story/NNN-f-slug/plan.md`    |
 | 2     | `/feature-implem`    | Implémenter sous-tâche par sous-tâche avec QA continue                           | Code + migrations + tests          |
-| 3     | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | `docs/story/NNN-f-slug/review.md`  |
-| 3     | `/report`            | Documenter ce qui a été fait vs ce qui était prévu                               | `docs/story/NNN-f-slug/report.md`  |
-| 3     | `/sync`              | Réaligner pitch et plan avec la réalité du code                                  | Mise à jour `pitch.md` + `plan.md` |
+| 3     | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | Verdict ; `review.md` si un point reste ouvert |
+| 3     | `/sync`              | Relever les écarts, réaligner pitch et plan, cocher les critères, consigner      | `pitch.md` + `plan.md` réalignés, `report.md` |
 | 3     | `/commit`            | En dernier : embarque code + report + docs réalignées, Conventional Commits + push | Commit                           |
 
 ## Track refacto — Comportement figé, code restructuré
@@ -167,9 +167,8 @@ Pour restructurer du code sans toucher au comportement externe (dette, couplage,
 |-------|-------------------|-------------------------------------------------------------------|-----------------------------------|
 | 1     | `/refactor-plan`  | Cadrer un refacto (motivation, cible, caractérisation, étapes)   | `docs/story/NNN-r-slug/plan.md`   |
 | 2     | `/refactor-implem`| Exécuter : verrou tests puis étapes incrémentales, non-régression | Code restructuré + tests          |
-| 3     | `/review`         | Code review focus non-régression                                  | `docs/story/NNN-r-slug/review.md` |
-| 3     | `/report`         | Documenter l'exécution vs le plan                                 | `docs/story/NNN-r-slug/report.md` |
-| 3     | `/sync`           | Réaligner le plan si la stratégie a dévié                         | Mise à jour `plan.md`             |
+| 3     | `/review`         | Code review focus non-régression                                  | Verdict ; `review.md` si un point reste ouvert |
+| 3     | `/sync`           | Relever les écarts, réaligner le plan, consigner                  | `plan.md` réaligné, `report.md`   |
 | 3     | `/commit`         | En dernier : embarque tout, souvent un commit par étape           | Commits                           |
 
 ## Track tech — Perf, résilience, observabilité, sécu (non user-facing)
@@ -182,9 +181,8 @@ Pour ajouter ou modifier une brique technique observable (latence, taux d'erreur
 |-------|----------------|--------------------------------------------------------------------|-----------------------------------|
 | 1     | `/tech-plan`   | Cadrer l'évolution (problème, brique, métriques cibles, rollback) | `docs/story/NNN-t-slug/plan.md`   |
 | 2     | `/tech-implem` | Exécuter : baseline, kill switch, étapes mesurées, validation      | Code + config + observabilité     |
-| 3     | `/review`      | Code review (kill switch, compatibilité, non-régression)          | `docs/story/NNN-t-slug/review.md` |
-| 3     | `/report`      | Documenter les critères atteints / non atteints vs le plan         | `docs/story/NNN-t-slug/report.md` |
-| 3     | `/sync`        | Réaligner le plan si la stratégie a dévié                          | Mise à jour `plan.md`             |
+| 3     | `/review`      | Code review (kill switch, compatibilité, non-régression)          | Verdict ; `review.md` si un point reste ouvert |
+| 3     | `/sync`        | Écarts, métriques atteintes ou non, plan réaligné, consigner       | `plan.md` réaligné, `report.md`   |
 | 3     | `/commit`      | En dernier : embarque code + report + docs réalignées, + push      | Commits                           |
 
 ## Track fast — Bugfixes et petits changements
@@ -203,20 +201,24 @@ coder → QA du stack → tests ciblés → /review (optionnel) → /commit
 
 En cas de doute → partir sur le track approprié (feature, refacto ou tech). Il est toujours possible de basculer du structurant vers le fast si l'analyse révèle que c'est trivial.
 
-## Phase 3 — Clôturer (`/review`, `/report`, `/sync`, `/commit`)
+## Phase 3 — Clôturer (`/review`, `/sync`, `/commit`)
 
-Les trois tracks (feature, refacto, tech) partagent les mêmes étapes de clôture après l'implémentation, **dans cet ordre**. Ce sont des skills communs : seuls le contenu et le ton des artifacts changent selon le track. Le `/commit` vient **en dernier** : review, report et sync travaillent tous sur le diff du working tree (non committé), puis le commit embarque d'un coup le code, le `report.md` et les documents réalignés.
+Les trois tracks (feature, refacto, tech) partagent les mêmes étapes de clôture après l'implémentation, **dans cet ordre**. Ce sont des skills communs : seuls le contenu et le ton des artifacts changent selon le track. Le `/commit` vient **en dernier** : review et sync travaillent sur le diff du working tree (non committé), puis le commit embarque d'un coup le code, le `report.md` et les documents réalignés.
 
-### `/report` — Documenter la livraison réelle
-Crée `report.md` dans le dossier de track (`docs/story/NNN-<f|r|t>-slug/`). Documente **ce qui a été fait vs ce qui était prévu** : écart entre intention (`pitch.md`/`plan.md`) et exécution réelle — ajouts non prévus, choix qui ont dévié, dette laissée, métriques effectivement obtenues (en track tech : valeur cible vs mesurée, kill switch armé ou non). C'est la **mémoire factuelle** de la livraison, utile pour les rétros, l'onboarding futur et la traçabilité produit.
+### `/review` — Juger le diff
+Cherche ce qui doit bloquer le commit : faille, bug, régression, migration risquée, dérive non justifiée par rapport au plan. Les findings se corrigent dans la passe. `review.md` n'est **conservé que si un point reste ouvert** (finding non coché, réserve arbitrée, vérification « hors review » avant déploiement) : un fichier tout coché au verdict positif ne dit rien qu'un commit ne dise déjà. La trace de la revue — statut, findings corrigés — vit dans le `metadata.json`.
 
-### `/sync` — Réaligner la doc d'intention avec le code
-Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier (modèle de données ajusté, route renommée, lib remplacée, étape rajoutée…). Le but : que la doc d'intention **se lise comme si elle avait été écrite correctement dès le départ**, sans cicatrice de l'historique de décisions. **Autonome** : il déduit la story du working tree, tranche les écarts seul (réaligner / laisser / escalader) et applique, puis rend un compte rendu avant/après relisible d'un `git diff` — rien n'étant encore commité. `--ask` restaure le mode pas-à-pas. Une **phase finale** propage aussi les écarts vers les **documents de phase 0** quand ils existent (modes Enrichir/Éditer) : `stack.md` gagne une dépendance/service détecté dans le diff, `product-backlog.md` marque la feature livrée, et `vision.md` **évolue avec le produit** — une feature qui étend le périmètre enrichit la vision, une feature qui contredit un anti-objectif le fait retirer. La vision **suit** les features, elle ne les bloque pas ; seule une divergence stratégique large est renvoyée vers un `/vision` en mode Pivot.
+### `/sync` — Clôture documentaire
+Une seule passe, le diff lu une fois :
 
-**Différence `/report` vs `/sync`** : `/report` raconte l'histoire de la livraison **une fois pour toutes** (document figé, lecture chronologique). `/sync` met à jour le document d'intention **en place**, comme une révision documentaire. Les deux sont complémentaires : on garde la trace dans `report.md` et on rend les docs d'intention à nouveau fiables pour les futurs lecteurs.
+1. **Relève les écarts** entre l'intention (`pitch.md`/`plan.md`) et le code livré — écarts volontaires, non livré, ajouts non prévus. Le *pourquoi* de chaque écart, il le prend là où il est né : checkpoints de l'implem, entrée `Implémentation` et `Review` du `metadata.json`, findings de la review. Il ne pose de question que si un élément prévu n'est pas livré et que rien ne dit s'il est abandonné, reporté ou oublié.
+2. **Réaligne** la doc d'intention pour qu'elle **se lise comme si elle avait été écrite correctement dès le départ** (modèle ajusté, route renommée, étape rajoutée…), et **coche les critères en place** : critères d'acceptation dans le pitch, critères de sortie dans le plan. Une **phase finale** propage aux **documents de phase 0** quand ils existent (modes Enrichir/Éditer) : `stack.md` gagne une dépendance détectée dans le diff, `product-backlog.md` marque l'état de la feature, `vision.md` **évolue avec le produit** — elle suit les features, elle ne les bloque pas ; seule une divergence stratégique large est renvoyée vers `/vision` en mode Pivot.
+3. **Consigne** dans `report.md` ce qui n'a aucune autre place : les écarts et où ils ont été réalignés, ce qui n'est pas livré, la dette, les leçons. Rien n'y est recopié — le périmètre livré, c'est le plan réaligné ; les critères, ils sont cochés dans le pitch. Pas de report du tout si la story est conforme et sans dette.
+
+**Autonome** : il déduit la story du working tree, tranche seul (réaligner / laisser / escalader), applique, puis rend un compte rendu avant/après relisible d'un `git diff` — rien n'étant encore commité. `--ask` restaure le mode pas-à-pas. En clôture, il **propose** un ADR quand un écart est une décision d'architecture, et `/rules` quand une leçon mérite d'être chargée la prochaine fois qu'on touche la zone.
 
 ### `/commit` — Construire et pousser les commits
-**Dernière étape** : une fois report et sync passés, lit le diff git, regroupe les changements en lots cohérents, propose des messages au format **Conventional Commits en français** (`feat(scope): …`, `fix(scope): …`, `refactor(scope): …`, etc.), demande validation, commit et push. Le commit embarque ainsi le code, le `report.md` et les docs réalignées en une fois. Sur un track refacto, on a souvent **un commit par étape** pour préserver la réversibilité.
+**Dernière étape** : une fois review et sync passés, lit le diff git, regroupe les changements en lots cohérents, propose des messages au format **Conventional Commits en français** (`feat(scope): …`, `fix(scope): …`, `refactor(scope): …`, etc.), demande validation, commit et push. Le commit embarque ainsi le code, le `report.md` et les docs réalignées en une fois. Sur un track refacto, on a souvent **un commit par étape** pour préserver la réversibilité.
 
 > **Ne pas confondre `/sync` avec `/doc-feature`** : `/sync` recale un document d'intention récent que tu viens de modifier dans un track structuré. `/doc-feature` (voir Utilitaires) cartographie une feature **ancienne ou jamais passée par le pipeline**, en partant du code livré, sans dossier de track préalable.
 
@@ -226,7 +228,7 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 |----------------------|--------------------------------------------------------------------------------------------|
 | `/status`            | **Reprendre un projet après une pause** — recense les stories de `docs/story/`, déduit pour chacune l'étape atteinte (des artifacts présents et du `metadata.json`) et sa fraîcheur (active ≤ 7 j / en pause / dormante > 30 j), relève l'état du dépôt (branche, working tree, commits depuis le dernier tag, stash et commits non poussés), vérifie le décor de phase 0, puis conseille **une** reprise en nommant le skill à taper. **Lecture seule stricte** : n'écrit aucun fichier, pas même `metadata.json` — ce n'est pas une passe du pipeline. `/status <slug>` zoome sur une story, `/status --all` inclut les livrées |
 | `/test-scenario`     | Tester un scénario utilisateur via Playwright MCP (navigateur piloté en live)              |
-| `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : neuf skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
+| `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : huit skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
 | `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |
 | `/doc-feature`       | **Cartographier une feature existante** en lisant le code (entités, flux, routes, services, templates, points d'extension) — stack-agnostique avec détection auto (Sylius, Symfony, autre). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarder sur un module legacy ou documenter une zone du code jamais passée par le pipeline. À distinguer de `/sync` (qui met à jour une doc d'intention récente). |
 | `/release`           | **Créer une release versionnée bout en bout** — détermine le bump SemVer (major/minor/patch) depuis les Conventional Commits depuis le dernier tag, met à jour `CHANGELOG.md` (format Keep a Changelog), crée un tag annoté `vX.Y.Z`, push, puis publie la release sur GitHub via `gh`. Demande validation avant toute action publique. Argument-hint : `[major\|minor\|patch] [--no-push] [--draft] [--pre <suffix>]`. |
@@ -234,13 +236,13 @@ Met à jour `pitch.md` ou `plan.md` quand l'implémentation a obligé à dévier
 
 ### Les ADR viennent à toi
 
-Un ADR ne se perd pas au moment où on prend la décision — il se perd au moment où on passe à la suite. C'est pourquoi **neuf skills proposent** d'en graver un, chacun au moment où il voit passer une décision d'architecture :
+Un ADR ne se perd pas au moment où on prend la décision — il se perd au moment où on passe à la suite. C'est pourquoi **huit skills proposent** d'en graver un, chacun au moment où il voit passer une décision d'architecture :
 
 | Quand | Qui propose | Ce qu'il a sous les yeux |
 |---|---|---|
 | Au cadrage | `/feature-plan`, `/refactor-plan`, `/tech-plan` | §Approche retenue et §Alternatives écartées — le plan a déjà fait le travail d'argumentation |
 | À l'exécution | `/feature-implem`, `/refactor-implem`, `/tech-implem` | Un choix tranché **hors plan**, en cours de route : le cas le plus précieux, rien d'autre ne le trace |
-| À la clôture | `/review`, `/report`, `/sync` | Une décision jamais justifiée, un écart d'approche assumé, un réalignement durable |
+| À la clôture | `/review`, `/sync` | Une décision jamais justifiée, un écart d'approche assumé, un réalignement durable |
 
 La proposition tient en **une ligne**, arrive **en clôture**, et n'attend **aucune réponse** : tu lances `/adr` si tu veux, sinon tu continues. Elle n'apparaît que si la décision passe le test d'ADR-ité (structurante · coûteuse à inverser · alternative sérieuse écartée · question du futur lecteur — 3 sur 4 minimum) et qu'aucun ADR ne couvre déjà le sujet. Le silence est le cas normal.
 

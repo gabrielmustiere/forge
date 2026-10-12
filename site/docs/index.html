@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Documentation — Forge, plugin Claude Code</title>
-    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 26 skills, configuration des permissions et dépannage.">
+    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 24 skills, configuration des permissions et dépannage.">
     <link rel="canonical" href="https://forge.mustiere.fr/docs/">
     <meta name="author" content="Gabriel Mustiere">
     <meta name="theme-color" content="#0a0e12">
@@ -14,17 +14,17 @@
     <meta property="og:site_name" content="Forge">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="Documentation — Forge, plugin Claude Code">
-    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 26 skills, configuration et dépannage.">
+    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 24 skills, configuration et dépannage.">
     <meta property="og:url" content="https://forge.mustiere.fr/docs/">
     <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 24 skills, stack-agnostique.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Documentation — Forge, plugin Claude Code">
-    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 26 skills, configuration et dépannage.">
+    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 24 skills, configuration et dépannage.">
     <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 26 skills, stack-agnostique.">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 24 skills, stack-agnostique.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
                     "@type": "TechArticle",
                     "@id": "https://forge.mustiere.fr/docs/#article",
                     "headline": "Documentation du plugin Claude Code Forge",
-                    "description": "Prérequis, installation, concepts du pipeline, référence des 26 skills, configuration des permissions et dépannage du plugin Forge.",
+                    "description": "Prérequis, installation, concepts du pipeline, référence des 24 skills, configuration des permissions et dépannage du plugin Forge.",
                     "url": "https://forge.mustiere.fr/docs/",
                     "inLanguage": "fr-FR",
                     "proficiencyLevel": "Beginner",
@@ -88,7 +88,7 @@
                             "@type": "HowToStep",
                             "position": 3,
                             "name": "Recharger les plugins",
-                            "text": "Exécuter /reload-plugins pour que les 26 skills soient disponibles sous le préfixe /forge:."
+                            "text": "Exécuter /reload-plugins pour que les 24 skills soient disponibles sous le préfixe /forge:."
                         }
                     ]
                 },
@@ -142,7 +142,7 @@
         <p class="doc-header__eyebrow">DOCUMENTATION</p>
         <h1>Installer et utiliser Forge</h1>
         <p class="doc-header__lead">Forge est un plugin Claude Code stack-agnostique. Il découpe le cycle de développement en étapes courtes, chacune produisant un artefact markdown qui alimente la suivante. Cette page couvre l'installation, les
-            concepts, la référence des 26 skills et la configuration.</p>
+            concepts, la référence des 24 skills et la configuration.</p>
     </header>
 
     <div class="doc-body">
@@ -234,7 +234,7 @@
                         </li>
                         <li>
                             <h4>Recharger les plugins</h4>
-                            <p>Rend les 26 skills disponibles dans la session courante.</p>
+                            <p>Rend les 24 skills disponibles dans la session courante.</p>
                             <div class="code">
                                 <pre><code><span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
                             </div>
@@ -323,12 +323,12 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             <tr>
                                 <td><code>review.md</code></td>
                                 <td>Technique</td>
-                                <td>Le diff est-il sûr, propre et conforme au plan ?</td>
+                                <td>Le diff est-il sûr, propre et conforme au plan ? Conservé seulement si un point reste ouvert.</td>
                             </tr>
                             <tr>
                                 <td><code>report.md</code></td>
                                 <td>Factuel</td>
-                                <td>Qu'a-t-on livré, comparé à ce qui était prévu ?</td>
+                                <td>Qu'est-ce qui a dérivé de l'intention, qu'est-ce qui reste à faire ?</td>
                             </tr>
                             <tr>
                                 <td><code>estimate.md</code></td>
@@ -344,7 +344,8 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                         </table>
                     </div>
                     <p>Un document sert <strong>un seul but, dans un seul registre</strong>, annoncé dans son en-tête. Le brief et le pitch sont fonctionnels : aucun nom de classe, de service ou de framework n'y a sa place. Les plans et la review
-                        sont techniques. Les documents de décision (review, report, estimation) ouvrent sur leur section <code>## Synthèse</code> — on doit pouvoir ne lire qu'elle.</p>
+                        sont techniques. Les documents de décision (review, report, estimation) ouvrent sur leur section <code>## Synthèse</code> — on doit pouvoir ne lire qu'elle.
+                        Rien ne se recopie d'un document à l'autre : le périmètre livré, c'est le plan réaligné ; les critères atteints se cochent dans le pitch ou le plan qui les porte.</p>
                     <div class="callout">
                         <p class="callout__title">Un artefact, un seul écrivain</p>
                         <p>Chaque document a une skill propriétaire ; les autres le lisent. Deux exceptions assumées : <code>metadata.json</code>, append-only par construction, et les documents projet que <code>/forge:sync</code> co-écrit via les
@@ -416,7 +417,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
 
             <section class="doc-section" aria-labelledby="reference-title">
                 <h2 id="reference-title">Référence des skills</h2>
-                <p>Vingt-cinq skills, quatre phases. La <strong>phase</strong> dit <em>quand</em> : on pose le décor une fois pour le projet, puis chaque story traverse le cadrage, l'implémentation et la clôture, dans cet ordre. Le <a
+                <p>Vingt-quatre skills, quatre phases. La <strong>phase</strong> dit <em>quand</em> : on pose le décor une fois pour le projet, puis chaque story traverse le cadrage, l'implémentation et la clôture, dans cet ordre. Le <a
                     href="#choisir-track">track</a> dit <em>avec quelles skills</em> : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Perdu en cours de route ? <code>/forge:help</code> réaffiche le
                     pipeline complet et oriente vers la bonne.</p>
 
@@ -560,15 +561,11 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             <tbody>
                             <tr>
                                 <td><code>/forge:review</code></td>
-                                <td>Code review du diff : sécurité, qualité, conformité au plan, non-régression.</td>
-                            </tr>
-                            <tr>
-                                <td><code>/forge:report</code></td>
-                                <td>La mémoire factuelle de la livraison : écart entre intention et exécution, ajouts non prévus, dette laissée, métriques obtenues. Écrit une fois pour toutes.</td>
+                                <td>Code review du diff : sécurité, qualité, conformité au plan, non-régression. Les findings se corrigent dans la passe ; <code>review.md</code> n'est conservé que si un point reste ouvert.</td>
                             </tr>
                             <tr>
                                 <td><code>/forge:sync</code></td>
-                                <td>Met à jour les documents d'intention <strong>en place</strong>, comme une révision documentaire, ainsi que les docs projet (vision, stack, product-backlog).</td>
+                                <td>La clôture documentaire, en une passe : relève les écarts entre l'intention et le livré, met à jour les documents d'intention <strong>en place</strong> (critères cochés compris) et les docs projet (vision, stack, product-backlog), puis consigne dans <code>report.md</code> ce qui n'a aucune autre place — écarts, non-livré, dette, leçons.</td>
                             </tr>
                             <tr>
                                 <td><code>/forge:commit</code></td>
@@ -578,8 +575,8 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                         </table>
                     </div>
                     <div class="callout">
-                        <p class="callout__title">report et sync sont complémentaires</p>
-                        <p><code>/forge:report</code> fige la trace de ce qui s'est passé ; <code>/forge:sync</code> rend les documents d'intention à nouveau fiables pour les futurs lecteurs. On garde les deux.</p>
+                        <p class="callout__title">Une seule passe pour la clôture</p>
+                        <p><code>/forge:sync</code> lit le diff une fois : il rend les documents d'intention à nouveau fiables pour les futurs lecteurs, et ne garde dans <code>report.md</code> que la trace de ce qui a dérivé et de ce qui reste. Il remplace l'ancien couple <code>/forge:report</code> + <code>/forge:sync</code>.</p>
                     </div>
                 </div>
 

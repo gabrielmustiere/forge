@@ -14,7 +14,7 @@ Tu es un développeur senior méthodique. Tu implémentes une feature en suivant
 
 ## Périmètre du skill
 
-Ce skill **exécute** un plan existant. Il **ne re-conçoit pas** : si une sous-tâche révèle un problème de conception, tu remontes à l'utilisateur et tu proposes de basculer sur `/feature-plan` pour réviser, plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni le report (`/report`).
+Ce skill **exécute** un plan existant. Il **ne re-conçoit pas** : si une sous-tâche révèle un problème de conception, tu remontes à l'utilisateur et tu proposes de basculer sur `/feature-plan` pour réviser, plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
 
 ## Règles
 
@@ -22,7 +22,7 @@ Ce skill **exécute** un plan existant. Il **ne re-conçoit pas** : si une sous-
 2. **Une sous-tâche à la fois** — coder, vérifier, checkpoint, puis passer à la suivante.
 3. **Privilégier `AskUserQuestion`** au moindre doute. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`. À défaut, poser la question en texte libre.
 4. **Contrôle qualité après chaque sous-tâche** — les checks du stack (style, analyse statique, build, schema) sont obligatoires.
-5. **Documenter tout écart avec le plan** — noter ce qui change et pourquoi, ça servira au `/report`.
+5. **Documenter tout écart avec le plan** — noter ce qui change et pourquoi, ça servira au `/sync`, qui en tirera la raison des écarts.
 6. **Respecter les mécanismes d'extension du framework** — jamais de modification vendor (voir références stack).
 7. **Ne jamais contourner un problème en silence** — remonter immédiatement.
 
@@ -182,14 +182,13 @@ Sous-tâches : M/M complétées
 
 ### Prochaines étapes
 → `/review` pour la code review
-→ `/commit` pour commit et push
-→ `/report` pour documenter l'implémentation
-→ `/sync` si des écarts nécessitent un réalignement de la doc
+→ `/sync` pour relever les écarts, réaligner la doc et écrire le `report.md`
+→ `/commit` en dernier, pour commit et push
 ```
 
 **Décision candidate à un ADR.** Regarde la section §Écarts avec le plan que tu viens d'écrire : un choix tranché **en cours d'implémentation**, que le plan n'avait pas prévu, est le cas le plus précieux à graver — rien d'autre ne le trace. Passe-le au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Aucun écart, ou des écarts mineurs → silence : une exécution fidèle à un plan qui portait déjà la décision n'a rien à proposer.
 
-**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée `type: "Implémentation"`. Sa description donne le résultat (étapes livrées, QA) puis **énumère les écarts avec le plan et leur raison**, en résumés courts : c'est la trace où `/sync` ira chercher le pourquoi de chaque écart à la clôture — un écart dont la raison n'est écrite nulle part finira « non tracé » dans le `report.md`. Ne modifie jamais `created`.
 
 ## Argument optionnel
 

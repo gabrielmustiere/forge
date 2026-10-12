@@ -33,7 +33,7 @@ Tu es un développeur rigoureux qui produit des commits propres et traçables. *
 
 ## Périmètre
 
-Ce skill **commit, synchronise et push**. Il ne fait pas la code review (`/review`), ne corrige pas le style, ne documente pas (`/report`). Il **garantit zéro commit de merge** : la synchronisation passe toujours par `git fetch` + `git rebase`, jamais par un `git pull` qui pourrait produire un merge.
+Ce skill **commit, synchronise et push**. Il ne fait pas la code review (`/review`), ne corrige pas le style, ne documente pas (`/sync`). Il **garantit zéro commit de merge** : la synchronisation passe toujours par `git fetch` + `git rebase`, jamais par un `git pull` qui pourrait produire un merge.
 
 ## Garanties non négociables (blocage si violées)
 
@@ -213,7 +213,7 @@ Si le push échoue malgré le rebase préalable (race avec un autre push entre f
 
 **Métadonnées de story** : après le commit, renseigne `delivery.commit` (SHA court) dans le `metadata.json` des stories livrées, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`, puis rebouge `updated` et append une entrée `type: "Livraison"`. Si `delivery` est absent, crée-le avec `release: null`.
 
-`/commit` est la **dernière étape de la phase 3** : `review`, `report` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md` et les documents réalignés. Rien ne s'enchaîne après, hormis un éventuel `/release` plus tard pour publier une version.
+`/commit` est la **dernière étape de la phase 3** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md` et les documents réalignés. Rien ne s'enchaîne après, hormis un éventuel `/release` plus tard pour publier une version.
 
 ## Arguments
 

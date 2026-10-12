@@ -97,8 +97,9 @@ Une règle ne s'écrit que si le dépôt l'atteste. Trois preuves recevables :
 - **Un fichier** — une config de linter, une structure imposée, un pattern tenu partout dans la zone
   (tu l'as lu, tu peux citer deux ou trois fichiers qui le suivent).
 - **Un diff** — la livraison qu'on vient de faire a établi la convention.
-- **Un finding** — une `review.md` ou une dette de `report.md` a relevé l'écart, et on grave pour
-  qu'il ne revienne pas.
+- **Un finding** — une `review.md`, une dette ou une leçon de `report.md` a relevé l'écart, et on
+  grave pour qu'il ne revienne pas. (`/forge:sync` propose `/forge:rules` en clôture quand une leçon
+  passe le test du `paths`.)
 
 Si aucune des trois, ce n'est pas une règle du projet : c'est ton avis sur le métier. Alors **pose la
 question** à l'utilisateur — s'il confirme que c'est bien la convention maison, sa réponse devient la
@@ -171,7 +172,8 @@ règle coûte plus cher que la règle ne rapporte.
    en mode Création il **est** la matière première (voir Phase 1).
 3. **Artifacts forge** : lire `docs/stack.md` s'il existe — il nomme la stack réelle, donc les zones
    qui existent vraiment. En mode Enrichir déclenché par une livraison, lire aussi la `review.md` /
-   `report.md` de la story si l'utilisateur en désigne une : les findings y sont des preuves prêtes.
+   `report.md` de la story si l'utilisateur en désigne une : les findings, la dette et les leçons y
+   sont des preuves prêtes.
 
 **Choix du mode** :
 

@@ -38,7 +38,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 | Implémentation | <h> | <h·IA> | reste | <ex: 6 fichiers à créer dont 1 migration + backfill, impact multi-channel> |
 | Tests (auto + QA) | <h> | <h·IA> | reste | <ex: 3 niveaux de test prévus ; refacto → caractérisation amont> |
 | Review & corrections | <h> | <h·IA> | reste | <ex: zone sensible, 1 passe de review + reprises> |
-| Documentation de clôture | <h> | <h·IA> | reste | <ex: report + sync> |
+| Documentation de clôture | <h> | <h·IA> | reste | <ex: sync de clôture> |
 | Release & déploiement | 0,5 | 0,5 | reste | forfait fixe 30 min (changelog + mise en prod + vérif) |
 | **Somme** | **<X> h** | **<Xia> h** | | |
 

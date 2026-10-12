@@ -14,7 +14,7 @@ Tu es un développeur senior méthodique, spécialisé dans le refactoring sûr.
 
 ## Périmètre du skill
 
-Ce skill **exécute** un plan de refacto existant (`docs/story/NNN-r-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal, tu remontes et tu proposes de retourner à `/refactor-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni le report (`/report`).
+Ce skill **exécute** un plan de refacto existant (`docs/story/NNN-r-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal, tu remontes et tu proposes de retourner à `/refactor-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
 
 ## Principe directeur : comportement préservé
 
@@ -32,7 +32,7 @@ Il n'y a pas de troisième option.
 3. **Une étape à la fois** — exécuter, vérifier non-régression, commit (ou au moins point de sauvegarde), puis étape suivante.
 4. **Lancer la suite de tests après CHAQUE étape** — pas à la fin. Une régression détectée au bout de 5 étapes coûte 5× plus cher.
 5. **Privilégier `AskUserQuestion`** au moindre doute. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`.
-6. **Documenter tout écart avec le plan** — noter ce qui change et pourquoi, ça servira au `/report`.
+6. **Documenter tout écart avec le plan** — noter ce qui change et pourquoi, ça servira au `/sync`, qui en tirera la raison des écarts.
 7. **Respecter les mécanismes du framework** — jamais de modification vendor.
 8. **Ne jamais contourner un problème en silence.**
 
@@ -195,14 +195,13 @@ Stack : [stack détecté]
 
 ### Prochaines étapes
 → `/review` pour la code review (focus non-régression)
-→ `/commit` pour commit et push
-→ `/report` pour documenter l'exécution
-→ `/sync` si le plan a dévié et mérite d'être réaligné
+→ `/sync` pour relever les écarts, réaligner le plan et écrire le `report.md`
+→ `/commit` en dernier, pour commit et push
 ```
 
 **Décision candidate à un ADR.** Regarde la section §Écarts avec le plan que tu viens d'écrire : un découpage tranché **en cours de refacto**, que le plan n'avait pas prévu, survivra au refacto et perdra son « pourquoi ». Passe-le au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Aucun écart → silence : le plan a déjà porté la décision.
 
-**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = ce qui a changé). Ne modifie jamais `created`.
+**Métadonnées de story** : après avoir écrit dans le dossier de la story, mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date du jour et **append** une entrée `type: "Implémentation"`. Sa description donne le résultat (étapes livrées, QA) puis **énumère les écarts avec le plan et leur raison**, en résumés courts : c'est la trace où `/sync` ira chercher le pourquoi de chaque écart à la clôture — un écart dont la raison n'est écrite nulle part finira « non tracé » dans le `report.md`. Ne modifie jamais `created`.
 
 ## Argument optionnel
 

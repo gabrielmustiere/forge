@@ -50,12 +50,12 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | Artifact | Écrivain **unique** | Lecteurs |
 |---|---|---|
 | `docs/story/<NNN>-f-<slug>/brief.md` | `feature-interview` | `feature-pitch`, `estimate` |
-| `docs/story/<NNN>-f-<slug>/pitch.md` | `feature-pitch` | `feature-plan`, `review`, `report`, `estimate`, `adr` |
-| `docs/story/<NNN>-f-<slug>/plan.md` | `feature-plan` | `feature-implem`, `review`, `report`, `estimate`, `adr` |
-| `docs/story/<NNN>-r-<slug>/plan.md` | `refactor-plan` | `refactor-implem`, `review`, `report`, `estimate`, `adr` |
-| `docs/story/<NNN>-t-<slug>/plan.md` | `tech-plan` | `tech-implem`, `review`, `report`, `estimate`, `adr` |
-| `docs/story/<NNN>-*/review.md` | `review` | `report`, `adr` |
-| `docs/story/<NNN>-*/report.md` | `report` | `sync`, `adr` |
+| `docs/story/<NNN>-f-<slug>/pitch.md` | `feature-pitch` | `feature-plan`, `review`, `sync`, `estimate`, `adr` |
+| `docs/story/<NNN>-f-<slug>/plan.md` | `feature-plan` | `feature-implem`, `review`, `sync`, `estimate`, `adr` |
+| `docs/story/<NNN>-r-<slug>/plan.md` | `refactor-plan` | `refactor-implem`, `review`, `sync`, `estimate`, `adr` |
+| `docs/story/<NNN>-t-<slug>/plan.md` | `tech-plan` | `tech-implem`, `review`, `sync`, `estimate`, `adr` |
+| `docs/story/<NNN>-*/review.md` *(conservé seulement si un point reste ouvert)* | `review` | `sync`, `adr`, `rules` |
+| `docs/story/<NNN>-*/report.md` | `sync` | `adr`, `rules` |
 | `docs/story/<NNN>-*/estimate.md` | `estimate` | — |
 | `docs/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule), `status`, `product-backlog` (avancement) |
 | `docs/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `claude-md` |
@@ -64,7 +64,7 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `docs/adr/<NNNN>-<slug>.md` + `docs/adr/README.md` | `adr` | tous |
 | `docs/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
 | `CHANGELOG.md` + tags de version | `release` | — |
-| Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `report`, `doc-feature`, `stack` |
+| Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `stack` |
 | L'historique git (commits, push) | `commit` (+ `release` pour le commit de version) | — |
 | `CLAUDE.md` racine | `claude-md` (+ `rules`, voir §3) | tous |
 | `.claude/rules/**` | `rules` | tous (chargées par le harness, pas lues par les skills) |
@@ -101,8 +101,8 @@ rendent l'exception sûre :
 1. **`sync` n'écrit que via les modes des propriétaires** (Enrichir / Éditer) — il applique leur
    grammaire, il n'en invente pas une deuxième.
 2. **Chaque changement est attesté et restitué.** `sync` applique seul les retouches ciblées,
-   mais il ne peut écrire que ce qu'une ligne du `report.md`, un hunk du diff ou un fichier
-   prouve — et il rend compte de chacune (avant / après / preuve) en clôture, dans un working
+   mais il ne peut écrire que ce qu'un hunk du diff, un fichier lu ou une trace amont (entrée du
+   `metadata.json`, finding de review) prouve — et il rend compte de chacune (avant / après / preuve) en clôture, dans un working
    tree encore non commité. La sécurité ne vient pas d'une validation phrase par phrase, qui
    noyait le signal ; elle vient de la règle de preuve et de la relecture d'un seul `git diff`.
 3. **`sync` propage, il ne cadre pas.** Une divergence stratégique large n'est pas absorbée : il
@@ -195,7 +195,7 @@ une question d'outil.
 |---|---|---|---|
 | **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `claude-md`, `doc-feature`, `help` | non | ses documents (§2) |
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
-| **Clôture** | `review`, `report`, `sync`, `backfill-metadata` | non | ses documents (§2) |
+| **Clôture** | `review`, `sync`, `backfill-metadata` | non | ses documents (§2) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
 | **Vérification** | `test-scenario` | non | **rien** — elle observe, elle ne corrige pas |
 
@@ -225,8 +225,8 @@ pas de frontière. Ne pas y consacrer d'énergie : elle se dépense mieux sur le
 exception (voir plus bas).
 
 La raison n'est pas la prudence, c'est le voisinage : le pipeline aligne des skills dont les
-descriptions se ressemblent nécessairement (`report` « compte rendu d'écarts » et `sync`
-« réalignement de la doc » découpent le même moment du cycle). Aucune
+descriptions se ressemblent nécessairement (`review` « juger le diff » et `sync` « relever les
+écarts au plan » regardent le même diff au même moment du cycle). Aucune
 formulation ne rendra ce triage fiable — des skills aussi voisines sont *intrinsèquement*
 ambiguës pour un classifieur. Le seul aiguillage sûr est
 celui de l'utilisateur qui tape le nom.
@@ -240,8 +240,8 @@ skills adjacents et produit le mauvais document — n'existe pas ici : il n'y a 
 
 Deux garde-fous bornent malgré tout l'exception :
 
-1. **La voie normale reste la proposition explicite.** Neuf skills (les trois plans, les trois
-   `*-implem`, `review`, `report`, `sync`) suggèrent un ADR en clôture selon
+1. **La voie normale reste la proposition explicite.** Huit skills (les trois plans, les trois
+   `*-implem`, `review`, `sync`) suggèrent un ADR en clôture selon
    [`adr-prompting.md`](adr-prompting.md) — une ligne, non bloquante, sous test d'ADR-ité.
    C'est ce chemin qui doit rendre l'ADR visible, pas le déclenchement automatique.
 2. **Un ADR n'écrase jamais rien.** Il crée un fichier neuf sous un numéro libre. Un ADR

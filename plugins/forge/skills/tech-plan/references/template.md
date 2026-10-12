@@ -7,7 +7,7 @@
 > **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
-guide: Plan d'une évolution technique (préfixe `-t-`). Produit par `/forge:tech-plan`, consommé par `/forge:tech-implem` (étape build), `/forge:review`, `/forge:report` et `/forge:estimate`.
+guide: Plan d'une évolution technique (préfixe `-t-`). Produit par `/forge:tech-plan`, consommé par `/forge:tech-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections. Les sections propres au track `-t-` (Rollback et kill switch, Métriques) sont additionnelles.
 Une évolution technique change l'infrastructure ou un composant technique transverse sans impact métier visible (montée de version, paramétrage par l'environnement, bibliothèque remplacée, déploiement). Si du métier change, c'est une feature ; si seule la structure du code change, c'est un refacto.
 Pas de pitch pour une évolution technique : la `## Motivation` de ce plan porte le pourquoi, en termes techniques (charte §3).
@@ -59,7 +59,7 @@ Aucun impact modèle.
 
 ## Périmètre
 
-> _Skill : tables exhaustives, format normatif (charte §6) — point de jonction avec `report.md`, qui les reprend en ajoutant une colonne « Prévu dans le plan ». Inclure les fichiers de configuration et d'environnement : sur un `-t-`, ce sont eux qui portent le vrai changement._
+> _Skill : tables exhaustives, format normatif (charte §6) — `/forge:sync` les réaligne sur le livré à la clôture : après la passe, elles **sont** le périmètre livré. Inclure les fichiers de configuration et d'environnement : sur un `-t-`, ce sont eux qui portent le vrai changement._
 
 ### Fichiers à créer
 
@@ -152,7 +152,7 @@ Aucun impact modèle.
 
 ## Critères de sortie
 
-> _Skill : checkboxes vérifiables avant clôture — **la seule section de critères du plan** (charte §4) : les cibles chiffrées de §Métriques s'y reprennent sous forme binaire (« atteinte / non atteinte »). Plus exigeant qu'un plan de feature, car l'impact peut être prod : la bascule et le kill switch **testé** en font partie. Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet._
+> _Skill : checkboxes vérifiables avant clôture, cochées en place par `/forge:sync` — **la seule section de critères du plan** (charte §4) : les cibles chiffrées de §Métriques s'y reprennent sous forme binaire (« atteinte / non atteinte »). Plus exigeant qu'un plan de feature, car l'impact peut être prod : la bascule et le kill switch **testé** en font partie. Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet._
 
 - [ ] Suite de tests du projet verte (unit, functional, E2E selon ce qui existe).
 - [ ] <Critère binaire repris de §Métriques : ex « `<commande de recherche>` retourne 0 occurrence »>.

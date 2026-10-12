@@ -169,7 +169,7 @@ Si la décision est née pendant une story qui a déjà un `report.md`, édite-l
 - ADR-0007 — Cache sessions Redis (accepted) — `docs/adr/0007-cache-sessions-redis.md`
 ```
 
-Si la story n'a pas encore de report, ne rien faire — `/report` lira l'index plus tard.
+Si la story n'a pas encore de report, ne rien faire — `/sync` verra l'index à la clôture et ne reproposera pas la décision.
 
 **Si un ADR est superseded** par celui-ci : édite l'ADR ancien pour passer son statut à `superseded by ADR-NNNN`, et mentionne-le dans la section `Links` du nouveau.
 

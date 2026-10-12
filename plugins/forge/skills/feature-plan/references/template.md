@@ -7,7 +7,7 @@
 > **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
-guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Produit par `/forge:feature-plan`, consommé par `/forge:feature-implem` (étape build), `/forge:review`, `/forge:report` et `/forge:estimate`.
+guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Produit par `/forge:feature-plan`, consommé par `/forge:feature-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections : les skills avals les cherchent par leur nom.
 Le pitch décrit l'intention métier ; ce fichier décrit le COMMENT. Le « pourquoi » ne se recopie PAS ici : il vit dans `pitch.md` §Contexte, auquel l'en-tête renvoie (charte §5).
 STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Les mécanismes, commandes QA et conventions viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et du `CLAUDE.md` du projet — les exemples ci-dessous sont à remplacer par ceux du stack réel.
@@ -56,7 +56,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 
 ## Périmètre
 
-> _Skill : tables exhaustives, format normatif (charte §6) — c'est le point de jonction avec `report.md`, qui reprend ces deux tables en y ajoutant une colonne « Prévu dans le plan ». Un reviewer doit pouvoir cocher chaque ligne contre le diff._
+> _Skill : tables exhaustives, format normatif (charte §6) — `/forge:sync` les réaligne sur le livré à la clôture : après la passe, elles **sont** le périmètre livré (le `report.md` ne les recopie pas). Un reviewer doit pouvoir cocher chaque ligne contre le diff._
 
 ### Fichiers à créer
 
@@ -144,7 +144,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 
 ## Critères de sortie
 
-> _Skill : checkboxes **techniques et vérifiables** cochées à la livraison — le pendant des « Critères d'acceptation » observables du pitch (charte §4). Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet : ne pas inventer, ne pas écrire un outil en dur qui n'existe pas dans ce projet._
+> _Skill : checkboxes **techniques et vérifiables** cochées en place par `/forge:sync` à la clôture — le pendant des « Critères d'acceptation » observables du pitch (charte §4). Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet : ne pas inventer, ne pas écrire un outil en dur qui n'existe pas dans ce projet._
 
 - [ ] <Critère structurel ou comportemental mesurable>.
 - [ ] Suite de tests du projet verte, sans nouvelle régression.
