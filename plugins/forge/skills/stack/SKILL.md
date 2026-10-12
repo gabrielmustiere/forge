@@ -170,7 +170,7 @@ Adapte le message au mode :
 
 - **Création** / **Pivot** :
   > Stack cartographiée : `docs/stack.md`
-  > Ce document est lu par `/feature-plan`, `/refactor-plan`, `/tech-plan`, `/tech-implem`, `/refactor-implem`, `/feature-implem` et `/review` : ils s'appuient dessus pour proposer des solutions cohérentes avec ton stack réel plutôt que de re-détecter à chaque fois.
+  > Ce document est lu par `/feature-plan`, `/refactor-plan`, `/tech-plan`, `/tech-implem`, `/refactor-implem`, `/feature-implem`, `/review` et `/doc-feature` : ils s'appuient dessus pour proposer des solutions cohérentes avec ton stack réel plutôt que de re-détecter à chaque fois.
   > *(Mode Pivot)* L'ancienne cartographie est archivée sous `docs/stack.md.archive-AAAA-MM-JJ`.
   > *(Cas amorçage)* Le projet a été amorcé depuis `gabrielmustiere/symfony-template`. Pour démarrer :
   > `make init` (deps + DB + fixtures), `docker compose up -d` (Mailpit), puis `make serve` (→ `https://<projet>.wip`). `APP_SECRET` a été régénéré ; ne réutilise jamais celui du template.

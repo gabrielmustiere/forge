@@ -1,6 +1,6 @@
 # Référence stack — Symfony
 
-À charger quand `composer.json` requiert `symfony/framework-bundle` **sans** Sylius (cas Sylius traité dans `sylius.md`).
+À charger quand le stack du projet est Symfony **sans** Sylius (`docs/stack.md`, ou `composer.json` requiert `symfony/framework-bundle`) — cas Sylius traité dans `sylius.md`.
 
 ## Vocabulaire à utiliser
 

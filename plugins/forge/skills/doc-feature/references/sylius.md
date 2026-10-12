@@ -1,6 +1,6 @@
 # Référence stack — Sylius
 
-À charger quand `composer.json` requiert `sylius/sylius` ou un `sylius/*-bundle`.
+À charger quand le stack du projet est Sylius (`docs/stack.md`, ou `composer.json` requiert `sylius/sylius` ou un `sylius/*-bundle`).
 
 ## Vocabulaire à utiliser
 

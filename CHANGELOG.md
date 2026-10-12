@@ -10,6 +10,14 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **`/forge:doc-feature` lit `docs/stack.md`** — il était le seul à ignorer la cartographie
+  produite par `/forge:stack` et rescannait `composer.json` / `package.json` à chaque lancement.
+  Il suit désormais la même logique que les skills du workflow : stack déjà établi dans la
+  session, sinon chargé depuis `docs/stack.md`, et détection depuis les manifestes seulement en
+  dernier recours. La ligne affichée dit d'où vient le stack.
+
 ## [6.11.0] - 2026-09-29 — Stack chargé sans redétection
 
 ### ✨ Fonctionnel

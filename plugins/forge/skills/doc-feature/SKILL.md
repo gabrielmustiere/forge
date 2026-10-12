@@ -33,25 +33,32 @@ Ce skill est **hors pipeline** (pas de spec → design → implem). Son rôle es
 2. **Privilégier `AskUserQuestion`** pour clarifier le périmètre. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`.
 3. **Tracer le chemin complet** — point d'entrée (route, CLI, event, cron…) → orchestration (controller, handler, service) → métier (entités, règles, side effects) → sortie (template, response, message).
 4. **Documenter ce qui existe, pas ce qui devrait exister** — pas de suggestions d'amélioration sauf si demandé.
-5. **Adapter le niveau de détail au stack détecté** — charger la référence stack appropriée (voir Phase 0).
+5. **Adapter le niveau de détail au stack du projet** — charger la référence stack appropriée (voir Phase 0).
 
 ## Déroulement
 
-### Phase 0 — Détection du stack
+### Phase 0 — Stack du projet
 
-Avant toute exploration, identifie le stack du projet pour adapter le vocabulaire et les sections du document. Lis dans cet ordre :
+Avant toute exploration, établis le stack du projet pour adapter le vocabulaire et les sections du document. Le premier cas qui s'applique gagne :
 
-1. `composer.json` à la racine — clés `require` :
-   - `sylius/sylius` ou `sylius/*-bundle` → **stack Sylius**, charger `${CLAUDE_SKILL_DIR}/references/sylius.md`
-   - `symfony/framework-bundle` (sans Sylius) → **stack Symfony**, charger `${CLAUDE_SKILL_DIR}/references/symfony.md`
-   - Autre PHP → **stack PHP générique**
-2. `package.json` à la racine — clés `dependencies` / `devDependencies` :
-   - `next`, `react`, `vue`, `@nestjs/*`, `express`, etc. → noter le framework JS
-3. À défaut : examiner l'arborescence (`src/`, `app/`, `lib/`, `pkg/`, `cmd/`…) et le `README` pour situer.
+1. **Stack déjà établi dans la session** — une skill précédente a lu `docs/stack.md` ou les manifestes, et le résultat est toujours dans ton contexte → ne relis rien, reprends-le.
+2. **`docs/stack.md` existe** (produit par `/stack`) → lis-le : c'est la cartographie validée par l'utilisateur, couche par couche (backend, frontend, données…). **Ne scanne pas** `composer.json`/`package.json`, le fichier les résume déjà — sauf pour un détail qu'il ne couvre pas.
+3. **Sinon, détection légère** — lis dans cet ordre :
+   1. `composer.json` à la racine — clés `require` : `sylius/sylius` ou `sylius/*-bundle` → **Sylius** ; `symfony/framework-bundle` sans Sylius → **Symfony** ; autre PHP → **PHP générique**.
+   2. `package.json` à la racine — clés `dependencies` / `devDependencies` : `next`, `react`, `vue`, `@nestjs/*`, `express`, etc. → noter le framework JS.
+   3. À défaut : examiner l'arborescence (`src/`, `app/`, `lib/`, `pkg/`, `cmd/`…) et le `README` pour situer.
+
+Affiche le stack retenu en une ligne, avec sa provenance — « Stack chargé depuis `docs/stack.md` : **sylius** » ou « Stack détecté via `composer.json` : **symfony** ». Ne parle de détection que dans le cas 3.
 
 Si plusieurs stacks coexistent (monorepo, front + back), demande à l'utilisateur quel périmètre documenter en priorité.
 
-Charge la référence stack avant d'explorer — elle contient les chemins typiques, les conventions et les sections additionnelles à inclure dans le document final.
+Charge ensuite la référence de cette skill correspondant au framework backend retenu, avant d'explorer — elle contient les chemins typiques, les conventions et les sections additionnelles à inclure dans le document final :
+
+- **Sylius** → `${CLAUDE_SKILL_DIR}/references/sylius.md`
+- **Symfony** (sans Sylius) → `${CLAUDE_SKILL_DIR}/references/symfony.md`
+- **Autre** → pas de référence dédiée : sections génériques uniquement.
+
+Ces références sont propres à la documentation : ce ne sont pas celles des skills du workflow (`references/stacks/`). Même dans le cas 1, charge-la si elle n'est pas déjà dans ton contexte.
 
 ### Phase 1 — Identification de la feature
 
@@ -123,7 +130,7 @@ Quand l'utilisateur valide, écris le fichier de documentation.
 # [Nom de la feature]
 
 > Résumé en une phrase.
-> Stack : [détecté]
+> Stack : [stack retenu en Phase 0]
 > Périmètre exploré : [back-office / front / API / tout]
 
 ## Vue d'ensemble
