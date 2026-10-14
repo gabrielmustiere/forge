@@ -1,6 +1,6 @@
 ---
 name: rules
-description: "Écrit les règles projet dans `.claude/rules/` — instructions paths-scopées, chargées seulement quand Claude ouvre un fichier de la zone — et retire du CLAUDE.md ce qui part en règle. Modes Création, Enrichir, Éditer."
+description: "Écrit les règles projet dans `.claude/rules/` — instructions paths-scopées, chargées seulement quand Claude ouvre un fichier de la zone — et retire d'AGENTS.md / CLAUDE.md ce qui part en règle. Modes Création, Enrichir, Éditer."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[zone ciblée ou intention libre]"
@@ -26,13 +26,14 @@ générale récitée de mémoire.
 
 ## Périmètre du skill
 
-Ce skill écrit `.claude/rules/**`, et **touche au `CLAUDE.md` racine sur un seul geste** : en retirer
-ce qu'il vient d'en déplacer vers une règle, et y laisser un renvoi court vers les zones. Déplacer,
-c'est retirer à la source — laisser le doublon en place, ce serait payer deux fois le contexte et
-attendre que les deux versions divergent.
+Ce skill écrit `.claude/rules/**`, et **touche aux instructions projet sur un seul geste** : retirer
+d'`AGENTS.md` (ou du `CLAUDE.md` s'il n'est pas encore migré) ce qu'il vient d'en déplacer vers une
+règle, et laisser un renvoi court vers les zones dans le `CLAUDE.md`. Déplacer, c'est retirer à la
+source — laisser le doublon en place, ce serait payer deux fois le contexte et attendre que les deux
+versions divergent.
 
-Tout le reste du `CLAUDE.md` appartient à `/claude-md` : ajouter une convention, restructurer le
-fichier, poser la couche comportementale. Tu ne fais que **soustraire ce que tu as emporté**.
+Tout le reste de ces deux fichiers appartient à `/agents-md` : ajouter une convention, restructurer,
+migrer, poser la couche comportementale. Tu ne fais que **soustraire ce que tu as emporté**.
 
 Ce skill n'est **pas** :
 
@@ -43,7 +44,7 @@ Ce skill n'est **pas** :
   Si l'utilisateur veut qu'une commande soit *bloquée* ou *réécrite* et pas seulement *conseillée*,
   la règle est le mauvais outil : renvoie-le vers les hooks `PreToolUse`.
 
-Si l'utilisateur dérive vers « documente ma stack » ou « refais mon CLAUDE.md », recadre vers le
+Si l'utilisateur dérive vers « documente ma stack » ou « refais mon AGENTS.md », recadre vers le
 skill dédié.
 
 ## Ce qu'est une règle, et pourquoi le `paths` est tout
@@ -67,7 +68,7 @@ reste :
 - **Le déclencheur est la lecture d'un fichier**, pas la nature de la tâche ni l'exécution d'une
   commande. Claude ouvre `src/Repository/OrderRepository.php` → la règle entre en contexte.
 - **Une règle sans `paths` est chargée au lancement, avec la même priorité que `.claude/CLAUDE.md`.**
-  Elle n'apporte donc rien qu'une section de `CLAUDE.md` n'apporterait — c'est du rangement, pas une
+  Elle n'apporte donc rien qu'une section d'`AGENTS.md` n'apporterait — c'est du rangement, pas une
   économie. **Le `paths` est la seule raison d'exister d'une règle.**
 - **Une règle est du contexte, pas de la configuration appliquée.** Claude la lit et essaie de la
   suivre ; rien ne la force.
@@ -81,14 +82,14 @@ Demande-toi : *quels fichiers Claude doit-il être en train de lire pour que cet
 - Tu sais les nommer par un glob → **c'est une règle**, écris-la.
 - Tu n'y arrives pas, ou le glob honnête serait `**/*` → **ce n'est pas une règle de zone.** Ne la
   déguise pas en règle avec un glob bidon : elle ne se déclencherait pas au bon moment, ou se
-  déclencherait tout le temps pour rien. Sa place est dans le `CLAUDE.md` → renvoie l'utilisateur
-  vers `/claude-md`, en lui disant en une phrase pourquoi.
+  déclencherait tout le temps pour rien. Sa place est dans `AGENTS.md` → renvoie l'utilisateur
+  vers `/agents-md`, en lui disant en une phrase pourquoi.
 
 Le piège classique, et tu le rencontreras souvent : **les règles d'outillage.** « Toujours passer par
 le binaire `symfony` », « lance les tests via le Makefile », « jamais `npm`, toujours `pnpm` ». Ce
 sont d'excellentes instructions et de mauvaises règles : lancer une commande n'est pas lire un
 fichier, donc aucun `paths` ne les déclenchera au moment où elles comptent. Elles vont dans
-`CLAUDE.md` — et si l'utilisateur veut la garantie plutôt que le conseil, dans un hook.
+`AGENTS.md` — et si l'utilisateur veut la garantie plutôt que le conseil, dans un hook.
 
 ### Test 2 — la règle de preuve
 
@@ -141,9 +142,9 @@ règle coûte plus cher que la règle ne rapporte.
   C'est le cas fréquent des conventions qui sont un **contrat entre deux zones** — poser un
   `data-test` dans un template et le cibler depuis un test e2e. Ça fait deux règles, une par zone,
   chacune ne disant que sa moitié : elles ne se lisent jamais dans la même session.
-- **Non redondante avec le `CLAUDE.md`.** Deux instructions qui se recouvrent, c'est du contexte payé
+- **Non redondante avec `AGENTS.md`.** Deux instructions qui se recouvrent, c'est du contexte payé
   deux fois ; deux instructions qui se contredisent, c'est Claude qui en choisit une au hasard. Quand
-  une règle reprend une section du `CLAUDE.md`, retire la section (Phase 6) : c'est ce retrait qui
+  une règle reprend une section d'`AGENTS.md`, retire la section (Phase 6) : c'est ce retrait qui
   donne son sens au déplacement.
 
 ## Règles du mode interactif
@@ -152,7 +153,7 @@ règle coûte plus cher que la règle ne rapporte.
    (« go », « c'est bon », « écris »). Une règle fausse ou mal scopée pollue silencieusement toutes
    les sessions suivantes de toute l'équipe — c'est le genre de dégât qu'on ne voit pas passer.
 2. **Appliquer les deux tests à chaque candidate**, et dire à l'utilisateur laquelle échoue et
-   pourquoi. Une candidate recalée n'est pas perdue : elle part vers `/claude-md` ou vers un hook.
+   pourquoi. Une candidate recalée n'est pas perdue : elle part vers `/agents-md` ou vers un hook.
 3. **Vérifier chaque glob avant de graver** (Phase 5). Un `paths` qui ne matche aucun fichier est une
    règle morte, et elle est morte en silence.
 4. **Privilégier `AskUserQuestion`** pour arbitrer (max 3 questions par tour). Si l'outil n'est pas
@@ -168,8 +169,10 @@ règle coûte plus cher que la règle ne rapporte.
 
 1. **Règles existantes** : `ls .claude/rules/` (récursif). Si des règles existent, les lire toutes —
    c'est la base à faire évoluer, et c'est aussi ce avec quoi il ne faut pas doublonner.
-2. **`CLAUDE.md` racine** : le lire intégralement s'il existe. Il te dit ce qui est déjà couvert, et
-   en mode Création il **est** la matière première (voir Phase 1).
+2. **Instructions projet** (`AGENTS.md`, `CLAUDE.md`) : les lire intégralement s'ils existent. Ils
+   te disent ce qui est déjà couvert, et en mode Création ils **sont** la matière première (voir
+   Phase 1). Si le `CLAUDE.md` n'est pas encore un pont vers `AGENTS.md`, la soustraction de la
+   Phase 6 se fera dans le `CLAUDE.md` — signale que `/agents-md` le migrerait.
 3. **Artifacts forge** : lire `docs/stack.md` s'il existe — il nomme la stack réelle, donc les zones
    qui existent vraiment. En mode Enrichir déclenché par une livraison, lire aussi la `review.md` /
    `report.md` de la story si l'utilisateur en désigne une : les findings, la dette et les leçons y
@@ -195,7 +198,8 @@ tranche**, pas le catalogue.
 
 **En mode Création**, deux sources, dans cet ordre :
 
-1. **Le `CLAUDE.md` existant** — c'est là que sont déjà écrites les conventions du projet, en vrac.
+1. **Les instructions projet existantes** (`AGENTS.md`, ou le `CLAUDE.md` pas encore migré) — c'est là
+   que sont déjà écrites les conventions du projet, en vrac.
    Passe-le au test du `paths`, section par section : ce qui est scopable devient une règle candidate,
    le reste **doit rester où il est**. C'est le cas d'entrée réel de tout projet vivant, et le gain
    est immédiat quand un dépôt porte plusieurs sujets étrangers l'un à l'autre (une app et un
@@ -221,15 +225,15 @@ l'utilisateur, et c'est là qu'il va corriger ton jugement.
 - .claude/rules/twig.md — paths: templates/**/*.twig
   · Sélecteurs de test data-test="…" (prouvé : playwright.config.ts + 9 templates)
 
-## Recalées au test du paths → restent dans CLAUDE.md
+## Recalées au test du paths → restent dans AGENTS.md
 - « toujours le binaire symfony, jamais php » — aucune lecture de fichier ne la déclencherait.
-  À garder dans CLAUDE.md (déjà présente), et candidate à un hook PreToolUse si tu veux la garantie.
+  À garder dans AGENTS.md (déjà présente), et candidate à un hook PreToolUse si tu veux la garantie.
 
 ## Recalées faute de preuve → question
 - « on teste tout avec des mocks plutôt que des stubs » : je ne vois pas de pattern net (les deux
   coexistent dans tests/). C'est une convention voulue, ou juste l'état des lieux ?
 
-## À retirer du CLAUDE.md (ce qui part en règle)
+## À retirer d'AGENTS.md (ce qui part en règle)
 - La section « Règles critiques (app) » → recouverte par doctrine.md, je la retire.
 - La section « Stack (app) » → reste : c'est un constat, pas une prescription.
 ```
@@ -283,7 +287,7 @@ Trois contrôles, dans cet ordre :
      dossier en point doit être **écrit** dans le motif : `plugins/**/.claude-plugin/*`. C'est le
      piège le plus vicieux des trois, parce que le glob a l'air juste et n'est pas vide.
 3. **Le scope est-il honnête ?** Un match énorme et hétérogène (`**/*`, tout le dépôt) n'est pas une
-   règle scopée : c'est une règle de `CLAUDE.md` déguisée. Resserre, ou renonce.
+   règle scopée : c'est une règle d'`AGENTS.md` déguisée. Resserre, ou renonce.
 
 Affiche le compte par règle — c'est le seul retour que l'utilisateur peut vérifier d'un coup d'œil,
 donc il doit être juste :
@@ -294,33 +298,41 @@ twig.md         → templates/**/*.twig ...................... 24 fichiers ✓
 marketplace.md  → plugins/**, plugins/**/.claude-plugin/* ... 62 fichiers ✓ (dont plugin.json)
 ```
 
-### Phase 6 — Élaguer le CLAUDE.md
+### Phase 6 — Élaguer les instructions projet
 
-Une règle écrite dont la source reste dans le `CLAUDE.md`, c'est le pire des deux mondes : le
+Une règle écrite dont la source reste dans `AGENTS.md`, c'est le pire des deux mondes : le
 contexte est payé deux fois, et le jour où l'une des deux versions bouge, Claude arbitre au hasard
 entre elles. Tu n'as pas fini tant que tu n'as pas retiré ce que tu as emporté.
 
 **Uniquement de la soustraction**, et seulement sur ce qui est effectivement parti en règle. Un
 passage qui a échoué au test du `paths` reste où il est — c'est le résultat du test, pas un oubli.
-Pour tout le reste (ajouter, réorganiser, réécrire une section), c'est `/claude-md` : dis-le à
+Pour tout le reste (ajouter, réorganiser, réécrire une section), c'est `/agents-md` : dis-le à
 l'utilisateur, n'y touche pas.
 
+**Retirer d'`AGENTS.md`, c'est retirer aussi aux autres agents.** Codex, Cursor et les autres lisent
+`AGENTS.md` mais ne chargent pas `.claude/rules/` : la convention déplacée cesse d'exister pour eux.
+Dis-le dans la synthèse. Si l'équipe travaille avec d'autres agents sur ce dépôt, l'utilisateur peut
+choisir de garder la section : il paie alors le doublon en connaissance de cause, et c'est son
+arbitrage, pas le tien.
+
 **Cherche le doublon par le sens, pas par les mots.** C'est le piège de cette phase, et il est
-systématique : tes règles sont écrites depuis le **code**, pas recopiées du `CLAUDE.md`. Elles disent
+systématique : tes règles sont écrites depuis le **code**, pas recopiées d'`AGENTS.md`. Elles disent
 donc la même convention dans d'autres termes, et un élagage qui ne cherche que les passages déplacés
 littéralement n'en retire aucun. Résultat : neuf règles écrites, quatre lignes retirées, et le
-`CLAUDE.md` qui pesait toujours autant — la douleur qu'on venait soulager, intacte.
+`AGENTS.md` qui pesait toujours autant — la douleur qu'on venait soulager, intacte.
 
-Reprends chaque règle écrite et relis le `CLAUDE.md` **en entier** en te demandant, pour chaque
+Reprends chaque règle écrite et relis `AGENTS.md` **en entier** en te demandant, pour chaque
 puce : *cette convention est-elle déjà dite quelque part ici, même autrement formulée ?* Une ligne
 « Interdit : QueryBuilder hors repository » et une règle `doctrine.md` qui dit « tout QueryBuilder
 vit dans un repository », c'est un doublon — donc un retrait, même sans un mot en commun.
 
 1. **Montre les retraits avant de les faire** — section par section, avec la règle qui la remplace.
    Une validation explicite, comme pour les règles elles-mêmes.
-2. **Retire par `Edit` ciblé**, jamais par réécriture du fichier : le `CLAUDE.md` contient du savoir
+2. **Retire par `Edit` ciblé**, jamais par réécriture du fichier : `AGENTS.md` contient du savoir
    manuel que tu n'as pas produit et que tu ne dois pas perdre.
-3. **Laisse un renvoi court** vers les zones — deux ou trois lignes, pas une table exhaustive.
+3. **Laisse un renvoi court** vers les zones — deux ou trois lignes, pas une table exhaustive —
+   **dans le `CLAUDE.md`**, sous sa section « Spécifique Claude Code », pas dans `AGENTS.md` : seul
+   Claude Code charge ces règles, le renvoi ne dirait rien aux autres agents.
    Ce n'est pas cosmétique : une règle ne se charge qu'à la **lecture** d'un fichier de sa zone, donc
    une session qui démarre par une création pure peut ne jamais la voir. Le renvoi est le filet.
 
@@ -336,9 +348,9 @@ concernés : `doctrine.md`, `templates.md`, `tests.md`, `marketplace.md`.
 > Elles ne se chargent que quand Claude ouvre un fichier de leur zone — `/memory` te montre ce qui
 > est chargé dans une session donnée, et le hook `InstructionsLoaded` trace le détail si un jour tu
 > doutes qu'une règle se déclenche.
-> *(si élagage)* `CLAUDE.md` : <N> lignes retirées (parties en règle), renvoi ajouté. Le reste est
-> intact.
-> *(si des candidates ont été recalées vers CLAUDE.md)* `<règle>` y reste : aucun `paths` ne la
+> *(si élagage)* `AGENTS.md` : <N> lignes retirées (parties en règle) ; renvoi ajouté au `CLAUDE.md`.
+> Le reste est intact.
+> *(si des candidates ont été recalées vers AGENTS.md)* `<règle>` y reste : aucun `paths` ne la
 > déclencherait au bon moment.
 > *(si des candidates ont été recalées vers un hook)* `<règle>` demande une garantie, pas un conseil :
 > un hook `PreToolUse` est le bon outil.

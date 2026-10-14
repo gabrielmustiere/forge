@@ -341,7 +341,7 @@ traités dans la dette du `report.md`). Un finding = un niveau + un tag + un emp
 | `MIGRATION` | Migration non réversible, destructrice ou non testée. |
 | `TEST` | Test manquant, faux, ou qui ne teste pas ce qu'il prétend. |
 | `PERF` | Régression de performance ou requête pathologique. |
-| `CONV` | Non-respect d'une convention du projet (`CLAUDE.md`, stack). |
+| `CONV` | Non-respect d'une convention du projet (`AGENTS.md`, stack). |
 | `ROBUSTESSE` | Cas limite non géré, erreur avalée, état incohérent possible. |
 | `I18N` | Libellé en dur, traduction manquante. |
 | `UX` | Parcours ou affordance qui dessert l'utilisateur, sans être un bug. |
@@ -384,7 +384,7 @@ Le corpus forge est en français, verdicts compris. Valeurs **fermées** :
   n'ont pas de `metadata.json` — ils gardent leur changelog.)*
 - **Un nom de stack en dur.** Ni dans l'en-tête, ni dans les exemples des templates. Les
   mécanismes, commandes QA et conventions viennent de la détection
-  (`references/stacks/_detection.md` puis `references/stacks/<stack>.md`) et du `CLAUDE.md` du
+  (`references/stacks/_detection.md` puis `references/stacks/<stack>.md`) et de l'`AGENTS.md` du
   projet. Un template écrit `<mécanisme du stack détecté>`, jamais `EntityListener`.
 - **Une métadonnée dupliquée** (date, SHA, tag de release) : elle diverge, et la copie fait foi
   à tort. Lien vers la story, et `metadata.json` tranche.

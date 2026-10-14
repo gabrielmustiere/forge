@@ -41,16 +41,16 @@ Exemples :
 
 Avant toute navigation, identifier l'environnement cible. Les informations projet (URLs, credentials, comptes de test, locale) sont **propres à chaque projet** — le skill ne les devine pas.
 
-**Lire en priorité le `CLAUDE.md` à la racine du projet** et y chercher une section dédiée au test en environnement local (noms possibles : `Environnement`, `Test environment`, `Credentials de test`, `URLs locales`, `Playwright MCP`, etc.). Cette section doit typiquement contenir :
+**Lire en priorité les instructions projet à la racine** (`AGENTS.md`, plus ce que le `CLAUDE.md` ajoute après son import) et y chercher une section dédiée au test en environnement local (noms possibles : `Environnement`, `Test environment`, `Credentials de test`, `URLs locales`, `Playwright MCP`, etc.). Cette section doit typiquement contenir :
 
 - **URLs / hostnames** du front (shop, app), de l'admin/back-office, de l'API, et la ou les locales supportées
 - **Comptes admin** (user/password du formulaire back-office)
 - **Comptes utilisateurs / clients** de test (email ou username + password, avec éventuellement le canal/tenant associé pour les projets multi-channel)
 - **Spécificités projet** : préfixes de route (`/fr_FR/`, `/en/`…), champs de login (username vs email), quirks de cookies ou de sessions
 
-**Si le `CLAUDE.md` ne contient pas l'info nécessaire**, demander à l'utilisateur via `AskUserQuestion` avec les champs manquants — et suggérer en même temps qu'il ajoute la section manquante à son `CLAUDE.md` pour les prochaines sessions. Ne jamais inventer une URL ou un credential.
+**Si ces fichiers ne contiennent pas l'info nécessaire**, demander à l'utilisateur via `AskUserQuestion` avec les champs manquants — et suggérer en même temps qu'il ajoute la section manquante à son `AGENTS.md` pour les prochaines sessions. Ne jamais inventer une URL ou un credential.
 
-**Si le projet n'a pas de `CLAUDE.md`** (ou pas de section environnement), demander à l'utilisateur les infos minimales en début de session : URL de départ, compte à utiliser (s'il y a besoin d'auth), locale.
+**Si le projet n'a ni `AGENTS.md` ni `CLAUDE.md`** (ou pas de section environnement), demander à l'utilisateur les infos minimales en début de session : URL de départ, compte à utiliser (s'il y a besoin d'auth), locale.
 
 Afficher un récapitulatif de l'environnement chargé en 2-3 lignes avant de lancer le scénario.
 

@@ -8,7 +8,7 @@ d'en faire une règle.
 
 Une zone est un ensemble de fichiers qui **partagent des décisions d'écriture** que le reste du dépôt
 ne partage pas. Le test : *une convention vraie ici serait-elle fausse ou hors sujet ailleurs ?* Si
-elle est vraie partout, ce n'est pas une zone — c'est le `CLAUDE.md`.
+elle est vraie partout, ce n'est pas une zone — c'est `AGENTS.md`.
 
 Trois lignes de découpe, par ordre de rendement :
 
@@ -64,12 +64,12 @@ Trois lignes de découpe, par ordre de rendement :
 Les pièges les plus fréquents, tous recalés par le test du `paths` :
 
 - **L'outillage** — « toujours le binaire `symfony` », « passer par le Makefile », « `pnpm` pas
-  `npm` ». Lancer une commande n'est pas lire un fichier. → `CLAUDE.md`, ou un hook si on veut la
+  `npm` ». Lancer une commande n'est pas lire un fichier. → `AGENTS.md`, ou un hook si on veut la
   garantie.
 - **Le comportement de l'agent** — « demander avant de refactorer », « ne pas sur-concevoir ». Vrai
-  partout, donc aucun glob honnête. → `CLAUDE.md` (couche Karpathy de `/claude-md`).
+  partout, donc aucun glob honnête. → `AGENTS.md` (couche Karpathy de `/agents-md`).
 - **L'architecture globale** — « Request → Controller → Service → Repository ». Chaque couche a sa
-  règle scopée ; le schéma d'ensemble, lui, est vrai partout. → `CLAUDE.md`.
+  règle scopée ; le schéma d'ensemble, lui, est vrai partout. → `AGENTS.md`.
 - **La stack** — « on est en PHP 8.5 avec Symfony 8 ». Un constat, pas une prescription. →
   `docs/stack.md` via `/stack`.
 - **`vendor/`, `node_modules/`, `var/`** — on n'y écrit pas, une règle n'y sert à rien.

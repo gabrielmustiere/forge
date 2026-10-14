@@ -44,8 +44,8 @@ par-dessus ni écraser ces artefacts. Procédure sûre :
    avec les ADR du projet, sinon renomme-le pour laisser le compteur ADR du projet libre.
 4. `CLAUDE.md`, `README.md`, `DESIGN.md` : le template en fournit. S'ils **existent déjà** dans
    le projet, **demande** avant d'écraser. S'ils n'existent pas, copie ceux du template — ils
-   seront personnalisés à l'étape suivante (et `CLAUDE.md` pourra être régénéré plus tard via
-   `/forge:claude-md`).
+   seront personnalisés à l'étape suivante (et `CLAUDE.md` pourra être migré plus tard vers
+   `AGENTS.md` via `/forge:agents-md`).
 
 ## Personnalisation — carte des variables à transformer
 

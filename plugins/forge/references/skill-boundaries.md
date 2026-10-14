@@ -58,15 +58,15 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `docs/story/<NNN>-*/report.md` | `sync` | `adr`, `rules` |
 | `docs/story/<NNN>-*/estimate.md` | `estimate` | — |
 | `docs/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule), `status`, `product-backlog` (avancement) |
-| `docs/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `claude-md` |
+| `docs/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `agents-md` |
 | `docs/product-backlog.md` | `product-backlog` (+ `sync`, voir §3) | `feature-pitch`, `status` |
-| `docs/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `claude-md` |
+| `docs/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `agents-md` |
 | `docs/adr/<NNNN>-<slug>.md` + `docs/adr/README.md` | `adr` | tous |
 | `docs/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
 | `CHANGELOG.md` + tags de version | `release` | — |
 | Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `stack` |
 | L'historique git (commits, push) | `commit` (+ `release` pour le commit de version) | — |
-| `CLAUDE.md` racine | `claude-md` (+ `rules`, voir §3) | tous |
+| `AGENTS.md` + pont `CLAUDE.md` racine | `agents-md` (+ `rules`, voir §3) | tous |
 | `.claude/rules/**` | `rules` | tous (chargées par le harness, pas lues par les skills) |
 
 **Le corollaire le plus important** : un skill qui a besoin d'un artifact qu'il ne possède pas
@@ -118,10 +118,10 @@ aussi pourquoi `feature-pitch` n'écrit **pas** le rattachement dans le backlog 
 `metadata.json` de sa propre story : le lien vit du côté de celui qui le connaît, la projection
 reste chez le propriétaire du document.
 
-### Le `CLAUDE.md` — `rules` soustrait ce qu'il emporte
+### `AGENTS.md` — `rules` soustrait ce qu'il emporte
 
 `rules` écrit `.claude/rules/**`, qui lui appartient. Mais une règle est presque toujours un
-**déplacement** : une convention qui vivait dans le `CLAUDE.md` s'en va vivre dans un fichier
+**déplacement** : une convention qui vivait dans `AGENTS.md` s'en va vivre dans un fichier
 scopé, où elle ne coûtera du contexte que dans les sessions qui la concernent. Or un déplacement
 est atomique par nature. Le laisser à moitié — règle écrite, source intacte — ce n'est pas rester
 prudent : c'est produire exactement le mal que I1 veut éviter, deux énoncés de la même convention
@@ -132,16 +132,17 @@ Trois garde-fous, calqués sur ceux de `sync` :
 
 1. **`rules` ne fait que soustraire.** Il n'ajoute aucune convention, ne réorganise pas le fichier,
    ne touche pas à la couche comportementale. Le seul ajout admis est un renvoi de deux lignes vers
-   `.claude/rules/` — nécessaire parce qu'une règle ne se charge qu'à la **lecture** d'un fichier de
-   sa zone, et qu'une session qui démarre par une création pure ne la verrait jamais.
+   `.claude/rules/`, posé dans le pont `CLAUDE.md` puisque seul Claude Code charge ces règles —
+   nécessaire parce qu'une règle ne se charge qu'à la **lecture** d'un fichier de sa zone, et
+   qu'une session qui démarre par une création pure ne la verrait jamais.
 2. **Il ne retire que ce qu'il vient d'emporter** — le déplacement fait foi, qu'il soit littéral ou
    reformulé. Un passage qui a échoué au test du `paths` reste où il est : c'est le résultat du
    test, pas un oubli.
 3. **Chaque retrait est proposé et validé** avant écriture, et appliqué par `Edit` ciblé — jamais
    par réécriture du fichier, qui contient du savoir manuel que `rules` n'a pas produit.
 
-Pour tout le reste du `CLAUDE.md` — ajouter, restructurer, réécrire — c'est `/forge:claude-md`, et
-`rules` y renvoie.
+Pour tout le reste d'`AGENTS.md` et du pont — ajouter, restructurer, réécrire, migrer — c'est
+`/forge:agents-md`, et `rules` y renvoie.
 
 Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces trois
 cas est le signe qu'une frontière est mal placée — c'est le découpage qu'il faut corriger, pas
@@ -193,7 +194,7 @@ une question d'outil.
 
 | Famille | Skills | Écriture git | Écrit des fichiers |
 |---|---|---|---|
-| **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `claude-md`, `doc-feature`, `help` | non | ses documents (§2) |
+| **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `agents-md`, `doc-feature`, `help` | non | ses documents (§2) |
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
 | **Clôture** | `review`, `sync`, `backfill-metadata` | non | ses documents (§2) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |

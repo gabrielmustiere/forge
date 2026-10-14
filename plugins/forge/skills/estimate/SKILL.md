@@ -95,7 +95,7 @@ Affiche en 2-3 lignes ce que tu as lu et **avec quel niveau de fiabilité** tu v
 
 ### Phase 2 — Stack du projet et contexte
 
-Le même volume fonctionnel ne coûte pas le même temps selon le terrain. Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis le `CLAUDE.md` racine s'il existe — il révèle les contraintes qui pèsent sur la charge : commandes QA obligatoires, multi-thème, conventions de test exigeantes, étapes de déploiement particulières.
+Le même volume fonctionnel ne coûte pas le même temps selon le terrain. Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis l'`AGENTS.md` racine (à défaut le `CLAUDE.md`) s'il existe — il révèle les contraintes qui pèsent sur la charge : commandes QA obligatoires, multi-thème, conventions de test exigeantes, étapes de déploiement particulières.
 
 Repère les amplificateurs de charge propres au terrain : un projet multi-channel/multi-thème (typiquement Sylius) multiplie le coût UI et test ; un legacy peu testé alourdit chaque modification ; une CI lente alourdit chaque itération de tests.
 

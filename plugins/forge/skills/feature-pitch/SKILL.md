@@ -50,7 +50,7 @@ Demande à l'utilisateur de pitcher sa fonctionnalité en une phrase. S'il l'a d
 
 Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Le pitch produit reste **fonctionnel**, pas technique — mais connaître le stack permet d'orienter les questions de transverses (ex: un projet Sylius suggère de challenger sur multi-channel / multi-thème, un projet Symfony sans e-commerce n'a pas ces axes).
 
-Lis aussi le `CLAUDE.md` du projet s'il existe — il contient les conventions et contraintes métier du projet user (découpage en modules, contraintes réglementaires, stakeholders).
+Lis aussi l'`AGENTS.md` du projet (à défaut le `CLAUDE.md`) s'il existe — il contient les conventions et contraintes métier du projet user (découpage en modules, contraintes réglementaires, stakeholders).
 
 **Lecture de la vision projet** : si `docs/vision.md` existe, lis-le intégralement. La vision est la boussole du projet — chaque feature doit s'aligner avec :
 

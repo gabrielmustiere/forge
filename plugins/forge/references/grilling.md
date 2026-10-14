@@ -64,7 +64,7 @@ Question : Une remise peut-elle s'appliquer à une commande déjà payée ?
 
 Une question à laquelle le dépôt répond **ne se pose pas** : elle se lit. Avant chaque round,
 vérifie si le code, `docs/vision.md`, `docs/stack.md`, `docs/product-backlog.md`, `docs/adr/`,
-le `CLAUDE.md` ou un document amont de la story (brief, pitch) tranche déjà. Si oui, **annonce le
+l'`AGENTS.md` ou un document amont de la story (brief, pitch) tranche déjà. Si oui, **annonce le
 fait et sa source** et ferme la branche :
 
 > `src/Security/Voter/ProjectVoter.php:31` — seul le chef de projet édite un lot → branche « droits d'édition » fermée.

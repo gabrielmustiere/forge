@@ -44,7 +44,7 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 - `/forge:commit` — message Conventional Commits en français, commit et push.
 - `/forge:sync` — clôture documentaire : relève les écarts, réaligne les docs d'intention et les docs projet sur le code livré, coche les critères, consigne écarts, dette et leçons dans `report.md`.
 - `/forge:help` — sommaire du pipeline, tracks, skills et artefacts.
-- `/forge:claude-md` — génère ou met à jour le `CLAUDE.md` du projet.
+- `/forge:agents-md` — génère, met à jour ou migre l'`AGENTS.md` du projet, lisible par tous les agents de code, avec un `CLAUDE.md` pont pour Claude Code.
 - `/forge:rules` — écrit les règles projet paths-scopées dans `.claude/rules/`.
 - `/forge:status` — point de situation à la reprise : stories en cours, étape atteinte, état du dépôt, par quoi reprendre. Lecture seule.
 - `/forge:grill` — passe au gril une idée, une décision ou un pitch/plan existant : arbre de décision, une réponse recommandée par question, code lu avant d'interroger. N'écrit aucun fichier.

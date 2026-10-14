@@ -52,7 +52,7 @@ Une application a un cycle de vie long. La vision n'est pas un document gravé u
 Avant de challenger, fais l'inventaire :
 
 1. **Document existant** : vérifier la présence de `docs/vision.md`. S'il existe, le lire intégralement (problème, audience, valeur, métriques, principes, anti-objectifs, hypothèses, horizons, éventuel changelog).
-2. **Contexte projet** : lire le `CLAUDE.md` à la racine (et tout `README.md` ou `docs/README.md`) pour comprendre ce qui existe déjà.
+2. **Contexte projet** : lire l'`AGENTS.md` à la racine, à défaut le `CLAUDE.md` (et tout `README.md` ou `docs/README.md`) pour comprendre ce qui existe déjà.
 3. **Stack** : lire `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et appliquer la procédure. La vision reste **non technique**, mais connaître le stack permet d'orienter les questions (ex: un projet Sylius oriente naturellement vers du e-commerce, un projet Symfony pur peut couvrir des cas plus variés).
 4. **Stories existantes** : si `docs/story/` contient déjà des entrées, les survoler (juste les titres et résumés). Si la vision est révisée après plusieurs features livrées, l'enrichissement doit être cohérent avec ce qui a été fait — pas le contredire en silence.
 
@@ -68,7 +68,7 @@ Avant de challenger, fais l'inventaire :
 
 Note le mode choisi : il pilote toute la suite. Tout le reste du déroulement (quelles phases jouer, quoi écrire, quoi archiver) en dépend.
 
-Si le projet est totalement vierge (ni `CLAUDE.md`, ni `README.md`, ni `docs/`), c'est normal : on est en mode Création, et on construit la vision en partant du pitch user.
+Si le projet est totalement vierge (ni `AGENTS.md`, ni `CLAUDE.md`, ni `README.md`, ni `docs/`), c'est normal : on est en mode Création, et on construit la vision en partant du pitch user.
 
 ### Phase 1 — Pitch initial *(modes Création et Pivot uniquement)*
 

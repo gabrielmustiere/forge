@@ -53,7 +53,7 @@ symfony console doctrine:schema:validate     # si schéma touché
 npm run build                                # assets (si front)
 ```
 
-Si le projet utilise un autre outillage (Rector, PHP CS Fixer, Psalm), le découvrir dans `composer.json` / `Makefile` / `CLAUDE.md` du projet et s'y conformer — ne pas imposer un outillage absent.
+Si le projet utilise un autre outillage (Rector, PHP CS Fixer, Psalm), le découvrir dans `composer.json` / `Makefile` / `AGENTS.md` du projet et s'y conformer — ne pas imposer un outillage absent.
 
 ## Sécurité
 

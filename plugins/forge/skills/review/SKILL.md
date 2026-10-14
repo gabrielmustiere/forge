@@ -53,7 +53,7 @@ Sinon, travaille uniquement sur le diff brut.
 
 **Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack correspondantes — elles listent les axes de review spécifiques au framework.
 
-**Lis le `CLAUDE.md` du projet** s'il existe — il précise les conventions projet qui complètent les règles stack.
+**Lis l'`AGENTS.md` du projet** (à défaut le `CLAUDE.md`) s'il existe — il précise les conventions projet qui complètent les règles stack.
 
 Récupère le diff selon l'état du repo (essaie dans cet ordre) :
 

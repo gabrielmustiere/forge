@@ -1,9 +1,9 @@
 # Bloc « Principes de travail » — adaptation Karpathy
 
-Ce bloc est la **couche comportementale** du `CLAUDE.md`. Il distille quatre principes
+Ce bloc est la **couche comportementale** d'`AGENTS.md`. Il distille quatre principes
 issus des observations d'Andrej Karpathy sur les écueils récurrents du code assisté par LLM
 (repo `multica-ai/andrej-karpathy-skills`), plus un cinquième sur les commentaires — même
-écueil, même remède. Insère-le tel quel dans le `CLAUDE.md` généré, en section dédiée.
+écueil, même remède. Insère-le tel quel dans l'`AGENTS.md` généré, en section dédiée.
 Adapte uniquement les exemples entre crochets au projet réel.
 
 ---

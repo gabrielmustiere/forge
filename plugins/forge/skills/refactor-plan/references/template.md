@@ -11,7 +11,7 @@ guide: Plan d'un refacto (préfixe `-r-`). Produit par `/forge:refactor-plan`, c
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections. Les sections propres au track `-r-` (Forme cible, Clients identifiés, Comportement externe à préserver, Tests de caractérisation) sont additionnelles et rattachées aux sections canoniques qu'elles étendent.
 Un refacto ne change PAS le comportement externe. Si du métier change, c'est une feature. Si c'est l'infra ou un composant technique transverse, c'est une évolution technique (`-t-`).
 Pas de pitch pour un refacto : la `## Motivation` de ce plan porte le pourquoi — mais en termes techniques (dette, perf, blocage), pas en valeur métier (charte §3).
-STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Mécanismes, commandes QA et seuils viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et du `CLAUDE.md` du projet.
+STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Mécanismes, commandes QA et seuils viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et de l'`AGENTS.md` du projet.
 L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
@@ -173,7 +173,7 @@ Aucun impact modèle.
 
 ## Critères de sortie
 
-> _Skill : checkboxes **mesurables**, pas qualitatives (charte §4), cochées en place par `/forge:sync` à la clôture. Comportement préservé, perf mesurée si applicable, tests verts, qualité. Les commandes QA et les seuils viennent du stack détecté et du `CLAUDE.md` du projet — ne rien inventer._
+> _Skill : checkboxes **mesurables**, pas qualitatives (charte §4), cochées en place par `/forge:sync` à la clôture. Comportement préservé, perf mesurée si applicable, tests verts, qualité. Les commandes QA et les seuils viennent du stack détecté et de l'`AGENTS.md` du projet — ne rien inventer._
 
 - [ ] Tous les tests de caractérisation passent **avant ET après** chaque étape.
 - [ ] Suite complète du projet verte, sans nouvelle régression.

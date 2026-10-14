@@ -10,6 +10,35 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **BREAKING — `/forge:claude-md` devient `/forge:agents-md` : des instructions projet lisibles par
+  tous les agents** — l'ancienne commande disparaît. `/forge:agents-md` écrit l'`AGENTS.md`
+  racine, le format ouvert que lisent Codex, Cursor, Copilot et, depuis la v2.1.277, Claude Code.
+  Tout le contenu y vit : nature, stack, architecture, commandes, conventions, principes de
+  travail. Le `CLAUDE.md` n'est plus qu'un pont : `@AGENTS.md` en première ligne, puis seulement
+  ce qui nomme un mécanisme de Claude Code (renvoi vers `.claude/rules/`, hooks, serveurs MCP).
+  Le pont est nécessaire, pas cosmétique. Claude Code ignore `AGENTS.md` dès qu'un `CLAUDE.md`
+  ou un `CLAUDE.local.md` existe, et certaines sessions (Bedrock, Vertex, télémétrie désactivée)
+  ne le lisent jamais. L'import couvre tous ces cas sans double lecture.
+- **Mode Migration** — un `CLAUDE.md` existant est trié ligne à ligne entre les deux fichiers,
+  tri montré et validé avant écriture, contenu déplacé sans être réécrit. Le skill prend aussi en
+  charge un `git mv` qui garde l'historique, la fusion avec un `AGENTS.md` déjà présent (cas
+  fréquent où l'`AGENTS.md` n'était en réalité jamais lu) et le remplacement d'un lien
+  symbolique `CLAUDE.md → AGENTS.md`.
+- **`/forge:rules` élague `AGENTS.md`** — ce qui part en règle en est retiré, et le renvoi vers
+  `.claude/rules/` va dans le pont : seul Claude Code charge ces règles. La synthèse signale que
+  ce retrait prive aussi les autres agents de la convention. Si l'équipe travaille avec d'autres
+  agents, l'utilisateur peut garder la section.
+
+### 🔧 Technique
+
+- **Les skills lisent `AGENTS.md`, à défaut `CLAUDE.md`** — plans, implems, review, ateliers et
+  `test-scenario`. La préséance de `references/stacks/_detection.md` devient
+  `.claude/rules/` > `AGENTS.md` / `CLAUDE.md` > références stack. Le contrat de frontières
+  attribue `AGENTS.md` et le pont à `agents-md` (+ `rules` en soustraction). Inventaire, manifeste
+  et site sont alignés.
+
 ## [7.1.0] - 2026-10-12 — Passer au gril
 
 ### ✨ Fonctionnel

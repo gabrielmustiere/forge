@@ -48,7 +48,7 @@ Sinon, liste les dossiers `docs/story/*-r-*` qui contiennent un `plan.md` via `G
 
 **Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack — elles contiennent les commandes QA et les pièges à éviter.
 
-**Lis le `CLAUDE.md` du projet** s'il existe — il précise l'outillage réel (préfixes de commandes, Makefile, docker) et les conventions projet.
+**Lis l'`AGENTS.md` du projet** (à défaut le `CLAUDE.md`) s'il existe — il précise l'outillage réel (préfixes de commandes, Makefile, docker) et les conventions projet.
 
 Affiche :
 
@@ -110,7 +110,7 @@ Avant d'écrire quoi que ce soit, lire les fichiers qui vont être modifiés **e
 Appliquer la restructuration en respectant :
 
 - Les règles du stack détecté (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md`, déjà chargé via la détection).
-- Les conventions projet du `CLAUDE.md`.
+- Les conventions projet de l'`AGENTS.md`.
 - **Le commentaire est l'exception, pas le réflexe.** Il ne se justifie que si l'information ne peut pas vivre dans le code : une contrainte externe, la raison d'un choix non évident, un invariant que le typage n'exprime pas. Ce qu'un nom ou une signature dit déjà ne se commente pas. Deux réflexes propres au refacto : ne pas commenter *ce qu'on vient de déplacer* (le diff le raconte déjà, et le commentaire survivra au diff), et **supprimer ou corriger les commentaires devenus faux** — ils documentent le code d'avant, ce qui est pire qu'un silence.
 - Le périmètre strict de l'étape — pas de "tant qu'on y est" qui sortirait du plan.
 - **Si un Strangler Fig est prévu** : conserver l'ancien code en place, introduire le nouveau en parallèle, basculer les clients indiqués pour cette étape.
@@ -118,7 +118,7 @@ Appliquer la restructuration en respectant :
 
 #### 3.4 — QA + non-régression (obligatoire)
 
-Exécuter les checks du projet — style/formatage et analyse statique a minima. Les commandes viennent du `CLAUDE.md`, de la référence stack chargée en Phase 1, ou du manifeste de tâches réel (`Makefile`, `package.json`, `justfile`…) : ne devine pas une commande plausible, demande si tu ne trouves pas.
+Exécuter les checks du projet — style/formatage et analyse statique a minima. Les commandes viennent de l'`AGENTS.md`, de la référence stack chargée en Phase 1, ou du manifeste de tâches réel (`Makefile`, `package.json`, `justfile`…) : ne devine pas une commande plausible, demande si tu ne trouves pas.
 
 Puis **lancer les tests concernés par le périmètre de l'étape** — a minima les tests de caractérisation + les tests existants listés comme filet.
 

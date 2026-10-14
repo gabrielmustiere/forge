@@ -46,7 +46,7 @@ Trois erreurs qui rendent une règle morte en silence, et que la Phase 5 est là
   (61 au lieu de 62) ne prouve rien : vérifie que les fichiers nommés par la règle sont dans la liste.
 
 Un fichier **sans** `paths` est chargé au lancement comme `.claude/CLAUDE.md`. Ce n'est presque jamais
-ce qu'on veut ici : si la règle doit être vraie partout, sa place est dans le `CLAUDE.md`.
+ce qu'on veut ici : si la règle doit être vraie partout, sa place est dans `AGENTS.md`.
 
 ## Le corps
 
@@ -77,7 +77,7 @@ Mauvais, et voici pourquoi :
 - Écrire des requêtes performantes.                          ← invérifiable, ne décide rien
 - Doctrine 3.2 est installé depuis mars 2024.                ← historique (→ git log)
 - Toujours lancer `symfony console` et pas `php bin/console`. ← outillage : aucun paths ne le
-                                                                déclenche au bon moment (→ CLAUDE.md)
+                                                                déclenche au bon moment (→ AGENTS.md)
 ```
 
 ## Taille

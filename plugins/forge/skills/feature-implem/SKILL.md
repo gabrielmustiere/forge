@@ -40,7 +40,7 @@ Lis aussi le pitch feature lié (`pitch.md` dans le même dossier) pour avoir le
 
 **Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack correspondantes (elles contiennent les commandes QA à utiliser, les conventions et les pièges à éviter).
 
-**Lis le `CLAUDE.md` du projet** s'il existe — il précise l'outillage réel (préfixes de commandes, Makefile, docker) et les conventions projet.
+**Lis l'`AGENTS.md` du projet** (à défaut le `CLAUDE.md`) s'il existe — il précise l'outillage réel (préfixes de commandes, Makefile, docker) et les conventions projet.
 
 Affiche :
 
@@ -72,7 +72,7 @@ Avant d'écrire quoi que ce soit, lire les fichiers qui vont être modifiés ou 
 Coder en respectant :
 
 - Les règles du stack détecté (voir `${CLAUDE_SKILL_DIR}/../../references/stacks/<stack>.md`, déjà chargé via la détection).
-- Les conventions projet du `CLAUDE.md` quand elles précisent ou surchargent les règles stack.
+- Les conventions projet de l'`AGENTS.md` quand elles précisent ou surchargent les règles stack.
 - **Le commentaire est l'exception, pas le réflexe.** Il ne se justifie que si l'information ne peut pas vivre dans le code : une contrainte externe (bug d'une lib, contrat d'API imposé), la raison d'un choix non évident, un invariant que le typage n'exprime pas. Ce qu'un nom de méthode, une signature typée ou un test dit déjà ne se commente pas — le redire crée une seconde source de vérité, et c'est elle qui mentira dans six mois. Concrètement : pas de commentaire de section (`// --- Validation ---`), pas de paraphrase de la ligne suivante, pas de docblock qui répète les types. Si tu ressens le besoin d'expliquer *ce que* fait un bloc, renomme ou extrais plutôt que de commenter.
 - L'ordre de développement au sein d'une sous-tâche :
   1. Modèle (entité / mapping / migration)
@@ -88,7 +88,7 @@ Exécuter les checks du projet après chaque sous-tâche. Trois familles à couv
 - **analyse statique** — types, linter, niveau configuré ;
 - **build** — compilation, assets, schéma, selon ce que produit le projet.
 
-**Les commandes exactes ne s'inventent pas** : elles viennent du `CLAUDE.md` du projet, de la référence stack chargée en Phase 1, ou du manifeste de tâches réel (`Makefile`, `package.json`, `composer.json`, `justfile`…). Si tu ne trouves pas comment lancer un check, demande — ne devine pas une commande plausible.
+**Les commandes exactes ne s'inventent pas** : elles viennent de l'`AGENTS.md` du projet, de la référence stack chargée en Phase 1, ou du manifeste de tâches réel (`Makefile`, `package.json`, `composer.json`, `justfile`…). Si tu ne trouves pas comment lancer un check, demande — ne devine pas une commande plausible.
 
 **Ne présente PAS le checkpoint tant que les checks ne passent pas.** Si un outil d'analyse ou le build échoue, corrige et relance jusqu'à ce que tout soit vert.
 
@@ -149,7 +149,7 @@ Checkpoint tests :
 
 Avant de clôturer :
 
-- Supprimer les traces de debug laissées en chemin (dumps, `print`/`console.log`, breakpoints, logs temporaires) — le `CLAUDE.md` du projet en interdit souvent une liste précise.
+- Supprimer les traces de debug laissées en chemin (dumps, `print`/`console.log`, breakpoints, logs temporaires) — l'`AGENTS.md` du projet en interdit souvent une liste précise.
 - Supprimer les fichiers temporaires (artefacts d'outils, screenshots laissés).
 - Vérifier que les TODO dans le code référencent un ticket.
 - Vérifier qu'aucun fichier sensible n'est staged (`.env`, credentials).

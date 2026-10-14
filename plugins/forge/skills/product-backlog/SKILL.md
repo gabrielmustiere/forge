@@ -72,7 +72,7 @@ Avant de challenger, fais l'inventaire :
 2. **Blueprint existant** : lire `docs/product-backlog.md` s'il existe (domaines, capacités, parcours, règles transverses, backlog, changelog).
 3. **Stories existantes** : scanner `docs/story/` (noms de dossiers, `.md` présents, `metadata.json`) pour repérer ce qui a déjà été cadré ou livré. Le backlog ne doit pas réinventer ce qui existe — au contraire, l'enrichissement doit s'inscrire dans l'historique. Cette lecture alimente directement la **réconciliation de l'avancement** (Phase 0bis).
 4. **Stack** : lire `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et appliquer la procédure. Le backlog reste **fonctionnel**, mais le stack oriente le découpage en domaines (ex: e-commerce Sylius → suggérer catalogue / panier / commande / paiement / promotion / fidélité).
-5. **Contexte projet** : `CLAUDE.md` racine + `README.md` si présents — conventions, contraintes métier, stakeholders.
+5. **Contexte projet** : `AGENTS.md` (à défaut `CLAUDE.md`) racine + `README.md` si présents — conventions, contraintes métier, stakeholders.
 
 #### Choix du mode
 

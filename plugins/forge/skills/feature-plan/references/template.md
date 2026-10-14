@@ -10,7 +10,7 @@
 guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Produit par `/forge:feature-plan`, consommé par `/forge:feature-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections : les skills avals les cherchent par leur nom.
 Le pitch décrit l'intention métier ; ce fichier décrit le COMMENT. Le « pourquoi » ne se recopie PAS ici : il vit dans `pitch.md` §Contexte, auquel l'en-tête renvoie (charte §5).
-STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Les mécanismes, commandes QA et conventions viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et du `CLAUDE.md` du projet — les exemples ci-dessous sont à remplacer par ceux du stack réel.
+STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Les mécanismes, commandes QA et conventions viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et de l'`AGENTS.md` du projet — les exemples ci-dessous sont à remplacer par ceux du stack réel.
 L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
@@ -22,7 +22,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 
 ### Mécanismes mobilisés
 
-> _Skill : les patterns et briques du stack détecté que la feature réutilise (jamais inventés) — hook de cycle de vie, écouteur d'événement, décorateur, composant temps réel, contrôle d'accès, requête dédiée… Pour chaque, dire BRIÈVEMENT pourquoi celui-là plutôt qu'un autre. Nommer les mécanismes avec le vocabulaire du stack réel, tel que le donnent `references/stacks/<stack>.md` et le `CLAUDE.md` du projet._
+> _Skill : les patterns et briques du stack détecté que la feature réutilise (jamais inventés) — hook de cycle de vie, écouteur d'événement, décorateur, composant temps réel, contrôle d'accès, requête dédiée… Pour chaque, dire BRIÈVEMENT pourquoi celui-là plutôt qu'un autre. Nommer les mécanismes avec le vocabulaire du stack réel, tel que le donnent `references/stacks/<stack>.md` et l'`AGENTS.md` du projet._
 
 - **`<Mécanisme>`** : <usage dans la feature et justification courte>.
 - **`<Mécanisme>`** : <…>.
@@ -144,7 +144,7 @@ L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les
 
 ## Critères de sortie
 
-> _Skill : checkboxes **techniques et vérifiables** cochées en place par `/forge:sync` à la clôture — le pendant des « Critères d'acceptation » observables du pitch (charte §4). Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet : ne pas inventer, ne pas écrire un outil en dur qui n'existe pas dans ce projet._
+> _Skill : checkboxes **techniques et vérifiables** cochées en place par `/forge:sync` à la clôture — le pendant des « Critères d'acceptation » observables du pitch (charte §4). Les commandes QA viennent du stack détecté et de l'`AGENTS.md` du projet : ne pas inventer, ne pas écrire un outil en dur qui n'existe pas dans ce projet._
 
 - [ ] <Critère structurel ou comportemental mesurable>.
 - [ ] Suite de tests du projet verte, sans nouvelle régression.

@@ -98,7 +98,7 @@ Cas 3 :
 
 > Stack non détecté automatiquement — on part sur quoi : `symfony`, `sylius`, autre, ou rien ?
 
-## Conventions projet (`.claude/rules/` et `CLAUDE.md`)
+## Conventions projet (`.claude/rules/` et `AGENTS.md`)
 
 Deux sources, à ne pas confondre.
 
@@ -108,12 +108,13 @@ chargées par le harness, automatiquement, quand Claude ouvre un fichier de leur
 lis pas à la main « pour vérifier » — tu les payerais deux fois. Elles sont la parole la plus précise
 du projet sur une zone donnée, donc **elles priment sur tout le reste** en cas de conflit.
 
-**`CLAUDE.md` à la racine** — à lire s'il existe. Il porte ce qui est vrai partout, quelle que soit
-la zone touchée :
+**`AGENTS.md` à la racine** — à lire s'il existe ; à défaut, le `CLAUDE.md`. Si le `CLAUDE.md` est un
+pont (`@AGENTS.md` en tête), lis aussi ce qu'il ajoute après l'import. Ils portent ce qui est vrai
+partout, quelle que soit la zone touchée :
 
 - Commandes QA exactes (préfixe `symfony`, `docker compose exec`, Makefile, etc.)
 - Credentials de test (admin, clients, hostnames multi-channel)
 - Noms de thèmes shop utilisés, overrides custom
 - Convention de branches, de commits scope spécifique au projet
 
-La préséance en cas de conflit, du plus fort au plus faible : **`.claude/rules/` scopées > `CLAUDE.md` > références stack**. Les deux premières sont la source de vérité de l'utilisateur pour son projet ; les références stack ne sont qu'un défaut de framework. Et entre les deux premières, la plus spécifique gagne : une règle de zone a été écrite en regardant précisément ces fichiers-là.
+La préséance en cas de conflit, du plus fort au plus faible : **`.claude/rules/` scopées > `AGENTS.md` / `CLAUDE.md` > références stack**. Les deux premières sont la source de vérité de l'utilisateur pour son projet ; les références stack ne sont qu'un défaut de framework. Et entre les deux premières, la plus spécifique gagne : une règle de zone a été écrite en regardant précisément ces fichiers-là.

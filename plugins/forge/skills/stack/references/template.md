@@ -74,7 +74,7 @@ Structure de référence du fichier produit par `/stack`. Adapte les sections au
 
 ## Outillage de développement local
 
-- **Commandes QA / build** : <make test, symfony console…> (`<source : Makefile / CLAUDE.md>`)
+- **Commandes QA / build** : <make test, symfony console…> (`<source : Makefile / AGENTS.md>`)
 - **Services de dev** : <docker compose up…> (`<source>`)
 
 ## Contraintes & dette de stack connues

@@ -11,7 +11,7 @@ guide: Plan d'une évolution technique (préfixe `-t-`). Produit par `/forge:tec
 Format commun à tous les documents de story : voir la charte `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Les trois plans (`-f-`/`-r-`/`-t-`) partagent le squelette de la charte §5 — ne pas réordonner ni renommer les sections. Les sections propres au track `-t-` (Rollback et kill switch, Métriques) sont additionnelles.
 Une évolution technique change l'infrastructure ou un composant technique transverse sans impact métier visible (montée de version, paramétrage par l'environnement, bibliothèque remplacée, déploiement). Si du métier change, c'est une feature ; si seule la structure du code change, c'est un refacto.
 Pas de pitch pour une évolution technique : la `## Motivation` de ce plan porte le pourquoi, en termes techniques (charte §3).
-STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Mécanismes, commandes QA et outils viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et du `CLAUDE.md` du projet.
+STACK-AGNOSTIQUE (charte §9) : aucun nom de framework en dur. Mécanismes, commandes QA et outils viennent de la détection (`references/stacks/_detection.md` → `references/stacks/<stack>.md`) et de l'`AGENTS.md` du projet.
 L'en-tête ci-dessus RESTE dans le fichier commité. Retirer ce bloc et tous les `> _Skill : ..._` avant commit.
 -->
 
@@ -148,11 +148,11 @@ Aucun impact modèle.
    - <…>
 
 5. [ ] **<Nom de l'étape — ex: nettoyage de la documentation>**
-   - <CLAUDE.md, docs projet, ADR éventuelle>.
+   - <AGENTS.md, docs projet, ADR éventuelle>.
 
 ## Critères de sortie
 
-> _Skill : checkboxes vérifiables avant clôture, cochées en place par `/forge:sync` — **la seule section de critères du plan** (charte §4) : les cibles chiffrées de §Métriques s'y reprennent sous forme binaire (« atteinte / non atteinte »). Plus exigeant qu'un plan de feature, car l'impact peut être prod : la bascule et le kill switch **testé** en font partie. Les commandes QA viennent du stack détecté et du `CLAUDE.md` du projet._
+> _Skill : checkboxes vérifiables avant clôture, cochées en place par `/forge:sync` — **la seule section de critères du plan** (charte §4) : les cibles chiffrées de §Métriques s'y reprennent sous forme binaire (« atteinte / non atteinte »). Plus exigeant qu'un plan de feature, car l'impact peut être prod : la bascule et le kill switch **testé** en font partie. Les commandes QA viennent du stack détecté et de l'`AGENTS.md` du projet._
 
 - [ ] Suite de tests du projet verte (unit, functional, E2E selon ce qui existe).
 - [ ] <Critère binaire repris de §Métriques : ex « `<commande de recherche>` retourne 0 occurrence »>.
@@ -162,7 +162,7 @@ Aucun impact modèle.
 - [ ] Bascule prod validée : <parcours de contrôle>.
 - [ ] Kill switch **testé** (pas seulement documenté) : <méthode + résultat attendu>.
 - [ ] Analyse statique et style conformes aux exigences du projet.
-- [ ] Documentation projet alignée (`CLAUDE.md`, docs, ADR).
+- [ ] Documentation projet alignée (`AGENTS.md`, docs, ADR).
 
 ## Risques et mitigations
 

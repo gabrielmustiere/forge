@@ -56,7 +56,7 @@ Une stack vit : les libs bougent, les services s'ajoutent, l'infra migre. `stack
 ### Phase 0 — Inventaire de l'existant et choix du mode
 
 1. **Document existant** : vérifier la présence de `docs/stack.md`. S'il existe, le lire intégralement.
-2. **Contexte projet** : lire le `CLAUDE.md` à la racine (et `README.md` s'il existe) — ils contiennent souvent l'outillage réel (commandes QA, docker, Makefile) et des conventions que les manifestes ne disent pas.
+2. **Contexte projet** : lire l'`AGENTS.md` à la racine, à défaut le `CLAUDE.md` (et `README.md` s'il existe) — ils contiennent souvent l'outillage réel (commandes QA, docker, Makefile) et des conventions que les manifestes ne disent pas.
 
 #### Choix du mode
 

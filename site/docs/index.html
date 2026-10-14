@@ -182,7 +182,7 @@
                         <p class="toc__label">CONFIGURATION</p>
                         <ul class="toc__list">
                             <li><a href="#permissions">Permissions et outillage</a></li>
-                            <li><a href="#claude-md">Le CLAUDE.md du projet</a></li>
+                            <li><a href="#agents-md">L'AGENTS.md du projet</a></li>
                             <li><a href="#stacks">Règles framework</a></li>
                         </ul>
                     </div>
@@ -596,8 +596,8 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                                 <td>Le sommaire du pipeline, des tracks, des skills et des artefacts.</td>
                             </tr>
                             <tr>
-                                <td><code>/forge:claude-md</code></td>
-                                <td>Génère ou met à jour le <code>CLAUDE.md</code> : analyse du codebase prouvée par fichier — aucune commande inventée — et injection des principes comportementaux.</td>
+                                <td><code>/forge:agents-md</code></td>
+                                <td>Génère, met à jour ou migre l'<code>AGENTS.md</code>, lisible par tous les agents de code, et réduit le <code>CLAUDE.md</code> à un pont : analyse du codebase prouvée par fichier — aucune commande inventée — et injection des principes comportementaux.</td>
                             </tr>
                             <tr>
                                 <td><code>/forge:rules</code></td>
@@ -658,7 +658,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                 <div class="doc-block" id="permissions">
                     <h3>Permissions et outillage</h3>
                     <p>Les skills d'implémentation <strong>n'imposent aucun outillage</strong> : elles ne présument ni de votre gestionnaire de paquets, ni de votre lanceur de tests. Elles lisent les commandes réelles dans votre
-                        <code>CLAUDE.md</code>, la référence stack, ou votre manifeste de tâches (<code>Makefile</code>, <code>package.json</code>, <code>composer.json</code>, <code>justfile</code>…) — et si elles ne les trouvent pas, elles demandent
+                        <code>AGENTS.md</code>, la référence stack, ou votre manifeste de tâches (<code>Makefile</code>, <code>package.json</code>, <code>composer.json</code>, <code>justfile</code>…) — et si elles ne les trouvent pas, elles demandent
                         au lieu de deviner.</p>
                     <p>Conséquence pratique : c'est à votre projet de <strong>pré-autoriser son outillage</strong> dans son <code>.claude/settings.json</code>. Sans ça, Claude Code demandera confirmation à chaque commande de build ou de test — c'est
                         fonctionnel, juste bavard.</p>
@@ -674,11 +674,12 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                         projet est souverain et ne se contourne pas.</p>
                 </div>
 
-                <div class="doc-block" id="claude-md">
-                    <h3>Le <code>CLAUDE.md</code> du projet</h3>
-                    <p>Les références stack embarquées dans le plugin couvrent le générique. Ce qui est propre à votre projet — commandes QA exactes, identifiants de test, noms de thèmes, conventions de branches — vit dans le <code>CLAUDE.md</code> à
-                        la racine. Les skills le lisent en complément.</p>
-                    <p><code>/forge:claude-md</code> le génère pour vous, en prouvant chaque affirmation par un fichier du dépôt. Si une règle est <strong>scopable à une zone du code</strong>, préférez <code>/forge:rules</code> : elle produit un
+                <div class="doc-block" id="agents-md">
+                    <h3>L'<code>AGENTS.md</code> du projet</h3>
+                    <p>Les références stack embarquées dans le plugin couvrent le générique. Ce qui est propre à votre projet — commandes QA exactes, identifiants de test, noms de thèmes, conventions de branches — vit dans l'<code>AGENTS.md</code> à
+                        la racine, le format ouvert que lisent Claude Code et les autres agents de code. Les skills le lisent en complément.</p>
+                    <p><code>/forge:agents-md</code> le génère pour vous, en prouvant chaque affirmation par un fichier du dépôt, et réduit le <code>CLAUDE.md</code> à un pont : <code>@AGENTS.md</code> en première ligne, puis ce qui ne concerne
+                        que Claude Code. Claude Code ignore l'<code>AGENTS.md</code> dès qu'un <code>CLAUDE.md</code> existe ; l'import garantit qu'il le lit quand même. Un <code>CLAUDE.md</code> existant se migre avec la même commande. Si une règle est <strong>scopable à une zone du code</strong>, préférez <code>/forge:rules</code> : elle produit un
                         fichier dans <code>.claude/rules/</code> qui n'est chargé que quand Claude ouvre un fichier concerné — le contexte reste léger.</p>
                 </div>
 

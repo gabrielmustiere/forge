@@ -71,7 +71,7 @@ Liste `docs/adr/` via `Glob` pour trouver le plus grand numéro existant. Le pro
 Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la référence stack pertinente (Symfony, Sylius, …) — les choix d'extension, naming, mécanismes architecturaux varient selon le framework et
 ces règles informent le challenge des options.
 
-Lis aussi `CLAUDE.md` à la racine s'il existe — les conventions projet priment.
+Lis aussi `AGENTS.md` à la racine (à défaut `CLAUDE.md`) s'il existe — les conventions projet priment.
 
 ### Phase 3 — Exploration du contexte
 

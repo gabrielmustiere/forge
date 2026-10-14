@@ -46,7 +46,7 @@ Sinon, liste les dossiers `docs/story/*-t-*` qui contiennent un `plan.md` via `G
 
 **Établis le stack** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la ou les références stack.
 
-**Lis le `CLAUDE.md` du projet** s'il existe — il précise l'outillage réel, les credentials de test, et surtout **l'outillage de métriques** disponible (commandes de bench, URL de dashboards, requêtes Prometheus, etc.).
+**Lis l'`AGENTS.md` du projet** (à défaut le `CLAUDE.md`) s'il existe — il précise l'outillage réel, les credentials de test, et surtout **l'outillage de métriques** disponible (commandes de bench, URL de dashboards, requêtes Prometheus, etc.).
 
 Affiche :
 
@@ -107,7 +107,7 @@ Lire les fichiers modifiés et ceux qui les consomment. Citer ce qu'on a lu.
 
 Coder en respectant :
 
-- Les règles du stack (références stack + `CLAUDE.md`).
+- Les règles du stack (références stack + `AGENTS.md`).
 - Le mécanisme d'extension du framework prévu dans le plan (décorateur, middleware, listener, transport messenger…). Jamais de modification vendor.
 - **Kill switch actif dès l'intro** : le nouveau chemin n'est activé que si le flag est ON. Par défaut le flag est OFF → comportement strictement inchangé.
 - **Le commentaire est l'exception, pas le réflexe.** Il ne se justifie que si l'information ne peut pas vivre dans le code : une contrainte externe, la raison d'un choix non évident, un invariant que le typage n'exprime pas. Ce qu'un nom ou une signature dit déjà ne se commente pas. Le flag, lui, est précisément un cas où le commentaire se justifie : rien dans le code ne dit qu'il est **temporaire** — une ligne qui nomme la story et la condition de retrait, et c'est tout.

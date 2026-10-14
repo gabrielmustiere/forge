@@ -46,7 +46,7 @@ Affiche un résumé du pitch en 3-4 lignes pour confirmer qu'on parle de la mêm
 
 Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure : établir le stack du projet, charger la ou les références correspondantes, afficher en une ligne le stack retenu et sa provenance.
 
-Lis aussi le `CLAUDE.md` à la racine du projet s'il existe — il contient les conventions projet (commandes QA, credentials, thèmes, conventions perso) qui complètent et priment sur les règles framework génériques.
+Lis aussi l'`AGENTS.md` à la racine du projet (à défaut le `CLAUDE.md`) s'il existe — il contient les conventions projet (commandes QA, credentials, thèmes, conventions perso) qui complètent et priment sur les règles framework génériques.
 
 ### Phase 3 — Exploration du codebase
 

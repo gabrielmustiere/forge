@@ -264,11 +264,11 @@ Le workflow établit le stack du projet (Symfony, Sylius) et charge les référe
 - règles Symfony — Doctrine, services, forms, Twig, QA, sécu, perf
 - delta e-commerce Sylius — Resources, channels, thèmes, Twig Hooks…
 
-Les skills concernées chargent ces références automatiquement — rien à lire manuellement. Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans le `CLAUDE.md` à la racine du projet — les skills le lisent en complément des références stack.
+Les skills concernées chargent ces références automatiquement — rien à lire manuellement. Les conventions propres à ton projet (commandes QA exactes, credentials de test, noms de thèmes utilisés, branches…) vivent dans l'`AGENTS.md` à la racine du projet — les skills le lisent en complément des références stack.
 
 ## Outillage et autorisations
 
-Les skills d'implémentation (`/feature`, `/refactor`, `/tech`) **n'imposent aucun outillage** : elles ne présument ni de ton gestionnaire de paquets, ni de ton lanceur de tests. Les commandes réelles se lisent dans ton `CLAUDE.md`, la référence stack, ou ton manifeste de tâches (`Makefile`, `package.json`, `composer.json`, `justfile`…) — et si elles ne les trouvent pas, elles demandent au lieu de deviner.
+Les skills d'implémentation (`/feature`, `/refactor`, `/tech`) **n'imposent aucun outillage** : elles ne présument ni de ton gestionnaire de paquets, ni de ton lanceur de tests. Les commandes réelles se lisent dans ton `AGENTS.md`, la référence stack, ou ton manifeste de tâches (`Makefile`, `package.json`, `composer.json`, `justfile`…) — et si elles ne les trouvent pas, elles demandent au lieu de deviner.
 
 Conséquence pratique : **c'est à ton projet de pré-autoriser son outillage**, dans son `.claude/settings.json`. Sans ça, Claude Code demandera confirmation à chaque commande de build ou de test — c'est fonctionnel, juste bavard.
 
