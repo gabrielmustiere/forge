@@ -10,6 +10,18 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [7.2.1] - 2026-10-19 — agents-md et release à leur place dans le pipeline
+
+### ✨ Fonctionnel
+
+- **`/forge:agents-md` rejoint la phase 0** — l'`AGENTS.md` fait partie du décor de projet, au même
+  titre que la vision, le backlog et la stack. Il se lance après `/forge:stack` et `/forge:vision`,
+  qu'il réutilise. C'est là que les skills d'implémentation lisent les commandes de build, de test
+  et de QA.
+- **`/forge:release` ferme la phase 3** — il vient après `/forge:commit` et reste optionnel : on le
+  lance quand on publie une version, pas à chaque story. Les deux skills quittent les utilitaires
+  dans `/forge:help`, l'inventaire, le site et sa documentation.
+
 ## [7.2.0] - 2026-10-14 — Du CLAUDE.md à l'AGENTS.md
 
 ### ✨ Fonctionnel
@@ -548,7 +560,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.2.1...HEAD
+[7.2.1]: https://github.com/gabrielmustiere/forge/compare/v7.2.0...v7.2.1
 [7.2.0]: https://github.com/gabrielmustiere/forge/compare/v7.1.0...v7.2.0
 [7.1.0]: https://github.com/gabrielmustiere/forge/compare/v7.0.0...v7.1.0
 [7.0.0]: https://github.com/gabrielmustiere/forge/compare/v6.12.0...v7.0.0
