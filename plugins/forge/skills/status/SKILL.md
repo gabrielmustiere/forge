@@ -98,6 +98,18 @@ L'étape se déduit des artifacts présents, dans cet ordre — le dernier signa
 
 Vérifie la présence de `docs/vision.md`, `docs/product-backlog.md`, `docs/stack.md`. Un manquant se signale sur une ligne, sans insister — le backlog est facultatif, la vision et la stack rendent les cadrages suivants plus sûrs.
 
+**Instructions projet** : vérifie aussi `AGENTS.md` et `CLAUDE.md` à la racine — `ls -l` (un `CLAUDE.md` peut être un lien symbolique vers `AGENTS.md`), puis lis les premières lignes du `CLAUDE.md` pour y chercher l'import `@AGENTS.md`. C'est là que les skills d'implémentation trouvent les commandes de build, de test et de QA : sans lui, elles demandent au lieu de lancer. L'état se reporte sur la ligne « Décor » :
+
+| État trouvé | Sur la ligne « Décor » | Orientation |
+|---|---|---|
+| `AGENTS.md` + `CLAUDE.md` qui l'importe | `agents ✓` | — |
+| `AGENTS.md` + `CLAUDE.md` **sans** `@AGENTS.md` | `agents ⚠ (AGENTS.md ignoré par Claude Code)` | `/forge:agents-md` (fusion) |
+| `AGENTS.md` seul, ou `CLAUDE.md` lien symbolique | `agents ⚠ (pont CLAUDE.md absent)` | `/forge:agents-md` (pose le pont) |
+| `CLAUDE.md` seul | `agents ⚠ (CLAUDE.md seul)` | `/forge:agents-md` (migration) |
+| Ni l'un ni l'autre | `agents ✗ (absent)` | `/forge:agents-md` |
+
+Le cas « les deux sans import » se dit explicitement, même si rien d'autre n'est à signaler : l'utilisateur croit son `AGENTS.md` lu alors que Claude Code l'ignore dès qu'un `CLAUDE.md` existe. Tu constates, tu ne juges pas le contenu des fichiers — la qualité des instructions appartient à `/forge:agents-md`.
+
 **Avancement du backlog** : si `docs/product-backlog.md` existe et porte des lignes à cocher, relève les compteurs par horizon **tels qu'ils sont écrits** (`### MVP — … · \`3/8 livrées\``) et reporte-les sur la ligne « Décor ». Tu **ne recalcules rien** et tu ne corriges rien : la réconciliation appartient à `/forge:product-backlog` (règle 1, lecture seule stricte). Si tes propres relevés de Phase 3 contredisent visiblement un compteur (une story livrée dont la ligne n'est pas cochée), dis-le en une ligne — deux signaux qui se contredisent se disent — et renvoie vers `/forge:product-backlog` pour réconcilier. Backlog au format tabulaire ancien (sans cases) : pas de compteur, on n'en fabrique pas.
 
 Aucun `docs/story/` du tout : le projet n'a pas encore de story forge. Dis-le, et oriente vers `/forge:vision` (projet neuf) ou `/forge:feature-pitch` (le décor est déjà posé).
@@ -110,7 +122,7 @@ Rends un bloc unique, sur ce gabarit — les colonnes vides ne se remplissent pa
 ## Point de situation — <nom du projet>
 
 **Dépôt** — branche `<branche>`, <working tree propre | N fichiers modifiés>, <N> commits depuis `<dernier tag>`.
-**Décor** — vision ✓ · backlog ✓ (MVP 3/8 · V2 0/5 livrées) · stack ✗ (absent)
+**Décor** — vision ✓ · backlog ✓ (MVP 3/8 · V2 0/5 livrées) · stack ✗ (absent) · agents ⚠ (AGENTS.md ignoré par Claude Code)
 ⚠️ <alerte pertes potentielles : stash / commits non poussés — la ligne disparaît s'il n'y a rien à signaler>
 
 ### En cours (<N>)
