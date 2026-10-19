@@ -213,7 +213,7 @@ Si le push échoue malgré le rebase préalable (race avec un autre push entre f
 
 **Métadonnées de story** : après le commit, renseigne `delivery.commit` (SHA court) dans le `metadata.json` des stories livrées, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`, puis rebouge `updated` et append une entrée `type: "Livraison"`. Si `delivery` est absent, crée-le avec `release: null`.
 
-`/commit` est la **dernière étape de la phase 3** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md` et les documents réalignés. Rien ne s'enchaîne après, hormis un éventuel `/release` plus tard pour publier une version.
+`/commit` est la **dernière étape de la phase 3 pour une story** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md` et les documents réalignés. Rien ne s'enchaîne après dans la story ; `/release` ferme la phase 3 plus tard, quand on publie une version.
 
 ## Arguments
 

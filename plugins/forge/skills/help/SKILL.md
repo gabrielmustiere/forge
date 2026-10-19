@@ -26,10 +26,15 @@ allowed-tools:
                        │ stack │──▶ docs/stack.md (langages, backend, frontend, données,
                        └───────┘    ops, CI — chaque techno prouvée par un fichier source)
                                     Lu par feature-implem/refactor-implem/tech-implem/review.
+                       ┌───────────┐
+                       │ agents-md │──▶ AGENTS.md à la racine + CLAUDE.md pont (nature, stack,
+                       └───────────┘    commandes, conventions — chaque ligne prouvée par fichier)
+                                        Lu par toutes les skills : commandes QA, conventions projet.
 
      PHASES 1 À 3 — CADRER, IMPLÉMENTER, CLÔTURER : une story emprunte UN SEUL des trois tracks.
      La phase dit quand ; le track dit avec quelles skills. Dans chaque track ci-dessous :
      les plans = phase 1, l'implem = phase 2, review → sync → commit = phase 3.
+     La phase 3 se ferme, quand on publie une version, par release (voir sous les tracks).
 
                         TRACK FEATURE (valeur utilisateur, structurante)
  (optionnel : besoin flou)
@@ -63,6 +68,11 @@ allowed-tools:
                   + kill switch                 +report.md    +push
                 + étapes mesurées
 
+                 FIN DE PHASE 3 (optionnel, pas à chaque story : quand on publie)
+ ┌────────┐   ┌─────────┐
+ │ commit │┄┄▶│ release │──▶ vX.Y.Z + CHANGELOG.md + tag annoté + GitHub release
+ └────────┘   └─────────┘    (après un ou plusieurs commits de stories livrées)
+
                        UTILITAIRES (hors pipeline, à la demande)
  ┌─────────────────┐    ┌─────┐    ┌──────┐
  │  test-scenario  │    │ adr │    │ help │  ← tu y es
@@ -73,15 +83,15 @@ allowed-tools:
                   (depuis pitch/plan/review/report
                    ou topic libre)
 
- ┌──────────────┐    ┌─────────┐    ┌──────────┐
- │  doc-feature │    │ release │    │ estimate │
- └──────┬───────┘    └────┬────┘    └────┬─────┘
-        │                 │              │
-        ▼                 ▼              ▼
- docs/feature-map/    vX.Y.Z +       estimate.md
- NNN-slug/overview.md CHANGELOG.md   (temps facturable
- (rétro-doc à partir  + tag annoté    tout compris, en
-  du code livré)      + GitHub rel.   heures : réf. + IA)
+ ┌──────────────┐    ┌──────────┐
+ │  doc-feature │    │ estimate │
+ └──────┬───────┘    └────┬─────┘
+        │                 │
+        ▼                 ▼
+ docs/feature-map/    estimate.md
+ NNN-slug/overview.md (temps facturable
+ (rétro-doc à partir   tout compris, en
+  du code livré)       heures : réf. + IA)
 
  ┌────────┐
  │ status │  point de situation à la reprise : stories en cours, étape
@@ -123,13 +133,14 @@ Le pipeline se lit sur deux axes qu'il ne faut pas confondre :
 
 ## Phase 0 — Poser le décor
 
-Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le décor **une fois pour toutes** : pourquoi ce produit existe, ce qu'on va construire, et sur quoi on marche. Les trois documents sont **vivants** (4 modes : Création / Enrichir / Éditer / Pivot, avec changelog) et vivent à la racine de `docs/`, pas dans une story.
+Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le décor **une fois pour toutes** : pourquoi ce produit existe, ce qu'on va construire, sur quoi on marche, et comment on travaille dans ce dépôt. Les trois documents de `docs/` sont **vivants** (4 modes : Création / Enrichir / Éditer / Pivot, avec changelog) et vivent à la racine de `docs/`, pas dans une story. L'`AGENTS.md`, lui, vit à la racine du dépôt (modes Création / Migration / Mise à jour).
 
 | Skill              | Rôle                                                                                                | Produit                   |
 |--------------------|-----------------------------------------------------------------------------------------------------|---------------------------|
 | `/vision`          | Atelier challengeur sur problème, audience, valeur, North Star, principes, anti-objectifs            | `docs/vision.md`          |
 | `/product-backlog` | Atelier fonctionnel : domaines → capacités → parcours → règles transverses → backlog MVP/V2/V3       | `docs/product-backlog.md` |
 | `/stack`           | Scanne tous les manifestes (langages, backend, frontend, données, ops, CI), interroge pour combler les trous, prouve chaque techno par un fichier source | `docs/stack.md` |
+| `/agents-md`       | Analyse le codebase (nature, stack, architecture, commandes, conventions), chaque ligne prouvée par un fichier — aucune commande inventée ; migre un `CLAUDE.md` existant | `AGENTS.md` + `CLAUDE.md` pont |
 
 **Vision** — pourquoi ce produit existe, pour qui, quelle valeur il crée, comment on mesure le succès, et ce qu'on refuse explicitement de faire. Lue par `/product-backlog` puis par `/feature-pitch` à chaque nouvelle feature pour challenger l'alignement (problème adressé, audience, principes, impact North Star). Pas de lancement à chaque feature : c'est un document fondateur, révisé seulement lors d'un pivot.
 
@@ -138,6 +149,8 @@ Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le 
 **Stack** — sur quoi on marche, avant de cadrer la moindre évolution. Indispensable sur un legacy non documenté, utile sur un projet neuf dès que la stack se stabilise. Lu **en priorité par les skills techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il **constate** l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
 
 `docs/stack.md` est un document **vivant** (mêmes 4 modes que vision/backlog : Création / Enrichir / Éditer / Pivot, avec changelog). Il est lu **en priorité par les tracks techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il constate l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
+
+**AGENTS.md** — comment on travaille dans ce dépôt : commandes de build, de test et de QA, conventions, architecture. C'est là que les skills d'implémentation lisent les commandes exactes au lieu de les deviner, et il sert aussi aux autres agents (Codex, Cursor…) ; le `CLAUDE.md` est réduit à un pont `@AGENTS.md` plus le spécifique Claude Code. À lancer **après `/stack` et `/vision`** s'ils existent : il les réutilise. Les règles qui ne concernent qu'une zone du code en sortent ensuite vers `.claude/rules/` via `/rules`.
 
 ## Choisir son track
 
@@ -208,9 +221,9 @@ coder → QA du stack → tests ciblés → /review (optionnel) → /commit
 
 En cas de doute → partir sur le track approprié (feature, refacto ou tech). Il est toujours possible de basculer du structurant vers le fast si l'analyse révèle que c'est trivial.
 
-## Phase 3 — Clôturer (`/review`, `/sync`, `/commit`)
+## Phase 3 — Clôturer (`/review`, `/sync`, `/commit`, puis `/release`)
 
-Les trois tracks (feature, refacto, tech) partagent les mêmes étapes de clôture après l'implémentation, **dans cet ordre**. Ce sont des skills communs : seuls le contenu et le ton des artifacts changent selon le track. Le `/commit` vient **en dernier** : review et sync travaillent sur le diff du working tree (non committé), puis le commit embarque d'un coup le code, le `report.md` et les documents réalignés.
+Les trois tracks (feature, refacto, tech) partagent les mêmes étapes de clôture après l'implémentation, **dans cet ordre**. Ce sont des skills communs : seuls le contenu et le ton des artifacts changent selon le track. Le `/commit` vient **en dernier** pour la story : review et sync travaillent sur le diff du working tree (non committé), puis le commit embarque d'un coup le code, le `report.md` et les documents réalignés. `/release` ferme la phase quand on publie une version — pas à chaque story.
 
 ### `/review` — Juger le diff
 Cherche ce qui doit bloquer le commit : faille, bug, régression, migration risquée, dérive non justifiée par rapport au plan. Les findings se corrigent dans la passe. `review.md` n'est **conservé que si un point reste ouvert** (finding non coché, réserve arbitrée, vérification « hors review » avant déploiement) : un fichier tout coché au verdict positif ne dit rien qu'un commit ne dise déjà. La trace de la revue — statut, findings corrigés — vit dans le `metadata.json`.
@@ -227,6 +240,9 @@ Une seule passe, le diff lu une fois :
 ### `/commit` — Construire et pousser les commits
 **Dernière étape** : une fois review et sync passés, lit le diff git, regroupe les changements en lots cohérents, propose des messages au format **Conventional Commits en français** (`feat(scope): …`, `fix(scope): …`, `refactor(scope): …`, etc.), demande validation, commit et push. Le commit embarque ainsi le code, le `report.md` et les docs réalignées en une fois. Sur un track refacto, on a souvent **un commit par étape** pour préserver la réversibilité.
 
+### `/release` — Publier une version (optionnel)
+**Pas à chaque story** : quand une ou plusieurs stories commitées méritent d'être publiées. Détermine le bump SemVer (major/minor/patch) depuis les Conventional Commits depuis le dernier tag, met à jour `CHANGELOG.md` (format Keep a Changelog, titre de version, chapitres Fonctionnel / Technique), crée un tag annoté `vX.Y.Z`, push, puis publie la release sur GitHub via `gh`. Demande validation avant toute action publique. Renseigne la `delivery` des stories embarquées. Argument-hint : `[major\|minor\|patch] [--no-push] [--draft] [--pre <suffix>]`. `/status` te signale quand des livraisons non taguées s'accumulent.
+
 > **Ne pas confondre `/sync` avec `/doc-feature`** : `/sync` recale un document d'intention récent que tu viens de modifier dans un track structuré. `/doc-feature` (voir Utilitaires) cartographie une feature **ancienne ou jamais passée par le pipeline**, en partant du code livré, sans dossier de track préalable.
 
 ## Utilitaires (hors pipeline)
@@ -239,7 +255,6 @@ Une seule passe, le diff lu une fois :
 | `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : huit skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
 | `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |
 | `/doc-feature`       | **Cartographier une feature existante** en lisant le code (entités, flux, routes, services, templates, points d'extension) — stack-agnostique avec détection auto (Sylius, Symfony, autre). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarder sur un module legacy ou documenter une zone du code jamais passée par le pipeline. À distinguer de `/sync` (qui met à jour une doc d'intention récente). |
-| `/release`           | **Créer une release versionnée bout en bout** — détermine le bump SemVer (major/minor/patch) depuis les Conventional Commits depuis le dernier tag, met à jour `CHANGELOG.md` (format Keep a Changelog), crée un tag annoté `vX.Y.Z`, push, puis publie la release sur GitHub via `gh`. Demande validation avant toute action publique. Argument-hint : `[major\|minor\|patch] [--no-push] [--draft] [--pre <suffix>]`. |
 | `/help`              | Ce sommaire — pour se rappeler le workflow et les skills disponibles                       |
 
 ### Les ADR viennent à toi

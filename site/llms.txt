@@ -18,10 +18,10 @@ Les skills sont namespacées par le nom du plugin : `/forge:help`, `/forge:featu
 
 Le pipeline compte 25 skills et se lit sur deux axes. La **phase** dit *quand* : quatre phases, dans l'ordre. Le **track** dit *avec quelles skills* : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Le track se choisit à l'entrée de la phase 1 et ne modifie pas les phases traversées.
 
-- **Phase 0 — poser le décor** (une fois pour le projet, documents vivants à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`.
+- **Phase 0 — poser le décor** (une fois pour le projet ; les documents de `docs/` sont vivants, à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `docs/vision.md`, `product-backlog` → `docs/product-backlog.md`, `stack` → `docs/stack.md`, puis `agents-md` → `AGENTS.md` à la racine du dépôt (commandes et conventions du projet, avec un `CLAUDE.md` pont), qui réutilise la stack et la vision.
 - **Phase 1 — cadrer** : selon le track, `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) ; ou `refactor-plan` (→ `plan.md`, avec tests de caractérisation) ; ou `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch). Les trois tracks produisent un `plan.md` ; seul le track feature intercale un `pitch.md` fonctionnel en amont.
 - **Phase 2 — implémenter** : `feature-implem`, `refactor-implem` ou `tech-implem`. Étapes courtes, QA du projet après chacune.
-- **Phase 3 — clôturer**, commune aux trois tracks : `review` (verdict, `review.md` si un point reste ouvert) → `sync` (écarts relevés, docs réalignées, → `report.md`) → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées.
+- **Phase 3 — clôturer**, commune aux trois tracks : `review` (verdict, `review.md` si un point reste ouvert) → `sync` (écarts relevés, docs réalignées, → `report.md`) → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. `release` ferme la phase quand on publie une version — pas à chaque story.
 
 Les trois tracks : **feature** (valeur utilisateur observable), **refacto** (comportement externe strictement figé, verrou de tests de caractérisation avant toute modification), **tech** (perf, résilience, observabilité, sécu — métrique cible chiffrée, baseline, kill switch). Hors de ce découpage, le **track fast** couvre les bugfixes : moins de 3 fichiers, pas de migration ni d'impact transverse → on code, on passe la QA du stack, puis `/forge:commit`. Pas de pitch pour un typo.
 
@@ -32,6 +32,7 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 - `/forge:vision` — cadre la vision projet : problème, audience, valeur, North Star, principes, anti-objectifs.
 - `/forge:product-backlog` — traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3, avec un avancement en cases à cocher dérivé des stories livrées.
 - `/forge:stack` — cartographie la stack ; chaque techno prouvée par un fichier source.
+- `/forge:agents-md` — génère, met à jour ou migre l'`AGENTS.md` du projet, lisible par tous les agents de code, avec un `CLAUDE.md` pont pour Claude Code.
 - `/forge:feature-interview` — dégrossit un besoin flou par interview guidée ancrée sur le code existant.
 - `/forge:feature-pitch` — cadre l'idée et challenge l'alignement vision/backlog.
 - `/forge:feature-plan` — plan technique : archi, données, contrats, migration, tests.
@@ -43,8 +44,8 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 - `/forge:review` — code review du diff : sécu, qualité, conformité au plan, non-régression.
 - `/forge:commit` — message Conventional Commits en français, commit et push.
 - `/forge:sync` — clôture documentaire : relève les écarts, réaligne les docs d'intention et les docs projet sur le code livré, coche les critères, consigne écarts, dette et leçons dans `report.md`.
+- `/forge:release` — optionnel, quand on publie une version : tag SemVer annoté, `CHANGELOG.md` Keep a Changelog et release GitHub.
 - `/forge:help` — sommaire du pipeline, tracks, skills et artefacts.
-- `/forge:agents-md` — génère, met à jour ou migre l'`AGENTS.md` du projet, lisible par tous les agents de code, avec un `CLAUDE.md` pont pour Claude Code.
 - `/forge:rules` — écrit les règles projet paths-scopées dans `.claude/rules/`.
 - `/forge:status` — point de situation à la reprise : stories en cours, étape atteinte, état du dépôt, par quoi reprendre. Lecture seule.
 - `/forge:grill` — passe au gril une idée, une décision ou un pitch/plan existant : arbre de décision, une réponse recommandée par question, code lu avant d'interroger. N'écrit aucun fichier.
@@ -53,7 +54,6 @@ Tous les artefacts vivent à plat dans `docs/story/` au format `NNN-<f|r|t>-<slu
 - `/forge:estimate` — chiffre le temps « tout compris » d'une story à facturer, en heures.
 - `/forge:doc-feature` — cartographie une feature existante (legacy) dans `docs/feature-map/`.
 - `/forge:backfill-metadata` — reconstruit le `metadata.json` des stories antérieures depuis git.
-- `/forge:release` — tag SemVer annoté, `CHANGELOG.md` Keep a Changelog et release GitHub.
 
 ## Forge Board
 

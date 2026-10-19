@@ -69,10 +69,10 @@
                     },
                     "description": "Pipeline de développement stack-agnostique pour Claude Code. Découpe le cycle en étapes courtes validées une à une, chacune produisant un artefact markdown qui alimente la suivante : quatre phases (poser le décor, cadrer, implémenter, clôturer) et trois tracks symétriques (feature, refacto, tech) qui décident des skills appelées au cadrage et à l'implémentation.",
                     "featureList": [
-                        "Phase 0 — poser le décor : vision, product-backlog et stack en documents vivants",
+                        "Phase 0 — poser le décor : vision, product-backlog et stack en documents vivants, agents-md pour l'AGENTS.md du projet",
                         "Phase 1 — cadrer : feature-interview, feature-pitch, feature-plan, refactor-plan, tech-plan",
                         "Phase 2 — implémenter : feature-implem, refactor-implem, tech-implem",
-                        "Phase 3 — clôturer : review, sync, commit",
+                        "Phase 3 — clôturer : review, sync, commit, puis release quand on publie une version",
                         "Trois tracks symétriques : feature (valeur utilisateur), refacto (comportement figé), tech (perf, résilience, sécu)",
                         "Artefacts unifiés dans docs/story/ au format NNN-<f|r|t>-<slug>",
                         "Détection automatique du stack (Symfony, Sylius) et chargement des conventions adaptées"
@@ -218,7 +218,7 @@
                 <span class="badge badge--accent">PHASE 0</span>
                 <h3 class="phase__label">Poser le décor — une fois, documents vivants</h3>
             </div>
-            <ul class="phase__items">
+            <ul class="phase__items phase__items--4">
                 <li class="node">
                     <p class="node__name">vision</p>
                     <p class="node__desc">Cap produit, personas, non-négociables</p>
@@ -233,6 +233,11 @@
                     <p class="node__name">stack</p>
                     <p class="node__desc">Choix techniques et conventions de code</p>
                     <p class="node__out">→ docs/stack.md</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">agents-md</p>
+                    <p class="node__desc">Commandes et conventions du dépôt, lues par tous les agents</p>
+                    <p class="node__out">→ AGENTS.md</p>
                 </li>
             </ul>
         </div>
@@ -304,7 +309,7 @@
                 <span class="badge badge--accent">PHASE 3</span>
                 <h3 class="phase__label">Clôturer — commune aux trois tracks</h3>
             </div>
-            <ol class="phase__items">
+            <ol class="phase__items phase__items--4">
                 <li class="node">
                     <p class="node__name">review</p>
                     <p class="node__desc">Sécu, régressions, conformité au plan</p>
@@ -319,6 +324,11 @@
                     <p class="node__name">commit</p>
                     <p class="node__desc">Message conventionnel, rebase strict</p>
                     <p class="node__out">→ commit + push</p>
+                </li>
+                <li class="node">
+                    <p class="node__name">release</p>
+                    <p class="node__desc">Optionnel, quand on publie une version — pas à chaque story</p>
+                    <p class="node__out">→ tag + CHANGELOG.md + release GitHub</p>
                 </li>
             </ol>
         </div>
@@ -360,6 +370,10 @@
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:stack</code></dt>
                         <dd class="skill__desc">Cartographie la stack technique — chaque techno prouvée par un fichier source → docs/stack.md</dd>
+                    </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:agents-md</code></dt>
+                        <dd class="skill__desc">Génère ou migre l'AGENTS.md, lu par tous les agents : analyse du codebase + principes comportementaux</dd>
                     </div>
                 </dl>
             </section>
@@ -432,6 +446,10 @@
                         <dt class="skill__cmd"><code>/forge:commit</code></dt>
                         <dd class="skill__desc">Message Conventional Commits en français (l'intention), commit + push — vient en dernier</dd>
                     </div>
+                    <div class="skill">
+                        <dt class="skill__cmd"><code>/forge:release</code></dt>
+                        <dd class="skill__desc">Optionnel, quand on publie une version : tag SemVer annoté + CHANGELOG.md Keep a Changelog + release GitHub</dd>
+                    </div>
                 </dl>
             </section>
 
@@ -444,10 +462,6 @@
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:help</code></dt>
                         <dd class="skill__desc">Sommaire du pipeline, tracks, skills et artefacts — le GPS</dd>
-                    </div>
-                    <div class="skill">
-                        <dt class="skill__cmd"><code>/forge:agents-md</code></dt>
-                        <dd class="skill__desc">Génère ou migre l'AGENTS.md, lu par tous les agents : analyse du codebase + principes comportementaux</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:rules</code></dt>
@@ -480,10 +494,6 @@
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:backfill-metadata</code></dt>
                         <dd class="skill__desc">Reconstruit le metadata.json des stories antérieures depuis l'historique git — jamais de date inventée</dd>
-                    </div>
-                    <div class="skill">
-                        <dt class="skill__cmd"><code>/forge:release</code></dt>
-                        <dd class="skill__desc">Tag SemVer annoté + CHANGELOG.md Keep a Changelog + release GitHub</dd>
                     </div>
                 </dl>
             </section>

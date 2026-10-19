@@ -423,7 +423,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
 
                 <div class="doc-block" id="ref-phase0">
                     <h3>Phase 0 — poser le décor</h3>
-                    <p>Une fois en début de projet, puis révisé lors d'un pivot. Ces trois documents sont <strong>vivants</strong> : ils supportent quatre modes (Création, Enrichir, Éditer, Pivot) et tiennent leur propre changelog.</p>
+                    <p>Une fois en début de projet, puis révisé lors d'un pivot. Les trois documents de <code>docs/</code> sont <strong>vivants</strong> : ils supportent quatre modes (Création, Enrichir, Éditer, Pivot) et tiennent leur propre changelog. L'<code>AGENTS.md</code>, lui, vit à la racine du dépôt.</p>
                     <div class="table-wrap">
                         <table class="doc-table">
                             <thead>
@@ -449,12 +449,18 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                                 <td>Scanne les manifestes, interroge pour combler les trous, prouve chaque techno par un fichier source</td>
                                 <td><code>docs/stack.md</code></td>
                             </tr>
+                            <tr>
+                                <td><code>/forge:agents-md</code></td>
+                                <td>Analyse le codebase — nature, stack, architecture, commandes, conventions — chaque ligne prouvée par un fichier, aucune commande inventée ; migre un <code>CLAUDE.md</code> existant</td>
+                                <td><code>AGENTS.md</code> + <code>CLAUDE.md</code> pont</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
                     <p><code>docs/vision.md</code> est lu par <code>/forge:product-backlog</code> puis par <code>/forge:feature-pitch</code> à chaque feature, pour challenger l'alignement. <code>docs/stack.md</code> est lu en priorité par les skills
                         techniques. Il <strong>constate</strong> l'existant — il ne justifie pas un choix (c'est <code>/forge:adr</code>) ni ne décide d'une évolution (c'est <code>/forge:tech-plan</code>).</p>
                     <p><code>/forge:product-backlog</code> est facultatif : on peut aller directement de la vision au pitch. Il devient recommandé dès qu'on a plus de trois ou quatre features pressenties.</p>
+                    <p><code>/forge:agents-md</code> se lance après <code>/forge:stack</code> et <code>/forge:vision</code>, qu'il réutilise. C'est dans l'<code>AGENTS.md</code> que les skills d'implémentation lisent les commandes exactes de build, de test et de QA — voir <a href="#agents-md">L'AGENTS.md du projet</a>.</p>
                 </div>
 
                 <div class="doc-block" id="ref-cadrer">
@@ -571,6 +577,10 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                                 <td><code>/forge:commit</code></td>
                                 <td>Vient en dernier pour embarquer d'un coup le code, le <code>report.md</code> et les docs réalignées : lit le diff, regroupe les changements en lots cohérents, propose des messages Conventional Commits en français, demande validation, commit et push.</td>
                             </tr>
+                            <tr>
+                                <td><code>/forge:release</code></td>
+                                <td><em>Optionnel, pas à chaque story</em> — ferme la phase quand on publie une version : détermine le bump SemVer depuis les Conventional Commits, met à jour le <code>CHANGELOG.md</code>, crée un tag annoté, push et publie la release GitHub via <code>gh</code>. Demande validation avant toute action publique.</td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -594,10 +604,6 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             <tr>
                                 <td><code>/forge:help</code></td>
                                 <td>Le sommaire du pipeline, des tracks, des skills et des artefacts.</td>
-                            </tr>
-                            <tr>
-                                <td><code>/forge:agents-md</code></td>
-                                <td>Génère, met à jour ou migre l'<code>AGENTS.md</code>, lisible par tous les agents de code, et réduit le <code>CLAUDE.md</code> à un pont : analyse du codebase prouvée par fichier — aucune commande inventée — et injection des principes comportementaux.</td>
                             </tr>
                             <tr>
                                 <td><code>/forge:rules</code></td>
@@ -634,12 +640,6 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             <tr>
                                 <td><code>/forge:backfill-metadata</code></td>
                                 <td>Reconstruit rétroactivement le <code>metadata.json</code> des stories antérieures depuis l'historique git. N'écrit que des valeurs vraies — jamais de date inventée.</td>
-                            </tr>
-                            <tr>
-                                <td><code>/forge:release</code></td>
-                                <td>Détermine le bump SemVer depuis les Conventional Commits, met à jour le <code>CHANGELOG.md</code>, crée un tag annoté, push et publie la release GitHub via <code>gh</code>. Demande validation avant toute action
-                                    publique.
-                                </td>
                             </tr>
                             </tbody>
                         </table>
