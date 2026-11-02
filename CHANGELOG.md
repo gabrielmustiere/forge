@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [7.3.0] - 2026-11-02 — Phase 0 tenue à jour
+
 ### ✨ Fonctionnel
 
 - **`/forge:sync` remet à jour le backlog et la vision quand ils existent** — la passe sur les
@@ -27,6 +29,10 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
   §Notes annoté de sa story, audience et valeur enrichies, principe ou anti-objectif édité sur
   trace. Le statut d'une hypothèse ne bouge que sur une mesure consignée. Le problème, la North
   Star, les seuils et le signal d'arrêt ne sont jamais touchés : c'est un Pivot.
+- **`/forge:status` vérifie l'`AGENTS.md`** — la ligne « Décor » relève l'`AGENTS.md` et le
+  `CLAUDE.md` racine et signale un `AGENTS.md` ignoré par Claude Code, un pont `@AGENTS.md`
+  absent ou un `CLAUDE.md` seul. Chaque état non conforme oriente vers `/forge:agents-md` ; le
+  contenu des fichiers n'est pas jugé.
 
 ### 🔧 Technique
 
@@ -584,7 +590,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.2.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.3.0...HEAD
+[7.3.0]: https://github.com/gabrielmustiere/forge/compare/v7.2.1...v7.3.0
 [7.2.1]: https://github.com/gabrielmustiere/forge/compare/v7.2.0...v7.2.1
 [7.2.0]: https://github.com/gabrielmustiere/forge/compare/v7.1.0...v7.2.0
 [7.1.0]: https://github.com/gabrielmustiere/forge/compare/v7.0.0...v7.1.0
