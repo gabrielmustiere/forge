@@ -29,7 +29,7 @@ Ce qui rend l'autonomie sûre ici : `sync` n'écrit que du Markdown et du `metad
 Une passe, trois gestes, sur **une** story :
 
 1. **Relever les écarts** entre l'intention (`pitch.md` + `plan.md`, ou `plan.md` seul) et le code livré dans le working tree — en lisant le diff **une seule fois**.
-2. **Réaligner** la doc d'intention de la story (`pitch.md`/`plan.md`), **cocher les critères** dans le document qui les porte, et propager aux documents projet de phase 0 (`vision.md`, `stack.md`, `product-backlog.md`) via leurs modes Enrichir/Éditer.
+2. **Réaligner** la doc d'intention de la story (`pitch.md`/`plan.md`), **cocher les critères** dans le document qui les porte, et **remettre à jour** les documents projet de phase 0 qui existent (`product-backlog.md`, `vision.md`, `stack.md`) via leurs modes Enrichir/Éditer — avancement du backlog réconcilié en entier, vision passée section par section.
 3. **Consigner** dans `report.md` ce qui n'a aucune autre maison : les écarts et où ils ont été réalignés, ce qui n'est pas livré, la dette, les leçons.
 
 Ce qu'il ne fait pas, et à qui il renvoie :
@@ -70,7 +70,7 @@ Le skill **ne demande aucune validation** pour :
 - L'identification et le classement des écarts.
 - La formulation du texte réaligné et du `report.md`.
 - Les `Edit` sur `pitch.md` / `plan.md`, le cochage des critères attestés, l'écriture de `report.md` et du `metadata.json`.
-- Les retouches **ciblées** de `stack.md`, `product-backlog.md` et `vision.md` en modes Enrichir/Éditer (Phase 5).
+- La remise à jour de `product-backlog.md`, `vision.md` et `stack.md` quand ils existent (Phase 5) : réconciliation complète de l'avancement du backlog, retouches ciblées en modes Enrichir/Éditer.
 - La décision de **ne rien faire** sur un écart cosmétique ou déjà couvert.
 
 Le skill **demande arbitrage** uniquement quand :
@@ -210,42 +210,76 @@ Applique le seau « à appliquer » avec `Edit` sur `pitch.md` / `plan.md`, sans
 
 `- [ ]` → `- [x]` pour chaque critère **attesté** (un test qui le vérifie, un hunk du diff, un résultat consigné par l'implem ou la review). Un critère non atteint reste décoché ; sa raison va au §Non implémenté du report. On ne reformule un critère que si sa règle métier a été réalignée sur une décision tracée — jamais pour le rendre cochable.
 
-### Phase 5 — Propagation aux documents projet (vision / stack / backlog)
+### Phase 5 — Remise à jour des documents projet (backlog / vision / stack)
 
-Une story livrée fait souvent dériver les documents de **phase 0**, pas seulement sa doc d'intention. Cette phase propage les écarts vers `docs/vision.md`, `docs/stack.md` et `docs/product-backlog.md` **quand ils existent**, en réutilisant leurs modes **Enrichir/Éditer**. Tu ne recartographies rien : tu fais des retouches chirurgicales à partir de ce que le diff révèle déjà. **Saute silencieusement un document absent.**
+Une story livrée fait dériver les documents de **phase 0**, pas seulement sa doc d'intention. Et ces documents dérivent aussi entre deux syncs : une story committée depuis, une case cochée à la main sur GitHub, un pointeur de vision devenu une story. `sync` est le seul moment du pipeline où quelqu'un les regarde après une livraison — il les **remet à jour**, il ne se contente pas de vérifier que la story courante les a touchés.
 
-**Principe commun aux trois documents.** Ce sont des **reflets vivants** de ce que le produit est devenu : ils **suivent** le code livré, ils ne le jugent ni ne le bloquent jamais. Le code livré fait foi — quand un document le contredit, c'est le **document** qui est en retard. Trois gestes seulement : **Enrichir** quand la livraison ajoute (dépendance, capacité, audience, territoire produit), **Éditer** quand elle rend une entrée caduque (version, anti-objectif, principe, capacité obsolète), **ne rien faire** quand elle reste dans le cadre déjà décrit. La seule chose qu'on ne bricole pas en inline, c'est une divergence **stratégique et large** → renvoi vers le skill dédié en mode Pivot.
+**Règle d'existence.** Pour chacun de `docs/product-backlog.md`, `docs/vision.md` et `docs/stack.md` :
+- **Absent** → saute-le en silence. `sync` ne crée jamais un document de phase 0 : la création appartient au propriétaire (`/product-backlog`, `/vision`, `/stack`).
+- **Présent** → la passe ci-dessous est **obligatoire**, même quand la story semble ne rien changer, et le compte rendu porte une ligne pour ce document, qu'il ait bougé ou non (« à jour » est un résultat, pas un oubli).
+
+**Principe commun.** Ce sont des **reflets vivants** de ce que le produit est devenu : ils **suivent** le code livré, ils ne le jugent ni ne le bloquent jamais. Le code livré fait foi — quand un document le contredit, c'est le **document** qui est en retard. Trois gestes, empruntés aux modes des propriétaires : **Enrichir** quand la livraison ajoute, **Éditer** quand elle rend une entrée caduque, **ne rien faire** quand elle reste dans le cadre décrit. Deux natures de contenu, qui ne se traitent pas pareil :
+
+| Nature | Exemples | Règle |
+|---|---|---|
+| **Dérivé** — recalculable depuis des preuves | cases, lignes d'état, compteurs et §Couverture du backlog ; jalon d'horizon franchi | **Recalculé en entier** à chaque passe, pas seulement pour la story courante. Pas de ligne de changelog. |
+| **Rédigé** — une affirmation sur le produit | capacité, ligne de backlog, audience, principe, anti-objectif, dépendance de stack | **Retouché seulement sur preuve** issue de cette story (hunk, fichier, trace amont). Une ligne de changelog par retouche. |
+
+La seule chose qu'on ne bricole jamais en inline, c'est une divergence **stratégique et large** → renvoi vers le skill propriétaire en mode Pivot.
 
 Les fichiers touchés par la story sont ceux du working tree relevés en Phase 2 (`git status --porcelain`, `git diff --name-only`, untracked compris).
 
-**`docs/stack.md` — factuel, prouvé par fichier.**
+#### `docs/product-backlog.md` — réconciliation complète, puis périmètre
+
+Format normatif : `${CLAUDE_SKILL_DIR}/../product-backlog/references/template.md` (format d'une ligne, §États, compteur d'horizon, §Couverture). Charge-le au moment d'écrire.
+
+**1. Réconcilier tout l'avancement** — la même procédure que la Phase 0bis de `/product-backlog` (`${CLAUDE_SKILL_DIR}/../product-backlog/SKILL.md`), appliquée **à toutes les lignes**, pas seulement à celle de la story courante :
+- **Apparier** chaque `docs/story/*/metadata.json` à sa ligne par le seul champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). Champ absent → story non rattachée : ne devine jamais une ligne par ressemblance de titre.
+- **Dériver l'état** de chaque ligne appariée selon le catalogue fermé du template (les mêmes valeurs que `/status`), puis écrire les trois éléments ensemble, jamais l'un sans les autres : la **case** (`[x]` **si et seulement si** `delivery.commit` est renseigné), la **ligne d'état**, le **compteur** de l'horizon (`n/N livrées`).
+- **La story courante** : `sync` tourne en général **avant** `/commit`, donc sans `delivery.commit` — sa case reste vide et son état devient **clôture en cours**. Ne coche pas « par anticipation » : la passe suivante (prochain `sync` ou `/product-backlog`) cochera sur la preuve.
+- **Corriger les écarts** que les preuves contredisent : case cochée sans `delivery.commit` → décochée ; livraison non reflétée → cochée ; compteur faux → recalculé.
+- **Recalculer la §Couverture** (capacités livrées / planifiées par horizon, parcours supportés) : elle est dérivée des cases, elle bouge avec elles.
+- **Signaler sans corriger** : story `f-` orpheline (sans `backlog`, sujet qui recoupe visiblement une ligne) → proposer `/forge:backfill-metadata` ou un Enrichir ; **ligne fantôme** (un `backlog` qui pointe un slug disparu) → ne rien supprimer.
+
+Ces corrections ne produisent **aucune ligne de changelog** — le changelog du document trace le périmètre, pas l'avancement — mais elles rebougent la date « dernière mise à jour » du sous-titre.
+
+**2. Réaligner le périmètre** — rédigé, donc sur preuve de **cette** story seulement :
+- **Capacité ou feature livrée sans ligne** → **Enrichir** (nouvelle capacité, nouvelle ligne dans l'horizon courant, rattachements renseignés). Une ligne ajoutée pour une feature déjà livrée naît cochée ; sinon elle naît à l'état que les preuves disent.
+- **Ligne dont le pitch ne dit plus ce qui a été livré** (règle métier réalignée en Phase 4 sur une décision tracée, partie reportée) → **Éditer** le pitch de la ligne ou ses rattachements, sans changer son slug (les `metadata.json` y sont accrochés).
+- Stories `r-`/`t-` : pas de champ `backlog`, en général aucun impact sur le périmètre — sauf changement de comportement visible. La réconciliation du point 1 tourne quand même.
+
+**Backlog encore en tables** (format antérieur à l'avancement coché) : ne le convertis pas — la conversion appartient à `/product-backlog`. Signale-le en une ligne au compte rendu et ne retouche que le périmètre.
+
+#### `docs/vision.md` — boussole vivante, elle suit le produit
+
+La vision n'est **pas un garde-fou** qui juge ou bloque les features : elle évolue avec ce que le produit devient. Passe-la **section par section** avec cette grille — c'est elle qui rend la passe systématique sans la rendre bavarde :
+
+| Section | Ce qui peut la faire bouger | Geste |
+|---|---|---|
+| §Horizons | Un jalon dont **toutes** les lignes de backlog qui le nomment explicitement (champ `Vision :` de la ligne) sont cochées après réconciliation | **Éditer** — annoter le jalon en place : `— atteint (stories NNN-…)`. Dérivé : jamais par anticipation, jamais sur un rattachement deviné |
+| §Notes pour les features à venir | Un pointeur désormais porté par une story (cadrée ou livrée) | **Éditer** — annoter `→ story NNN-…` ; ne pas supprimer le pointeur |
+| §L'audience | La story sert réellement une audience absente du document (rôle, permission, écran dédié dans le diff) | **Enrichir** — utilisateur secondaire |
+| §La proposition de valeur | La story apporte un bénéfice nommé que la vision ne décrit pas | **Enrichir** |
+| §Principes produit, §Anti-objectifs | La story contredit un principe ou réalise un anti-objectif, et c'est voulu (trace amont) | **Éditer** — reformuler le principe, retirer l'anti-objectif caduc. Sans trace qui dit que c'est voulu → **arbitrage** (contradiction non tranchable) |
+| §Hypothèses critiques | Un résultat **mesuré** et consigné (implem, review, report) qui valide ou invalide l'hypothèse | **Éditer** le statut. Livrer une feature ne valide aucune hypothèse : sans mesure, le statut ne bouge pas |
+| §Le problème, §Métriques de succès (North Star, seuils, signal d'arrêt), pitch d'en-tête | Rien qu'une story puisse prouver | **Jamais touché** par `sync`. S'ils semblent devoir changer, c'est un **Pivot** → renvoi vers `/forge:vision` |
+
+Une story qui reste dans le cadre ne touche à rien. Si la vision bouge sur l'audience, la valeur ou un principe, signale au compte rendu que le backlog peut en être affecté (`/forge:product-backlog` en Enrichir/Éditer) — `sync` ne dérive pas de capacités d'une vision qu'il vient de retoucher.
+
+#### `docs/stack.md` — factuel, prouvé par fichier
+
 Regarde si la story a touché un manifeste : `composer.json`/`composer.lock`, `package.json`, `docker-compose*.yml`, `.github/workflows/*`, `Dockerfile`, `.env*`.
 - Nouvelle dépendance structurante, nouveau service, version bumpée, job CI ajouté → **Enrichir** (ajout) ou **Éditer** (version/remplacement), **prouvé par le fichier** (règle de `/stack` : jamais de techno non attestée).
-- Rien de structurant (juste du code applicatif) → ne touche pas `stack.md`.
+- Rien de structurant (juste du code applicatif) → ne touche pas `stack.md`, et le compte rendu dit « à jour ».
 
-**`docs/product-backlog.md` — fonctionnel, ciblé.** (surtout stories `f-`)
-- **Mets à jour la ligne de la story.** Le rattachement se lit dans le `metadata.json`, champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`) — c'est le slug de la ligne d'origine, posé par `/feature-pitch`. Champ absent → pas de rattachement : ne devine pas la ligne par ressemblance de titre.
-- **Format exact** (celui que `/product-backlog` maintient, voir son `references/template.md`) : trois choses ensemble, jamais l'une sans les autres.
-  1. La case : `- [ ]` → `- [x]`, **uniquement** si `delivery.commit` est renseigné. `sync` tourne en général **avant** `/commit` : la story n'est pas encore livrée, la case reste vide et tu poses seulement l'état (`clôture en cours`). La prochaine passe de `/product-backlog` cochera. Ne coche pas « par anticipation ».
-  2. La ligne d'état : `Story <dossier>` · **<état>**, l'état pris dans le catalogue fermé du template (les mêmes valeurs que `/status`). Version affichée seulement si `delivery.release` existe.
-  3. Le compteur de l'horizon dans son titre (`### MVP — … · \`n/N livrées\``), recalculé.
-- **Pas de ligne de changelog** pour un cochage ou un changement d'état : le changelog du document trace le **périmètre**, pas l'avancement. Tu n'en ajoutes une que si tu ajoutes ou édites réellement une **ligne de backlog**.
-- **Capacité non prévue** apparue à la livraison → l'ajouter (**Enrichir**), avec sa ligne de changelog. Une ligne ajoutée pour une feature **déjà livrée** naît cochée : la preuve existe.
-- **Backlog encore en tables** (format antérieur à l'avancement coché) : ne le convertis pas — la conversion appartient à `/product-backlog`. Signale-le en une ligne au compte rendu.
-- Stories `r-`/`t-` : en général aucun impact backlog — ne propose rien, sauf changement de comportement visible. Leur `metadata.json` n'a pas de champ `backlog`.
+#### Application
 
-**`docs/vision.md` — boussole vivante, elle suit le produit.**
-La vision n'est **pas un garde-fou** qui juge ou bloque les features : elle **évolue avec ce que le produit devient**.
-- La story **étend** le produit au-delà de la vision (nouvelle audience réellement servie, nouvelle valeur, nouveau territoire, jalon North Star franchi) → **Enrichir** ciblé de la section concernée.
-- La story **contredit** un principe ou un anti-objectif → c'est le document qui est en retard : **Éditer** (reformuler le principe, retirer l'anti-objectif devenu caduc). Jamais de blocage.
-- La story reste **dans le cadre** → ne touche à rien.
-- Divergence **stratégique et large** → ne bricole pas : signale qu'un **Pivot** est probablement nécessaire et renvoie vers `/vision`.
+Applique directement les retouches : elles sont attestées et restent relisibles au `git diff`. Restent soumis à arbitrage : le **Pivot** et la **refonte d'un domaine entier** (backlog) ou d'une couche (stack) — ne les force pas, signale-les et renvoie vers `/forge:product-backlog`, `/forge:vision` ou `/forge:stack` dans le mode adéquat. Pour chaque retouche **rédigée** :
+- `Edit` ciblé de la section concernée, structure et titres préservés.
+- Une ligne au **changelog du document, dans son format natif** — table `Date | Nature | Axe/Éléments | Motif` pour `vision.md` et `product-backlog.md`, liste de lignes datées pour `stack.md` — de nature `Enrichir` ou `Éditer`, motif terminé par `sync post-livraison de la story NNN-<f|r|t>-slug`. Ne convertis jamais le format du changelog.
+- La date « dernière mise à jour » du sous-titre rebougée.
 
-**Application.** Applique directement les retouches **ciblées** sur les trois documents : elles sont attestées et restent relisibles au `git diff`. Restent soumis à arbitrage : le **Pivot** et la **refonte d'un domaine entier**. Pour chaque retouche :
-- `Edit` ciblé de la section concernée.
-- Une ligne au **changelog natif du document** (liste de lignes datées, **pas** de table) : `AAAA-MM-JJ — <Enrichir|Éditer> — <couche|élément|axe> — sync post-livraison de la story NNN-<f|r|t>-slug`. Rebouge la date « dernière mise à jour » du sous-titre. **Exception** : la mise à jour d'avancement du backlog (case, état, compteur) ne produit pas de ligne de changelog — elle rebouge quand même la date du sous-titre.
-
-Un impact trop lourd pour une retouche ciblée (refonte d'un domaine backlog, pivot de stack) ne se force pas : signale-le et renvoie vers `/stack` ou `/product-backlog` dans le mode adéquat.
+Le contenu **dérivé** (avancement du backlog, jalon d'horizon atteint) ne produit pas de ligne de changelog — il rebouge seulement la date du sous-titre.
 
 ### Phase 6 — `report.md`
 
@@ -277,9 +311,14 @@ Le compte rendu **remplace** la validation pas-à-pas : il doit permettre de rel
 > - `plan.md` §Périmètre — ajout de `src/Service/StockGuard.php`, créé mais non prévu
 > - `pitch.md` §Critères d'acceptation — 8/9 cochés
 > - `stack.md` §Données — Redis 7.2 ajouté *(attesté : `docker-compose.yml`)*
+> - `product-backlog.md` — avancement réconcilié : `export-csv` → clôture en cours, `import-clients` cochée (livrée `a1b2c3d`, non reflétée), MVP 4/8, §Couverture recalculée
+> - `vision.md` §Horizons — jalon « reprise des données clients » annoté atteint *(lignes `import-clients`, `dedoublonnage-clients` cochées)*
+>
+> **Documents projet à jour** — `<document>` : rien à reprendre *(une ligne par document présent et non modifié ; un document absent n'apparaît pas)*
 >
 > **Non réaligné (volontairement)**
 > - §Critères d'acceptation #3 non livré, aucune décision tracée → consigné en §Non implémenté
+> - `product-backlog.md` — story `053-f-relances` orpheline (pas de champ `backlog`) → `/forge:backfill-metadata` ou un Enrichir
 >
 > **Consigné dans `report.md`** — 3 écarts, 1 non livré, 2 dettes (dont 1 critique), 3 leçons
 >
@@ -289,7 +328,7 @@ Le compte rendu **remplace** la validation pas-à-pas : il doit permettre de rel
 > Rien n'est commité : `git diff -- docs/` pour relire, `git checkout -- <fichier>` pour annuler une retouche.
 > Prochaine étape : `/commit` — il embarque d'un coup le code, le `report.md` et les documents réalignés.
 
-Un bloc vide se supprime plutôt que de s'afficher avec « aucun ». Le bloc **Non réaligné** est ce qui rend l'autonomie acceptable : il rend visibles les décisions de ne rien faire, qui sinon passeraient pour des oublis.
+Un bloc vide se supprime plutôt que de s'afficher avec « aucun » — sauf pour les documents projet présents : chacun apparaît soit dans **Appliqué**, soit dans **Documents projet à jour**, pour qu'on voie qu'il a été passé. Le bloc **Non réaligné** est ce qui rend l'autonomie acceptable : il rend visibles les décisions de ne rien faire, qui sinon passeraient pour des oublis.
 
 **Décision candidate à un ADR.** Réaligner, c'est constater qu'un choix a tenu — un `stack.md` enrichi d'une dépendance structurante, une approche réécrite parce que la livraison a tranché autrement, un écart d'approche assumé. Passe les écarts et réalignements au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, si l'un d'eux passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon.
 

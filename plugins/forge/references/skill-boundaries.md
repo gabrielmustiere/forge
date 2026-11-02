@@ -113,7 +113,8 @@ rendent l'exception sûre :
 la donnée **dérivée** (preuve : le `delivery` d'un `metadata.json` rattaché par son champ
 `backlog`). Que `sync` les mette à jour au passage n'ajoute donc pas un écrivain de plus : deux
 skills qui dérivent la même donnée des mêmes preuves ne peuvent pas se contredire — le dernier
-qui passe recalcule, et `product-backlog` réconcilie l'ensemble en ouverture de session. C'est
+qui passe recalcule. `sync` réconcilie l'ensemble à chaque clôture, `product-backlog` en ouverture de
+session — même procédure, mêmes preuves. C'est
 aussi pourquoi `feature-pitch` n'écrit **pas** le rattachement dans le backlog mais dans le
 `metadata.json` de sa propre story : le lien vit du côté de celui qui le connaît, la projection
 reste chez le propriétaire du document.

@@ -10,6 +10,30 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **`/forge:sync` remet à jour le backlog et la vision quand ils existent** — la passe sur les
+  documents projet n'est plus facultative : chaque document présent est passé à chaque clôture et
+  apparaît dans le compte rendu, modifié ou « à jour ». Un document absent est sauté, jamais créé.
+- **Backlog : réconciliation complète** — `sync` applique la procédure d'avancement de
+  `/forge:product-backlog` à toutes les lignes, plus seulement à celle de la story courante. Les
+  cases, les états, les compteurs d'horizon et la §Couverture sont recalculés. Une livraison
+  committée depuis le dernier passage est rattrapée, une case cochée à la main sans preuve est
+  décochée. Les stories orphelines et les lignes fantômes sont signalées, jamais corrigées
+  d'autorité. Le périmètre (nouvelle capacité, pitch de ligne réaligné) reste retouché sur preuve
+  de la story.
+- **Vision : passe section par section** — une grille fixe ce qu'une story peut faire bouger :
+  jalon d'horizon annoté « atteint » quand toutes ses lignes de backlog sont livrées, pointeur de
+  §Notes annoté de sa story, audience et valeur enrichies, principe ou anti-objectif édité sur
+  trace. Le statut d'une hypothèse ne bouge que sur une mesure consignée. Le problème, la North
+  Star, les seuils et le signal d'arrêt ne sont jamais touchés : c'est un Pivot.
+
+### 🔧 Technique
+
+- **Changelog des documents projet au format natif** — `sync` écrivait une liste de lignes datées
+  là où `vision.md` et `product-backlog.md` portent une table. Il suit désormais le format de
+  chaque document, sans jamais le convertir.
+
 ## [7.2.1] - 2026-10-19 — agents-md et release à leur place dans le pipeline
 
 ### ✨ Fonctionnel
