@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [7.4.0] - 2026-11-13 — Modèle et effort par skill
+
 ### ✨ Fonctionnel
 
 - **`/forge:commit` et `/forge:test-scenario` tournent en sous-agent isolé** (`context: fork`, sur
@@ -611,7 +613,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.4.0...HEAD
+[7.4.0]: https://github.com/gabrielmustiere/forge/compare/v7.3.0...v7.4.0
 [7.3.0]: https://github.com/gabrielmustiere/forge/compare/v7.2.1...v7.3.0
 [7.2.1]: https://github.com/gabrielmustiere/forge/compare/v7.2.0...v7.2.1
 [7.2.0]: https://github.com/gabrielmustiere/forge/compare/v7.1.0...v7.2.0
