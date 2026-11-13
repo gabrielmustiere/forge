@@ -3,6 +3,8 @@ name: doc-feature
 description: Documente une feature implémentée en lisant le code — entités, flux, routes, services, templates, points d'extension. Stack-agnostique (Sylius, Symfony). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarding ou cartographie.
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: medium
 argument-hint: "[sujet, chemin fichier ou slug]"
 allowed-tools:
   - Read

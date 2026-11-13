@@ -3,6 +3,8 @@ name: release
 description: Crée une release versionnée bout-en-bout — bump SemVer depuis Conventional Commits, met à jour `CHANGELOG.md` (version titrée, chapitres Fonctionnel/Technique), tag annoté `vX.Y.Z`, push, puis publie sur GitHub via `gh`. Demande validation avant toute action publique.
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: medium
 argument-hint: "[major|minor|patch] [--no-push] [--draft] [--pre <suffix>]"
 allowed-tools:
   - Read

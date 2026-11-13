@@ -3,6 +3,8 @@ name: stack
 description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Cas greenfield : si rien n'est encore choisi, propose d'amorcer depuis le template Symfony par défaut et le personnalise. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: medium
 argument-hint: "[couche ciblée ou intention libre]"
 allowed-tools:
   - Read

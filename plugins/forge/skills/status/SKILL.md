@@ -3,6 +3,8 @@ name: status
 description: Point de situation à la reprise d'un projet forge — stories en cours dans `docs/story/`, étape atteinte par chacune, état du dépôt, et par quoi reprendre. Lecture seule, n'écrit rien. À lancer quand on revient après une pause.
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: low
 argument-hint: "[slug-story] [--all]"
 allowed-tools:
   - Read

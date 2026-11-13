@@ -10,6 +10,27 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **`/forge:commit` et `/forge:test-scenario` tournent en sous-agent isolé** (`context: fork`, sur
+  Sonnet) — le commit ne relit plus tout le contexte de la story pour un diff qu'il lit lui-même,
+  et les snapshots du navigateur, très volumineux, ne s'accumulent plus dans la session
+  principale. Un sous-agent ne peut pas interroger l'utilisateur : là où ces skills demandaient un
+  arbitrage (secret détecté, découpage, conflit de rebase, environnement manquant, étape échouée),
+  ils s'arrêtent et rendent un bloc `## Arbitrage requis`, tranché par la session principale.
+  `test-scenario` exige désormais le scénario en argument.
+
+### 🔧 Technique
+
+- **Modèle et effort réglés par skill** — chaque skill déclare le couple `model` / `effort` qui
+  donne le meilleur rapport qualité / tokens, selon deux contraintes : un réglage de frontmatter
+  ne vaut que pour le tour d'invocation, et changer de modèle en cours de session fait perdre le
+  cache. Sonnet là où le travail est mécanique et le contexte petit (`status`, `stack`, `release`,
+  `doc-feature`, `backfill-metadata`) ; Haiku pour `help` ; effort `medium` pour les tours sans
+  conception (`product-backlog`, `agents-md`, `rules`, `feature-interview`, `adr`,
+  `refactor-implem`, `sync`). Les ateliers de conception, les implems, `review` et `estimate`
+  héritent du réglage de session.
+
 ## [7.3.0] - 2026-11-02 — Phase 0 tenue à jour
 
 ### ✨ Fonctionnel

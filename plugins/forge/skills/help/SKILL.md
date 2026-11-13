@@ -3,6 +3,8 @@ name: help
 description: Affiche le sommaire du workflow et oriente vers le bon skill — quatre phases (décor, cadrage, implem, clôture), trois tracks (feature, refacto, tech) et leurs artifacts. À utiliser quand tu ne sais pas par où commencer ou quel skill correspond.
 user_invocable: true
 disable-model-invocation: true
+model: haiku
+effort: low
 allowed-tools:
   - Read
   - Glob

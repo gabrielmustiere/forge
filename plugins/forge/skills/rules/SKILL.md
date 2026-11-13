@@ -3,6 +3,7 @@ name: rules
 description: "Écrit les règles projet dans `.claude/rules/` — instructions paths-scopées, chargées seulement quand Claude ouvre un fichier de la zone — et retire d'AGENTS.md / CLAUDE.md ce qui part en règle. Modes Création, Enrichir, Éditer."
 user_invocable: true
 disable-model-invocation: true
+effort: medium
 argument-hint: "[zone ciblée ou intention libre]"
 allowed-tools:
   - Read

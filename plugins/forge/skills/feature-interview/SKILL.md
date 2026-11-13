@@ -3,6 +3,7 @@ name: feature-interview
 description: Transforme un besoin flou en brief pour `/feature-pitch` — interview accessible (irritant, qui, résultat attendu) ancrée sur le code existant. Pour qui sait ce qui le gêne mais pas le pitcher. Produit `docs/story/NNN-f-<slug>/brief.md`.
 user_invocable: true
 disable-model-invocation: true
+effort: medium
 argument-hint: "[besoin en vrac, même vague]"
 allowed-tools:
   - Read

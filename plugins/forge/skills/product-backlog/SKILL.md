@@ -3,6 +3,7 @@ name: product-backlog
 description: "Traduit la vision en périmètre fonctionnel — domaines, capacités, parcours, backlog MVP/V2/V3 avec avancement coché depuis les stories. Quatre modes (Création, Enrichir, Éditer, Pivot). Produit `docs/product-backlog.md`, lu par `feature-pitch`."
 user_invocable: true
 disable-model-invocation: true
+effort: medium
 argument-hint: "[intention ou domaine ciblé]"
 allowed-tools:
   - Read

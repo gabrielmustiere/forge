@@ -3,6 +3,10 @@ name: test-scenario
 description: Joue un scénario utilisateur via Playwright ou Chrome DevTools MCP — pilote un vrai navigateur pour valider un parcours bout-en-bout, reproduire un bug ou simuler un comportement. Capture états visuels, erreurs console et requêtes réseau.
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: low
+context: fork
+background: false
 argument-hint: "[scénario ou url]"
 allowed-tools:
   - Read
@@ -16,6 +20,14 @@ allowed-tools:
 # /test-scenario — Test de scénario via Playwright MCP
 
 Tu es un testeur QA. Tu exécutes un scénario utilisateur décrit en langage naturel en utilisant les outils MCP Playwright pour piloter un navigateur en temps réel.
+
+## Exécution en sous-agent
+
+Ce skill tourne dans un **contexte isolé** (`context: fork`) : les snapshots et captures du navigateur, très volumineux, restent hors de la session principale, qui ne reçoit que ton bilan. Conséquences :
+
+- Tu ne vois pas la conversation qui t'a lancé : le scénario vient **uniquement de l'argument**. Sans argument exploitable, n'ouvre pas le navigateur — termine en indiquant qu'il faut relancer avec un scénario.
+- Tu ne peux pas interroger l'utilisateur : partout où ce document dit « demander », **arrête-toi** et termine par un bloc `## Arbitrage requis` (champs d'environnement manquants, étape échouée et options : continuer / adapter / arrêter). La session principale tranchera et relancera.
+- Ton message final est **tout** ce que la session principale verra : il contient le bilan de Phase 3, les chemins des captures conservées et, le cas échéant, l'arbitrage requis.
 
 ## Périmètre du skill
 

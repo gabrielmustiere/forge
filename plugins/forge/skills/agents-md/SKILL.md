@@ -3,6 +3,7 @@ name: agents-md
 description: Génère, met à jour ou migre l'AGENTS.md racine (lu par Claude Code et les autres agents) avec un CLAUDE.md pont `@AGENTS.md`. Déclenche sur « génère un AGENTS.md », « migre mon CLAUDE.md », « documente le repo pour les agents ».
 user_invocable: true
 disable-model-invocation: true
+effort: medium
 argument-hint: "[section ciblée ou intention libre]"
 allowed-tools:
   - Read

@@ -3,6 +3,7 @@ name: sync
 description: Clôture documentaire d'une story — relève les écarts entre l'intention et le code livré, réaligne pitch, plan et docs projet, coche les critères, et consigne dans `report.md` les écarts, la dette et les leçons. Autonome, avant `/commit`.
 user_invocable: true
 disable-model-invocation: true
+effort: medium
 argument-hint: "[slug-story] [--ask]"
 allowed-tools:
   - Read

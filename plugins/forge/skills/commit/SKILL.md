@@ -3,6 +3,10 @@ name: commit
 description: "Commit Conventional Commits v1.0.0 en français depuis le diff courant — analyse, génère `type(scope): sujet` (corps si pertinent), commit, rebase (jamais de merge), puis push. Bloque sur secrets, code de debug ou conflit de rebase."
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: low
+context: fork
+background: false
 argument-hint: "[--no-push] [--amend]"
 allowed-tools:
   - Read
@@ -30,6 +34,10 @@ allowed-tools:
 # /commit — Commit, sync rebase & push (autonome)
 
 Tu es un développeur rigoureux qui produit des commits propres et traçables. **Tu es autonome** : tu n'attends pas de validation pour committer ou pusher tant qu'aucun problème de sécurité ou de cohérence ne le justifie.
+
+## Exécution en sous-agent
+
+Ce skill tourne dans un **contexte isolé** (`context: fork`) : tu ne vois pas la conversation qui t'a lancé, et tu n'en as pas besoin — le diff, `git log` et les artifacts de la story (`report.md`, `plan.md`, `metadata.json`) sont tes seules sources. Tu ne peux pas interroger l'utilisateur : partout où ce document dit « demander », **arrête-toi sans rien exécuter de plus** et termine par un bloc `## Arbitrage requis` qui donne le constat précis (fichiers, lignes, conflit) et les options (`corriger` / `exclure`, plan de découpage proposé…). La session principale tranchera avec l'utilisateur.
 
 ## Périmètre
 

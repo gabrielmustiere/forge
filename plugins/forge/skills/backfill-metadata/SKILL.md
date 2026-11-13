@@ -3,6 +3,8 @@ name: backfill-metadata
 description: Reconstruit le `metadata.json` manquant des stories antérieures — déduit le titre du H1, les dates `created`/`updated` de l'historique git, la timeline `changelog` de l'apparition de chaque artifact, la livraison (`delivery.commit`/`release`) des commits et tags, propose des `tags` à valider. Déclenche sur « générer les métadonnées des anciennes stories », « backfill metadata.json », « reconstruire les métadonnées ».
 user_invocable: true
 disable-model-invocation: true
+model: sonnet
+effort: low
 argument-hint: "[slug|chemin de story] [--force] [--all]"
 allowed-tools:
   - Read

@@ -1,8 +1,9 @@
 ---
 name: adr
-description: Rédige un Architecture Decision Record (MADR léger) → `docs/adr/NNNN-slug.md` : contexte, drivers, options écartées, conséquences. Déclenche sur « documenter cette décision », « pourquoi ce choix », « écrire un ADR », « graver cet arbitrage ».
+description: "Rédige un Architecture Decision Record (MADR léger) → `docs/adr/NNNN-slug.md` : contexte, drivers, options écartées, conséquences. Déclenche sur « documenter cette décision », « pourquoi ce choix », « écrire un ADR », « graver cet arbitrage »."
 user_invocable: true
 disable-model-invocation: false
+effort: medium
 argument-hint: "[topic, chemin artifact ou slug-story]"
 allowed-tools:
     - Read
