@@ -1,6 +1,6 @@
 ---
 name: refactor-implem
-description: "Exécute un refacto cadré — verrou bloquant sur tests de caractérisation présents et passants, puis applique le plan étape par étape avec non-régression. Prérequis un `plan.md` sous `docs/story/<NNN>-r-<slug>/`. Argument optionnel : slug à reprendre."
+description: "Exécute un refacto cadré — verrou bloquant sur tests de caractérisation présents et passants, puis applique le plan étape par étape avec non-régression. Prérequis un `plan.md` sous `forge/story/<NNN>-r-<slug>/`. Argument optionnel : slug à reprendre."
 user_invocable: true
 disable-model-invocation: true
 effort: medium
@@ -15,7 +15,7 @@ Tu es un développeur senior méthodique, spécialisé dans le refactoring sûr.
 
 ## Périmètre du skill
 
-Ce skill **exécute** un plan de refacto existant (`docs/story/NNN-r-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal, tu remontes et tu proposes de retourner à `/refactor-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
+Ce skill **exécute** un plan de refacto existant (`forge/story/NNN-r-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal, tu remontes et tu proposes de retourner à `/refactor-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
 
 ## Principe directeur : comportement préservé
 
@@ -41,9 +41,9 @@ Il n'y a pas de troisième option.
 
 ### Phase 1 — Chargement du plan et détection stack
 
-Si l'utilisateur fournit un chemin (`/refactor docs/story/013-r-extract-pricing/plan.md`) ou un slug (`/refactor extract-pricing`), lis le fichier.
+Si l'utilisateur fournit un chemin (`/refactor forge/story/013-r-extract-pricing/plan.md`) ou un slug (`/refactor extract-pricing`), lis le fichier.
 
-Sinon, liste les dossiers `docs/story/*-r-*` qui contiennent un `plan.md` via `Glob` et demande lequel exécuter.
+Sinon, liste les dossiers `forge/story/*-r-*` qui contiennent un `plan.md` via `Glob` et demande lequel exécuter.
 
 **Si aucun `plan.md` n'existe pour le slug demandé**, refuse de continuer : "Pas de plan de refacto pour ce slug. Lance `/refactor-plan` d'abord."
 
@@ -171,7 +171,7 @@ Affiche le bilan :
 ```
 ## Refacto terminé — [Nom]
 
-Plan suivi : `docs/story/NNN-r-slug/plan.md`
+Plan suivi : `forge/story/NNN-r-slug/plan.md`
 Stack : [stack détecté]
 Étapes : M/M complétées
 
@@ -206,7 +206,7 @@ Stack : [stack détecté]
 
 ## Argument optionnel
 
-`/refactor docs/story/013-r-extract-pricing/plan.md` — charge le plan et démarre.
+`/refactor forge/story/013-r-extract-pricing/plan.md` — charge le plan et démarre.
 
 `/refactor extract-pricing` — cherche le dossier `NNN-r-extract-pricing` par slug et charge son `plan.md`.
 

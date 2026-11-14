@@ -30,7 +30,7 @@ Pour chaque élément ciblé, demande la nature précise :
 
 Systématique avant rédaction :
 
-- **Alignement vision** : l'ajout pointe-t-il vers un problème, une audience, un principe ou une North Star de `docs/vision.md` ? Sinon refus ou retour au mode Pivot (signal qu'on dérive).
+- **Alignement vision** : l'ajout pointe-t-il vers un problème, une audience, un principe ou une North Star de `forge/vision.md` ? Sinon refus ou retour au mode Pivot (signal qu'on dérive).
 - **Conflit anti-objectifs** : l'ajout contredit-il un anti-objectif de la vision ?
 - **Rattachement** : une nouvelle feature s'accroche-t-elle à au moins une capacité existante (ou à une capacité elle-même ajoutée dans la même session) ? Une nouvelle capacité se rattache-t-elle à un domaine ? Un nouveau parcours référence-t-il des capacités identifiées ?
 - **Doublon** : l'élément existe-t-il déjà sous un autre nom ?

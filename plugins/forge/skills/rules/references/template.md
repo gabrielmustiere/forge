@@ -73,7 +73,7 @@ Mauvais, et voici pourquoi :
 ```markdown
 # Repositories
 
-- Ce dossier contient les repositories Doctrine du projet.   ← constat, pas règle (→ docs/stack.md)
+- Ce dossier contient les repositories Doctrine du projet.   ← constat, pas règle (→ forge/stack.md)
 - Écrire des requêtes performantes.                          ← invérifiable, ne décide rien
 - Doctrine 3.2 est installé depuis mars 2024.                ← historique (→ git log)
 - Toujours lancer `symfony console` et pas `php bin/console`. ← outillage : aucun paths ne le

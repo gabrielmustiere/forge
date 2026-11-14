@@ -46,12 +46,16 @@ Les ateliers du pipeline (`feature-pitch`, les trois plans, `vision`, `adr`) app
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : quand la cible est un document de story, applique d'abord la
+> garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…)
+> se migre d'abord par `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 1 — La cible
 
 Trois entrées, selon l'argument :
 
-- **Un document de story** (`/forge:grill 047-f-filtres`, `/forge:grill docs/story/047-f-filtres/plan.md`) — résolution par slug, préfixes `f-`, `r-`, `t-` testés ; pour un slug, le document le plus avancé (`plan.md` s'il existe, sinon `pitch.md`). Lis-le **intégralement**, puis ses amonts (`brief.md`, `pitch.md` pour un plan) et le `metadata.json`. La graine de l'arbre : ses décisions énoncées sans justification, ses `## Questions ouvertes`, et surtout **ce qu'il laisse implicite** — les cas limites absents des règles métier, le critère que personne ne saura vérifier, la stratégie de test muette sur une branche du périmètre.
-- **Un sujet dans un dépôt** (`/forge:grill passer les relances en asynchrone`) — reconnaissance ciblée : le code concerné, `docs/vision.md`, `docs/stack.md`, `docs/adr/`, l'`AGENTS.md`. Juste assez pour recommander et fermer les branches que le dépôt tranche ; pas une cartographie.
+- **Un document de story** (`/forge:grill 047-f-filtres`, `/forge:grill forge/story/047-f-filtres/plan.md`) — résolution par slug, préfixes `f-`, `r-`, `t-` testés ; pour un slug, le document le plus avancé (`plan.md` s'il existe, sinon `pitch.md`). Lis-le **intégralement**, puis ses amonts (`brief.md`, `pitch.md` pour un plan) et le `metadata.json`. La graine de l'arbre : ses décisions énoncées sans justification, ses `## Questions ouvertes`, et surtout **ce qu'il laisse implicite** — les cas limites absents des règles métier, le critère que personne ne saura vérifier, la stratégie de test muette sur une branche du périmètre.
+- **Un sujet dans un dépôt** (`/forge:grill passer les relances en asynchrone`) — reconnaissance ciblée : le code concerné, `forge/vision.md`, `forge/stack.md`, `forge/adr/`, l'`AGENTS.md`. Juste assez pour recommander et fermer les branches que le dépôt tranche ; pas une cartographie.
 - **Un sujet sans code** (une décision business, un texte, une direction produit) — pas d'exploration. Le gril se mène sur les seules réponses de l'utilisateur.
 
 Sans argument, demande ce qu'il faut passer au gril — une phrase suffit.

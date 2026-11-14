@@ -1,6 +1,6 @@
 ---
 name: doc-feature
-description: Documente une feature implémentée en lisant le code — entités, flux, routes, services, templates, points d'extension. Stack-agnostique (Sylius, Symfony). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarding ou cartographie.
+description: Documente une feature implémentée en lisant le code — entités, flux, routes, services, templates, points d'extension. Stack-agnostique (Sylius, Symfony). Produit `forge/feature-map/NNN-slug/overview.md`. Utile pour onboarding ou cartographie.
 user_invocable: true
 disable-model-invocation: true
 model: sonnet
@@ -39,18 +39,22 @@ Ce skill est **hors pipeline** (pas de spec → design → implem). Son rôle es
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 0 — Stack du projet
 
 Avant toute exploration, établis le stack du projet pour adapter le vocabulaire et les sections du document. Le premier cas qui s'applique gagne :
 
-1. **Stack déjà établi dans la session** — une skill précédente a lu `docs/stack.md` ou les manifestes, et le résultat est toujours dans ton contexte → ne relis rien, reprends-le.
-2. **`docs/stack.md` existe** (produit par `/stack`) → lis-le : c'est la cartographie validée par l'utilisateur, couche par couche (backend, frontend, données…). **Ne scanne pas** `composer.json`/`package.json`, le fichier les résume déjà — sauf pour un détail qu'il ne couvre pas.
+1. **Stack déjà établi dans la session** — une skill précédente a lu `forge/stack.md` ou les manifestes, et le résultat est toujours dans ton contexte → ne relis rien, reprends-le.
+2. **`forge/stack.md` existe** (produit par `/stack`) → lis-le : c'est la cartographie validée par l'utilisateur, couche par couche (backend, frontend, données…). **Ne scanne pas** `composer.json`/`package.json`, le fichier les résume déjà — sauf pour un détail qu'il ne couvre pas.
 3. **Sinon, détection légère** — lis dans cet ordre :
    1. `composer.json` à la racine — clés `require` : `sylius/sylius` ou `sylius/*-bundle` → **Sylius** ; `symfony/framework-bundle` sans Sylius → **Symfony** ; autre PHP → **PHP générique**.
    2. `package.json` à la racine — clés `dependencies` / `devDependencies` : `next`, `react`, `vue`, `@nestjs/*`, `express`, etc. → noter le framework JS.
    3. À défaut : examiner l'arborescence (`src/`, `app/`, `lib/`, `pkg/`, `cmd/`…) et le `README` pour situer.
 
-Affiche le stack retenu en une ligne, avec sa provenance — « Stack chargé depuis `docs/stack.md` : **sylius** » ou « Stack détecté via `composer.json` : **symfony** ». Ne parle de détection que dans le cas 3.
+Affiche le stack retenu en une ligne, avec sa provenance — « Stack chargé depuis `forge/stack.md` : **sylius** » ou « Stack détecté via `composer.json` : **symfony** ». Ne parle de détection que dans le cas 3.
 
 Si plusieurs stacks coexistent (monorepo, front + back), demande à l'utilisateur quel périmètre documenter en priorité.
 
@@ -120,8 +124,8 @@ Quand l'utilisateur valide, écris le fichier de documentation.
 
 **Choix du dossier** :
 
-- Format : `docs/feature-map/NNN-slug-de-la-feature/` (NNN = prochain numéro sur 3 chiffres, slug en kebab-case). Exemples : `001-promotions/`, `002-cart-lifecycle/`.
-- Scanner les dossiers existants via `Glob` (pattern `docs/feature-map/[0-9]*/`), extraire le préfixe numérique le plus élevé et incrémenter de 1.
+- Format : `forge/feature-map/NNN-slug-de-la-feature/` (NNN = prochain numéro sur 3 chiffres, slug en kebab-case). Exemples : `001-promotions/`, `002-cart-lifecycle/`.
+- Scanner les dossiers existants via `Glob` (pattern `forge/feature-map/[0-9]*/`), extraire le préfixe numérique le plus élevé et incrémenter de 1.
 - **Collision de slug** : si le slug existe déjà sous un autre numéro, demande à l'utilisateur s'il veut **étendre** la doc existante ou choisir un slug distinct. Ne jamais écraser sans validation.
 
 **Nom du fichier** : `overview.md` dans ce dossier.
@@ -207,7 +211,7 @@ La référence stack peut compléter ce squelette par des sections additionnelle
 
 Affiche le chemin du fichier produit :
 
-> Documentation prête : `docs/feature-map/NNN-slug/overview.md`
+> Documentation prête : `forge/feature-map/NNN-slug/overview.md`
 
 ## Argument optionnel
 

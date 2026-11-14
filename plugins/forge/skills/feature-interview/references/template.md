@@ -2,7 +2,7 @@
 
 > **But** : dégrossir un besoin flou par interview — matière première à challenger, pas un cadrage validé.
 > **Registre** : fonctionnel
-> **Story** : `docs/story/<NNN>-f-<slug>/`
+> **Story** : `forge/story/<NNN>-f-<slug>/`
 > **Amont** : aucun
 
 <!--

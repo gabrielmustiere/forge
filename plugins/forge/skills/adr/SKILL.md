@@ -1,6 +1,6 @@
 ---
 name: adr
-description: "Rédige un Architecture Decision Record (MADR léger) → `docs/adr/NNNN-slug.md` : contexte, drivers, options écartées, conséquences. Déclenche sur « documenter cette décision », « pourquoi ce choix », « écrire un ADR », « graver cet arbitrage »."
+description: "Rédige un Architecture Decision Record (MADR léger) → `forge/adr/NNNN-slug.md` : contexte, drivers, options écartées, conséquences. Déclenche sur « documenter cette décision », « pourquoi ce choix », « écrire un ADR », « graver cet arbitrage »."
 user_invocable: true
 disable-model-invocation: false
 effort: medium
@@ -25,7 +25,7 @@ retenue** et **les conséquences assumées**. Tu refuses les ADR creux ("on a ch
 
 ## Périmètre du skill
 
-Ce skill produit un **ADR atomique** (une décision = un fichier) dans `docs/adr/NNNN-<slug>.md`. Il s'utilise dans plusieurs contextes :
+Ce skill produit un **ADR atomique** (une décision = un fichier) dans `forge/adr/NNNN-<slug>.md`. Il s'utilise dans plusieurs contextes :
 
 - **Depuis un artifact de la timeline** (`pitch.md`, `plan.md`, `review.md`, `report.md`) — extrait la décision implicite ou explicite et la transforme en ADR autonome, avec backlink dans l'artifact source.
 - **Depuis une revue de code** (`/review` qui révèle un choix structurant à graver) — capture la décision avant qu'elle ne se dissolve dans le diff.
@@ -52,21 +52,21 @@ Trois modes d'entrée possibles selon l'argument :
 
 | Argument                                                      | Mode                               |
 |---------------------------------------------------------------|------------------------------------|
-| `/adr docs/story/NNN-<f\|r\|t>-slug/plan.md` (ou `pitch.md`)  | **Depuis artifact** (chemin)       |
+| `/adr forge/story/NNN-<f\|r\|t>-slug/plan.md` (ou `pitch.md`)  | **Depuis artifact** (chemin)       |
 | `/adr <slug-story>`                                           | **Depuis artifact** (résolution)   |
 | `/adr <topic libre>` (ex: "passer à Redis pour les sessions") | **Standalone topic**               |
 | `/adr` sans argument                                          | **Demander** : artifact ou topic ? |
 
-Si chemin ou slug fourni : résous le dossier dans `docs/story/` (préfixes `f-`, `r-`, `t-`), lis intégralement l'artifact (et les autres docs du dossier si pertinent pour le contexte). Affiche un résumé en 3-4 lignes : "Tu veux documenter quelle
+Si chemin ou slug fourni : résous le dossier dans `forge/story/` (préfixes `f-`, `r-`, `t-`), lis intégralement l'artifact (et les autres docs du dossier si pertinent pour le contexte). Affiche un résumé en 3-4 lignes : "Tu veux documenter quelle
 décision exactement depuis ce dossier ?" — un même artifact peut contenir plusieurs décisions à graver séparément.
 
-Si topic libre : reformule en une phrase neutre ("Tu veux trancher entre X et Y pour Z, c'est bien ça ?") et demande s'il existe un artifact dans `docs/story/` qui motive la décision (souvent oui, à lier en backlink).
+Si topic libre : reformule en une phrase neutre ("Tu veux trancher entre X et Y pour Z, c'est bien ça ?") et demande s'il existe un artifact dans `forge/story/` qui motive la décision (souvent oui, à lier en backlink).
 
 Si `/adr` sans argument : demande à l'utilisateur s'il part d'un artifact (et lequel) ou d'un topic brut.
 
 ### Phase 2 — Numérotation et stack du projet
 
-Liste `docs/adr/` via `Glob` pour trouver le plus grand numéro existant. Le prochain ADR sera `NNNN` (4 chiffres, ex: `0007`) — pad à 4 chiffres pour rester triable à long terme. Si le dossier `docs/adr/` n'existe pas, ce sera le premier ADR
+Liste `forge/adr/` via `Glob` pour trouver le plus grand numéro existant. Le prochain ADR sera `NNNN` (4 chiffres, ex: `0007`) — pad à 4 chiffres pour rester triable à long terme. Si le dossier `forge/adr/` n'existe pas, ce sera le premier ADR
 (`0001`).
 
 Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure. Charge la référence stack pertinente (Symfony, Sylius, …) — les choix d'extension, naming, mécanismes architecturaux varient selon le framework et
@@ -80,7 +80,7 @@ Avant de proposer des options, comprends :
 
 - **Le code concerné** : entités, services, points d'extension touchés. Cite les fichiers.
 - **L'historique** : `git log` ciblé sur les fichiers/dossiers concernés pour voir s'il y a déjà eu des allers-retours sur ce choix.
-- **Les ADR existants** : `ls docs/adr/` — un ADR antérieur peut être en train d'être superseded par celui-ci. Lis le `README.md` index s'il existe.
+- **Les ADR existants** : `ls forge/adr/` — un ADR antérieur peut être en train d'être superseded par celui-ci. Lis le `README.md` index s'il existe.
 - **Les contraintes externes** : config infra (`compose.yaml`, `Dockerfile`, `.env*`), dépendances (`composer.json`, `package.json`), CI.
 
 Présente un résumé : "Voilà l'existant pertinent pour cette décision : …" — cite chaque fichier avec son chemin. Si tu détectes qu'un ADR existant traite déjà du sujet, signale-le et demande si on **supersede** l'ancien.
@@ -121,9 +121,9 @@ décision faible.
 
 Quand l'utilisateur valide, charge le template `${CLAUDE_SKILL_DIR}/references/template.md` et écris le fichier.
 
-**Nom du fichier** : `docs/adr/NNNN-<slug-kebab>.md`. Le slug doit être court, descriptif, et **factuel** (ex: `0007-cache-sessions-redis.md` plutôt que `0007-on-choisit-redis.md`).
+**Nom du fichier** : `forge/adr/NNNN-<slug-kebab>.md`. Le slug doit être court, descriptif, et **factuel** (ex: `0007-cache-sessions-redis.md` plutôt que `0007-on-choisit-redis.md`).
 
-Si le dossier `docs/adr/` n'existe pas, crée-le.
+Si le dossier `forge/adr/` n'existe pas, crée-le.
 
 ### Phase 6 — Backlinks et index
 
@@ -136,14 +136,14 @@ Trois actions de couplage à effectuer (selon les éléments présents) :
 ```markdown
 # Plan technique — Checkout express
 
-> Pitch : `docs/story/042-f-checkout-express/pitch.md`
+> Pitch : `forge/story/042-f-checkout-express/pitch.md`
 > Stack : symfony
-> ADR : `docs/adr/0007-cache-sessions-redis.md`
+> ADR : `forge/adr/0007-cache-sessions-redis.md`
 ```
 
 Si plusieurs ADR sont attachés au même artifact, lister chaque ADR sur sa propre ligne.
 
-**2. Index `docs/adr/README.md`**
+**2. Index `forge/adr/README.md`**
 
 Crée le fichier s'il n'existe pas, sinon édite-le pour insérer la nouvelle ligne dans la table (triée par numéro croissant) :
 
@@ -167,14 +167,14 @@ Si la décision est née pendant une story qui a déjà un `report.md`, édite-l
 ```markdown
 ## Décisions architecturales
 
-- ADR-0007 — Cache sessions Redis (accepted) — `docs/adr/0007-cache-sessions-redis.md`
+- ADR-0007 — Cache sessions Redis (accepted) — `forge/adr/0007-cache-sessions-redis.md`
 ```
 
 Si la story n'a pas encore de report, ne rien faire — `/sync` verra l'index à la clôture et ne reproposera pas la décision.
 
 **Si un ADR est superseded** par celui-ci : édite l'ADR ancien pour passer son statut à `superseded by ADR-NNNN`, et mentionne-le dans la section `Links` du nouveau.
 
-**Métadonnées de story** : si l'ADR est rattaché à une story (backlink dans un artifact de `docs/story/NNN-<f|r|t>-<slug>/`), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date
+**Métadonnées de story** : si l'ADR est rattaché à une story (backlink dans un artifact de `forge/story/NNN-<f|r|t>-<slug>/`), mets à jour son `metadata.json` selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — rebouge `updated` à la date
 du jour et **append** une entrée de changelog (`type` = nature de la passe, `description` = décision gravée + numéro d'ADR). Ne modifie jamais `created`. (ADR standalone sans story : rien à faire.)
 
 ### Phase 7 — Clôture
@@ -182,28 +182,28 @@ du jour et **append** une entrée de changelog (`type` = nature de la passe, `de
 Affiche le résumé :
 
 ```
-ADR prêt : docs/adr/NNNN-slug.md
+ADR prêt : forge/adr/NNNN-slug.md
 Statut : <proposed | accepted | superseded ADR-XXXX>
 Backlinks ajoutés :
   - <artifact source si applicable>
-  - docs/adr/README.md
+  - forge/adr/README.md
   - <report.md de la story si applicable>
 ```
 
 Propose la suite selon le statut :
 
-- **proposed** : "À valider — relance `/adr docs/adr/NNNN-slug.md` après décision pour passer en `accepted`, ou édite manuellement le statut."
+- **proposed** : "À valider — relance `/adr forge/adr/NNNN-slug.md` après décision pour passer en `accepted`, ou édite manuellement le statut."
 - **accepted** : "Suites obligatoires identifiées ? Si oui, prochaine étape : `/feature-pitch` (nouveau besoin), `/refactor-plan` (restructurer pour exploiter la décision), `/tech-plan` (mettre en place la brique technique)."
 - **superseded** : "L'ADR-XXXX a été marqué comme superseded — vérifie qu'aucun code ne s'y réfère encore."
 
 ## Argument optionnel
 
-`/adr docs/story/042-f-checkout/plan.md` — extrait une décision depuis un artifact, propose un draft à partir du contenu.
+`/adr forge/story/042-f-checkout/plan.md` — extrait une décision depuis un artifact, propose un draft à partir du contenu.
 
-`/adr checkout-express` — résout le slug dans `docs/story/`, propose la liste des décisions possibles à graver.
+`/adr checkout-express` — résout le slug dans `forge/story/`, propose la liste des décisions possibles à graver.
 
 `/adr passer à Redis pour les sessions` — mode topic libre, atelier complet.
 
-`/adr docs/adr/0007-cache-sessions-redis.md` — édition d'un ADR existant (typiquement pour passer de `proposed` à `accepted`, ou pour `supersede`).
+`/adr forge/adr/0007-cache-sessions-redis.md` — édition d'un ADR existant (typiquement pour passer de `proposed` à `accepted`, ou pour `supersede`).
 
 `/adr` sans argument — demande à l'utilisateur le mode d'entrée.

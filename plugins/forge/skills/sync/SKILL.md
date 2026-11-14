@@ -45,11 +45,11 @@ Ce qu'il ne fait pas, et à qui il renvoie :
 
 ## Types de dossiers reconnus
 
-`docs/story/` utilise un préfixage par type :
+`forge/story/` utilise un préfixage par type :
 
-- `docs/story/NNN-f-slug/` — **feature** : intention = `pitch.md` + `plan.md`
-- `docs/story/NNN-r-slug/` — **refacto** : intention = `plan.md` (comportement préservé + tests de caractérisation)
-- `docs/story/NNN-t-slug/` — **évolution technique** : intention = `plan.md` (brique ajoutée ou changée, métriques)
+- `forge/story/NNN-f-slug/` — **feature** : intention = `pitch.md` + `plan.md`
+- `forge/story/NNN-r-slug/` — **refacto** : intention = `plan.md` (comportement préservé + tests de caractérisation)
+- `forge/story/NNN-t-slug/` — **évolution technique** : intention = `plan.md` (brique ajoutée ou changée, métriques)
 
 Le skill adapte ce qu'il relève et les fichiers qu'il modifie selon le type.
 
@@ -119,13 +119,17 @@ En cas de doute entre « réaligner » et « ne rien faire », **ne rien faire e
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 1 — Chargement
 
-Si l'utilisateur fournit un slug (`/sync ma-feature`) ou un chemin, résous le dossier dans `docs/story/` en testant les préfixes `f-`, `r-`, `t-`.
+Si l'utilisateur fournit un slug (`/sync ma-feature`) ou un chemin, résous le dossier dans `forge/story/` en testant les préfixes `f-`, `r-`, `t-`.
 
 Sinon, **déduis la story toi-même** plutôt que de la demander, dans cet ordre :
 
-1. Un dossier `docs/story/*-[frt]-*/` apparaît dans le working tree (`git status --porcelain`) → c'est celui-là.
+1. Un dossier `forge/story/*-[frt]-*/` apparaît dans le working tree (`git status --porcelain`) → c'est celui-là.
 2. Un seul dossier de story a été touché par les commits non pushés (`git log @{u}..HEAD --name-only`, ou `git log -5 --name-only` si pas d'upstream) → c'est celui-là.
 3. Sinon, le dossier de plus haut numéro contenant un `plan.md` et dont le `metadata.json` n'a pas de `delivery.commit` — c'est la story dont la clôture est en cours.
 
@@ -215,7 +219,7 @@ Applique le seau « à appliquer » avec `Edit` sur `pitch.md` / `plan.md`, sans
 
 Une story livrée fait dériver les documents de **phase 0**, pas seulement sa doc d'intention. Et ces documents dérivent aussi entre deux syncs : une story committée depuis, une case cochée à la main sur GitHub, un pointeur de vision devenu une story. `sync` est le seul moment du pipeline où quelqu'un les regarde après une livraison — il les **remet à jour**, il ne se contente pas de vérifier que la story courante les a touchés.
 
-**Règle d'existence.** Pour chacun de `docs/product-backlog.md`, `docs/vision.md` et `docs/stack.md` :
+**Règle d'existence.** Pour chacun de `forge/product-backlog.md`, `forge/vision.md` et `forge/stack.md` :
 - **Absent** → saute-le en silence. `sync` ne crée jamais un document de phase 0 : la création appartient au propriétaire (`/product-backlog`, `/vision`, `/stack`).
 - **Présent** → la passe ci-dessous est **obligatoire**, même quand la story semble ne rien changer, et le compte rendu porte une ligne pour ce document, qu'il ait bougé ou non (« à jour » est un résultat, pas un oubli).
 
@@ -230,12 +234,12 @@ La seule chose qu'on ne bricole jamais en inline, c'est une divergence **straté
 
 Les fichiers touchés par la story sont ceux du working tree relevés en Phase 2 (`git status --porcelain`, `git diff --name-only`, untracked compris).
 
-#### `docs/product-backlog.md` — réconciliation complète, puis périmètre
+#### `forge/product-backlog.md` — réconciliation complète, puis périmètre
 
 Format normatif : `${CLAUDE_SKILL_DIR}/../product-backlog/references/template.md` (format d'une ligne, §États, compteur d'horizon, §Couverture). Charge-le au moment d'écrire.
 
 **1. Réconcilier tout l'avancement** — la même procédure que la Phase 0bis de `/product-backlog` (`${CLAUDE_SKILL_DIR}/../product-backlog/SKILL.md`), appliquée **à toutes les lignes**, pas seulement à celle de la story courante :
-- **Apparier** chaque `docs/story/*/metadata.json` à sa ligne par le seul champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). Champ absent → story non rattachée : ne devine jamais une ligne par ressemblance de titre.
+- **Apparier** chaque `forge/story/*/metadata.json` à sa ligne par le seul champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). Champ absent → story non rattachée : ne devine jamais une ligne par ressemblance de titre.
 - **Dériver l'état** de chaque ligne appariée selon le catalogue fermé du template (les mêmes valeurs que `/status`), puis écrire les trois éléments ensemble, jamais l'un sans les autres : la **case** (`[x]` **si et seulement si** `delivery.commit` est renseigné), la **ligne d'état**, le **compteur** de l'horizon (`n/N livrées`).
 - **La story courante** : `sync` tourne en général **avant** `/commit`, donc sans `delivery.commit` — sa case reste vide et son état devient **clôture en cours**. Ne coche pas « par anticipation » : la passe suivante (prochain `sync` ou `/product-backlog`) cochera sur la preuve.
 - **Corriger les écarts** que les preuves contredisent : case cochée sans `delivery.commit` → décochée ; livraison non reflétée → cochée ; compteur faux → recalculé.
@@ -251,7 +255,7 @@ Ces corrections ne produisent **aucune ligne de changelog** — le changelog du 
 
 **Backlog encore en tables** (format antérieur à l'avancement coché) : ne le convertis pas — la conversion appartient à `/product-backlog`. Signale-le en une ligne au compte rendu et ne retouche que le périmètre.
 
-#### `docs/vision.md` — boussole vivante, elle suit le produit
+#### `forge/vision.md` — boussole vivante, elle suit le produit
 
 La vision n'est **pas un garde-fou** qui juge ou bloque les features : elle évolue avec ce que le produit devient. Passe-la **section par section** avec cette grille — c'est elle qui rend la passe systématique sans la rendre bavarde :
 
@@ -267,7 +271,7 @@ La vision n'est **pas un garde-fou** qui juge ou bloque les features : elle évo
 
 Une story qui reste dans le cadre ne touche à rien. Si la vision bouge sur l'audience, la valeur ou un principe, signale au compte rendu que le backlog peut en être affecté (`/forge:product-backlog` en Enrichir/Éditer) — `sync` ne dérive pas de capacités d'une vision qu'il vient de retoucher.
 
-#### `docs/stack.md` — factuel, prouvé par fichier
+#### `forge/stack.md` — factuel, prouvé par fichier
 
 Regarde si la story a touché un manifeste : `composer.json`/`composer.lock`, `package.json`, `docker-compose*.yml`, `.github/workflows/*`, `Dockerfile`, `.env*`.
 - Nouvelle dépendance structurante, nouveau service, version bumpée, job CI ajouté → **Enrichir** (ajout) ou **Éditer** (version/remplacement), **prouvé par le fichier** (règle de `/stack` : jamais de techno non attestée).
@@ -284,7 +288,7 @@ Le contenu **dérivé** (avancement du backlog, jalon d'horizon atteint) ne prod
 
 ### Phase 6 — `report.md`
 
-Écris `docs/story/NNN-<f|r|t>-slug/report.md` selon `${CLAUDE_SKILL_DIR}/references/report-template.md`, à charger au moment de la rédaction. Charte de format : `${CLAUDE_SKILL_DIR}/../../references/document-format.md` — en cas de doute, elle fait foi.
+Écris `forge/story/NNN-<f|r|t>-slug/report.md` selon `${CLAUDE_SKILL_DIR}/references/report-template.md`, à charger au moment de la rédaction. Charte de format : `${CLAUDE_SKILL_DIR}/../../references/document-format.md` — en cas de doute, elle fait foi.
 
 Le report est **mince par construction** : il ne garde que ce qu'aucun autre fichier ne porte après la passe.
 
@@ -326,7 +330,7 @@ Le compte rendu **remplace** la validation pas-à-pas : il doit permettre de rel
 > **Arbitrage requis** *(le cas échéant)*
 > - <divergence stratégique / contradiction / impact lourd / raison manquante>
 >
-> Rien n'est commité : `git diff -- docs/` pour relire, `git checkout -- <fichier>` pour annuler une retouche.
+> Rien n'est commité : `git diff -- forge/` pour relire, `git checkout -- <fichier>` pour annuler une retouche.
 > Prochaine étape : `/commit` — il embarque d'un coup le code, le `report.md` et les documents réalignés.
 
 Un bloc vide se supprime plutôt que de s'afficher avec « aucun » — sauf pour les documents projet présents : chacun apparaît soit dans **Appliqué**, soit dans **Documents projet à jour**, pour qu'on voie qu'il a été passé. Le bloc **Non réaligné** est ce qui rend l'autonomie acceptable : il rend visibles les décisions de ne rien faire, qui sinon passeraient pour des oublis.
@@ -341,7 +345,7 @@ Un bloc vide se supprime plutôt que de s'afficher avec « aucun » — sauf pou
 
 `/sync ma-feature` — cherche le dossier par slug (préfixes `f-`, `r-`, `t-`) et démarre.
 
-`/sync docs/story/013-r-extract-service/plan.md` — charge directement une story par un de ses fichiers.
+`/sync forge/story/013-r-extract-service/plan.md` — charge directement une story par un de ses fichiers.
 
 `/sync` sans argument — déduit la story du working tree ou des commits récents (Phase 1) et enchaîne.
 

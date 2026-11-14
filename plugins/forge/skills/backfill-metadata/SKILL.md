@@ -39,7 +39,7 @@ partagée `story-metadata.md` reste la seule source de vérité du format. Ici o
 
 ## Périmètre
 
-- **Cible** : les dossiers `docs/story/NNN-<f|r|t>-<slug>/` qui **n'ont pas** de `metadata.json`,
+- **Cible** : les dossiers `forge/story/NNN-<f|r|t>-<slug>/` qui **n'ont pas** de `metadata.json`,
   ou dont le `metadata.json` est **malformé** (JSON invalide, `version` absente).
 - **Ne touche jamais** un `metadata.json` valide existant — sauf `--force` (re-dérivation
   explicite d'une story déjà pourvue, ex. pour corriger un backfill précédent).
@@ -58,7 +58,7 @@ partagée `story-metadata.md` reste la seule source de vérité du format. Ici o
 | `created`     | Date du **premier** commit touchant le dossier de la story (`git log --reverse … | head -1`).               |
 | `updated`     | Date du **dernier** commit touchant le dossier de la story (`git log -1`).                                  |
 | `tags`        | **Proposés** par déduction du titre + contenu + track, en kebab-case, puis **validés** par l'utilisateur. Jamais écrits sans validation. |
-| `backlog`     | Slug de la ligne de `docs/product-backlog.md` que la story réalise — **seulement** si le rapprochement est certain (voir §Rattachement backlog). Absent sinon, et **toujours** sur un track `r`/`t`. |
+| `backlog`     | Slug de la ligne de `forge/product-backlog.md` que la story réalise — **seulement** si le rapprochement est certain (voir §Rattachement backlog). Absent sinon, et **toujours** sur un track `r`/`t`. |
 | `changelog`   | Timeline reconstruite depuis la date d'apparition des artifacts dans git, **jalons fusionnés par date** (les artifacts d'un même commit → une entrée `Création` de cadrage + une entrée `Livraison`, jamais une ligne par fichier). Détail des dates distinctes conservé. |
 | `delivery`    | `commit` = SHA court du commit de livraison **si identifiable avec confiance** ; `release` = plus ancien tag contenant ce commit. Absent si la story n'est pas livrée ou si la livraison n'est pas identifiable de façon fiable. |
 
@@ -84,18 +84,22 @@ partagée `story-metadata.md` reste la seule source de vérité du format. Ici o
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 1 — Détection
 
 Cadre l'exécution selon `$ARGUMENTS` :
 
-- **Un slug ou un chemin** (`006-f-metadonnees-story`, `docs/story/006-…/`) → une seule story.
-- **`--all`** ou aucun argument → toutes les stories `docs/story/NNN-<f|r|t>-<slug>/`.
+- **Un slug ou un chemin** (`006-f-metadonnees-story`, `forge/story/006-…/`) → une seule story.
+- **`--all`** ou aucun argument → toutes les stories `forge/story/NNN-<f|r|t>-<slug>/`.
 - **`--force`** → inclut aussi les stories qui ont déjà un `metadata.json` valide (re-dérivation).
 
 Liste les candidats et leur état :
 
 ```bash
-ls -1d docs/story/[0-9][0-9][0-9]-[frt]-*/ 2>/dev/null
+ls -1d forge/story/[0-9][0-9][0-9]-[frt]-*/ 2>/dev/null
 ```
 
 Pour chaque dossier, teste la présence et la validité de `metadata.json` (Read + parse JSON) :
@@ -203,12 +207,12 @@ Ajoute alors une entrée de changelog `Livraison` (date du commit) si `delivery.
 et `Release` (date du tag) si `delivery.release` l'a été.
 
 **Rattachement backlog (`backlog`)** — ce champ fait cocher une ligne d'avancement dans
-`docs/product-backlog.md` : un rattachement faux coche la **mauvaise** ligne, ce qui est pire que
+`forge/product-backlog.md` : un rattachement faux coche la **mauvaise** ligne, ce qui est pire que
 pas de rattachement du tout. Il est donc soumis à la règle de preuve la plus stricte du skill.
 
 - **Track `r`/`t` → jamais de `backlog`.** Un refacto ou une évolution technique ne réalise pas une
   ligne de backlog fonctionnel. N'essaie même pas le rapprochement.
-- **Pas de `docs/product-backlog.md`** dans le projet → champ absent, silencieusement.
+- **Pas de `forge/product-backlog.md`** dans le projet → champ absent, silencieusement.
 - **Track `f`** : lis le backlog et cherche la ligne que la story réalise. Deux niveaux de preuve :
   - **Certain** — le slug de la story (hors préfixe `NNN-f-`) est **égal** à un slug de ligne de
     backlog, ou le `pitch.md` cite explicitement la ligne. → propose le rattachement.
@@ -225,7 +229,7 @@ pas de rattachement du tout. Il est donc soumis à la règle de preuve la plus s
 Présente, **par story**, la proposition reconstruite avant écriture :
 
 ```
-docs/story/006-f-metadonnees-story/metadata.json  (nouveau)
+forge/story/006-f-metadonnees-story/metadata.json  (nouveau)
 
   title    : « Enrichir chaque story de métadonnées lisibles par le Board »   (H1 de pitch.md)
   created  : 2026-07-05   (premier commit du dossier — 5f7519e)

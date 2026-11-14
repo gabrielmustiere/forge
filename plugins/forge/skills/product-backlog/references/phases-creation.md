@@ -84,7 +84,7 @@ Pour chaque ligne de backlog :
 - **Parcours servis** : référencer les parcours de la phase 3 où la feature s'inscrit.
 - **Priorité / horizon** : `MVP` (indispensable au lancement) · `V2` (post-lancement court terme) · `V3` (long terme), aligné sur les horizons de la vision.
 - **Dépendances** : autres lignes du backlog à livrer avant (par slug).
-- **Justification vision** : pointeur explicite vers ce que la feature sert dans `docs/vision.md` (problème, audience, principe, North Star).
+- **Justification vision** : pointeur explicite vers ce que la feature sert dans `forge/vision.md` (problème, audience, principe, North Star).
 
 **Mise en forme** : chaque ligne s'écrit en item de liste à cocher (case + slug + pitch, puis une ligne d'état, puis une ligne de rattachements) — format exact et catalogue fermé des états dans `template.md` §Format d'une ligne de backlog. Les 7 champs ci-dessus sont tous conservés, seule leur disposition change.
 

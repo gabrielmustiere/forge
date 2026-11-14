@@ -1,4 +1,4 @@
-# Format de `docs/vision.md`
+# Format de `forge/vision.md`
 
 ```markdown
 # Vision — [Nom du projet]

@@ -1,6 +1,6 @@
 ---
 name: feature-plan
-description: "Conçoit techniquement une feature cadrée — architecture, modèle de données, intégrations, contrats d'API, stratégie de test, impacts existants. Prérequis : `pitch.md` validé. Produit `docs/story/<NNN>-f-<slug>/plan.md`, lu par `feature`."
+description: "Conçoit techniquement une feature cadrée — architecture, modèle de données, intégrations, contrats d'API, stratégie de test, impacts existants. Prérequis : `pitch.md` validé. Produit `forge/story/<NNN>-f-<slug>/plan.md`, lu par `feature`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-feature ou chemin pitch.md]"
@@ -34,9 +34,9 @@ Ce skill couvre **uniquement la conception technique** : approche, mécanismes r
 
 ### Phase 1 — Chargement du pitch
 
-Si l'utilisateur fournit un chemin (`/feature-plan docs/story/007-f-ma-feature/pitch.md`) ou un slug (`/feature-plan ma-feature`), lis le fichier.
+Si l'utilisateur fournit un chemin (`/feature-plan forge/story/007-f-ma-feature/pitch.md`) ou un slug (`/feature-plan ma-feature`), lis le fichier.
 
-Sinon, liste les dossiers dans `docs/story/` matchant `NNN-f-*` via `Glob` et demande lequel utiliser.
+Sinon, liste les dossiers dans `forge/story/` matchant `NNN-f-*` via `Glob` et demande lequel utiliser.
 
 **Si aucun `pitch.md` n'existe pour le slug demandé**, refuse de continuer et propose : "Il n'y a pas de pitch fonctionnel pour cette feature. Lance d'abord `/feature-pitch` pour cadrer le besoin."
 
@@ -103,7 +103,7 @@ Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur dise « on r
 
 Quand l'utilisateur valide, écris le fichier de plan.
 
-**Nom du fichier** : `docs/story/NNN-f-slug-de-la-feature/plan.md` (dans le **même dossier** que le pitch).
+**Nom du fichier** : `forge/story/NNN-f-slug-de-la-feature/plan.md` (dans le **même dossier** que le pitch).
 
 **Format du fichier** : voir `${CLAUDE_SKILL_DIR}/references/template.md`. À charger au moment de la rédaction — il contient le squelette, les guides de remplissage par section et les conventions (`> _Skill : ..._`, commentaires HTML, placeholders) à retirer avant commit.
 
@@ -115,14 +115,14 @@ Quand l'utilisateur valide, écris le fichier de plan.
 
 Affiche le chemin du fichier produit et propose :
 
-> Plan prêt : `docs/story/NNN-f-slug/plan.md`
+> Plan prêt : `forge/story/NNN-f-slug/plan.md`
 > Prochaine étape : `/feature-implem` pour lancer l'implémentation.
 
 **Décision candidate à un ADR.** Si le plan introduit une dépendance, un modèle de données ou une frontière de module qui survivront à la feature, passe le §Approche retenue et le §Alternatives écartées au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon — la plupart des features ne gravent rien.
 
 ## Argument optionnel
 
-`/feature-plan docs/story/007-f-ma-feature/pitch.md` — charge directement le pitch et passe à l'exploration.
+`/feature-plan forge/story/007-f-ma-feature/pitch.md` — charge directement le pitch et passe à l'exploration.
 
 `/feature-plan ma-feature` — cherche le dossier par slug.
 

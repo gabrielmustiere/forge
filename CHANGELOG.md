@@ -12,6 +12,24 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ### ✨ Fonctionnel
 
+- **BREAKING — l'atelier forge quitte `docs/` pour `forge/`** — vision, stack, backlog produit,
+  stories, ADR et feature-maps vivent désormais sous `forge/` (`forge/story/NNN-f-slug/`,
+  `forge/adr/NNNN-slug.md`, `forge/stack.md`…). `docs/` était un nom générique : il se confondait
+  avec la documentation propre au projet. Le pipeline a maintenant son propre dossier, et la
+  documentation pour les utilisateurs du produit garde le sien, `documentation/`. Tous les skills
+  lisent et écrivent sous `forge/`, et seulement là.
+- **Nouveau skill `/forge:migrate-forge` : la transition en une commande** — sur un projet resté
+  sur `docs/`, il déplace l'atelier par `git mv` (l'historique de chaque fichier est conservé),
+  réécrit le préfixe des chemins dans les documents déplacés, et propose une par une la correction
+  des références restantes : `AGENTS.md`, `CLAUDE.md`, `paths:` des règles `.claude/rules/`, CI. Le
+  plan complet est montré avant le premier déplacement (`--dry-run` pour s'arrêter là), les
+  collisions comme deux stories au même numéro sont arbitrées par l'utilisateur, les `metadata.json`
+  ne sont pas touchés comme une passe, et rien n'est commité.
+- **Un projet non migré est arrêté net** — plutôt que de créer un `forge/story/001-…` à côté d'un
+  `docs/story/` existant (compteur reparti de zéro, vision et stack réécrites à vide), les skills
+  détectent l'ancienne convention au démarrage et renvoient vers `/forge:migrate-forge`.
+  `/forge:status` le signale en tête du point sans s'arrêter.
+
 - **Nouveau skill `/forge:user-doc` : documentation fonctionnelle des features** — étape
   optionnelle du track feature, entre `/forge:sync` et `/forge:commit`. Il transforme une story
   `f-` livrée en pages destinées aux utilisateurs du produit, sous `documentation/`, selon la
@@ -42,6 +60,18 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
   `commit`.
 - Principes Diataxis adaptés en français depuis le skill `diataxis` de Romain Lespinasse
   (licence MIT, attribution dans `user-doc/references/diataxis.md`).
+- Nouvelle référence partagée `references/legacy-docs.md` : la garde « ancienne convention »,
+  appliquée par `_detection.md` (treize skills) et en tête des neuf skills qui n'y passent pas
+  (`sync`, `stack`, `status`, `user-doc`, `doc-feature`, `backfill-metadata`, `agents-md`,
+  `rules`, `grill`). Seuls `docs/story/`, `docs/vision.md`, `docs/stack.md` et
+  `docs/product-backlog.md` la déclenchent : un `docs/adr/` seul (log4brains, ADR maison) n'est pas
+  pris pour un atelier forge.
+- Contrat de frontières : quatrième exception de co-écriture, l'atelier entier, que
+  `migrate-forge` déplace sans le rédiger (préfixe de chemin seul, pas une passe de story, aucun
+  commit), et nouvelle famille **Maintenance**. Le catalogue des zones de `/forge:rules` distingue
+  `forge/**/*.md` (atelier) et `documentation/**/*.md` (doc utilisateur).
+- Le template Symfony de `/stack` peut encore apporter un `docs/adr/` : son ADR d'exemple est
+  désormais rangé dans `forge/adr/`, et aucun `docs/` n'est recréé.
 
 ## [7.4.0] - 2026-11-13 — Modèle et effort par skill
 

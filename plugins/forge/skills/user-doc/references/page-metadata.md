@@ -35,7 +35,7 @@ documentation/
 - `<feature>` est la clé de feature (slug de backlog, sinon slug de la story sans `NNN-f-`), en
   kebab-case. Elle ne change jamais, même si le titre évolue : c'est elle qui relie les pages.
 - `<objectif>` et `<sujet>` sont en kebab-case, dans la langue du pitch (`corriger-un-rejet`).
-- `documentation/` est distinct de `docs/`. `docs/` est l'atelier interne du pipeline (stories,
+- `documentation/` est distinct de `forge/`. `forge/` est l'atelier interne du pipeline (stories,
   ADR, vision) ; `documentation/` s'adresse aux utilisateurs du produit et peut être publié tel
   quel (rendu GitHub, mkdocs, site statique).
 
@@ -68,7 +68,7 @@ history:
 | `title` | chaîne | Identique au `# H1` de la page. |
 | `type` | énum | `tutorial` · `how-to` · `reference` · `explanation`. Cohérent avec le dossier. |
 | `features` | liste | Clés de feature couvertes. Une seule en général ; plusieurs pour une explication transverse. |
-| `stories` | liste | Dossiers de story (sans `docs/story/`) qui ont façonné la page, ordre chronologique. Append-only. |
+| `stories` | liste | Dossiers de story (sans `forge/story/`) qui ont façonné la page, ordre chronologique. Append-only. |
 | `cases` | liste | IDs des cas de la matrice que la page documente. Pour la référence : tous les cas non exclus. |
 | `created` | `YYYY-MM-DD` | Écrit une fois, jamais modifié. |
 | `updated` | `YYYY-MM-DD` | Date de la dernière passe qui a **modifié** la page. |
@@ -166,7 +166,7 @@ Donc :
   chaque ligne de la page à la livraison qui l'a introduite.
 
 **2. La page pointe vers ses stories, et la story vers son commit et sa version.** Le champ
-`stories` mène à `docs/story/<NNN>-f-<slug>/metadata.json`, dont `delivery.commit` et
+`stories` mène à `forge/story/<NNN>-f-<slug>/metadata.json`, dont `delivery.commit` et
 `delivery.release` donnent le commit et le tag de version. La question « depuis quelle version ce
 comportement est-il documenté ? » se résout sans dupliquer l'information.
 

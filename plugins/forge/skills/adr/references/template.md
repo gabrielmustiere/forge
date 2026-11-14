@@ -1,6 +1,6 @@
 # Template ADR — MADR léger
 
-Format à appliquer pour `docs/adr/NNNN-<slug>.md`. Conserver l'ordre des sections — un futur lecteur navigue par section.
+Format à appliquer pour `forge/adr/NNNN-<slug>.md`. Conserver l'ordre des sections — un futur lecteur navigue par section.
 
 ```markdown
 # ADR-NNNN — <Titre court et factuel>
@@ -8,7 +8,7 @@ Format à appliquer pour `docs/adr/NNNN-<slug>.md`. Conserver l'ordre des sectio
 - **Statut** : proposed | accepted | superseded by ADR-XXXX
 - **Date** : YYYY-MM-DD
 - **Déciders** : <noms ou rôles, optionnel>
-- **Story liée** : `docs/story/NNN-<f|r|t>-slug/` (optionnel — vide si ADR standalone)
+- **Story liée** : `forge/story/NNN-<f|r|t>-slug/` (optionnel — vide si ADR standalone)
 
 ## Contexte
 
@@ -67,7 +67,7 @@ Justification accrochée aux drivers — pas de "parce que c'est mieux". Exemple
 
 ## Links
 
-- Artifact source : `docs/story/NNN-<f|r|t>-slug/plan.md` (ou `pitch.md`, `review.md`, `report.md`)
+- Artifact source : `forge/story/NNN-<f|r|t>-slug/plan.md` (ou `pitch.md`, `review.md`, `report.md`)
 - ADR superseded : ADR-XXXX (si applicable)
 - ADR liés : ADR-YYYY (dépendances ou contraintes — si applicable)
 - Références externes : docs framework, RFC, post-mortem

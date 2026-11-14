@@ -1,6 +1,6 @@
 ---
 name: tech-implem
-description: Exécute une évolution technique cadrée — capture la baseline AVANT, kill switch à chaud, applique le plan étape par étape avec mesure d'impact et non-régression. Prérequis un `plan.md` sous `docs/story/<NNN>-t-<slug>/`.
+description: Exécute une évolution technique cadrée — capture la baseline AVANT, kill switch à chaud, applique le plan étape par étape avec mesure d'impact et non-régression. Prérequis un `plan.md` sous `forge/story/<NNN>-t-<slug>/`.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-tech]"
@@ -14,7 +14,7 @@ Tu es un développeur senior orienté fiabilité. Tu exécutes un plan d'évolut
 
 ## Périmètre du skill
 
-Ce skill **exécute** un plan d'évolution technique existant (`docs/story/NNN-t-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal ou que la cible n'est pas atteignable, tu remontes et tu proposes de retourner à `/tech-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
+Ce skill **exécute** un plan d'évolution technique existant (`forge/story/NNN-t-slug/plan.md`). Il **ne re-cadre pas** : si une étape révèle que le plan est bancal ou que la cible n'est pas atteignable, tu remontes et tu proposes de retourner à `/tech-plan` plutôt que d'improviser. Il ne fait pas la code review (`/review`), ni le commit (`/commit`), ni la clôture documentaire (`/sync`).
 
 ## Principe directeur : mesurer avant, mesurer après
 
@@ -38,9 +38,9 @@ Si un cache n'améliore pas la latence, si un retry ne fait pas baisser le taux 
 
 ### Phase 1 — Chargement du plan et détection stack
 
-Si l'utilisateur fournit un chemin (`/tech docs/story/044-t-redis-cache/plan.md`) ou un slug (`/tech redis-cache`), lis le fichier.
+Si l'utilisateur fournit un chemin (`/tech forge/story/044-t-redis-cache/plan.md`) ou un slug (`/tech redis-cache`), lis le fichier.
 
-Sinon, liste les dossiers `docs/story/*-t-*` qui contiennent un `plan.md` via `Glob` et demande lequel exécuter.
+Sinon, liste les dossiers `forge/story/*-t-*` qui contiennent un `plan.md` via `Glob` et demande lequel exécuter.
 
 **Si aucun `plan.md` n'existe pour le slug demandé**, refuse de continuer : "Pas de plan d'évolution tech pour ce slug. Lance `/tech-plan` d'abord."
 
@@ -72,7 +72,7 @@ Charge `${CLAUDE_SKILL_DIR}/references/measurement-toolkit.md` qui contient les 
 
 #### 2.3 — Consigner la baseline dans le plan
 
-Modifier `docs/story/NNN-t-slug/plan.md` pour renseigner la colonne "Baseline actuelle" de chaque métrique. Faire commiter via `/forge:commit` — commit dédié, la baseline doit être en base avant la première modif fonctionnelle pour rester opposable.
+Modifier `forge/story/NNN-t-slug/plan.md` pour renseigner la colonne "Baseline actuelle" de chaque métrique. Faire commiter via `/forge:commit` — commit dédié, la baseline doit être en base avant la première modif fonctionnelle pour rester opposable.
 
 Checkpoint baseline :
 
@@ -186,7 +186,7 @@ Affiche le bilan :
 ```
 ## Évolution tech terminée — [Nom]
 
-Plan suivi : `docs/story/NNN-t-slug/plan.md`
+Plan suivi : `forge/story/NNN-t-slug/plan.md`
 Stack : [stack détecté]
 Étapes : M/M complétées
 
@@ -226,7 +226,7 @@ Stack : [stack détecté]
 
 ## Argument optionnel
 
-`/tech docs/story/044-t-redis-cache/plan.md` — charge le plan et démarre.
+`/tech forge/story/044-t-redis-cache/plan.md` — charge le plan et démarre.
 
 `/tech redis-cache` — cherche le dossier `NNN-t-redis-cache` par slug et charge son `plan.md`.
 

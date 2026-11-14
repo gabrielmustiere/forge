@@ -11,7 +11,7 @@ riches (vrai titre, âge, dernière activité, tags, badge de livraison), sans j
 **La source de vérité est ce fichier, produit par les skills.** L'app ne fait que lire.
 
 Il sert aussi de **preuve d'avancement** : c'est de lui (champ `backlog` + `delivery`) que
-`/sync` et `/product-backlog` dérivent l'état coché des lignes de `docs/product-backlog.md`.
+`/sync` et `/product-backlog` dérivent l'état coché des lignes de `forge/product-backlog.md`.
 Un état d'avancement ne s'y saisit donc jamais à la main — il se dérive d'ici.
 
 ## Emplacement et nom
@@ -19,7 +19,7 @@ Un état d'avancement ne s'y saisit donc jamais à la main — il se dérive d'i
 Un fichier **`metadata.json`** à la racine du dossier de la story :
 
 ```
-docs/story/NNN-<f|r|t>-<slug>/metadata.json
+forge/story/NNN-<f|r|t>-<slug>/metadata.json
 ```
 
 Un seul par story, quel que soit le track (`f`, `r`, `t`). Il cohabite avec `pitch.md`,
@@ -57,7 +57,7 @@ Le schéma est **embarqué chez tous les utilisateurs forge** : il doit rester s
 | `created`   | `YYYY-MM-DD`| Date de création. **Écrite une seule fois**, jamais modifiée ensuite.                      |
 | `updated`   | `YYYY-MM-DD`| Date de la **dernière** passe d'un skill sur la story. Rebougée à chaque écriture.         |
 | `tags`      | liste       | Étiquettes **kebab-case**, proposées par le skill, **validées par l'utilisateur**. Dédupliquées. |
-| `backlog`   | chaîne/absent| Slug de la ligne de `docs/product-backlog.md` dont la story est issue. **Absent** si la story ne vient d'aucune ligne de backlog. Voir §Rattachement au backlog. |
+| `backlog`   | chaîne/absent| Slug de la ligne de `forge/product-backlog.md` dont la story est issue. **Absent** si la story ne vient d'aucune ligne de backlog. Voir §Rattachement au backlog. |
 | `changelog` | liste       | Timeline consolidée, ordre chronologique. Chaque entrée : `{ date, type, description }`.   |
 | `delivery`  | objet/absent| `{ release, commit }`. `release` et `commit` peuvent être `null`. Absent tant que non livrée. |
 
@@ -91,7 +91,7 @@ Côté lecteurs (Forge Board, `/status`, réconciliation de `/product-backlog`) 
 
 ### Rattachement au backlog
 
-Ce champ est le **lien exact** entre une ligne de `docs/product-backlog.md` et la story qui
+Ce champ est le **lien exact** entre une ligne de `forge/product-backlog.md` et la story qui
 la réalise. Il existe parce que le slug d'une ligne de backlog est *pressenti* : `/feature-pitch`
 a le droit de l'affiner au cadrage, et un rapprochement par comparaison de chaînes serait donc
 faux un jour sur N. Le lien est porté **par la story**, pas par le backlog — de cette façon
@@ -104,7 +104,7 @@ Règles :
   la ligne de backlog correspondante. `/backfill-metadata` peut le reconstruire rétroactivement.
 - **Quelle valeur** : le slug **de la ligne de backlog** (`import-clients-csv`), pas le nom du
   dossier de story (`042-f-import-clients-csv`), pas le slug affiné de la story s'il a divergé.
-- **Absent par défaut** : pas de ligne retrouvée, pas de `docs/product-backlog.md` dans le
+- **Absent par défaut** : pas de ligne retrouvée, pas de `forge/product-backlog.md` dans le
   projet, story `r-`/`t-` (un refacto ou une évolution technique ne réalise pas une ligne de
   backlog fonctionnel) → le champ **n'est pas écrit**. Jamais de chaîne vide, jamais de valeur
   devinée : c'est ce champ qui fait cocher une case d'avancement, une valeur fausse coche la
@@ -153,8 +153,8 @@ qui documentait une divergence écrit désormais une entrée dans le changelog d
 
 ## Chemin d'accès (installation utilisateur)
 
-Le fichier vit dans le **projet** de l'utilisateur (`docs/story/…`), pas dans le plugin. Tu y
-accèdes par un chemin **relatif au projet** (`docs/story/NNN-<f|r|t>-<slug>/metadata.json`),
+Le fichier vit dans le **projet** de l'utilisateur (`forge/story/…`), pas dans le plugin. Tu y
+accèdes par un chemin **relatif au projet** (`forge/story/NNN-<f|r|t>-<slug>/metadata.json`),
 contrairement aux références du plugin qui, elles, se lisent via `${CLAUDE_SKILL_DIR}`.
 
 ## Dégradation (rappel côté app)

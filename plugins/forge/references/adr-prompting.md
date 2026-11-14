@@ -53,7 +53,7 @@ crédible :
    avec le récapitulatif final, une fois l'artifact écrit.
 3. **Jamais bloquante.** Pas de question, pas d'`AskUserQuestion`, pas d'attente de réponse. Une
    ligne, et le skill se termine.
-4. **Pas de doublon.** Avant de proposer, regarde `docs/adr/` (via `Glob`) : si un ADR couvre
+4. **Pas de doublon.** Avant de proposer, regarde `forge/adr/` (via `Glob`) : si un ADR couvre
    déjà la décision, ne propose rien. S'il en existe un **contredit** par la décision, dis-le —
    c'est un `supersedes`, et c'est plus intéressant qu'une proposition neuve.
 5. **Silence par défaut.** L'absence de proposition est le cas normal. La plupart des passes ne
@@ -76,7 +76,7 @@ Exemples :
 
 Cas du doublon contredit :
 
-> ⚠️ Cette décision contredit `docs/adr/0004-sessions-en-base.md`. Un ADR qui le remplace serait
+> ⚠️ Cette décision contredit `forge/adr/0004-sessions-en-base.md`. Un ADR qui le remplace serait
 > plus juste qu'une correction : `/forge:adr 014-t-sessions-redis`
 
 Ce qu'il ne faut pas écrire : « Voulez-vous rédiger un ADR ? » (question bloquante), « Pensez à

@@ -1,9 +1,9 @@
-# Format de `docs/product-backlog.md`
+# Format de `forge/product-backlog.md`
 
 ```markdown
 # Product Backlog — [Nom du projet]
 
-> Carte des capacités fonctionnelles et backlog priorisé dérivé de `docs/vision.md`.
+> Carte des capacités fonctionnelles et backlog priorisé dérivé de `forge/vision.md`.
 
 _Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : AAAA-MM-JJ._
 
@@ -74,7 +74,7 @@ _(répéter pour chaque domaine)_
 
 ## Backlog priorisé
 
-> Les cases sont **dérivées** de `docs/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery.commit` renseigné) ; les états intermédiaires se lisent sur la ligne « Story ».
+> Les cases sont **dérivées** de `forge/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery.commit` renseigné) ; les états intermédiaires se lisent sur la ligne « Story ».
 
 ### MVP — Lancement initial · `3/8 livrées`
 

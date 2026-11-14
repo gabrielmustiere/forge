@@ -2,9 +2,9 @@
 
 > **But** : figer le comment d'une évolution technique — brique retenue, métriques, bascule et rollback.
 > **Registre** : technique
-> **Story** : `docs/story/<NNN>-t-<slug>/`
+> **Story** : `forge/story/<NNN>-t-<slug>/`
 > **Amont** : aucun <!-- guide: une évolution technique n'a pas de pitch — ce plan porte motivation ET détail -->
-> **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
+> **ADR** : `forge/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
 guide: Plan d'une évolution technique (préfixe `-t-`). Produit par `/forge:tech-plan`, consommé par `/forge:tech-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.

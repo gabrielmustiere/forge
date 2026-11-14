@@ -56,7 +56,8 @@ Trois lignes de découpe, par ordre de rendement :
 | --- | --- | --- |
 | CI | `.github/workflows/**/*.yml` | jobs obligatoires, cache, secrets |
 | Infra | `**/*.tf`, `docker-compose*.yml`, `Dockerfile*` | conventions de nommage, pas de secret en dur |
-| Docs | `docs/**/*.md` | registre, langue, format |
+| Artefacts forge | `forge/**/*.md` | registre, langue, format |
+| Documentation utilisateur | `documentation/**/*.md` | registre, langue, format |
 | Plugins / skills Claude Code | `**/skills/**/SKILL.md`, `.claude-plugin/**` | frontmatter, nommage, structure |
 
 ## Ce qui n'est pas une zone
@@ -71,5 +72,5 @@ Les pièges les plus fréquents, tous recalés par le test du `paths` :
 - **L'architecture globale** — « Request → Controller → Service → Repository ». Chaque couche a sa
   règle scopée ; le schéma d'ensemble, lui, est vrai partout. → `AGENTS.md`.
 - **La stack** — « on est en PHP 8.5 avec Symfony 8 ». Un constat, pas une prescription. →
-  `docs/stack.md` via `/stack`.
+  `forge/stack.md` via `/stack`.
 - **`vendor/`, `node_modules/`, `var/`** — on n'y écrit pas, une règle n'y sert à rien.

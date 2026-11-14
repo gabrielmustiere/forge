@@ -1,6 +1,6 @@
 ---
 name: refactor-plan
-description: Cadre un refacto avant exécution — motivation, périmètre (fichiers/modules), tests de caractérisation à poser AVANT changement, plan incrémental par étapes vérifiables. Produit `docs/story/<NNN>-r-<slug>/plan.md`.
+description: Cadre un refacto avant exécution — motivation, périmètre (fichiers/modules), tests de caractérisation à poser AVANT changement, plan incrémental par étapes vérifiables. Produit `forge/story/<NNN>-r-<slug>/plan.md`.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[intention ou slug-refacto]"
@@ -113,12 +113,12 @@ Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur valide la ci
 
 ### Phase 5 — Choix du dossier et rédaction
 
-Quand l'utilisateur valide, écris le plan dans `docs/story/`.
+Quand l'utilisateur valide, écris le plan dans `forge/story/`.
 
 **Choix du dossier** :
 
-- Format : `docs/story/NNN-r-slug/` (préfixe `r-` pour *refacto*, NNN sur 3 chiffres, slug en kebab-case).
-- **Compteur global partagé** avec les features (`f-`) et évolutions techniques (`t-`) : scanner `docs/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
+- Format : `forge/story/NNN-r-slug/` (préfixe `r-` pour *refacto*, NNN sur 3 chiffres, slug en kebab-case).
+- **Compteur global partagé** avec les features (`f-`) et évolutions techniques (`t-`) : scanner `forge/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
 - **Collision de slug** : si le slug proposé existe déjà sous un autre numéro (tous préfixes confondus), demande à l'utilisateur s'il veut **étendre** ou choisir un slug distinct. Ne jamais écraser.
 
 **Nom du fichier** : `plan.md` dans ce dossier.
@@ -135,7 +135,7 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 
 Annonce :
 
-> Plan refacto prêt : `docs/story/NNN-r-slug/plan.md`
+> Plan refacto prêt : `forge/story/NNN-r-slug/plan.md`
 > Prochaine étape : `/refactor-implem` pour exécuter (verrou caractérisation d'abord, puis étapes incrémentales).
 
 **Décision candidate à un ADR.** Un refacto acte souvent un découpage ou un pattern qui lui survivra — et dont le « pourquoi » se perd une fois le code en place. Passe la structure cible au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon.

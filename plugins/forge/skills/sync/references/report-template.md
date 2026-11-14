@@ -2,7 +2,7 @@
 
 > **But** : garder la trace de ce qui a dérivé entre l'intention et le livré, et de ce qui reste à faire.
 > **Registre** : factuel
-> **Story** : `docs/story/<NNN>-<f|r|t>-<slug>/`
+> **Story** : `forge/story/<NNN>-<f|r|t>-<slug>/`
 > **Amont** : `pitch.md` · `plan.md` · `review.md` <!-- guide: retirer `pitch.md` pour `-r-`/`-t-` (pas de pitch), `review.md` si la review n'a pas conservé de fichier -->
 
 <!--

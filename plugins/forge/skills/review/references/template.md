@@ -2,7 +2,7 @@
 
 > **But** : juger le diff au regard de l'intention — dire si on commite, et ce qui bloque.
 > **Registre** : technique
-> **Story** : `docs/story/<NNN>-<f|r|t>-<slug>/`
+> **Story** : `forge/story/<NNN>-<f|r|t>-<slug>/`
 > **Amont** : `plan.md` <!-- guide: + `pitch.md` pour une story `-f-` -->
 > **Diff examiné** : <ex: working tree, ~29 fichiers modifiés + 9 nouveaux, ~660 lignes>
 

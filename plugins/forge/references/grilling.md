@@ -63,7 +63,7 @@ Question : Une remise peut-elle s'appliquer à une commande déjà payée ?
 ### 3. Le code avant l'utilisateur
 
 Une question à laquelle le dépôt répond **ne se pose pas** : elle se lit. Avant chaque round,
-vérifie si le code, `docs/vision.md`, `docs/stack.md`, `docs/product-backlog.md`, `docs/adr/`,
+vérifie si le code, `forge/vision.md`, `forge/stack.md`, `forge/product-backlog.md`, `forge/adr/`,
 l'`AGENTS.md` ou un document amont de la story (brief, pitch) tranche déjà. Si oui, **annonce le
 fait et sa source** et ferme la branche :
 

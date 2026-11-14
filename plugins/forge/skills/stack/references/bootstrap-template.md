@@ -1,7 +1,7 @@
 # Amorçage depuis le template Symfony par défaut
 
 Procédure utilisée par `/stack` dans le **cas greenfield** (mode Création, aucune brique
-technique détectée et aucun choix arrêté). Plutôt que de graver un `docs/stack.md` vide,
+technique détectée et aucun choix arrêté). Plutôt que de graver un `forge/stack.md` vide,
 on amorce le projet depuis le template de référence, puis on le personnalise à son nom.
 
 > Ne joue cette procédure **que** si l'utilisateur a explicitement choisi « Amorcer depuis
@@ -23,8 +23,8 @@ c'est ce qu'on propose.
 
 ## Récupération
 
-Le dépôt cible est **déjà** un dépôt forge (il contient `docs/vision.md`,
-`docs/product-backlog.md`, éventuellement `docs/story/`). Il ne faut donc **jamais** cloner
+Le dépôt cible est **déjà** un dépôt forge (il contient `forge/vision.md`,
+`forge/product-backlog.md`, éventuellement `forge/story/`). Il ne faut donc **jamais** cloner
 par-dessus ni écraser ces artefacts. Procédure sûre :
 
 1. Cloner le template dans un dossier temporaire, sans historique :
@@ -38,10 +38,12 @@ par-dessus ni écraser ces artefacts. Procédure sûre :
    ```
    (Le nouveau projet repart d'un changelog vierge — le `/forge:release` du projet le remplira.)
 3. Copier le socle applicatif dans le dépôt, **sans écraser** les artefacts forge existants
-   (`docs/vision.md`, `docs/product-backlog.md`, `docs/story/`, un `docs/stack.md` déjà amorcé).
-   Le template n'apporte pas ces fichiers, il n'y a donc pas de collision sur `docs/` — sauf
-   `docs/adr/0001-*.md` (un ADR d'exemple du template) : **ne le copie pas** s'il ferait doublon
+   (`forge/vision.md`, `forge/product-backlog.md`, `forge/story/`, un `forge/stack.md` déjà amorcé).
+   Le template n'apporte pas ces fichiers, il n'y a donc pas de collision sur `forge/` — sauf
+   `forge/adr/0001-*.md` (un ADR d'exemple du template) : **ne le copie pas** s'il ferait doublon
    avec les ADR du projet, sinon renomme-le pour laisser le compteur ADR du projet libre.
+   Si le template porte encore un dossier `docs/` (ancienne convention), ne le copie pas tel
+   quel : son ADR d'exemple va dans `forge/adr/` selon la même règle, et aucun `docs/` n'est créé.
 4. `CLAUDE.md`, `README.md`, `DESIGN.md` : le template en fournit. S'ils **existent déjà** dans
    le projet, **demande** avant d'écraser. S'ils n'existent pas, copie ceux du template — ils
    seront personnalisés à l'étape suivante (et `CLAUDE.md` pourra être migré plus tard vers
@@ -84,6 +86,6 @@ Notes :
    ```
 2. **Cartographie maintenant réelle** : la stack existe enfin sur disque. Enchaîne sur la Phase 1
    de détection normale (elle prouvera Symfony 8, SQLite, Tailwind, etc. par les fichiers qu'on
-   vient d'écrire), puis rédige `docs/stack.md` en mode Création à partir de ces preuves.
+   vient d'écrire), puis rédige `forge/stack.md` en mode Création à partir de ces preuves.
    Le changelog du fichier note l'origine : `AAAA-MM-JJ — Création — amorcé depuis
    gabrielmustiere/symfony-template`.

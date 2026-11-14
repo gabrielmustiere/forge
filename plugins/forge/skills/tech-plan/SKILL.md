@@ -1,6 +1,6 @@
 ---
 name: tech-plan
-description: Cadre une évolution technique transverse (perf, résilience, observabilité, sécu, scalabilité) — motivation, baseline AVANT, options, plan incrémental avec kill switch et métriques. Produit `docs/story/<NNN>-t-<slug>/plan.md`.
+description: Cadre une évolution technique transverse (perf, résilience, observabilité, sécu, scalabilité) — motivation, baseline AVANT, options, plan incrémental avec kill switch et métriques. Produit `forge/story/<NNN>-t-<slug>/plan.md`.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[intention ou slug-tech]"
@@ -131,12 +131,12 @@ Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur valide la br
 
 ### Phase 5 — Choix du dossier et rédaction
 
-Quand l'utilisateur valide, écris le plan dans `docs/story/`.
+Quand l'utilisateur valide, écris le plan dans `forge/story/`.
 
 **Choix du dossier** :
 
-- Format : `docs/story/NNN-t-slug/` (préfixe `t-` pour *tech*, NNN sur 3 chiffres, slug en kebab-case).
-- **Compteur global partagé** avec les features (`f-`) et refactos (`r-`) : scanner `docs/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
+- Format : `forge/story/NNN-t-slug/` (préfixe `t-` pour *tech*, NNN sur 3 chiffres, slug en kebab-case).
+- **Compteur global partagé** avec les features (`f-`) et refactos (`r-`) : scanner `forge/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
 - **Collision de slug** : si le slug proposé existe déjà sous un autre numéro (tous préfixes confondus), demande à l'utilisateur s'il veut **étendre** ou choisir un slug distinct. Ne jamais écraser.
 
 **Nom du fichier** : `plan.md` dans ce dossier.
@@ -153,7 +153,7 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 
 Annonce :
 
-> Plan évolution tech prêt : `docs/story/NNN-t-slug/plan.md`
+> Plan évolution tech prêt : `forge/story/NNN-t-slug/plan.md`
 > Prochaine étape : `/tech-implem` pour exécuter (baseline → kill switch → implémentation incrémentale → mesure après → validation des critères).
 
 **Décision candidate à un ADR.** Une évolution technique est presque toujours un choix d'architecture : composant retenu, stratégie de résilience, dispositif de repli. Passe le §Approche retenue et le §Alternatives écartées au test d'ADR-ité de `${CLAUDE_SKILL_DIR}/../../references/adr-prompting.md` et, s'il passe, ajoute **une** ligne de proposition au format qu'il fixe. Silence sinon — c'est le cas normal.

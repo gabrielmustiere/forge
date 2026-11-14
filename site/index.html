@@ -74,7 +74,7 @@
                         "Phase 2 — implémenter : feature-implem, refactor-implem, tech-implem",
                         "Phase 3 — clôturer : review, sync, commit, puis release quand on publie une version",
                         "Trois tracks symétriques : feature (valeur utilisateur), refacto (comportement figé), tech (perf, résilience, sécu)",
-                        "Artefacts unifiés dans docs/story/ au format NNN-<f|r|t>-<slug>",
+                        "Artefacts unifiés dans forge/story/ au format NNN-<f|r|t>-<slug>",
                         "Détection automatique du stack (Symfony, Sylius) et chargement des conventions adaptées"
                     ],
                     "offers": {
@@ -222,17 +222,17 @@
                 <li class="node">
                     <p class="node__name">vision</p>
                     <p class="node__desc">Cap produit, personas, non-négociables</p>
-                    <p class="node__out">→ docs/vision.md</p>
+                    <p class="node__out">→ forge/vision.md</p>
                 </li>
                 <li class="node">
                     <p class="node__name">product-backlog</p>
                     <p class="node__desc">Stories priorisées, prêtes à cadrer</p>
-                    <p class="node__out">→ docs/product-backlog.md</p>
+                    <p class="node__out">→ forge/product-backlog.md</p>
                 </li>
                 <li class="node">
                     <p class="node__name">stack</p>
                     <p class="node__desc">Choix techniques et conventions de code</p>
-                    <p class="node__out">→ docs/stack.md</p>
+                    <p class="node__out">→ forge/stack.md</p>
                 </li>
                 <li class="node">
                     <p class="node__name">agents-md</p>
@@ -335,7 +335,7 @@
 
         <div class="notes">
             <div class="note">
-                <h3 class="note__title">Tout vit dans <code>docs/story/</code></h3>
+                <h3 class="note__title">Tout vit dans <code>forge/story/</code></h3>
                 <p>Compteur global <code>NNN-&lt;f|r|t&gt;-&lt;slug&gt;</code> : le tri lexicographique donne la timeline du projet. Ex : <code>042-f-checkout-express/</code></p>
             </div>
             <div class="note">
@@ -361,15 +361,15 @@
                 <dl class="skill-group__list">
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:vision</code></dt>
-                        <dd class="skill__desc">Cadre la vision : problème, audience, valeur, North Star, principes, anti-objectifs → docs/vision.md</dd>
+                        <dd class="skill__desc">Cadre la vision : problème, audience, valeur, North Star, principes, anti-objectifs → forge/vision.md</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:product-backlog</code></dt>
-                        <dd class="skill__desc">Traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3, avec avancement coché → docs/product-backlog.md</dd>
+                        <dd class="skill__desc">Traduit la vision en domaines, capacités, parcours et backlog priorisé MVP/V2/V3, avec avancement coché → forge/product-backlog.md</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:stack</code></dt>
-                        <dd class="skill__desc">Cartographie la stack technique — chaque techno prouvée par un fichier source → docs/stack.md</dd>
+                        <dd class="skill__desc">Cartographie la stack technique — chaque techno prouvée par un fichier source → forge/stack.md</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:agents-md</code></dt>
@@ -469,7 +469,7 @@
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:adr</code></dt>
-                        <dd class="skill__desc">Rédige un Architecture Decision Record MADR léger → docs/adr/NNNN-slug.md</dd>
+                        <dd class="skill__desc">Rédige un Architecture Decision Record MADR léger → forge/adr/NNNN-slug.md</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:status</code></dt>
@@ -489,7 +489,7 @@
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:doc-feature</code></dt>
-                        <dd class="skill__desc">Cartographie une feature existante (legacy) → docs/feature-map/NNN-slug/overview.md</dd>
+                        <dd class="skill__desc">Cartographie une feature existante (legacy) → forge/feature-map/NNN-slug/overview.md</dd>
                     </div>
                     <div class="skill">
                         <dt class="skill__cmd"><code>/forge:backfill-metadata</code></dt>
@@ -508,7 +508,7 @@
             <span class="section__num" aria-hidden="true">04</span>
             <h2 id="board-title">Forge Board — le projet lié</h2>
         </div>
-        <p class="section__intro">Un tableau kanban <strong>lecture seule</strong> qui scanne les documents produits par le workflow (<code>docs/story/</code>) et projette chaque story en carte le long d'un pipeline visuel — pour répondre en quelques
+        <p class="section__intro">Un tableau kanban <strong>lecture seule</strong> qui scanne les documents produits par le workflow (<code>forge/story/</code>) et projette chaque story en carte le long d'un pipeline visuel — pour répondre en quelques
             secondes à « où en est le projet X ? ». Application Symfony 8 développée avec ce plugin, hébergée dans son propre dépôt.</p>
         <p class="section__note">Code, stack et installation : <a href="https://github.com/gabrielmustiere/forge-board">gabrielmustiere/forge-board</a></p>
     </section>

@@ -35,7 +35,7 @@ GitHub.
 
 ## Périmètre du skill
 
-**Ce qu'il fait** : il transforme une story feature livrée (`docs/story/NNN-f-<slug>/`) en pages
+**Ce qu'il fait** : il transforme une story feature livrée (`forge/story/NNN-f-<slug>/`) en pages
 Diataxis sous `documentation/`, avec captures et métadonnées de traçabilité. Il crée les pages, les
 enrichit quand une nouvelle story étend la feature, et les rafraîchit quand l'interface a changé.
 
@@ -112,13 +112,17 @@ depuis la racine du projet et échouerait.
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 0 — Story, sources et mode
 
 **Identifier la story** :
 
 - Argument fourni (`/user-doc 042-f-import-clients-csv`, ou le slug seul) → le dossier
-  `docs/story/` correspondant.
-- Sinon, déduis-la du working tree (`git status --porcelain docs/story/`) : un seul dossier `-f-`
+  `forge/story/` correspondant.
+- Sinon, déduis-la du working tree (`git status --porcelain forge/story/`) : un seul dossier `-f-`
   modifié, c'est lui. Plusieurs candidats ou aucun → demande.
 - Story `-r-` ou `-t-` → refuse et explique en une phrase (voir §Périmètre).
 
@@ -360,7 +364,7 @@ Vérifie, et corrige avant de clôturer :
 ```
 ## Documentation — <titre de la feature>
 
-Mode : <Création | Enrichir | Rafraîchir> · Story : docs/story/<NNN>-f-<slug>/
+Mode : <Création | Enrichir | Rafraîchir> · Story : forge/story/<NNN>-f-<slug>/
 Pages : <n> créées, <n> modifiées  (tutoriel <0|1> · guides <n> · référence 1 · explications <n>)
 Captures : <n> prises, <n> reprises, <n> à faire
 Couverture : <x>/<y> cas · exclus : <IDs et raisons>

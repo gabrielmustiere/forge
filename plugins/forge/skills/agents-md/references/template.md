@@ -18,12 +18,12 @@ Ce fichier guide les agents de code qui travaillent sur ce dépôt.
 ## Nature du projet
 
 [Une à trois phrases : qu'est-ce que ce projet, à quoi il sert, son type
-(application web, CLI, lib, monorepo, marketplace…). Reprends docs/vision.md si présent.]
+(application web, CLI, lib, monorepo, marketplace…). Reprends forge/vision.md si présent.]
 
 ## Stack technique
 
-[Langages, frameworks, bases de données, infra — synthèse courte. Si docs/stack.md existe,
-renvoie vers lui plutôt que de dupliquer : « Stack détaillée : `docs/stack.md` ». Sinon, liste
+[Langages, frameworks, bases de données, infra — synthèse courte. Si forge/stack.md existe,
+renvoie vers lui plutôt que de dupliquer : « Stack détaillée : `forge/stack.md` ». Sinon, liste
 l'essentiel prouvé par les manifestes.]
 
 ## Architecture
@@ -51,7 +51,7 @@ Tire-les du code existant et des configs (linters, editorconfig), pas de génér
 ## Pièges fréquents
 
 [Optionnel mais précieux : les erreurs qu'un nouveau venu commet sur CE projet. À remplir
-seulement si tu en as repéré dans le code, les configs ou docs/.]
+seulement si tu en as repéré dans le code, les configs ou `forge/`.]
 
 <!-- Section « Principes de travail » : injecter le bloc de references/principes-karpathy.md -->
 ```
@@ -84,7 +84,7 @@ chargent pas ces règles, le renvoi ne leur dirait rien.
   d'une suite de tests ».
 - **Une ligne, un fichier.** Rien ne figure dans les deux : un doublon est lu deux fois par
   Claude Code et finit par diverger.
-- **Pas de duplication avec les docs vivantes.** Si `docs/stack.md` ou `docs/vision.md`
+- **Pas de duplication avec les docs vivantes.** Si `forge/stack.md` ou `forge/vision.md`
   existent, renvoie vers eux au lieu de recopier — ils évoluent, `AGENTS.md` pointe.
 - **Des liens, pas des imports, dans `AGENTS.md`.** Une syntaxe `@chemin` n'est développée que
   par Claude Code ; pour les autres agents, c'est du texte. Un lien Markdown se lit partout.

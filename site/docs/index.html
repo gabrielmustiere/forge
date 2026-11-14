@@ -163,7 +163,7 @@
                         <p class="toc__label">CONCEPTS</p>
                         <ul class="toc__list">
                             <li><a href="#regle-or">La règle d'or</a></li>
-                            <li><a href="#artefacts">Artefacts et docs/story</a></li>
+                            <li><a href="#artefacts">Artefacts et forge/story</a></li>
                             <li><a href="#choisir-track">Choisir son track</a></li>
                             <li><a href="#track-fast">Le track fast</a></li>
                         </ul>
@@ -283,14 +283,14 @@
                 </div>
 
                 <div class="doc-block" id="artefacts">
-                    <h3>Artefacts et <code>docs/story/</code></h3>
-                    <p>Tous les artefacts vivent à plat dans <code>docs/story/</code>, numérotés globalement puis taggés par track. Le numéro vient <strong>en premier</strong> pour que le tri lexicographique d'un simple <code>ls</code> donne la
+                    <h3>Artefacts et <code>forge/story/</code></h3>
+                    <p>Tous les artefacts vivent à plat dans <code>forge/story/</code>, numérotés globalement puis taggés par track. Le numéro vient <strong>en premier</strong> pour que le tri lexicographique d'un simple <code>ls</code> donne la
                         timeline du projet.</p>
                     <div class="code">
                         <div class="code__label">arborescence</div>
-                        <pre><code>docs/story/042-f-checkout-express/   <span class="comment"># f = feature</span>
-docs/story/043-r-extract-pricing/    <span class="comment"># r = refacto</span>
-docs/story/044-t-redis-cache/        <span class="comment"># t = évolution technique</span></code></pre>
+                        <pre><code>forge/story/042-f-checkout-express/   <span class="comment"># f = feature</span>
+forge/story/043-r-extract-pricing/    <span class="comment"># r = refacto</span>
+forge/story/044-t-redis-cache/        <span class="comment"># t = évolution technique</span></code></pre>
                     </div>
                     <p>Le format est <code>NNN-&lt;f|r|t&gt;-&lt;slug&gt;</code>. Les numéros s'incrémentent globalement, tous tracks confondus : 042-f → 043-r → 044-t → 045-f.</p>
 
@@ -423,7 +423,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
 
                 <div class="doc-block" id="ref-phase0">
                     <h3>Phase 0 — poser le décor</h3>
-                    <p>Une fois en début de projet, puis révisé lors d'un pivot. Les trois documents de <code>docs/</code> sont <strong>vivants</strong> : ils supportent quatre modes (Création, Enrichir, Éditer, Pivot) et tiennent leur propre changelog. L'<code>AGENTS.md</code>, lui, vit à la racine du dépôt.</p>
+                    <p>Une fois en début de projet, puis révisé lors d'un pivot. Les trois documents de <code>forge/</code> sont <strong>vivants</strong> : ils supportent quatre modes (Création, Enrichir, Éditer, Pivot) et tiennent leur propre changelog. L'<code>AGENTS.md</code>, lui, vit à la racine du dépôt.</p>
                     <div class="table-wrap">
                         <table class="doc-table">
                             <thead>
@@ -437,17 +437,17 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             <tr>
                                 <td><code>/forge:vision</code></td>
                                 <td>Atelier challengeur : problème, audience, valeur, North Star, principes, anti-objectifs</td>
-                                <td><code>docs/vision.md</code></td>
+                                <td><code>forge/vision.md</code></td>
                             </tr>
                             <tr>
                                 <td><code>/forge:product-backlog</code></td>
                                 <td>Domaines → capacités → parcours → règles transverses → backlog priorisé MVP/V2/V3, avec avancement coché dérivé des stories</td>
-                                <td><code>docs/product-backlog.md</code></td>
+                                <td><code>forge/product-backlog.md</code></td>
                             </tr>
                             <tr>
                                 <td><code>/forge:stack</code></td>
                                 <td>Scanne les manifestes, interroge pour combler les trous, prouve chaque techno par un fichier source</td>
-                                <td><code>docs/stack.md</code></td>
+                                <td><code>forge/stack.md</code></td>
                             </tr>
                             <tr>
                                 <td><code>/forge:agents-md</code></td>
@@ -457,7 +457,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             </tbody>
                         </table>
                     </div>
-                    <p><code>docs/vision.md</code> est lu par <code>/forge:product-backlog</code> puis par <code>/forge:feature-pitch</code> à chaque feature, pour challenger l'alignement. <code>docs/stack.md</code> est lu en priorité par les skills
+                    <p><code>forge/vision.md</code> est lu par <code>/forge:product-backlog</code> puis par <code>/forge:feature-pitch</code> à chaque feature, pour challenger l'alignement. <code>forge/stack.md</code> est lu en priorité par les skills
                         techniques. Il <strong>constate</strong> l'existant — il ne justifie pas un choix (c'est <code>/forge:adr</code>) ni ne décide d'une évolution (c'est <code>/forge:tech-plan</code>).</p>
                     <p><code>/forge:product-backlog</code> est facultatif : on peut aller directement de la vision au pitch. Il devient recommandé dès qu'on a plus de trois ou quatre features pressenties.</p>
                     <p><code>/forge:agents-md</code> se lance après <code>/forge:stack</code> et <code>/forge:vision</code>, qu'il réutilise. C'est dans l'<code>AGENTS.md</code> que les skills d'implémentation lisent les commandes exactes de build, de test et de QA — voir <a href="#agents-md">L'AGENTS.md du projet</a>.</p>
@@ -611,7 +611,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             </tr>
                             <tr>
                                 <td><code>/forge:adr</code></td>
-                                <td>Rédige un Architecture Decision Record (format MADR léger) depuis un artefact ou un topic libre, avec backlinks et index automatiques. Produit <code>docs/adr/NNNN-slug.md</code>.</td>
+                                <td>Rédige un Architecture Decision Record (format MADR léger) depuis un artefact ou un topic libre, avec backlinks et index automatiques. Produit <code>forge/adr/NNNN-slug.md</code>.</td>
                             </tr>
                             <tr>
                                 <td><code>/forge:status</code></td>
@@ -635,7 +635,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
                             </tr>
                             <tr>
                                 <td><code>/forge:doc-feature</code></td>
-                                <td>Cartographie une feature existante en lisant le code (entités, flux, routes, services, points d'extension). Produit <code>docs/feature-map/NNN-slug/overview.md</code>.</td>
+                                <td>Cartographie une feature existante en lisant le code (entités, flux, routes, services, points d'extension). Produit <code>forge/feature-map/NNN-slug/overview.md</code>.</td>
                             </tr>
                             <tr>
                                 <td><code>/forge:backfill-metadata</code></td>
@@ -685,7 +685,7 @@ docs/story/044-t-redis-cache/        <span class="comment"># t = évolution tech
 
                 <div class="doc-block" id="stacks">
                     <h3>Règles framework</h3>
-                    <p>Le workflow établit le stack du projet et charge les références correspondantes, bundlées avec le plugin. Si <code>docs/stack.md</code> existe (produit par <code>/forge:stack</code>), il le lit : un simple chargement, sans scan. Sinon, il détecte le stack via <code>composer.json</code> / <code>package.json</code>. Dans une même session, rien n'est relu deux fois.</p>
+                    <p>Le workflow établit le stack du projet et charge les références correspondantes, bundlées avec le plugin. Si <code>forge/stack.md</code> existe (produit par <code>/forge:stack</code>), il le lit : un simple chargement, sans scan. Sinon, il détecte le stack via <code>composer.json</code> / <code>package.json</code>. Dans une même session, rien n'est relu deux fois.</p>
                     <ul>
                         <li>la procédure de chargement / détection du stack ;</li>
                         <li>les règles <strong>Symfony</strong> — Doctrine, services, forms, Twig, QA, sécu, perf ;</li>

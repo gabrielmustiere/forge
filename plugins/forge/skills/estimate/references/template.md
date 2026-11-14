@@ -2,7 +2,7 @@
 
 > **But** : chiffrer le temps « tout compris » de la story — du temps, jamais un montant.
 > **Registre** : économique
-> **Story** : `docs/story/<NNN>-<f|r|t>-<slug>/`
+> **Story** : `forge/story/<NNN>-<f|r|t>-<slug>/`
 > **Amont** : <`brief.md` | `pitch.md` | `plan.md` — celui qui a servi de base> — fiabilité : <grossière | fonctionnelle | affinée>
 
 <!--

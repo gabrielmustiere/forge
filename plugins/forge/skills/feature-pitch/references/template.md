@@ -2,7 +2,7 @@
 
 > **But** : figer l'intention métier de la feature — ce qu'on livre et pour qui, jamais comment.
 > **Registre** : fonctionnel
-> **Story** : `docs/story/<NNN>-f-<slug>/`
+> **Story** : `forge/story/<NNN>-f-<slug>/`
 > **Amont** : `brief.md` <!-- guide: ou « aucun » si le pitch part d'une idée directe, sans interview -->
 
 <Résumé en une à deux phrases : ce que la feature change pour l'utilisateur et pourquoi.>
@@ -23,7 +23,7 @@ Toutes les sections marquées « optionnelle » peuvent être retirées si elles
 
 ## Alignement vision
 
-> _Skill : section **conditionnelle** — à inclure **uniquement si `docs/vision.md` existe**, à retirer entièrement sinon (contrairement aux sections canoniques, celle-ci se supprime : son absence signifie « pas de vision projet », pas « pas regardé »). Confronter la feature aux axes de la vision : problème adressé, audience servie, principes respectés ou mis sous tension, hypothèse testée, impact North Star. Registre fonctionnel : on parle valeur et périmètre, pas mécanisme. Une feature qui ne s'aligne sur rien est un signal — le dire plutôt que broder._
+> _Skill : section **conditionnelle** — à inclure **uniquement si `forge/vision.md` existe**, à retirer entièrement sinon (contrairement aux sections canoniques, celle-ci se supprime : son absence signifie « pas de vision projet », pas « pas regardé »). Confronter la feature aux axes de la vision : problème adressé, audience servie, principes respectés ou mis sous tension, hypothèse testée, impact North Star. Registre fonctionnel : on parle valeur et périmètre, pas mécanisme. Une feature qui ne s'aligne sur rien est un signal — le dire plutôt que broder._
 
 - **Problème adressé** : <en quoi la feature attaque le problème central de la vision>.
 - **Audience servie** : <quel segment, dans quel usage>.

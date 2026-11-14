@@ -1,4 +1,4 @@
-# Template — `docs/stack.md`
+# Template — `forge/stack.md`
 
 Structure de référence du fichier produit par `/stack`. Adapte les sections au projet : **supprime une couche absente** plutôt que d'écrire « néant » partout, mais garde l'ordre. Chaque techno cite sa source entre parenthèses. Les couches non renseignées (trous assumés) sont marquées `_non renseigné_`.
 

@@ -15,9 +15,9 @@ service : il crée une deuxième source de vérité, et deux sources de vérité
 
 - [1. Les trois invariants](#1-les-trois-invariants)
 - [2. Propriété d'écriture : un artifact, un écrivain](#2-propriété-décriture--un-artifact-un-écrivain)
-- [3. Les trois exceptions assumées](#3-les-trois-exceptions-assumées)
+- [3. Les quatre exceptions assumées](#3-les-quatre-exceptions-assumées)
 - [4. Ce qui est une frontière, et ce qui n'en est pas](#4-ce-qui-est-une-frontière-et-ce-qui-nen-est-pas)
-- [5. Invocation : jamais automatique](#5-invocation--jamais-automatique)
+- [5. Invocation : jamais automatique (une exception)](#5-invocation--jamais-automatique-une-exception)
 - [6. Déclarer sa frontière dans un SKILL.md](#6-déclarer-sa-frontière-dans-un-skillmd)
 - [7. La revue de frontière](#7-la-revue-de-frontière)
 
@@ -49,20 +49,20 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 
 | Artifact | Écrivain **unique** | Lecteurs |
 |---|---|---|
-| `docs/story/<NNN>-f-<slug>/brief.md` | `feature-interview` | `feature-pitch`, `estimate` |
-| `docs/story/<NNN>-f-<slug>/pitch.md` | `feature-pitch` | `feature-plan`, `review`, `sync`, `estimate`, `adr`, `user-doc` |
-| `docs/story/<NNN>-f-<slug>/plan.md` | `feature-plan` | `feature-implem`, `review`, `sync`, `estimate`, `adr` |
-| `docs/story/<NNN>-r-<slug>/plan.md` | `refactor-plan` | `refactor-implem`, `review`, `sync`, `estimate`, `adr` |
-| `docs/story/<NNN>-t-<slug>/plan.md` | `tech-plan` | `tech-implem`, `review`, `sync`, `estimate`, `adr` |
-| `docs/story/<NNN>-*/review.md` *(conservé seulement si un point reste ouvert)* | `review` | `sync`, `adr`, `rules` |
-| `docs/story/<NNN>-*/report.md` | `sync` | `adr`, `rules` |
-| `docs/story/<NNN>-*/estimate.md` | `estimate` | — |
-| `docs/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule), `status`, `product-backlog` (avancement) |
-| `docs/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `agents-md` |
-| `docs/product-backlog.md` | `product-backlog` (+ `sync`, voir §3) | `feature-pitch`, `status` |
-| `docs/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `agents-md` |
-| `docs/adr/<NNNN>-<slug>.md` + `docs/adr/README.md` | `adr` | tous |
-| `docs/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
+| `forge/story/<NNN>-f-<slug>/brief.md` | `feature-interview` | `feature-pitch`, `estimate` |
+| `forge/story/<NNN>-f-<slug>/pitch.md` | `feature-pitch` | `feature-plan`, `review`, `sync`, `estimate`, `adr`, `user-doc` |
+| `forge/story/<NNN>-f-<slug>/plan.md` | `feature-plan` | `feature-implem`, `review`, `sync`, `estimate`, `adr` |
+| `forge/story/<NNN>-r-<slug>/plan.md` | `refactor-plan` | `refactor-implem`, `review`, `sync`, `estimate`, `adr` |
+| `forge/story/<NNN>-t-<slug>/plan.md` | `tech-plan` | `tech-implem`, `review`, `sync`, `estimate`, `adr` |
+| `forge/story/<NNN>-*/review.md` *(conservé seulement si un point reste ouvert)* | `review` | `sync`, `adr`, `rules` |
+| `forge/story/<NNN>-*/report.md` | `sync` | `adr`, `rules` |
+| `forge/story/<NNN>-*/estimate.md` | `estimate` | — |
+| `forge/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule), `status`, `product-backlog` (avancement) |
+| `forge/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `agents-md` |
+| `forge/product-backlog.md` | `product-backlog` (+ `sync`, voir §3) | `feature-pitch`, `status` |
+| `forge/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `agents-md` |
+| `forge/adr/<NNNN>-<slug>.md` + `forge/adr/README.md` | `adr` | tous |
+| `forge/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
 | `documentation/**` (pages Diataxis, `assets/`, index `README.md`) | `user-doc` | humains (utilisateurs du produit) |
 | `CHANGELOG.md` + tags de version | `release` | — |
 | Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `user-doc`, `stack` |
@@ -77,9 +77,9 @@ est faux ne corrige pas le plan : il remonte à l'utilisateur et propose `/forge
 `[PLAN]`, et c'est `sync` qui réalignera. C'est plus lent d'un tour, et c'est le prix de la
 traçabilité.
 
-## 3. Les trois exceptions assumées
+## 3. Les quatre exceptions assumées
 
-Trois artifacts ont plusieurs écrivains. Ce sont des exceptions **délibérées, encadrées et
+Quatre artifacts ou familles d'artifacts ont plusieurs écrivains. Ce sont des exceptions **délibérées, encadrées et
 documentées** — pas des zones grises.
 
 ### `metadata.json` — un contrat, pas une intention
@@ -146,7 +146,23 @@ Trois garde-fous, calqués sur ceux de `sync` :
 Pour tout le reste d'`AGENTS.md` et du pont — ajouter, restructurer, réécrire, migrer — c'est
 `/forge:agents-md`, et `rules` y renvoie.
 
-Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces trois
+### L'atelier entier — `migrate-forge` déplace, il ne rédige pas
+
+`migrate-forge` déplace tout l'atelier d'un projet de l'ancien `docs/` vers `forge/`, et réécrit au
+passage le préfixe des chemins que ces documents contiennent. Il touche donc les artifacts de
+presque tous les skills. L'exception tient parce que **déplacer n'est pas écrire** : aucune
+intention n'est ajoutée, retirée ou reformulée. Trois garde-fous :
+
+1. **Il ne réécrit qu'un préfixe** : `docs/` → `forge/` devant un chemin de l'atelier, rien
+   d'autre — pas de mise au format, pas de correction au passage.
+2. **Ce n'est pas une passe** : il ne rebouge ni `updated` ni le changelog des `metadata.json`.
+3. **Une fois par projet, validé, non commité** : le plan complet est montré avant le premier
+   `git mv`, et le résultat se relit dans un seul `git diff --cached -M` avant `/forge:commit`.
+
+Hors de l'atelier (`AGENTS.md`, `.claude/rules/`, CI), chaque réécriture est proposée une par une,
+sur le modèle de `rules` : `Edit` ciblé, jamais de réécriture de fichier.
+
+Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces quatre
 cas est le signe qu'une frontière est mal placée — c'est le découpage qu'il faut corriger, pas
 le contrat qu'il faut élargir.
 
@@ -199,6 +215,7 @@ une question d'outil.
 | **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `agents-md`, `doc-feature`, `help` | non | ses documents (§2) |
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
 | **Clôture** | `review`, `sync`, `user-doc`, `backfill-metadata` | non | ses documents (§2) |
+| **Maintenance** | `migrate-forge` | **non** — `git mv` prépare l'index, le commit reste à `commit` | déplace l'atelier (§3) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
 | **Vérification** | `test-scenario`, `status`, `grill` | non | **rien** — elles observent ou éprouvent, elles ne corrigent pas |
 
@@ -237,7 +254,7 @@ celui de l'utilisateur qui tape le nom.
 ### L'exception `adr`
 
 `adr` porte `disable-model-invocation: false`. Ce qui rend l'exception tenable, c'est qu'`adr`
-**n'a pas de voisin** : aucun autre skill ne produit de `docs/adr/NNNN-*.md`, et aucun autre ne
+**n'a pas de voisin** : aucun autre skill ne produit de `forge/adr/NNNN-*.md`, et aucun autre ne
 répond à « pourquoi ce choix ». Le risque que le §5 combat — un classifieur qui hésite entre deux
 skills adjacents et produit le mauvais document — n'existe pas ici : il n'y a rien à confondre.
 
@@ -251,7 +268,7 @@ Deux garde-fous bornent malgré tout l'exception :
    déclenché à contretemps coûte un fichier à supprimer, pas un artifact corrompu — contrairement
    à un `sync` ou un `pitch` mal aiguillés, qui réécrivent un document existant.
 
-Si un jour un second skill écrit dans `docs/adr/`, cette exception tombe : le voisinage
+Si un jour un second skill écrit dans `forge/adr/`, cette exception tombe : le voisinage
 réapparaîtrait, et avec lui l'ambiguïté que le §5 interdit.
 
 C'est aussi ce qui autorise les descriptions à être **riches et honnêtes** plutôt que

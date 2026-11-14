@@ -60,9 +60,9 @@ qui nomme ses mécanismes : `.claude/rules/`, `.claude/settings.json`, skills et
 
 Ce skill écrit **deux fichiers** : `AGENTS.md` et `CLAUDE.md` à la racine. Ce n'est **pas** :
 
-- La cartographie technique exhaustive (`/stack` → `docs/stack.md`) — `AGENTS.md` en fait une
-  **synthèse courte** et renvoie vers `docs/stack.md` s'il existe.
-- La vision produit (`/vision` → `docs/vision.md`) ni le périmètre fonctionnel
+- La cartographie technique exhaustive (`/stack` → `forge/stack.md`) — `AGENTS.md` en fait une
+  **synthèse courte** et renvoie vers `forge/stack.md` s'il existe.
+- La vision produit (`/vision` → `forge/vision.md`) ni le périmètre fonctionnel
   (`/product-backlog`) — `AGENTS.md` peut en reprendre une phrase, pas les détailler.
 - Les conventions scopées à une zone du code (`/rules` → `.claude/rules/`).
 - Une décision d'architecture (`/adr`).
@@ -73,7 +73,7 @@ détail.
 
 **Différence avec le `/init` natif** : `/init` génère un `CLAUDE.md` centré sur le codebase.
 `/agents-md` écrit des instructions **portables** entre agents, y ajoute la couche
-comportementale Karpathy et **réutilise les artifacts forge** (`docs/stack.md`, `docs/vision.md`)
+comportementale Karpathy et **réutilise les artifacts forge** (`forge/stack.md`, `forge/vision.md`)
 au lieu de tout re-détecter.
 
 ## Règles du mode interactif
@@ -89,19 +89,23 @@ au lieu de tout re-détecter.
 4. **Préserver l'existant.** Ne réécris pas une section rédigée à la main sans le signaler. En
    migration, **déplace sans réécrire** : le contenu change de fichier, pas de formulation —
    sauf les mentions de « Claude » qui deviennent « l'agent » dans `AGENTS.md`.
-5. **Réutiliser avant de re-détecter.** Lis `docs/stack.md`, `docs/vision.md` et `README.md`
+5. **Réutiliser avant de re-détecter.** Lis `forge/stack.md`, `forge/vision.md` et `README.md`
    s'ils existent : ils contiennent déjà la matière. `AGENTS.md` les synthétise et y renvoie.
 6. **Privilégier `AskUserQuestion`** pour combler les trous (max 3 questions par tour). Si
    l'outil n'est pas chargé, le récupérer via `ToolSearch`, sinon poser en texte libre.
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 0 — Inventaire de l'existant et choix du mode
 
 1. **Instructions existantes** : vérifier `AGENTS.md`, `CLAUDE.md` et `.claude/CLAUDE.md` à la
    racine (`ls -l` : un `CLAUDE.md` peut être un lien symbolique vers `AGENTS.md`). Lire
    intégralement ceux qui existent — c'est la base à faire évoluer, pas à écraser.
-2. **Artifacts forge** : lire `docs/vision.md` (nature/but du projet) et `docs/stack.md` (stack
+2. **Artifacts forge** : lire `forge/vision.md` (nature/but du projet) et `forge/stack.md` (stack
    prouvée) s'ils existent. Ils dispensent de re-détecter ce qui est déjà documenté.
 3. **`README.md`** : souvent la source la plus directe pour les commandes et le pitch.
 
@@ -127,7 +131,7 @@ manuel).
 
 ### Phase 1 — Détection (si la matière n'est pas déjà dans les artifacts)
 
-Ne re-détecte que ce que `docs/stack.md` / `docs/vision.md` ne couvrent pas. Pour le reste,
+Ne re-détecte que ce que `forge/stack.md` / `forge/vision.md` ne couvrent pas. Pour le reste,
 scanne le dépôt couche par couche :
 
 1. **Nature & stack** : manifestes de dépendances (`package.json`, `composer.json`,
@@ -151,8 +155,8 @@ Présente ce que tu comptes écrire, fichier par fichier, en distinguant le **pr
 
 ```
 ## AGENTS.md (prouvé)
-- Nature : marketplace de plugins Claude Code (docs/vision.md, marketplace.json)
-- Stack : PHP 8.2 / Symfony 6.4 (composer.json) — renvoi vers docs/stack.md
+- Nature : marketplace de plugins Claude Code (forge/vision.md, marketplace.json)
+- Stack : PHP 8.2 / Symfony 6.4 (composer.json) — renvoi vers forge/stack.md
 - Commandes : test `composer test`, lint `composer cs` (composer.json → scripts)
 - Architecture : src/ (domaine), config/, tests/ (arbre détecté)
 - Conventions : PSR-12 (.php-cs-fixer.dist.php), commits FR conventionnels (historique git)
@@ -229,7 +233,7 @@ sont nécessaires.
 > `AGENTS.md` écrit à la racine : les instructions du projet, lisibles par n'importe quel agent
 > de code. `CLAUDE.md` ne fait que l'importer pour Claude Code. *(si du spécifique)* Il garde en plus :
 > <liste courte>.
-> *(si docs/stack.md existe)* La stack détaillée reste dans `docs/stack.md` ; `AGENTS.md` y renvoie.
+> *(si forge/stack.md existe)* La stack détaillée reste dans `forge/stack.md` ; `AGENTS.md` y renvoie.
 > *(Migration)* Contenu déplacé de `CLAUDE.md` vers `AGENTS.md` : <sections>. Resté dans le pont :
 > <sections>. *(si git mv)* L'historique git suit `AGENTS.md`.
 > *(Mise à jour)* Sections actualisées : <liste>. Le reste a été préservé.

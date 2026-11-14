@@ -1,6 +1,6 @@
 ---
 name: stack
-description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Cas greenfield : si rien n'est encore choisi, propose d'amorcer depuis le template Symfony par défaut et le personnalise. Produit `docs/stack.md` avec changelog, lu par feature/refactor/tech/review."
+description: "Détecte et documente la stack technique complète d'un projet (langages, backend, frontend, données, ops, CI/CD) — phase 0. Scanne tous les manifestes puis interroge pour combler les trous non détectables. Quatre modes : Création, Enrichir, Éditer, Pivot. Cas greenfield : si rien n'est encore choisi, propose d'amorcer depuis le template Symfony par défaut et le personnalise. Produit `forge/stack.md` avec changelog, lu par feature/refactor/tech/review."
 user_invocable: true
 disable-model-invocation: true
 model: sonnet
@@ -28,10 +28,10 @@ Tu es un architecte logiciel qui prend un projet inconnu et en dresse la cartogr
 
 ## Périmètre du skill
 
-Ce skill couvre **uniquement l'inventaire de la stack technique** : ce qui tourne, avec quoi, et où. Il produit `docs/stack.md`, un document de référence factuel. Ce n'est **pas** :
+Ce skill couvre **uniquement l'inventaire de la stack technique** : ce qui tourne, avec quoi, et où. Il produit `forge/stack.md`, un document de référence factuel. Ce n'est **pas** :
 
 - La vision produit (`/vision`) ni le périmètre fonctionnel (`/product-backlog`).
-- Un cadrage de feature ou d'évolution (`/feature-plan`, `/tech-plan`, `/refactor-plan`) — ceux-là **lisent** `docs/stack.md` pour décider sur des bases solides.
+- Un cadrage de feature ou d'évolution (`/feature-plan`, `/tech-plan`, `/refactor-plan`) — ceux-là **lisent** `forge/stack.md` pour décider sur des bases solides.
 - Une décision d'architecture argumentée (`/adr`) — `stack.md` constate ce qui existe, l'ADR justifie un choix.
 
 Si l'utilisateur dérive vers « est-ce qu'on devrait migrer vers X » ou « quel cache choisir », recadre : `stack.md` documente l'existant, le choix relève de `/tech-plan` ou `/adr`.
@@ -47,7 +47,7 @@ Une stack vit : les libs bougent, les services s'ajoutent, l'infra migre. `stack
 
 ## Règles du mode interactif
 
-1. **Ne jamais écrire `docs/stack.md` tant que l'utilisateur n'a pas vu la synthèse de détection et validé** (« on rédige », « go », « c'est bon »). La détection automatique se trompe parfois (un service docker de dev confondu avec de la prod, une lib en `require-dev`) — l'utilisateur arbitre avant gravure.
+1. **Ne jamais écrire `forge/stack.md` tant que l'utilisateur n'a pas vu la synthèse de détection et validé** (« on rédige », « go », « c'est bon »). La détection automatique se trompe parfois (un service docker de dev confondu avec de la prod, une lib en `require-dev`) — l'utilisateur arbitre avant gravure.
 2. **Tout prouver par un fichier.** Chaque techno listée doit pointer vers le fichier qui l'atteste (`composer.json`, `docker-compose.yml`, `.github/workflows/ci.yml`…). Une techno non prouvable n'est pas « détectée » : c'est une **question** à poser, pas une ligne à écrire.
 3. **Privilégier `AskUserQuestion`** pour combler les trous. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une. **Maximum 3 questions par tour.**
 4. **Ne pas halluciner les versions.** Si `composer.json` dit `^6.4`, écris `^6.4` (contrainte), pas `6.4.12` (résolu) — sauf si tu as lu le lockfile. Distingue contrainte déclarée et version résolue.
@@ -55,19 +55,23 @@ Une stack vit : les libs bougent, les services s'ajoutent, l'infra migre. `stack
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
+
 ### Phase 0 — Inventaire de l'existant et choix du mode
 
-1. **Document existant** : vérifier la présence de `docs/stack.md`. S'il existe, le lire intégralement.
+1. **Document existant** : vérifier la présence de `forge/stack.md`. S'il existe, le lire intégralement.
 2. **Contexte projet** : lire l'`AGENTS.md` à la racine, à défaut le `CLAUDE.md` (et `README.md` s'il existe) — ils contiennent souvent l'outillage réel (commandes QA, docker, Makefile) et des conventions que les manifestes ne disent pas.
 
 #### Choix du mode
 
-- **Si `docs/stack.md` n'existe pas** : mode **Création** imposé, enchaîne sur la Phase 1.
-- **Si `docs/stack.md` existe** : demander explicitement le mode via `AskUserQuestion` :
+- **Si `forge/stack.md` n'existe pas** : mode **Création** imposé, enchaîne sur la Phase 1.
+- **Si `forge/stack.md` existe** : demander explicitement le mode via `AskUserQuestion` :
   - **Création** — recartographie complète from scratch (rare ; le fichier existant est devenu inutilisable mais sans pivot technique réel). *Préférer Pivot ou Enrichir.*
   - **Enrichir** — ajouter une ou plusieurs briques (nouveau service, nouvelle lib, nouvel hébergement, nouveau pipeline) sans contredire l'existant. *Le cas le plus fréquent.*
   - **Éditer** — corriger/affiner une entrée existante (version, remplacement à la marge, erreur de détection). Pas d'ajout net.
-  - **Pivot** — refonte technique majeure (framework, langage, hébergement). L'ancien fichier est archivé sous `docs/stack.md.archive-AAAA-MM-JJ` et on recartographie.
+  - **Pivot** — refonte technique majeure (framework, langage, hébergement). L'ancien fichier est archivé sous `forge/stack.md.archive-AAAA-MM-JJ` et on recartographie.
 
 Ne devine jamais le mode — demande-le. Note le mode : il pilote toute la suite.
 
@@ -108,10 +112,10 @@ Présente ce que tu as **prouvé**, couche par couche, avec la source entre pare
 Déclencheur : **mode Création** *et* la Phase 1 n'a prouvé **aucune brique technique** — pas de
 manifeste de dépendances (ni `composer.json`, ni `package.json`, ni `go.mod`, ni `pyproject.toml`…),
 pas de `docker-compose`/`compose.yaml`, pas de CI. Le dépôt est vide ou purement documentaire
-(il ne contient guère que les artefacts forge : `docs/vision.md`, `docs/product-backlog.md`).
+(il ne contient guère que les artefacts forge : `forge/vision.md`, `forge/product-backlog.md`).
 Autrement dit : **aucun choix technique n'a encore été fait**.
 
-Dans ce cas, ne rédige pas un `docs/stack.md` vide — il n'y a rien à cartographier. Propose
+Dans ce cas, ne rédige pas un `forge/stack.md` vide — il n'y a rien à cartographier. Propose
 l'**amorçage**. Via `AskUserQuestion` (récupère l'outil par `ToolSearch` s'il n'est pas chargé) :
 
 - **Amorcer depuis le template Symfony (recommandé)** — `gabrielmustiere/symfony-template` :
@@ -119,7 +123,7 @@ l'**amorçage**. Via `AskUserQuestion` (récupère l'outil par `ToolSearch` s'il
   récupère le template et le personnalise au nom du projet. **Défaut** quand l'utilisateur n'a pas
   de contrainte de stack particulière.
 - **J'ai déjà mes choix (autre stack)** — l'utilisateur part sur un autre langage/framework.
-  Recueille ses choix (3 questions max) et documente une **intention** dans `docs/stack.md` (statut
+  Recueille ses choix (3 questions max) et documente une **intention** dans `forge/stack.md` (statut
   « cible, non encore amorcée ») ; le scaffolding relève alors de l'écosystème choisi, pas de ce skill.
 - **Juste documenter, ne rien amorcer** — cas rare (on veut un `stack.md` d'intention sans toucher
   au dépôt).
@@ -153,12 +157,12 @@ Si l'utilisateur ne sait pas / n'a pas, écris explicitement « non renseigné �
 
 ### Phase 4 — Rédaction
 
-Quand l'utilisateur valide la synthèse, rédige (ou mets à jour) `docs/stack.md` selon le mode. Crée `docs/` au besoin (`mkdir -p docs`).
+Quand l'utilisateur valide la synthèse, rédige (ou mets à jour) `forge/stack.md` selon le mode. Crée `forge/` au besoin (`mkdir -p forge`).
 
 - **Création** : créer le fichier complet depuis le template. Changelog : une ligne `AAAA-MM-JJ — Création — inventaire initial`.
 - **Enrichir** : modifier seulement les sections concernées (préserver le reste à l'identique). Ajouter une ligne au changelog : date, nature `Enrichir`, couche ciblée, motif court (« ajout du service Meilisearch », « passage à GitHub Actions »).
 - **Éditer** : modifier en place. Ligne de changelog : date, `Éditer`, couche, motif (« Symfony 6.4 → 7.1 », « correction : Redis est en prod, pas seulement en dev »).
-- **Pivot** : `mv docs/stack.md docs/stack.md.archive-$(date +%Y-%m-%d)` puis recréer. Première ligne de changelog : `AAAA-MM-JJ — Pivot — refonte depuis docs/stack.md.archive-AAAA-MM-JJ — motif : <résumé>`.
+- **Pivot** : `mv forge/stack.md forge/stack.md.archive-$(date +%Y-%m-%d)` puis recréer. Première ligne de changelog : `AAAA-MM-JJ — Pivot — refonte depuis forge/stack.md.archive-AAAA-MM-JJ — motif : <résumé>`.
 
 Mets à jour la date « dernière mise à jour » du sous-titre dans tous les modes.
 
@@ -171,14 +175,14 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 Adapte le message au mode :
 
 - **Création** / **Pivot** :
-  > Stack cartographiée : `docs/stack.md`
+  > Stack cartographiée : `forge/stack.md`
   > Ce document est lu par `/feature-plan`, `/refactor-plan`, `/tech-plan`, `/tech-implem`, `/refactor-implem`, `/feature-implem`, `/review` et `/doc-feature` : ils s'appuient dessus pour proposer des solutions cohérentes avec ton stack réel plutôt que de re-détecter à chaque fois.
-  > *(Mode Pivot)* L'ancienne cartographie est archivée sous `docs/stack.md.archive-AAAA-MM-JJ`.
+  > *(Mode Pivot)* L'ancienne cartographie est archivée sous `forge/stack.md.archive-AAAA-MM-JJ`.
   > *(Cas amorçage)* Le projet a été amorcé depuis `gabrielmustiere/symfony-template`. Pour démarrer :
   > `make init` (deps + DB + fixtures), `docker compose up -d` (Mailpit), puis `make serve` (→ `https://<projet>.wip`). `APP_SECRET` a été régénéré ; ne réutilise jamais celui du template.
 
 - **Enrichir** / **Éditer** :
-  > Stack mise à jour : `docs/stack.md` (mode <Enrichir|Éditer>, couche(s) : <liste>). Changelog enrichi.
+  > Stack mise à jour : `forge/stack.md` (mode <Enrichir|Éditer>, couche(s) : <liste>). Changelog enrichi.
 
 ## Argument optionnel
 

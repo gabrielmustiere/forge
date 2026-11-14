@@ -1,6 +1,6 @@
 ---
 name: vision
-description: "Définit la vision projet (phase 0) — problème, audiences, North Star, principes, anti-objectifs. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `docs/vision.md` avec changelog, lu par `product-backlog` puis `feature-pitch`."
+description: "Définit la vision projet (phase 0) — problème, audiences, North Star, principes, anti-objectifs. Quatre modes : Création, Enrichir, Éditer, Pivot. Produit `forge/vision.md` avec changelog, lu par `product-backlog` puis `feature-pitch`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[intention libre ou angle d'attaque]"
@@ -38,7 +38,7 @@ Une application a un cycle de vie long. La vision n'est pas un document gravé u
 
 ## Règles du mode interactif
 
-1. **Ne jamais écrire `docs/vision.md` tant que l'utilisateur n'a pas explicitement validé** (« on rédige », « go », « c'est bon », « valide »). Une vision écrite trop tôt cristallise du flou en marbre.
+1. **Ne jamais écrire `forge/vision.md` tant que l'utilisateur n'a pas explicitement validé** (« on rédige », « go », « c'est bon », « valide »). Une vision écrite trop tôt cristallise du flou en marbre.
 2. **Privilégier `AskUserQuestion`** pour les questions structurées. Si l'outil n'est pas chargé, le récupérer via `ToolSearch`. À défaut, poser les questions en texte libre, une à une.
 3. **Challenger (Création, Pivot) en arbre de décision**, selon `${CLAUDE_SKILL_DIR}/../../references/grilling.md` : des rounds de 1 à 3 questions dont les prérequis sont tranchés, une réponse recommandée par question, le dépôt lu avant d'interroger, la frontière (les branches encore ouvertes) visible à chaque round.
 4. **Refuser les formulations creuses** — pas de « innover », « disrupter », « expérience exceptionnelle », « solution complète ». Demande à l'utilisateur de reformuler avec un verbe concret et un sujet identifiable.
@@ -51,28 +51,28 @@ Une application a un cycle de vie long. La vision n'est pas un document gravé u
 
 Avant de challenger, fais l'inventaire :
 
-1. **Document existant** : vérifier la présence de `docs/vision.md`. S'il existe, le lire intégralement (problème, audience, valeur, métriques, principes, anti-objectifs, hypothèses, horizons, éventuel changelog).
-2. **Contexte projet** : lire l'`AGENTS.md` à la racine, à défaut le `CLAUDE.md` (et tout `README.md` ou `docs/README.md`) pour comprendre ce qui existe déjà.
+1. **Document existant** : vérifier la présence de `forge/vision.md`. S'il existe, le lire intégralement (problème, audience, valeur, métriques, principes, anti-objectifs, hypothèses, horizons, éventuel changelog).
+2. **Contexte projet** : lire l'`AGENTS.md` à la racine, à défaut le `CLAUDE.md` (et le `README.md` s'il existe) pour comprendre ce qui existe déjà.
 3. **Stack** : lire `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et appliquer la procédure. La vision reste **non technique**, mais connaître le stack permet d'orienter les questions (ex: un projet Sylius oriente naturellement vers du e-commerce, un projet Symfony pur peut couvrir des cas plus variés).
-4. **Stories existantes** : si `docs/story/` contient déjà des entrées, les survoler (juste les titres et résumés). Si la vision est révisée après plusieurs features livrées, l'enrichissement doit être cohérent avec ce qui a été fait — pas le contredire en silence.
+4. **Stories existantes** : si `forge/story/` contient déjà des entrées, les survoler (juste les titres et résumés). Si la vision est révisée après plusieurs features livrées, l'enrichissement doit être cohérent avec ce qui a été fait — pas le contredire en silence.
 
 #### Choix du mode
 
-- **Si `docs/vision.md` n'existe pas** : mode **Création** imposé, enchaîne directement sur Phase 1.
-- **Si `docs/vision.md` existe** : demander explicitement à l'utilisateur quel mode il vise. Utilise `AskUserQuestion` avec ces 4 options (descriptions à expliciter pour qu'il n'y ait pas d'ambiguïté) :
+- **Si `forge/vision.md` n'existe pas** : mode **Création** imposé, enchaîne directement sur Phase 1.
+- **Si `forge/vision.md` existe** : demander explicitement à l'utilisateur quel mode il vise. Utilise `AskUserQuestion` avec ces 4 options (descriptions à expliciter pour qu'il n'y ait pas d'ambiguïté) :
 
   - **Création** — la vision existante est obsolète au point qu'on préfère la reconstruire from scratch sans pour autant la déclarer comme un pivot stratégique. *Rare — préférer Pivot.*
   - **Enrichir** — un ou plusieurs axes existants gagnent un nouvel élément (nouvelle audience secondaire, nouvelle hypothèse, nouvel anti-objectif, nouveau seuil de réussite, nouveau principe, nouvel horizon…) sans contredire ce qui est déjà écrit. *Le cas le plus fréquent sur un projet vivant.*
   - **Éditer** — un élément existant doit être corrigé, reformulé ou affiné (clarifier un principe trop vague, ajuster une métrique, retirer une hypothèse invalidée, supprimer un anti-objectif devenu obsolète…). Pas d'ajout net : on retouche l'existant.
-  - **Pivot** — changement stratégique majeur (nouvelle audience principale, nouveau modèle économique, abandon d'un problème pour un autre). L'ancien fichier est archivé sous `docs/vision.md.archive-AAAA-MM-JJ` et on rédige une nouvelle vision.
+  - **Pivot** — changement stratégique majeur (nouvelle audience principale, nouveau modèle économique, abandon d'un problème pour un autre). L'ancien fichier est archivé sous `forge/vision.md.archive-AAAA-MM-JJ` et on rédige une nouvelle vision.
 
 Note le mode choisi : il pilote toute la suite. Tout le reste du déroulement (quelles phases jouer, quoi écrire, quoi archiver) en dépend.
 
-Si le projet est totalement vierge (ni `AGENTS.md`, ni `CLAUDE.md`, ni `README.md`, ni `docs/`), c'est normal : on est en mode Création, et on construit la vision en partant du pitch user.
+Si le projet est totalement vierge (ni `AGENTS.md`, ni `CLAUDE.md`, ni `README.md`, ni `forge/`), c'est normal : on est en mode Création, et on construit la vision en partant du pitch user.
 
 ### Phase 1 — Pitch initial *(modes Création et Pivot uniquement)*
 
-En **Enrichir** ou **Éditer**, le pitch est déjà figé dans `docs/vision.md` — saute directement à la Phase 1bis.
+En **Enrichir** ou **Éditer**, le pitch est déjà figé dans `forge/vision.md` — saute directement à la Phase 1bis.
 
 En **Création** ou **Pivot**, demande à l'utilisateur de pitcher son projet en **une phrase** :
 
@@ -96,12 +96,12 @@ En **Création** ou **Pivot**, charge `${CLAUDE_SKILL_DIR}/references/axes-chall
 
 ### Phase 3 — Synthèse et rédaction
 
-Quand l'utilisateur valide, rédige (ou met à jour) `docs/vision.md` selon le mode :
+Quand l'utilisateur valide, rédige (ou met à jour) `forge/vision.md` selon le mode :
 
 - **Création** : créer le fichier complet à partir du format ci-dessous. Le changelog contient une seule ligne : `AAAA-MM-JJ — Création — vision initiale`.
 - **Enrichir** : modifier uniquement les sections concernées (préserver tout le reste à l'identique). Ajouter une ligne au changelog avec la date, la nature `Enrichir`, l'axe ciblé et un motif court (« nouvelle audience secondaire : fleet manager », « anti-objectif : pas de marketplace », etc.). Garder l'historique git.
 - **Éditer** : modifier en place les passages concernés. Ajouter une ligne au changelog avec la date, la nature `Éditer`, l'axe ciblé et un motif court (« reformulation du principe P2 », « seuil 1 an ramené de 5000 à 2000 utilisateurs actifs »).
-- **Pivot** : `mv docs/vision.md docs/vision.md.archive-$(date +%Y-%m-%d)` puis créer le nouveau fichier. Dans le nouveau changelog, première ligne = `AAAA-MM-JJ — Pivot — refonte depuis docs/vision.md.archive-AAAA-MM-JJ — motif : <résumé du pivot>`.
+- **Pivot** : `mv forge/vision.md forge/vision.md.archive-$(date +%Y-%m-%d)` puis créer le nouveau fichier. Dans le nouveau changelog, première ligne = `AAAA-MM-JJ — Pivot — refonte depuis forge/vision.md.archive-AAAA-MM-JJ — motif : <résumé du pivot>`.
 
 Mets à jour la date « dernière mise à jour » dans le sous-titre du document dans tous les modes.
 
@@ -114,13 +114,13 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 Adapte le message au mode :
 
 - **Création** ou **Pivot** :
-  > Vision prête : `docs/vision.md`
+  > Vision prête : `forge/vision.md`
   > Cette vision sera lue par `/product-backlog` (pour dériver le périmètre fonctionnel et le backlog priorisé) puis par `/feature-pitch` à chaque nouvelle feature pour challenger l'alignement.
   > Prochaine étape suggérée : `/product-backlog` pour traduire la vision en domaines, capacités, parcours et backlog priorisé. Si tu veux cadrer immédiatement une feature précise sans passer par le backlog, `/feature-pitch` reste utilisable directement (mais sans vue d'ensemble du périmètre).
-  > *(Mode Pivot)* L'ancienne vision est archivée sous `docs/vision.md.archive-AAAA-MM-JJ`. Le backlog devrait probablement être refondu également (`/product-backlog` en mode Pivot) pour réaligner sur cette nouvelle vision.
+  > *(Mode Pivot)* L'ancienne vision est archivée sous `forge/vision.md.archive-AAAA-MM-JJ`. Le backlog devrait probablement être refondu également (`/product-backlog` en mode Pivot) pour réaligner sur cette nouvelle vision.
 
 - **Enrichir** ou **Éditer** :
-  > Vision mise à jour : `docs/vision.md` (mode <Enrichir|Éditer>, axe(s) : <liste>). Changelog enrichi.
+  > Vision mise à jour : `forge/vision.md` (mode <Enrichir|Éditer>, axe(s) : <liste>). Changelog enrichi.
   > Impact possible sur le backlog : si l'évolution introduit/modifie une audience, une capacité attendue, un principe ou un anti-objectif, lance `/product-backlog` en mode Enrichir ou Éditer pour répercuter. Si une feature en cours s'appuie sur un point que tu viens de modifier, vérifie son `pitch.md`.
 
 ## Argument optionnel

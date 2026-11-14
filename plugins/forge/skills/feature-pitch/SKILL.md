@@ -1,6 +1,6 @@
 ---
 name: feature-pitch
-description: Cadre et challenge une feature avant développement — problème, utilisateurs, valeur, parcours, critères, hors-périmètre. S'aligne sur `docs/vision.md` et `docs/product-backlog.md`. Produit `docs/story/<NNN>-f-<slug>/pitch.md`.
+description: Cadre et challenge une feature avant développement — problème, utilisateurs, valeur, parcours, critères, hors-périmètre. S'aligne sur `forge/vision.md` et `forge/product-backlog.md`. Produit `forge/story/<NNN>-f-<slug>/pitch.md`.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[pitch initial ou slug feature]"
@@ -44,7 +44,7 @@ Si le pitch est trop vague (ex : "améliorer les commandes", "moderniser l'admin
 
 Demande à l'utilisateur de pitcher sa fonctionnalité en une phrase. S'il l'a déjà fait dans son message ou via l'argument optionnel, passe directement à la validation de phase 0 puis au challenge.
 
-**Détection d'un brief amont (`/feature-interview`)** : si l'argument est un slug/numéro de story et qu'un `brief.md` existe dans le dossier correspondant — ou plus largement si `docs/story/*-f-*/` contient un `brief.md` sans `pitch.md` que l'utilisateur désigne — lis-le. Ce brief est un besoin déjà dégrossi par interview, **100% fonctionnel** (irritant, qui, résultat attendu, ce que le produit fait déjà, zones de flou). Utilise-le comme **pitch initial riche** : tu peux sauter le refus de Phase 0 (le besoin est déjà concret) et attaquer directement le challenge sur les zones de flou que le brief a listées. À la rédaction (Phase 4), **écris `pitch.md` dans CE dossier** (le même que `brief.md`) — n'alloue pas un nouveau numéro, brief et pitch cohabitent dans `NNN-f-<slug>/`.
+**Détection d'un brief amont (`/feature-interview`)** : si l'argument est un slug/numéro de story et qu'un `brief.md` existe dans le dossier correspondant — ou plus largement si `forge/story/*-f-*/` contient un `brief.md` sans `pitch.md` que l'utilisateur désigne — lis-le. Ce brief est un besoin déjà dégrossi par interview, **100% fonctionnel** (irritant, qui, résultat attendu, ce que le produit fait déjà, zones de flou). Utilise-le comme **pitch initial riche** : tu peux sauter le refus de Phase 0 (le besoin est déjà concret) et attaquer directement le challenge sur les zones de flou que le brief a listées. À la rédaction (Phase 4), **écris `pitch.md` dans CE dossier** (le même que `brief.md`) — n'alloue pas un nouveau numéro, brief et pitch cohabitent dans `NNN-f-<slug>/`.
 
 ### Phase 2 — Stack du projet (contexte pour le challenge)
 
@@ -52,7 +52,7 @@ Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la p
 
 Lis aussi l'`AGENTS.md` du projet (à défaut le `CLAUDE.md`) s'il existe — il contient les conventions et contraintes métier du projet user (découpage en modules, contraintes réglementaires, stakeholders).
 
-**Lecture de la vision projet** : si `docs/vision.md` existe, lis-le intégralement. La vision est la boussole du projet — chaque feature doit s'aligner avec :
+**Lecture de la vision projet** : si `forge/vision.md` existe, lis-le intégralement. La vision est la boussole du projet — chaque feature doit s'aligner avec :
 
 - Le **problème** central que le projet résout (la feature en attaque-t-elle un nouveau pan, ou est-elle hors sujet ?).
 - L'**audience cible** (la feature sert-elle l'utilisateur principal, un secondaire, ou personne d'identifié ?).
@@ -61,16 +61,16 @@ Lis aussi l'`AGENTS.md` du projet (à défaut le `CLAUDE.md`) s'il existe — il
 
 Pendant le challenge (phase 3), pose au moins une question d'alignement vision quand c'est pertinent — surtout si la feature semble à la marge du périmètre. Si la feature contredit explicitement un anti-objectif ou un principe, signale-le clairement et demande si c'est un pivot assumé (auquel cas il faut d'abord lancer `/vision` en mode pivot avant de continuer).
 
-Si `docs/vision.md` n'existe pas, ce n'est pas bloquant — note que l'alignement vision n'est pas vérifiable et propose au user de lancer `/vision` quand il le sentira utile.
+Si `forge/vision.md` n'existe pas, ce n'est pas bloquant — note que l'alignement vision n'est pas vérifiable et propose au user de lancer `/vision` quand il le sentira utile.
 
-**Lecture du backlog produit** : si `docs/product-backlog.md` existe, lis-le. Il décrit les domaines fonctionnels, les capacités, les parcours utilisateurs et un backlog priorisé de features candidates.
+**Lecture du backlog produit** : si `forge/product-backlog.md` existe, lis-le. Il décrit les domaines fonctionnels, les capacités, les parcours utilisateurs et un backlog priorisé de features candidates.
 
 - **Si l'utilisateur a précisé une feature**, retrouve la ligne backlog correspondante (par slug ou par sujet). Récupère son pitch, ses capacités couvertes, ses parcours servis, ses dépendances et sa justification vision — ces éléments enrichissent directement le challenge (le pitch initial est déjà là, on attaque le détail). Si la feature n'apparaît dans aucun horizon, signale-le : soit le backlog est incomplet (proposer de revenir à `/product-backlog`), soit la feature est hors périmètre.
-- **Si l'utilisateur dit juste « cadrons la prochaine » ou équivalent**, propose-lui les 3 premières lignes MVP non encore cadrées (croise avec `docs/story/*-f-*` pour exclure celles déjà cadrées) et demande laquelle attaquer.
+- **Si l'utilisateur dit juste « cadrons la prochaine » ou équivalent**, propose-lui les 3 premières lignes MVP non encore cadrées (croise avec `forge/story/*-f-*` pour exclure celles déjà cadrées) et demande laquelle attaquer.
 - **Vérifie les dépendances** : si la feature à cadrer dépend d'autres lignes backlog non livrées, signale-le et demande confirmation avant de continuer.
-- **Retiens le slug de la ligne** : quand une ligne de backlog est retrouvée, **mémorise son slug tel qu'écrit dans le backlog**. Il sera enregistré dans le `metadata.json` de la story (champ `backlog`, voir Phase 5) — c'est ce lien qui fait cocher la ligne dans `docs/product-backlog.md` une fois la story livrée. Tu gardes le droit d'affiner le slug **de la story** (le nom du dossier) : c'est justement pourquoi le lien est stocké, et non redéduit plus tard par comparaison de chaînes. **N'écris rien dans `docs/product-backlog.md`** — ce fichier ne t'appartient pas.
+- **Retiens le slug de la ligne** : quand une ligne de backlog est retrouvée, **mémorise son slug tel qu'écrit dans le backlog**. Il sera enregistré dans le `metadata.json` de la story (champ `backlog`, voir Phase 5) — c'est ce lien qui fait cocher la ligne dans `forge/product-backlog.md` une fois la story livrée. Tu gardes le droit d'affiner le slug **de la story** (le nom du dossier) : c'est justement pourquoi le lien est stocké, et non redéduit plus tard par comparaison de chaînes. **N'écris rien dans `forge/product-backlog.md`** — ce fichier ne t'appartient pas.
 
-Si `docs/product-backlog.md` n'existe pas, ce n'est pas bloquant — note l'absence et propose `/product-backlog` si l'utilisateur veut une vue consolidée du périmètre. Continue ensuite normalement (le champ `backlog` du `metadata.json` restera simplement absent).
+Si `forge/product-backlog.md` n'existe pas, ce n'est pas bloquant — note l'absence et propose `/product-backlog` si l'utilisateur veut une vue consolidée du périmètre. Continue ensuite normalement (le champ `backlog` du `metadata.json` restera simplement absent).
 
 ### Phase 3 — Challenge (boucle interactive)
 
@@ -93,7 +93,7 @@ Les axes ci-dessous sont la **graine de l'arbre** (`grilling.md` §1) : ils dise
 
 - **L'existant framework** : avant d'aller plus loin, vérifie rapidement si une brique native du framework couvre déjà tout ou partie du besoin. Pour un projet Sylius, consulter la doc Sylius et les bundles installés (`composer.json`). Pour un projet Symfony, vérifier les bundles tiers pertinents. Si une brique native couvre, reformule la feature comme une **extension** plutôt qu'une réinvention.
 - **Plugins/bundles installés** : les dépendances déjà présentes fournissent-elles des hooks utiles ? (Ex: un projet e-commerce peut avoir un plugin paiement dont on étend les workflows.)
-- **Features déjà documentées** : si le projet maintient un dossier `docs/` documentant les features existantes ou les mécanismes natifs, y chercher des recoupements.
+- **Features déjà documentées** : si le projet a des cartographies `forge/feature-map/` (produites par `/doc-feature`) ou une documentation utilisateur `documentation/`, y chercher des recoupements.
 
 **Impacts transverses**
 
@@ -112,13 +112,13 @@ Itère jusqu'à ce que la frontière soit vide ou que l'utilisateur dise « on r
 
 ### Phase 4 — Synthèse et rédaction
 
-Quand l'utilisateur valide, rédige le pitch dans `docs/story/`.
+Quand l'utilisateur valide, rédige le pitch dans `forge/story/`.
 
 **Choix du dossier** :
 
 - **Brief amont déjà détecté (Phase 1)** : si un `brief.md` produit par `/feature-interview` a été repéré, **réutilise son dossier tel quel** — n'applique PAS l'allocation ci-dessous, le numéro est déjà attribué. Écris simplement `pitch.md` à côté du `brief.md`.
-- Format : `docs/story/NNN-f-slug-de-la-feature/` (préfixe `f-` pour *feature*, NNN = prochain numéro sur 3 chiffres, slug en kebab-case).
-- **Compteur global partagé** avec les refactos (`r-`) et évolutions techniques (`t-`) pour obtenir une timeline unique : scanner `docs/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
+- Format : `forge/story/NNN-f-slug-de-la-feature/` (préfixe `f-` pour *feature*, NNN = prochain numéro sur 3 chiffres, slug en kebab-case).
+- **Compteur global partagé** avec les refactos (`r-`) et évolutions techniques (`t-`) pour obtenir une timeline unique : scanner `forge/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, extraire le numéro max parmi tous types confondus, incrémenter de 1.
 - **Collision de slug** : si le slug proposé existe déjà sous un autre numéro (tous préfixes confondus), demande à l'utilisateur s'il veut **étendre** le dossier existant (et basculer sur ce pitch) ou choisir un slug distinct. Ne jamais écraser un pitch existant sans validation.
 
 **Nom du fichier** : `pitch.md` dans ce dossier.
@@ -127,11 +127,11 @@ Quand l'utilisateur valide, rédige le pitch dans `docs/story/`.
 
 **Charte de format** : le contrat commun à tous les documents de story (en-tête normalisé, registres, vocabulaire canonique des sections, formats de table, tags, verdicts) vit dans `${CLAUDE_SKILL_DIR}/../../references/document-format.md`. Le template en est l'application : en cas de doute sur un titre de section ou un format, la charte fait foi. Les skills avals cherchent les sections par leur nom canonique — ne pas les renommer.
 
-Section `## Alignement vision` : le template l'inclut, juste après `## Contexte`. Elle est **conditionnelle** — la garder **uniquement si `docs/vision.md` existe**, la retirer entièrement sinon (c'est la seule section du pitch qui se supprime : son absence signifie « pas de vision projet », pas « pas regardé »).
+Section `## Alignement vision` : le template l'inclut, juste après `## Contexte`. Elle est **conditionnelle** — la garder **uniquement si `forge/vision.md` existe**, la retirer entièrement sinon (c'est la seule section du pitch qui se supprime : son absence signifie « pas de vision projet », pas « pas regardé »).
 
 **Métadonnées de story** : à la rédaction, crée `metadata.json` dans le dossier de la story en suivant `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` — au minimum `title` (le H1 réel du pitch), `created` et `updated` à la date du jour, `tags` en kebab-case **proposés puis validés par l'utilisateur**, et une première entrée de changelog (`type: "Création"`). Ne produis plus de table de changelog en pied de fichier : la timeline vit dans `metadata.json`.
 
-Ajoute le champ **`backlog`** = le slug de la ligne de `docs/product-backlog.md` retenue en Phase 2, **si et seulement si** une ligne a réellement été retrouvée. Pas de ligne, pas de backlog dans le projet, ou feature hors périmètre → **n'écris pas le champ** (jamais de chaîne vide, jamais de slug deviné : une valeur fausse cochera la mauvaise ligne d'avancement).
+Ajoute le champ **`backlog`** = le slug de la ligne de `forge/product-backlog.md` retenue en Phase 2, **si et seulement si** une ligne a réellement été retrouvée. Pas de ligne, pas de backlog dans le projet, ou feature hors périmètre → **n'écris pas le champ** (jamais de chaîne vide, jamais de slug deviné : une valeur fausse cochera la mauvaise ligne d'avancement).
 
 Après écriture, affiche un résumé et demande si des ajustements sont nécessaires.
 
@@ -139,7 +139,7 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 
 Annonce :
 
-> Pitch prêt : `docs/story/NNN-f-slug/pitch.md`
+> Pitch prêt : `forge/story/NNN-f-slug/pitch.md`
 > Prochaine étape : `/feature-plan` pour concevoir la solution technique.
 
 ## Argument optionnel

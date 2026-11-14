@@ -34,7 +34,7 @@ Pour tester une modification du plugin avant publication : `claude --plugin-dir 
 
 ## Projet lié
 
-**[Forge Board](https://github.com/gabrielmustiere/forge-board)** — application Symfony qui projette les stories produites par ce workflow (`docs/story/`) en kanban. Développée jusqu'au 30 juillet 2026 dans ce dépôt, puis extraite dans le sien.
+**[Forge Board](https://github.com/gabrielmustiere/forge-board)** — application Symfony qui projette les stories produites par ce workflow (`forge/story/`) en kanban. Développée jusqu'au 30 juillet 2026 dans ce dépôt, puis extraite dans le sien.
 
 ## Licence
 

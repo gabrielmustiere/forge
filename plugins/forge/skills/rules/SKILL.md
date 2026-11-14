@@ -38,7 +38,7 @@ migrer, poser la couche comportementale. Tu ne fais que **soustraire ce que tu a
 
 Ce skill n'est **pas** :
 
-- La cartographie de la stack (`/stack`) — `docs/stack.md` **constate** ce qui tourne, une règle
+- La cartographie de la stack (`/stack`) — `forge/stack.md` **constate** ce qui tourne, une règle
   **prescrit** comment coder. « On utilise Doctrine » va dans `stack.md` ; « une requête ne sort pas
   du repository » est une règle.
 - Un hook (`.claude/settings.json`) — une règle est du **contexte**, un hook est une **garantie**.
@@ -159,12 +159,16 @@ règle coûte plus cher que la règle ne rapporte.
    règle morte, et elle est morte en silence.
 4. **Privilégier `AskUserQuestion`** pour arbitrer (max 3 questions par tour). Si l'outil n'est pas
    chargé, le récupérer via `ToolSearch`, sinon poser en texte libre.
-5. **Pas de changelog dans un fichier de règle.** Contrairement à `docs/stack.md` qu'on ouvre à la
+5. **Pas de changelog dans un fichier de règle.** Contrairement à `forge/stack.md` qu'on ouvre à la
    demande, une règle est injectée en contexte à chaque session où son `paths` matche : un historique
    dedans est payé en tokens à chaque fois pour un contenu qui n'aide personne à écrire du code.
    L'historique, c'est `git log` qui le tient.
 
 ## Déroulement
+
+> **Ancienne convention `docs/`** : avant tout, applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`. Un projet dont
+> l'atelier est encore sous `docs/` (`docs/story/`, `docs/stack.md`…) se migre d'abord par
+> `/forge:migrate-forge` — tu t'arrêtes et tu y renvoies.
 
 ### Phase 0 — Inventaire de l'existant et choix du mode
 
@@ -174,7 +178,7 @@ règle coûte plus cher que la règle ne rapporte.
    te disent ce qui est déjà couvert, et en mode Création ils **sont** la matière première (voir
    Phase 1). Si le `CLAUDE.md` n'est pas encore un pont vers `AGENTS.md`, la soustraction de la
    Phase 6 se fera dans le `CLAUDE.md` — signale que `/agents-md` le migrerait.
-3. **Artifacts forge** : lire `docs/stack.md` s'il existe — il nomme la stack réelle, donc les zones
+3. **Artifacts forge** : lire `forge/stack.md` s'il existe — il nomme la stack réelle, donc les zones
    qui existent vraiment. En mode Enrichir déclenché par une livraison, lire aussi la `review.md` /
    `report.md` de la story si l'utilisateur en désigne une : les findings, la dette et les leçons y
    sont des preuves prêtes.

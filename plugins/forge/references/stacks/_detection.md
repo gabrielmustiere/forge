@@ -5,30 +5,35 @@ Procédure partagée par les skills du workflow (`/vision`, `/product-backlog`, 
 `/tech-plan`, `/tech-implem`, `/review`, `/adr`, `/estimate`) pour établir le framework en usage et
 charger les bonnes règles. À faire **au démarrage** de ces skills, avant toute proposition technique.
 
+**Avant les trois cas**, applique la garde [`legacy-docs.md`](../legacy-docs.md)
+(`${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`) : si l'atelier forge du projet est encore sous `docs/` (`docs/story/`,
+`docs/stack.md`…), arrête-toi et renvoie vers `/forge:migrate-forge`. Ne lis pas `docs/stack.md`
+à la place de `forge/stack.md` : les skills ne connaissent qu'un emplacement.
+
 Trois cas, du moins coûteux au plus coûteux — le premier qui s'applique gagne :
 
 1. **Stack déjà établi dans la session** → rien à relire.
-2. **`docs/stack.md` existe** → le lire : c'est un **chargement**, pas une détection.
+2. **`forge/stack.md` existe** → le lire : c'est un **chargement**, pas une détection.
 3. **Ni l'un ni l'autre** → **détection** légère depuis les manifestes.
 
 ## Cas 1 — Stack déjà établi dans la session
 
 Si une skill précédente de la même session a déjà appliqué cette procédure (ex. `/feature-pitch`
-enchaîné sur `/feature-plan`) et que son résultat est toujours dans ton contexte — `docs/stack.md`
-et la ou les références stack lus en entier —, **ne relis rien** : ni `docs/stack.md`, ni les
+enchaîné sur `/feature-plan`) et que son résultat est toujours dans ton contexte — `forge/stack.md`
+et la ou les références stack lus en entier —, **ne relis rien** : ni `forge/stack.md`, ni les
 références, ni ce fichier. Reprends le stack établi et affiche la ligne de résumé.
 
 Relis quand même si :
 
-- `docs/stack.md` a changé depuis (ex. `/stack` lancé entre-temps dans la session) ;
+- `forge/stack.md` a changé depuis (ex. `/stack` lancé entre-temps dans la session) ;
 - le contexte a été résumé et tu n'as plus le contenu intégral des références — une référence
   résumée n'est pas une référence chargée.
 
 Au moindre doute, relis : une relecture coûte moins cher qu'une règle framework appliquée de mémoire.
 
-## Cas 2 — `docs/stack.md` existe (chargement)
+## Cas 2 — `forge/stack.md` existe (chargement)
 
-Vérifie la présence de `docs/stack.md` (produit par `/stack`). S'il existe, lis-le : c'est la
+Vérifie la présence de `forge/stack.md` (produit par `/stack`). S'il existe, lis-le : c'est la
 cartographie complète et validée par l'utilisateur (langages, backend, frontend, données, ops,
 devops), bien plus riche que la détection légère. Tu y trouves directement le framework, les
 versions, les services et l'outillage réel.
@@ -37,7 +42,7 @@ Utilise-le comme source principale et **ne scanne pas** `composer.json`/`package
 les résume déjà. Exception : un détail absent de `stack.md`, ou un soupçon qu'il est périmé
 (mtime/changelog très ancien vs deps récentes → suggérer `/stack` en mode Éditer/Enrichir).
 
-## Cas 3 — Détection légère (sans `docs/stack.md`)
+## Cas 3 — Détection légère (sans `forge/stack.md`)
 
 1. **Lire `composer.json`** (`Read` à la racine du projet) s'il existe.
 2. **Lire `package.json`** (`Read` à la racine du projet) s'il existe.
@@ -49,14 +54,14 @@ skills suivantes passeront alors par le cas 2, sans rien détecter.
 
 ## Règles de résolution
 
-Le signal est le framework backend déclaré par `docs/stack.md` (cas 2) ou, à défaut, les
+Le signal est le framework backend déclaré par `forge/stack.md` (cas 2) ou, à défaut, les
 dépendances de `composer.json` (cas 3). Traitées dans l'ordre — la première qui matche gagne.
 
 | Signal                                                                    | Stack       | Références à charger                                  |
 |---------------------------------------------------------------------------|-------------|-------------------------------------------------------|
 | Sylius — `sylius/sylius` (ou `sylius/*-bundle` core)                      | **sylius**  | `symfony.md` puis `sylius.md`                         |
 | Symfony — `symfony/framework-bundle` sans `sylius/...`                    | **symfony** | `symfony.md`                                          |
-| Autre framework déclaré par `docs/stack.md`                               | **autre**   | Aucune référence dédiée : `docs/stack.md` suffit, ne rien demander |
+| Autre framework déclaré par `forge/stack.md`                               | **autre**   | Aucune référence dédiée : `forge/stack.md` suffit, ne rien demander |
 | Aucun signal (cas 3)                                                      | **inconnu** | Demander à l'utilisateur quel stack, ou continuer sans référence spécifique |
 
 Les références (`symfony.md`, `sylius.md`) sont dans le **même dossier que ce fichier `_detection.md`**. Une fois le stack identifié, lis-les via `Read` en réutilisant le **chemin absolu du dossier d'où tu viens de lire `_detection.md`** (la skill te l'a passé via `${CLAUDE_SKILL_DIR}/../../references/stacks/`).
@@ -79,7 +84,7 @@ Règle : quand une sous-tâche de `/feature-implem` ou `/refactor-implem` touche
 
 Une ligne, pour que l'utilisateur sache ce qui va être appliqué **et d'où ça vient**. Le verbe dit
 ce qui s'est réellement passé : « détecté » seulement quand tu as scanné les manifestes (cas 3). Ne
-parle jamais de détection quand tu as simplement lu `docs/stack.md` : l'utilisateur croirait à un
+parle jamais de détection quand tu as simplement lu `forge/stack.md` : l'utilisateur croirait à un
 scan coûteux qui n'a pas eu lieu.
 
 Cas 1 :
@@ -88,9 +93,9 @@ Cas 1 :
 
 Cas 2 :
 
-> Stack chargé depuis `docs/stack.md` : **sylius** — j'applique Symfony + Sylius.
+> Stack chargé depuis `forge/stack.md` : **sylius** — j'applique Symfony + Sylius.
 
-> Stack chargé depuis `docs/stack.md` : **Laravel 11** — pas de référence framework dédiée, je m'appuie sur `stack.md`.
+> Stack chargé depuis `forge/stack.md` : **Laravel 11** — pas de référence framework dédiée, je m'appuie sur `stack.md`.
 
 Cas 3 :
 

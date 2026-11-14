@@ -2,9 +2,9 @@
 
 > **But** : figer le comment technique de la feature — architecture, périmètre de code, ordre d'exécution.
 > **Registre** : technique
-> **Story** : `docs/story/<NNN>-f-<slug>/`
+> **Story** : `forge/story/<NNN>-f-<slug>/`
 > **Amont** : `pitch.md`
-> **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
+> **ADR** : `forge/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
 guide: Plan TECHNIQUE d'une feature (préfixe `-f-`). Produit par `/forge:feature-plan`, consommé par `/forge:feature-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.

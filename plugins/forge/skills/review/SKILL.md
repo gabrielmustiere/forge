@@ -43,7 +43,7 @@ Ce skill **lit** le code et **émet un verdict**. Il ne corrige pas (sauf si l'u
 
 ### Phase 1 — Chargement du contexte et détection stack
 
-Si l'utilisateur fournit un chemin (`/review docs/story/007-f-slug/plan.md`, `/review docs/story/013-r-slug/plan.md`) ou un slug (`/review slug`), résous le dossier cible dans `docs/story/` (matchant `NNN-[frt]-slug`) et lis la **référence d'intention** selon le type :
+Si l'utilisateur fournit un chemin (`/review forge/story/007-f-slug/plan.md`, `/review forge/story/013-r-slug/plan.md`) ou un slug (`/review slug`), résous le dossier cible dans `forge/story/` (matchant `NNN-[frt]-slug`) et lis la **référence d'intention** selon le type :
 
 - Dossier `f-` (feature) → lire `plan.md` + `pitch.md` (critères d'acceptation)
 - Dossier `r-` (refacto) → lire `plan.md` (stratégie et critères de non-régression)
@@ -72,12 +72,12 @@ Charge `${CLAUDE_SKILL_DIR}/references/axes.md` qui détaille les 8 axes (sécur
 
 ### Phase 3 — Écriture du fichier review
 
-**Avant de présenter les findings**, persiste la review dans un fichier Markdown au sein du dossier `docs/story/NNN-<f|r|t>-slug/` correspondant :
+**Avant de présenter les findings**, persiste la review dans un fichier Markdown au sein du dossier `forge/story/NNN-<f|r|t>-slug/` correspondant :
 
 ```
-docs/story/NNN-f-slug/review.md   # review d'une feature
-docs/story/NNN-r-slug/review.md   # review d'un refacto
-docs/story/NNN-t-slug/review.md   # review d'une évolution technique
+forge/story/NNN-f-slug/review.md   # review d'une feature
+forge/story/NNN-r-slug/review.md   # review d'un refacto
+forge/story/NNN-t-slug/review.md   # review d'une évolution technique
 ```
 
 (Si pas de slug — review standalone — propose un emplacement à l'utilisateur ou skip ce fichier.)
@@ -102,7 +102,7 @@ Pour chaque finding bloquant, demande : "Tu veux corriger maintenant ou on note 
 
 Quand tous les findings sont traités :
 
-1. Mettre à jour `docs/story/NNN-<f|r|t>-slug/review.md` — cocher les items corrigés, mettre à jour la §Synthèse.
+1. Mettre à jour `forge/story/NNN-<f|r|t>-slug/review.md` — cocher les items corrigés, mettre à jour la §Synthèse.
 2. Afficher le verdict. Valeurs **fermées** et en français (charte §8) : `READY TO COMMIT` / `NEEDS FIXES` ne sont plus produits.
 
 ```
@@ -132,10 +132,10 @@ Si PRÊT À COMMITER :
 
 ## Argument optionnel
 
-`/review docs/story/007-f-slug/plan.md` — review d'une feature avec comparaison au plan.
+`/review forge/story/007-f-slug/plan.md` — review d'une feature avec comparaison au plan.
 
-`/review docs/story/013-r-slug/plan.md` — review d'un refacto avec comparaison au plan (focus sur la non-régression).
+`/review forge/story/013-r-slug/plan.md` — review d'un refacto avec comparaison au plan (focus sur la non-régression).
 
-`/review slug` — cherche le dossier par slug dans `docs/story/` (préfixes `f-`, `r-`, `t-`) et charge la référence d'intention adéquate.
+`/review slug` — cherche le dossier par slug dans `forge/story/` (préfixes `f-`, `r-`, `t-`) et charge la référence d'intention adéquate.
 
 `/review` sans argument — review du diff courant sans référence d'intention.

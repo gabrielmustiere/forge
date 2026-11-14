@@ -1,6 +1,6 @@
 ---
 name: estimate
-description: "Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release. Lit brief/pitch/plan. Réaliste + marge, en heures. Produit `docs/story/NNN-<f|r|t>-<slug>/estimate.md`."
+description: "Chiffre le temps « tout compris » d'une story à facturer (feature, refacto, tech) : cadrage, implem, tests, review, doc, release. Lit brief/pitch/plan. Réaliste + marge, en heures. Produit `forge/story/NNN-<f|r|t>-<slug>/estimate.md`."
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug de story ou chemin du dossier]"
@@ -26,7 +26,7 @@ Tu produis un `estimate.md` : une décomposition phase par phase du temps factur
 brief.md / pitch.md / plan.md ─▶ /estimate ─▶ estimate.md (temps facturable, tout compris)
 ```
 
-Ce skill est **optionnel et transversal** : il s'applique à n'importe quelle story du `docs/story/`, quel que soit le track (feature `f-`, refacto `r-`, évolution technique `t-`). Il se lance dès qu'il existe au moins un artifact à lire — typiquement après `/feature-pitch` quand il faut chiffrer pour le client **avant** de s'engager, ou après `/feature-plan` pour une estimation affinée par le découpage technique.
+Ce skill est **optionnel et transversal** : il s'applique à n'importe quelle story du `forge/story/`, quel que soit le track (feature `f-`, refacto `r-`, évolution technique `t-`). Il se lance dès qu'il existe au moins un artifact à lire — typiquement après `/feature-pitch` quand il faut chiffrer pour le client **avant** de s'engager, ou après `/feature-plan` pour une estimation affinée par le découpage technique.
 
 ## Périmètre du skill
 
@@ -80,8 +80,8 @@ Le barème d'accélération par phase est dans `method.md`. Ces deux chiffrages 
 
 Identifie le dossier de story à estimer :
 
-- Si l'utilisateur passe un slug ou un chemin (`/estimate 042-f-checkout-express` ou `/estimate docs/story/042-f-checkout-express/`), va directement dessus.
-- Sinon, liste `docs/story/` (dossiers matchant `^(\d{3})-[frt]-.+`) et demande lequel chiffrer.
+- Si l'utilisateur passe un slug ou un chemin (`/estimate 042-f-checkout-express` ou `/estimate forge/story/042-f-checkout-express/`), va directement dessus.
+- Sinon, liste `forge/story/` (dossiers matchant `^(\d{3})-[frt]-.+`) et demande lequel chiffrer.
 
 Lis **tout ce qui existe** dans le dossier, dans cet ordre de richesse croissante :
 
@@ -95,7 +95,7 @@ Affiche en 2-3 lignes ce que tu as lu et **avec quel niveau de fiabilité** tu v
 
 ### Phase 2 — Stack du projet et contexte
 
-Le même volume fonctionnel ne coûte pas le même temps selon le terrain. Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis l'`AGENTS.md` racine (à défaut le `CLAUDE.md`) s'il existe — il révèle les contraintes qui pèsent sur la charge : commandes QA obligatoires, multi-thème, conventions de test exigeantes, étapes de déploiement particulières.
+Le même volume fonctionnel ne coûte pas le même temps selon le terrain. Lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `forge/stack.md` s'il existe). Lis l'`AGENTS.md` racine (à défaut le `CLAUDE.md`) s'il existe — il révèle les contraintes qui pèsent sur la charge : commandes QA obligatoires, multi-thème, conventions de test exigeantes, étapes de déploiement particulières.
 
 Repère les amplificateurs de charge propres au terrain : un projet multi-channel/multi-thème (typiquement Sylius) multiplie le coût UI et test ; un legacy peu testé alourdit chaque modification ; une CI lente alourdit chaque itération de tests.
 
@@ -136,7 +136,7 @@ Après écriture, affiche les deux totaux (référence et avec IA, chacun avec m
 
 Annonce le fichier et rappelle les deux choses à faire côté utilisateur :
 
-> Estimation prête : `docs/story/NNN-<f|r|t>-<slug>/estimate.md`
+> Estimation prête : `forge/story/NNN-<f|r|t>-<slug>/estimate.md`
 > — **Deux totaux** : temps de référence (sans IA) et temps réel avec assistant IA. L'écart est ta marge — à toi de choisir la base de facturation.
 > — **Conversion en montant** : multiplie par ton taux horaire (le skill ne chiffre que du temps).
 > — **Reconfirmation** : si l'estimation a été produite sur le brief ou le pitch seul, relance `/estimate` après `/feature-plan` pour l'affiner avant de t'engager fermement.
@@ -144,5 +144,5 @@ Annonce le fichier et rappelle les deux choses à faire côté utilisateur :
 ## Argument optionnel
 
 - `/estimate 042-f-checkout-express` — chiffre directement la story par son slug ou numéro.
-- `/estimate docs/story/042-f-checkout-express/` — idem par chemin de dossier.
+- `/estimate forge/story/042-f-checkout-express/` — idem par chemin de dossier.
 - `/estimate` sans argument — liste les stories disponibles et demande laquelle chiffrer.

@@ -2,9 +2,9 @@
 
 > **But** : figer le comment d'un refacto — forme cible, verrou de non-régression, exécution incrémentale.
 > **Registre** : technique
-> **Story** : `docs/story/<NNN>-r-<slug>/`
+> **Story** : `forge/story/<NNN>-r-<slug>/`
 > **Amont** : aucun <!-- guide: un refacto n'a pas de pitch — ce plan porte motivation ET détail -->
-> **ADR** : `docs/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
+> **ADR** : `forge/adr/<NNNN>-<slug>.md` <!-- guide: ligne à supprimer si aucune ADR n'est rattachée -->
 
 <!--
 guide: Plan d'un refacto (préfixe `-r-`). Produit par `/forge:refactor-plan`, consommé par `/forge:refactor-implem` (étape build), `/forge:review`, `/forge:sync` et `/forge:estimate`.

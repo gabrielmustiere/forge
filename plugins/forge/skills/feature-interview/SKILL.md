@@ -1,6 +1,6 @@
 ---
 name: feature-interview
-description: Transforme un besoin flou en brief pour `/feature-pitch` — interview accessible (irritant, qui, résultat attendu) ancrée sur le code existant. Pour qui sait ce qui le gêne mais pas le pitcher. Produit `docs/story/NNN-f-<slug>/brief.md`.
+description: Transforme un besoin flou en brief pour `/feature-pitch` — interview accessible (irritant, qui, résultat attendu) ancrée sur le code existant. Pour qui sait ce qui le gêne mais pas le pitcher. Produit `forge/story/NNN-f-<slug>/brief.md`.
 user_invocable: true
 disable-model-invocation: true
 effort: medium
@@ -85,9 +85,9 @@ Ne juge pas, ne reformule pas encore en feature. Accuse réception et passe à l
 
 Avant de questionner, lis le code pour **comprendre le produit** : tes questions seront plus justes, et tu éviteras de faire imaginer un besoin que le produit couvre déjà. Tout ce que tu apprends ici est de la **connaissance de fond** — tu la traduis en fonctionnel avant qu'elle entre dans le brief (cf. règle d'or).
 
-1. **Comprendre le type de produit** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `docs/stack.md` s'il existe). Lis l'`AGENTS.md` racine (à défaut le `CLAUDE.md`) s'il existe. But : savoir **à quel genre de produit** tu as affaire (e-commerce, back-office, SaaS multi-tenant…) pour adapter ton vocabulaire et tes questions. Ces informations techniques **n'entrent pas dans le brief**.
+1. **Comprendre le type de produit** : lis `${CLAUDE_SKILL_DIR}/../../references/stacks/_detection.md` et applique la procédure (raccourci `forge/stack.md` s'il existe). Lis l'`AGENTS.md` racine (à défaut le `CLAUDE.md`) s'il existe. But : savoir **à quel genre de produit** tu as affaire (e-commerce, back-office, SaaS multi-tenant…) pour adapter ton vocabulaire et tes questions. Ces informations techniques **n'entrent pas dans le brief**.
 2. **Repérer ce que le produit fait déjà autour du besoin** : à partir des mots du besoin brut, lance une reconnaissance **ciblée** (pas un audit). Cherche le vocabulaire métier dans le code pour découvrir les **capacités déjà offertes** (ex: besoin « relances panier » → explore ce que le code fait autour de panier / commande / email pour savoir si le produit gère déjà un panier, un tunnel de commande, des emails automatiques). **Traduis chaque trouvaille en capacité utilisateur** — c'est cette version fonctionnelle qui nourrit tes questions et le brief, jamais les noms de classes, services ou fichiers.
-3. **Vision / backlog si présents** : si `docs/vision.md` ou `docs/product-backlog.md` existent, survole-les pour situer le besoin dans le périmètre connu (sans en faire un challenge d'alignement — ça, c'est le job du pitch).
+3. **Vision / backlog si présents** : si `forge/vision.md` ou `forge/product-backlog.md` existent, survole-les pour situer le besoin dans le périmètre connu (sans en faire un challenge d'alignement — ça, c'est le job du pitch).
 
 Garde tes trouvailles en tête, **déjà traduites en fonctionnel** : elles nourrissent les questions de l'interview (« j'ai vu que le produit gère déjà X — c'est de ça que tu parles, ou d'autre chose ? ») et alimentent la section « Ce que le produit fait déjà » du brief. Reste léger : si le besoin est encore trop flou pour cibler quoi que ce soit, note-le et avance — tu reviendras chercher après l'interview.
 
@@ -120,8 +120,8 @@ Quand l'utilisateur valide, rédige `brief.md`.
 
 **Choix du dossier** :
 
-- Format : `docs/story/NNN-f-<slug>/brief.md` (préfixe `f-` pour *feature*, NNN sur 3 chiffres, slug en kebab-case tiré du besoin).
-- **Compteur global partagé** avec features (`f-`), refactos (`r-`) et évolutions techniques (`t-`) : scanner `docs/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, prendre le numéro max tous types confondus, incrémenter de 1. (Même logique que `/feature-pitch` — la timeline reste unique et triée.)
+- Format : `forge/story/NNN-f-<slug>/brief.md` (préfixe `f-` pour *feature*, NNN sur 3 chiffres, slug en kebab-case tiré du besoin).
+- **Compteur global partagé** avec features (`f-`), refactos (`r-`) et évolutions techniques (`t-`) : scanner `forge/story/` pour tous les dossiers matchant `^(\d{3})-[frt]-.+`, prendre le numéro max tous types confondus, incrémenter de 1. (Même logique que `/feature-pitch` — la timeline reste unique et triée.)
 - **Collision de slug** : si le slug existe déjà sous un autre numéro, demande à l'utilisateur s'il veut réutiliser ce dossier ou choisir un slug distinct. Ne jamais écraser.
 
 Le dossier que tu crées ici est **le même** que celui où `/feature-pitch` écrira ensuite `pitch.md` : un brief et son pitch cohabitent dans `NNN-f-<slug>/`.
@@ -138,7 +138,7 @@ Après écriture, affiche un résumé et demande si des ajustements sont nécess
 
 Annonce le relais vers le pitch :
 
-> Brief prêt : `docs/story/NNN-f-<slug>/brief.md`
+> Brief prêt : `forge/story/NNN-f-<slug>/brief.md`
 > Prochaine étape : `/feature-pitch NNN-f-<slug>` — il va reprendre ce brief, le challenger et le transformer en pitch structuré (user stories, règles métier, critères d'acceptation). Le brief lui sert de matière : tu n'auras pas à tout réexpliquer.
 
 Si l'utilisateur veut enchaîner immédiatement, propose-lui de lancer `/feature-pitch` avec le slug.

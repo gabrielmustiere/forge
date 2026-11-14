@@ -70,7 +70,7 @@ il sert et d'où il vient.
 
 > **But** : <une ligne — ce que ce document décide ou apporte, du point de vue du lecteur>
 > **Registre** : <fonctionnel | technique | factuel | économique>
-> **Story** : `docs/story/<NNN>-<f|r|t>-<slug>/`
+> **Story** : `forge/story/<NNN>-<f|r|t>-<slug>/`
 > **Amont** : `pitch.md` · `plan.md` <!-- les documents dont celui-ci dépend, ou « aucun » -->
 ```
 
@@ -91,7 +91,7 @@ Règles :
 | `Commits liés : <SHA>` | Dupliqué et vite faux | `metadata.json` (`delivery.commit`) |
 | `Stack : symfony` | Le plugin est stack-agnostique | Détection (`references/stacks/_detection.md`) |
 
-Un lien `ADR : docs/adr/<NNNN>-<slug>.md` est en revanche **autorisé en fin de bloc** quand une
+Un lien `ADR : forge/adr/<NNNN>-<slug>.md` est en revanche **autorisé en fin de bloc** quand une
 ADR est rattachée : c'est un lien de navigation, pas une métadonnée dupliquée.
 
 ## 3. Registres : la règle d'or de chaque document
@@ -123,7 +123,7 @@ dit.
 
 **Exemption — quand le logiciel est le domaine métier.** Certains produits ont pour objet des
 artefacts techniques : un outil de développement, un CI, un explorateur de logs, le Forge Board
-lui-même. Un terme comme `pitch.md`, `docs/story/` ou « dépôt Git » y est le **vocabulaire
+lui-même. Un terme comme `pitch.md`, `forge/story/` ou « dépôt Git » y est le **vocabulaire
 métier de l'utilisateur**, pas une fuite de registre : le traduire en « capacité vécue » le
 dénaturerait. Le test qui tranche n'est pas « est-ce que ça ressemble à du technique ? » mais :
 
@@ -145,7 +145,7 @@ historiques ; toute nouvelle section doit s'y raccrocher ou y être ajoutée.
 | Conclusion d'un document de décision | `## Synthèse` | review, report, estimate | prose courte + puces |
 | Pourquoi maintenant | `## Motivation` | plan `-r-` / `-t-` | prose + un chiffre vérifiable |
 | Contexte métier | `## Contexte` | pitch | prose |
-| Alignement à la vision projet | `## Alignement vision` | pitch (conditionnel : si `docs/vision.md` existe) | puces |
+| Alignement à la vision projet | `## Alignement vision` | pitch (conditionnel : si `forge/vision.md` existe) | puces |
 | Solution choisie | `## Approche retenue` | les 3 plans | prose + sous-sections |
 | Options rejetées | `### Alternatives écartées` | sous `## Approche retenue` | table |
 | Patterns/briques mobilisés | `### Mécanismes mobilisés` | sous `## Approche retenue` | puces |

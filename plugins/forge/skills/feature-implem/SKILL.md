@@ -1,6 +1,6 @@
 ---
 name: feature-implem
-description: Implémente une feature depuis un plan technique validé — sous-tâches trackées, qualité continue (lint, types, tests), checkpoints humains avant choix structurants. Prérequis un `plan.md` sous `docs/story/<NNN>-f-<slug>/`.
+description: Implémente une feature depuis un plan technique validé — sous-tâches trackées, qualité continue (lint, types, tests), checkpoints humains avant choix structurants. Prérequis un `plan.md` sous `forge/story/<NNN>-f-<slug>/`.
 user_invocable: true
 disable-model-invocation: true
 argument-hint: "[slug-feature]"
@@ -30,9 +30,9 @@ Ce skill **exécute** un plan existant. Il **ne re-conçoit pas** : si une sous-
 
 ### Phase 1 — Chargement et détection stack
 
-Si l'utilisateur fournit un chemin (`/feature docs/story/007-f-ma-feature/plan.md`) ou un slug (`/feature ma-feature`), lis le fichier.
+Si l'utilisateur fournit un chemin (`/feature forge/story/007-f-ma-feature/plan.md`) ou un slug (`/feature ma-feature`), lis le fichier.
 
-Sinon, liste les dossiers dans `docs/story/` matchant `NNN-f-*` qui contiennent un `plan.md` via `Glob` et demande lequel implémenter.
+Sinon, liste les dossiers dans `forge/story/` matchant `NNN-f-*` qui contiennent un `plan.md` via `Glob` et demande lequel implémenter.
 
 **Si aucun `plan.md` n'existe pour le slug demandé**, refuse de continuer et propose : "Pas de plan technique pour cette feature. Lance `/feature-plan` d'abord."
 
@@ -161,7 +161,7 @@ Affiche le bilan complet :
 ```
 ## Implémentation terminée — [Nom de la feature]
 
-Plan suivi : `docs/story/NNN-f-slug/plan.md`
+Plan suivi : `forge/story/NNN-f-slug/plan.md`
 Stack : [stack détecté]
 Sous-tâches : M/M complétées
 
@@ -192,7 +192,7 @@ Sous-tâches : M/M complétées
 
 ## Argument optionnel
 
-`/feature docs/story/007-f-ma-feature/plan.md` — charge le plan et démarre.
+`/feature forge/story/007-f-ma-feature/plan.md` — charge le plan et démarre.
 
 `/feature ma-feature` — cherche le dossier feature par slug (préfixe `f-`) et charge son `plan.md`.
 

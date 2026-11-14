@@ -17,15 +17,15 @@ allowed-tools:
 ```
                        PHASE 0 — POSER LE DÉCOR (une fois par projet, ou pivot)
                        ┌────────┐
-                       │ vision │──▶ docs/vision.md (problème, audience, valeur,
+                       │ vision │──▶ forge/vision.md (problème, audience, valeur,
                        └────────┘    North Star, principes, anti-objectifs)
                                      Lu par product-backlog puis feature-pitch.
                        ┌────────────────┐
-                       │ product-backlog│──▶ docs/product-backlog.md (domaines, capacités,
+                       │ product-backlog│──▶ forge/product-backlog.md (domaines, capacités,
                        └────────────────┘    parcours, règles transverses, backlog priorisé MVP/V2/V3)
                                            Lu par feature-pitch pour situer chaque feature.
                        ┌───────┐
-                       │ stack │──▶ docs/stack.md (langages, backend, frontend, données,
+                       │ stack │──▶ forge/stack.md (langages, backend, frontend, données,
                        └───────┘    ops, CI — chaque techno prouvée par un fichier source)
                                     Lu par feature-implem/refactor-implem/tech-implem/review.
                        ┌───────────┐
@@ -88,7 +88,7 @@ allowed-tools:
  └─────────────────┘    └──┬──┘    └──────┘
  Playwright MCP live       │       ce sommaire
                            ▼
-                  docs/adr/NNNN-slug.md
+                  forge/adr/NNNN-slug.md
                   (depuis pitch/plan/review/report
                    ou topic libre)
 
@@ -97,7 +97,7 @@ allowed-tools:
  └──────┬───────┘    └────┬─────┘
         │                 │
         ▼                 ▼
- docs/feature-map/    estimate.md
+ forge/feature-map/   estimate.md
  NNN-slug/overview.md (temps facturable
  (rétro-doc à partir   tout compris, en
   du code livré)       heures : réf. + IA)
@@ -117,19 +117,19 @@ allowed-tools:
 
 Règle d'or : ne jamais passer à l'étape suivante sans validation explicite du user ("ok", "go", "validé", "c", etc.).
 
-## Convention dossiers `docs/story/`
+## Convention dossiers `forge/story/`
 
-Tous les artifacts vivent dans `docs/story/` à plat, **numérotés globalement** puis taggés par type. Format : `NNN-<f|r|t>-<slug>`. Le numéro vient en premier pour que le tri lexicographique de `ls` corresponde à l'ordre chronologique.
+Tous les artifacts vivent dans `forge/story/` à plat, **numérotés globalement** puis taggés par type. Format : `NNN-<f|r|t>-<slug>`. Le numéro vient en premier pour que le tri lexicographique de `ls` corresponde à l'ordre chronologique.
 
 | Tag    | Type              | Doc d'intention              | Exemple                             |
 |--------|-------------------|------------------------------|-------------------------------------|
-| `f`    | Feature           | `pitch.md` + `plan.md`       | `docs/story/042-f-checkout-express/` |
-| `r`    | Refacto           | `plan.md`                    | `docs/story/043-r-extract-pricing/`  |
-| `t`    | Évolution tech    | `plan.md`                    | `docs/story/044-t-redis-cache/`      |
+| `f`    | Feature           | `pitch.md` + `plan.md`       | `forge/story/042-f-checkout-express/` |
+| `r`    | Refacto           | `plan.md`                    | `forge/story/043-r-extract-pricing/`  |
+| `t`    | Évolution tech    | `plan.md`                    | `forge/story/044-t-redis-cache/`      |
 
 Tous les tracks produisent un `plan.md` (cadrage technique exécutable). Le track feature a en amont un `pitch.md` (cadrage fonctionnel) qui formalise le problème utilisateur avant le plan.
 
-Les numéros s'incrémentent globalement (042-f → 043-r → 044-t → 045-f…), ce qui permet de lire la timeline d'évolution du projet en listant simplement `docs/story/`.
+Les numéros s'incrémentent globalement (042-f → 043-r → 044-t → 045-f…), ce qui permet de lire la timeline d'évolution du projet en listant simplement `forge/story/`.
 
 **Un format commun à tous les documents** : `brief.md`, `pitch.md`, `plan.md`, `review.md`, `report.md` et `estimate.md` partagent un contrat de format unique (`references/document-format.md`). Chaque document sert **un seul but**, dans **un seul registre** — annoncé dans son en-tête : le brief et le pitch sont **fonctionnels** (aucun nom de classe, de service ou de framework), les plans et la review sont **techniques**, le report est **factuel**, l'estimation est **économique**. Les documents de décision (review, report, estimation) ouvrent sur leur `## Synthèse` : on doit pouvoir ne lire qu'elle. Les trois plans partagent le même squelette de sections, quel que soit le track — leurs spécificités (caractérisation d'un refacto, kill switch d'un tech) sont des sections additionnelles. La timeline, elle, ne vit dans aucun `.md` : elle est dans le `metadata.json` de la story. Et rien ne se recopie d'un document à l'autre : `review.md` n'est conservé que si un point reste ouvert, `report.md` ne garde que les écarts, la dette et les leçons — le périmètre livré et les critères cochés vivent dans le plan et le pitch réalignés.
 
@@ -142,13 +142,13 @@ Le pipeline se lit sur deux axes qu'il ne faut pas confondre :
 
 ## Phase 0 — Poser le décor
 
-Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le décor **une fois pour toutes** : pourquoi ce produit existe, ce qu'on va construire, sur quoi on marche, et comment on travaille dans ce dépôt. Les trois documents de `docs/` sont **vivants** (4 modes : Création / Enrichir / Éditer / Pivot, avec changelog) et vivent à la racine de `docs/`, pas dans une story. L'`AGENTS.md`, lui, vit à la racine du dépôt (modes Création / Migration / Mise à jour).
+Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le décor **une fois pour toutes** : pourquoi ce produit existe, ce qu'on va construire, sur quoi on marche, et comment on travaille dans ce dépôt. Les trois documents de `forge/` sont **vivants** (4 modes : Création / Enrichir / Éditer / Pivot, avec changelog) et vivent à la racine de `forge/`, pas dans une story. L'`AGENTS.md`, lui, vit à la racine du dépôt (modes Création / Migration / Mise à jour).
 
 | Skill              | Rôle                                                                                                | Produit                   |
 |--------------------|-----------------------------------------------------------------------------------------------------|---------------------------|
-| `/vision`          | Atelier challengeur sur problème, audience, valeur, North Star, principes, anti-objectifs            | `docs/vision.md`          |
-| `/product-backlog` | Atelier fonctionnel : domaines → capacités → parcours → règles transverses → backlog MVP/V2/V3       | `docs/product-backlog.md` |
-| `/stack`           | Scanne tous les manifestes (langages, backend, frontend, données, ops, CI), interroge pour combler les trous, prouve chaque techno par un fichier source | `docs/stack.md` |
+| `/vision`          | Atelier challengeur sur problème, audience, valeur, North Star, principes, anti-objectifs            | `forge/vision.md`          |
+| `/product-backlog` | Atelier fonctionnel : domaines → capacités → parcours → règles transverses → backlog MVP/V2/V3       | `forge/product-backlog.md` |
+| `/stack`           | Scanne tous les manifestes (langages, backend, frontend, données, ops, CI), interroge pour combler les trous, prouve chaque techno par un fichier source | `forge/stack.md` |
 | `/agents-md`       | Analyse le codebase (nature, stack, architecture, commandes, conventions), chaque ligne prouvée par un fichier — aucune commande inventée ; migre un `CLAUDE.md` existant | `AGENTS.md` + `CLAUDE.md` pont |
 
 **Vision** — pourquoi ce produit existe, pour qui, quelle valeur il crée, comment on mesure le succès, et ce qu'on refuse explicitement de faire. Lue par `/product-backlog` puis par `/feature-pitch` à chaque nouvelle feature pour challenger l'alignement (problème adressé, audience, principes, impact North Star). Pas de lancement à chaque feature : c'est un document fondateur, révisé seulement lors d'un pivot.
@@ -157,7 +157,7 @@ Avant le premier track, en tout début de projet (ou lors d'un pivot), poser le 
 
 **Stack** — sur quoi on marche, avant de cadrer la moindre évolution. Indispensable sur un legacy non documenté, utile sur un projet neuf dès que la stack se stabilise. Lu **en priorité par les skills techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il **constate** l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
 
-`docs/stack.md` est un document **vivant** (mêmes 4 modes que vision/backlog : Création / Enrichir / Éditer / Pivot, avec changelog). Il est lu **en priorité par les tracks techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il constate l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
+`forge/stack.md` est un document **vivant** (mêmes 4 modes que vision/backlog : Création / Enrichir / Éditer / Pivot, avec changelog). Il est lu **en priorité par les tracks techniques** (`/feature-plan`, `/refactor-plan`, `/tech-plan`, `/review`) pour décider sur des bases factuelles. Il constate l'existant — il ne justifie pas un choix (c'est le rôle d'`/adr`) ni ne décide d'une évolution (`/tech-plan`).
 
 **AGENTS.md** — comment on travaille dans ce dépôt : commandes de build, de test et de QA, conventions, architecture. C'est là que les skills d'implémentation lisent les commandes exactes au lieu de les deviner, et il sert aussi aux autres agents (Codex, Cursor…) ; le `CLAUDE.md` est réduit à un pont `@AGENTS.md` plus le spécifique Claude Code. À lancer **après `/stack` et `/vision`** s'ils existent : il les réutilise. Les règles qui ne concernent qu'une zone du code en sortent ensuite vers `.claude/rules/` via `/rules`.
 
@@ -178,9 +178,9 @@ Pour tout changement qui introduit une nouvelle fonctionnalité ou modifie un co
 
 | Phase | Skill                | Rôle                                                                             | Produit                            |
 |-------|----------------------|----------------------------------------------------------------------------------|------------------------------------|
-| 1     | `/feature-interview` | *(optionnel)* Découvrir un besoin flou par interview avant de pouvoir le pitcher | `docs/story/NNN-f-slug/brief.md`   |
-| 1     | `/feature-pitch`     | Cadrer et challenger une fonctionnalité (lit le `brief.md` amont s'il existe)    | `docs/story/NNN-f-slug/pitch.md`   |
-| 1     | `/feature-plan`      | Concevoir la solution technique à partir du pitch                                | `docs/story/NNN-f-slug/plan.md`    |
+| 1     | `/feature-interview` | *(optionnel)* Découvrir un besoin flou par interview avant de pouvoir le pitcher | `forge/story/NNN-f-slug/brief.md`   |
+| 1     | `/feature-pitch`     | Cadrer et challenger une fonctionnalité (lit le `brief.md` amont s'il existe)    | `forge/story/NNN-f-slug/pitch.md`   |
+| 1     | `/feature-plan`      | Concevoir la solution technique à partir du pitch                                | `forge/story/NNN-f-slug/plan.md`    |
 | 2     | `/feature-implem`    | Implémenter sous-tâche par sous-tâche avec QA continue                           | Code + migrations + tests          |
 | 3     | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | Verdict ; `review.md` si un point reste ouvert |
 | 3     | `/sync`              | Relever les écarts, réaligner pitch et plan, cocher les critères, consigner      | `pitch.md` + `plan.md` réalignés, `report.md` |
@@ -195,7 +195,7 @@ Pour restructurer du code sans toucher au comportement externe (dette, couplage,
 
 | Phase | Skill             | Rôle                                                              | Produit                           |
 |-------|-------------------|-------------------------------------------------------------------|-----------------------------------|
-| 1     | `/refactor-plan`  | Cadrer un refacto (motivation, cible, caractérisation, étapes)   | `docs/story/NNN-r-slug/plan.md`   |
+| 1     | `/refactor-plan`  | Cadrer un refacto (motivation, cible, caractérisation, étapes)   | `forge/story/NNN-r-slug/plan.md`   |
 | 2     | `/refactor-implem`| Exécuter : verrou tests puis étapes incrémentales, non-régression | Code restructuré + tests          |
 | 3     | `/review`         | Code review focus non-régression                                  | Verdict ; `review.md` si un point reste ouvert |
 | 3     | `/sync`           | Relever les écarts, réaligner le plan, consigner                  | `plan.md` réaligné, `report.md`   |
@@ -209,7 +209,7 @@ Pour ajouter ou modifier une brique technique observable (latence, taux d'erreur
 
 | Phase | Skill          | Rôle                                                               | Produit                           |
 |-------|----------------|--------------------------------------------------------------------|-----------------------------------|
-| 1     | `/tech-plan`   | Cadrer l'évolution (problème, brique, métriques cibles, rollback) | `docs/story/NNN-t-slug/plan.md`   |
+| 1     | `/tech-plan`   | Cadrer l'évolution (problème, brique, métriques cibles, rollback) | `forge/story/NNN-t-slug/plan.md`   |
 | 2     | `/tech-implem` | Exécuter : baseline, kill switch, étapes mesurées, validation      | Code + config + observabilité     |
 | 3     | `/review`      | Code review (kill switch, compatibilité, non-régression)          | Verdict ; `review.md` si un point reste ouvert |
 | 3     | `/sync`        | Écarts, métriques atteintes ou non, plan réaligné, consigner       | `plan.md` réaligné, `report.md`   |
@@ -258,18 +258,19 @@ Une seule passe, le diff lu une fois :
 ### `/user-doc` — Documenter pour les utilisateurs (track feature, optionnel)
 Entre `/sync` et `/commit`, sur une story `f-` : transforme la feature livrée en documentation fonctionnelle sous `documentation/`, selon **Diataxis** — une **référence** (registre de tous les cas, messages cités mot pour mot), un **guide pratique** par objectif utilisateur, un **tutoriel** si la feature ouvre un nouveau parcours, une **explication** si un pourquoi conditionne l'usage. L'exhaustivité tient à une **matrice de cas** numérotés (`C01`…), passée catégorie par catégorie et prouvée par le code. Chaque cas est documenté ou exclu avec sa raison. Les **captures** sont prises dans l'app locale (Playwright ou Chrome DevTools MCP) et décrites dans un manifeste `captures.yml` qui permet de les reprendre à l'identique. Chaque page porte un frontmatter de traçabilité (`stories`, `cases`, `history`), et part dans le commit de livraison : `git log --follow` relie la page au code qu'elle décrit. Modes Création / Enrichir (une nouvelle story étend la feature) / Rafraîchir (`--refresh` : l'interface a changé). Un comportement observé qui contredit le pitch n'est pas documenté : il est renvoyé vers `/sync` ou `/feature-implem`.
 
-> **Ne pas confondre `/user-doc` avec `/doc-feature`** : `/user-doc` écrit pour l'**utilisateur du produit** (ce qu'il peut faire, comment, dans quels cas) dans `documentation/`. `/doc-feature` écrit pour le **développeur** (entités, flux, points d'extension) dans `docs/feature-map/`.
+> **Ne pas confondre `/user-doc` avec `/doc-feature`** : `/user-doc` écrit pour l'**utilisateur du produit** (ce qu'il peut faire, comment, dans quels cas) dans `documentation/`. `/doc-feature` écrit pour le **développeur** (entités, flux, points d'extension) dans `forge/feature-map/`.
 
 ## Utilitaires (hors pipeline)
 
 | Skill                | Rôle                                                                                       |
 |----------------------|--------------------------------------------------------------------------------------------|
-| `/status`            | **Reprendre un projet après une pause** — recense les stories de `docs/story/`, déduit pour chacune l'étape atteinte (des artifacts présents et du `metadata.json`) et sa fraîcheur (active ≤ 7 j / en pause / dormante > 30 j), relève l'état du dépôt (branche, working tree, commits depuis le dernier tag, stash et commits non poussés), vérifie le décor de phase 0, puis conseille **une** reprise en nommant le skill à taper. **Lecture seule stricte** : n'écrit aucun fichier, pas même `metadata.json` — ce n'est pas une passe du pipeline. `/status <slug>` zoome sur une story, `/status --all` inclut les livrées |
+| `/status`            | **Reprendre un projet après une pause** — recense les stories de `forge/story/`, déduit pour chacune l'étape atteinte (des artifacts présents et du `metadata.json`) et sa fraîcheur (active ≤ 7 j / en pause / dormante > 30 j), relève l'état du dépôt (branche, working tree, commits depuis le dernier tag, stash et commits non poussés), vérifie le décor de phase 0, puis conseille **une** reprise en nommant le skill à taper. **Lecture seule stricte** : n'écrit aucun fichier, pas même `metadata.json` — ce n'est pas une passe du pipeline. `/status <slug>` zoome sur une story, `/status --all` inclut les livrées |
 | `/grill`             | **Passer une idée au gril** — t'interroge sans relâche sur une idée, une décision ou un document existant (`/grill 047-f-filtres` éprouve son plan) jusqu'à une compréhension partagée : un arbre de décision parcouru round par round, une réponse recommandée à chaque question, le code lu avant de te demander ce qu'il dit déjà. **N'écrit aucun fichier** : rend une synthèse (tranché / lu dans le code / contredit / resté ouvert) et nomme le skill qui l'intégrera. Le moment le plus rentable : entre le plan et l'implémentation, dans une session neuve |
 | `/test-scenario`     | Tester un scénario utilisateur via Playwright MCP (navigateur piloté en live)              |
-| `/adr`               | Rédiger un Architecture Decision Record (`docs/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : huit skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
-| `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `docs/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |
-| `/doc-feature`       | **Cartographier une feature existante** en lisant le code (entités, flux, routes, services, templates, points d'extension) — stack-agnostique avec détection auto (Sylius, Symfony, autre). Produit `docs/feature-map/NNN-slug/overview.md`. Utile pour onboarder sur un module legacy ou documenter une zone du code jamais passée par le pipeline. À distinguer de `/sync` (qui met à jour une doc d'intention récente). |
+| `/adr`               | Rédiger un Architecture Decision Record (`forge/adr/NNNN-slug.md`) depuis un artifact (pitch, plan, review, report) ou un topic libre — format MADR léger, backlinks et index automatiques. **Tu n'as pas à y penser toi-même** : huit skills du pipeline te le proposent quand la décision le mérite (voir ci-dessous) |
+| `/estimate`          | **Chiffrer le temps « tout compris » d'une story à facturer** (feature, refacto, tech) — toutes phases comprises (cadrage, implem, tests, review, doc, release en forfait fixe 30 min), pas seulement le code. Lit `brief.md`/`pitch.md`/`plan.md` selon ce qui existe (plus la matière est riche, plus c'est fiable), chiffre chaque phase justifiée par un signal + une marge d'incertitude, **en heures**, en **deux colonnes** (référence sans IA / temps réel avec assistant IA — l'écart = la marge). Produit `forge/story/NNN-<f\|r\|t>-<slug>/estimate.md`. Du temps, pas de montant. |
+| `/doc-feature`       | **Cartographier une feature existante** en lisant le code (entités, flux, routes, services, templates, points d'extension) — stack-agnostique avec détection auto (Sylius, Symfony, autre). Produit `forge/feature-map/NNN-slug/overview.md`. Utile pour onboarder sur un module legacy ou documenter une zone du code jamais passée par le pipeline. À distinguer de `/sync` (qui met à jour une doc d'intention récente). |
+| `/migrate-forge`     | **Migrer un projet resté sur l'ancien `docs/`** (forge v7 et avant) vers `forge/` — déplace vision, stack, backlog, stories, ADR et feature-maps par `git mv` (historique conservé), réécrit les chemins, propose la correction des références restantes (`AGENTS.md`, règles, CI). Une fois par projet, plan validé avant d'agir, aucun commit. Les autres skills s'arrêtent sur un projet non migré et y renvoient |
 | `/help`              | Ce sommaire — pour se rappeler le workflow et les skills disponibles                       |
 
 ### Les ADR viennent à toi
@@ -288,7 +289,7 @@ Des plugins complémentaires (ex: `sylius`, `symfony`) peuvent exposer des skill
 
 ## Règles framework
 
-Le workflow établit le stack du projet (Symfony, Sylius) et charge les références correspondantes, **bundlées avec le plugin**. Il lit `docs/stack.md` s'il existe (produit par `/forge:stack`) : c'est un simple chargement, sans scan. Sinon, il le détecte depuis `composer.json` / `package.json`. Dans une même session, il ne relit pas ce qu'une skill précédente a déjà chargé.
+Le workflow établit le stack du projet (Symfony, Sylius) et charge les références correspondantes, **bundlées avec le plugin**. Il lit `forge/stack.md` s'il existe (produit par `/forge:stack`) : c'est un simple chargement, sans scan. Sinon, il le détecte depuis `composer.json` / `package.json`. Dans une même session, il ne relit pas ce qu'une skill précédente a déjà chargé.
 
 - procédure de chargement / détection du stack
 - règles Symfony — Doctrine, services, forms, Twig, QA, sécu, perf

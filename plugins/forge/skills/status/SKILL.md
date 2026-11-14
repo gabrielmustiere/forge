@@ -1,6 +1,6 @@
 ---
 name: status
-description: Point de situation à la reprise d'un projet forge — stories en cours dans `docs/story/`, étape atteinte par chacune, état du dépôt, et par quoi reprendre. Lecture seule, n'écrit rien. À lancer quand on revient après une pause.
+description: Point de situation à la reprise d'un projet forge — stories en cours dans `forge/story/`, étape atteinte par chacune, état du dépôt, et par quoi reprendre. Lecture seule, n'écrit rien. À lancer quand on revient après une pause.
 user_invocable: true
 disable-model-invocation: true
 model: sonnet
@@ -25,7 +25,7 @@ Tu es le chef de projet qui rouvre le dossier après une absence. Ton livrable t
 
 ## Périmètre du skill
 
-Ce skill **constate et oriente**. Il lit `docs/story/`, les documents de phase 0 et l'état git, en déduit l'étape atteinte par chaque sujet, et nomme le skill par lequel reprendre.
+Ce skill **constate et oriente**. Il lit `forge/story/`, les documents de phase 0 et l'état git, en déduit l'étape atteinte par chaque sujet, et nomme le skill par lequel reprendre.
 
 Ce qu'il ne fait pas :
 
@@ -50,6 +50,11 @@ Ce qu'il ne fait pas :
 
 ## Déroulement
 
+> **Ancienne convention `docs/`** : applique la garde `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md` en mode lecture seule. Si l'atelier
+> est encore sous `docs/`, dis-le **en tête du point**, avant les stories, et oriente vers
+> `/forge:migrate-forge` — sans t'arrêter : lis alors `docs/` à la place de `forge/` pour
+> rendre le point.
+
 ### Phase 1 — État du dépôt
 
 Relève, dans cet ordre :
@@ -64,7 +69,7 @@ Sans remote configuré, la commande 5 échoue : constate-le, ne le compte pas co
 
 ### Phase 2 — Recensement des stories
 
-`Glob` sur `docs/story/*-[frt]-*/` puis, pour chaque dossier : la liste des `.md` présents et le `metadata.json`.
+`Glob` sur `forge/story/*-[frt]-*/` puis, pour chaque dossier : la liste des `.md` présents et le `metadata.json`.
 
 Du `metadata.json` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`) tu prends `title`, `updated`, `tags`, `delivery` et la **dernière entrée** du `changelog` — c'est elle qui raconte le mieux où le sujet s'est arrêté.
 
@@ -98,7 +103,7 @@ L'étape se déduit des artifacts présents, dans cet ordre — le dernier signa
 
 ### Phase 4 — Le décor
 
-Vérifie la présence de `docs/vision.md`, `docs/product-backlog.md`, `docs/stack.md`. Un manquant se signale sur une ligne, sans insister — le backlog est facultatif, la vision et la stack rendent les cadrages suivants plus sûrs.
+Vérifie la présence de `forge/vision.md`, `forge/product-backlog.md`, `forge/stack.md`. Un manquant se signale sur une ligne, sans insister — le backlog est facultatif, la vision et la stack rendent les cadrages suivants plus sûrs.
 
 **Instructions projet** : vérifie aussi `AGENTS.md` et `CLAUDE.md` à la racine — `ls -l` (un `CLAUDE.md` peut être un lien symbolique vers `AGENTS.md`), puis lis les premières lignes du `CLAUDE.md` pour y chercher l'import `@AGENTS.md`. C'est là que les skills d'implémentation trouvent les commandes de build, de test et de QA : sans lui, elles demandent au lieu de lancer. L'état se reporte sur la ligne « Décor » :
 
@@ -112,9 +117,9 @@ Vérifie la présence de `docs/vision.md`, `docs/product-backlog.md`, `docs/stac
 
 Le cas « les deux sans import » se dit explicitement, même si rien d'autre n'est à signaler : l'utilisateur croit son `AGENTS.md` lu alors que Claude Code l'ignore dès qu'un `CLAUDE.md` existe. Tu constates, tu ne juges pas le contenu des fichiers — la qualité des instructions appartient à `/forge:agents-md`.
 
-**Avancement du backlog** : si `docs/product-backlog.md` existe et porte des lignes à cocher, relève les compteurs par horizon **tels qu'ils sont écrits** (`### MVP — … · \`3/8 livrées\``) et reporte-les sur la ligne « Décor ». Tu **ne recalcules rien** et tu ne corriges rien : la réconciliation appartient à `/forge:product-backlog` (règle 1, lecture seule stricte). Si tes propres relevés de Phase 3 contredisent visiblement un compteur (une story livrée dont la ligne n'est pas cochée), dis-le en une ligne — deux signaux qui se contredisent se disent — et renvoie vers `/forge:product-backlog` pour réconcilier. Backlog au format tabulaire ancien (sans cases) : pas de compteur, on n'en fabrique pas.
+**Avancement du backlog** : si `forge/product-backlog.md` existe et porte des lignes à cocher, relève les compteurs par horizon **tels qu'ils sont écrits** (`### MVP — … · \`3/8 livrées\``) et reporte-les sur la ligne « Décor ». Tu **ne recalcules rien** et tu ne corriges rien : la réconciliation appartient à `/forge:product-backlog` (règle 1, lecture seule stricte). Si tes propres relevés de Phase 3 contredisent visiblement un compteur (une story livrée dont la ligne n'est pas cochée), dis-le en une ligne — deux signaux qui se contredisent se disent — et renvoie vers `/forge:product-backlog` pour réconcilier. Backlog au format tabulaire ancien (sans cases) : pas de compteur, on n'en fabrique pas.
 
-Aucun `docs/story/` du tout : le projet n'a pas encore de story forge. Dis-le, et oriente vers `/forge:vision` (projet neuf) ou `/forge:feature-pitch` (le décor est déjà posé).
+Aucun `forge/story/` du tout : le projet n'a pas encore de story forge. Dis-le, et oriente vers `/forge:vision` (projet neuf) ou `/forge:feature-pitch` (le décor est déjà posé).
 
 ### Phase 5 — Le point
 
