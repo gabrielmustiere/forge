@@ -59,7 +59,7 @@ Tous les artefacts vivent à plat dans `forge/story/` au format `NNN-<f|r|t>-<sl
 
 ## Forge Board
 
-Projet lié, dans son propre dépôt : https://github.com/gabrielmustiere/forge-board. Application Symfony 8 développée avec ce plugin — kanban en lecture seule qui scanne les `forge/story/` de dépôts forge et projette chaque story en carte le long d'un pipeline visuel.
+Projet lié, dans son propre dépôt : https://github.com/gabrielmustiere/forge-board. Application Symfony 8 développée avec ce plugin — kanban qui scanne les stories de dépôts forge et projette chaque story en carte le long d'un pipeline visuel. Il lit pour l'instant la convention de Forge 7 (`docs/story/`) : un projet migré vers `forge/story/` (Forge 8) n'y apparaît qu'une fois le Board mis à jour.
 
 ## Liens
 
