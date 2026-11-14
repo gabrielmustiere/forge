@@ -10,12 +10,19 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
-### 🔧 Technique
+## [8.0.1] - 2026-11-14 — Transition v8 consolidée
 
-- `/forge:commit` et `/forge:release` sur un projet resté sous `docs/` : la livraison n'est pas
-  bloquée, mais l'écriture du `delivery` dans les `metadata.json` est sautée et signalée, avec un
-  renvoi vers `/forge:migrate-forge` puis `/forge:backfill-metadata`. La garde partagée les
-  présentait à tort comme étrangers à l'atelier.
+### ✨ Fonctionnel
+
+- **Livrer un projet pas encore migré sans perdre la trace de livraison** — sur un projet resté
+  sous `docs/`, `/forge:commit` et `/forge:release` livrent normalement, mais ne peuvent pas
+  inscrire la livraison dans les `metadata.json` des stories. Ils le signalent désormais dans leur
+  résumé, au lieu de sauter l'étape sans rien dire, et renvoient vers `/forge:migrate-forge` puis
+  `/forge:backfill-metadata`, qui reconstruit cette trace depuis git.
+- **Le site présente les 27 skills de la v8** — `/forge:user-doc` et `/forge:migrate-forge` sur la
+  vitrine, dans la documentation et dans `llms.txt`, un encadré « Passer de Forge 7 à Forge 8 » et
+  une entrée de dépannage. Le site précise aussi que le Forge Board lit encore `docs/story/` : un
+  projet migré n'y apparaît qu'une fois le Board mis à jour.
 
 ## [8.0.0] - 2026-11-14 — De docs/ à forge/
 
@@ -685,7 +692,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.0.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.0.1...HEAD
+[8.0.1]: https://github.com/gabrielmustiere/forge/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/gabrielmustiere/forge/compare/v7.4.0...v8.0.0
 [7.4.0]: https://github.com/gabrielmustiere/forge/compare/v7.3.0...v7.4.0
 [7.3.0]: https://github.com/gabrielmustiere/forge/compare/v7.2.1...v7.3.0
