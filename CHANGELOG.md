@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-11-14 — De docs/ à forge/
+
 ### ✨ Fonctionnel
 
 - **BREAKING — l'atelier forge quitte `docs/` pour `forge/`** — vision, stack, backlog produit,
@@ -676,7 +678,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v7.4.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.0.0...HEAD
+[8.0.0]: https://github.com/gabrielmustiere/forge/compare/v7.4.0...v8.0.0
 [7.4.0]: https://github.com/gabrielmustiere/forge/compare/v7.3.0...v7.4.0
 [7.3.0]: https://github.com/gabrielmustiere/forge/compare/v7.2.1...v7.3.0
 [7.2.1]: https://github.com/gabrielmustiere/forge/compare/v7.2.0...v7.2.1
