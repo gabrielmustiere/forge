@@ -10,6 +10,39 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Nouveau skill `/forge:user-doc` : documentation fonctionnelle des features** — étape
+  optionnelle du track feature, entre `/forge:sync` et `/forge:commit`. Il transforme une story
+  `f-` livrée en pages destinées aux utilisateurs du produit, sous `documentation/`, selon la
+  méthode **Diataxis** : une référence (registre de tous les cas, messages cités mot pour mot), un
+  guide pratique par objectif utilisateur, un tutoriel si la feature ouvre un nouveau parcours,
+  une explication si un pourquoi conditionne l'usage. Une page ne mélange jamais deux types.
+- **Exhaustivité par construction** — une matrice de cas numérotés (`C01`…) est passée catégorie
+  par catégorie (parcours nominaux, variantes, permissions, saisies invalides, états vides,
+  limites, transitions, effets visibles ailleurs, annulation, erreurs, paramétrage, hors
+  périmètre), chaque cas prouvé par le code livré ou le pitch. Chaque cas est documenté ou exclu
+  avec sa raison, et la couverture est comptée en clôture.
+- **Captures prises dans l'application** via Playwright MCP ou Chrome DevTools MCP, sur
+  l'environnement local décrit dans l'`AGENTS.md`. La campagne est déléguée à un sous-agent pour
+  garder les snapshots hors de la session. Un manifeste `captures.yml` par feature décrit comment
+  reproduire chaque image. Un comportement observé qui contredit l'attendu n'est pas documenté :
+  il est renvoyé vers `/forge:sync` ou `/forge:feature-implem`.
+- **Documentation vivante et traçable** — trois modes (Création, Enrichir quand une nouvelle story
+  étend la feature, Rafraîchir quand l'interface a changé). Chaque page porte un frontmatter
+  (`stories`, `cases`, `history`). Comme elle part dans le commit de livraison, `git log --follow`
+  et l'historique GitHub la relient au code qu'elle décrit. Les captures reprises gardent leur
+  nom, si bien que le diff GitHub montre l'image avant/après.
+
+### 🔧 Technique
+
+- Contrat de frontières : `documentation/**` a pour écrivain unique `user-doc`, rangé dans la
+  famille Clôture. Convention de métadonnées de story : nouvelle entrée `Documentation`, écrite
+  seulement tant que la story n'est pas livrée, pour ne pas fausser le `delivery` posé par
+  `commit`.
+- Principes Diataxis adaptés en français depuis le skill `diataxis` de Romain Lespinasse
+  (licence MIT, attribution dans `user-doc/references/diataxis.md`).
+
 ## [7.4.0] - 2026-11-13 — Modèle et effort par skill
 
 ### ✨ Fonctionnel

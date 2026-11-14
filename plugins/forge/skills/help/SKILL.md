@@ -51,6 +51,13 @@ allowed-tools:
      pitch.md             plan.md         code+migrations     verdict      doc sync    commit
                                           +nouveaux tests   (review.md   +report.md    +push
                                                             si ouvert)
+                                                     (optionnel, entre sync et commit)
+                                                         ┌──────────┐
+                                                sync ┄┄▶ │ user-doc │ ┄┄▶ commit
+                                                         └─────┬────┘
+                                                               ▼
+                                           documentation/ : tutoriel, guides, référence,
+                                           explications (Diataxis) + captures, tous les cas
 
                     TRACK REFACTO (comportement figé, code restructuré)
  ┌───────────────┐   ┌─────────────────┐   ┌────────┐   ┌──────┐   ┌────────┐
@@ -177,7 +184,8 @@ Pour tout changement qui introduit une nouvelle fonctionnalité ou modifie un co
 | 2     | `/feature-implem`    | Implémenter sous-tâche par sous-tâche avec QA continue                           | Code + migrations + tests          |
 | 3     | `/review`            | Code review (sécu, perf, qualité, conformité plan)                               | Verdict ; `review.md` si un point reste ouvert |
 | 3     | `/sync`              | Relever les écarts, réaligner pitch et plan, cocher les critères, consigner      | `pitch.md` + `plan.md` réalignés, `report.md` |
-| 3     | `/commit`            | En dernier : embarque code + report + docs réalignées, Conventional Commits + push | Commit                           |
+| 3     | `/user-doc`          | *(optionnel)* Documenter la feature livrée pour ses utilisateurs : pages Diataxis, captures prises dans l'app, tous les cas couverts | `documentation/` |
+| 3     | `/commit`            | En dernier : embarque code + report + docs réalignées (+ documentation), Conventional Commits + push | Commit                           |
 
 ## Track refacto — Comportement figé, code restructuré
 
@@ -246,6 +254,11 @@ Une seule passe, le diff lu une fois :
 **Pas à chaque story** : quand une ou plusieurs stories commitées méritent d'être publiées. Détermine le bump SemVer (major/minor/patch) depuis les Conventional Commits depuis le dernier tag, met à jour `CHANGELOG.md` (format Keep a Changelog, titre de version, chapitres Fonctionnel / Technique), crée un tag annoté `vX.Y.Z`, push, puis publie la release sur GitHub via `gh`. Demande validation avant toute action publique. Renseigne la `delivery` des stories embarquées. Argument-hint : `[major\|minor\|patch] [--no-push] [--draft] [--pre <suffix>]`. `/status` te signale quand des livraisons non taguées s'accumulent.
 
 > **Ne pas confondre `/sync` avec `/doc-feature`** : `/sync` recale un document d'intention récent que tu viens de modifier dans un track structuré. `/doc-feature` (voir Utilitaires) cartographie une feature **ancienne ou jamais passée par le pipeline**, en partant du code livré, sans dossier de track préalable.
+
+### `/user-doc` — Documenter pour les utilisateurs (track feature, optionnel)
+Entre `/sync` et `/commit`, sur une story `f-` : transforme la feature livrée en documentation fonctionnelle sous `documentation/`, selon **Diataxis** — une **référence** (registre de tous les cas, messages cités mot pour mot), un **guide pratique** par objectif utilisateur, un **tutoriel** si la feature ouvre un nouveau parcours, une **explication** si un pourquoi conditionne l'usage. L'exhaustivité tient à une **matrice de cas** numérotés (`C01`…), passée catégorie par catégorie et prouvée par le code. Chaque cas est documenté ou exclu avec sa raison. Les **captures** sont prises dans l'app locale (Playwright ou Chrome DevTools MCP) et décrites dans un manifeste `captures.yml` qui permet de les reprendre à l'identique. Chaque page porte un frontmatter de traçabilité (`stories`, `cases`, `history`), et part dans le commit de livraison : `git log --follow` relie la page au code qu'elle décrit. Modes Création / Enrichir (une nouvelle story étend la feature) / Rafraîchir (`--refresh` : l'interface a changé). Un comportement observé qui contredit le pitch n'est pas documenté : il est renvoyé vers `/sync` ou `/feature-implem`.
+
+> **Ne pas confondre `/user-doc` avec `/doc-feature`** : `/user-doc` écrit pour l'**utilisateur du produit** (ce qu'il peut faire, comment, dans quels cas) dans `documentation/`. `/doc-feature` écrit pour le **développeur** (entités, flux, points d'extension) dans `docs/feature-map/`.
 
 ## Utilitaires (hors pipeline)
 

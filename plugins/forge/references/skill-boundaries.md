@@ -50,7 +50,7 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | Artifact | Écrivain **unique** | Lecteurs |
 |---|---|---|
 | `docs/story/<NNN>-f-<slug>/brief.md` | `feature-interview` | `feature-pitch`, `estimate` |
-| `docs/story/<NNN>-f-<slug>/pitch.md` | `feature-pitch` | `feature-plan`, `review`, `sync`, `estimate`, `adr` |
+| `docs/story/<NNN>-f-<slug>/pitch.md` | `feature-pitch` | `feature-plan`, `review`, `sync`, `estimate`, `adr`, `user-doc` |
 | `docs/story/<NNN>-f-<slug>/plan.md` | `feature-plan` | `feature-implem`, `review`, `sync`, `estimate`, `adr` |
 | `docs/story/<NNN>-r-<slug>/plan.md` | `refactor-plan` | `refactor-implem`, `review`, `sync`, `estimate`, `adr` |
 | `docs/story/<NNN>-t-<slug>/plan.md` | `tech-plan` | `tech-implem`, `review`, `sync`, `estimate`, `adr` |
@@ -63,8 +63,9 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `docs/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `agents-md` |
 | `docs/adr/<NNNN>-<slug>.md` + `docs/adr/README.md` | `adr` | tous |
 | `docs/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
+| `documentation/**` (pages Diataxis, `assets/`, index `README.md`) | `user-doc` | humains (utilisateurs du produit) |
 | `CHANGELOG.md` + tags de version | `release` | — |
-| Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `stack` |
+| Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `user-doc`, `stack` |
 | L'historique git (commits, push) | `commit` (+ `release` pour le commit de version) | — |
 | `AGENTS.md` + pont `CLAUDE.md` racine | `agents-md` (+ `rules`, voir §3) | tous |
 | `.claude/rules/**` | `rules` | tous (chargées par le harness, pas lues par les skills) |
@@ -197,7 +198,7 @@ une question d'outil.
 |---|---|---|---|
 | **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `agents-md`, `doc-feature`, `help` | non | ses documents (§2) |
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
-| **Clôture** | `review`, `sync`, `backfill-metadata` | non | ses documents (§2) |
+| **Clôture** | `review`, `sync`, `user-doc`, `backfill-metadata` | non | ses documents (§2) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
 | **Vérification** | `test-scenario`, `status`, `grill` | non | **rien** — elles observent ou éprouvent, elles ne corrigent pas |
 
