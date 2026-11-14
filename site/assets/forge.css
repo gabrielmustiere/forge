@@ -546,6 +546,7 @@
   }
 
   @media (min-width: 1024px) {
+    .phase__items--5 { grid-template-columns: repeat(5, 1fr); }
     .doc-layout { padding: 0 40px; }
     .doc-header { padding: 56px 0 0; }
     .doc-body { display: grid; grid-template-columns: 232px 1fr; gap: 48px; align-items: start; }

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Documentation — Forge, plugin Claude Code</title>
-    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage.">
+    <meta name="description" content="Documentation développeur du plugin Claude Code Forge : prérequis, installation, concepts du pipeline, référence des 27 skills, configuration des permissions et dépannage.">
     <link rel="canonical" href="https://forge.mustiere.fr/docs/">
     <meta name="author" content="Gabriel Mustiere">
     <meta name="theme-color" content="#0a0e12">
@@ -14,17 +14,17 @@
     <meta property="og:site_name" content="Forge">
     <meta property="og:locale" content="fr_FR">
     <meta property="og:title" content="Documentation — Forge, plugin Claude Code">
-    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
+    <meta property="og:description" content="Prérequis, installation, concepts du pipeline, référence des 27 skills, configuration et dépannage.">
     <meta property="og:url" content="https://forge.mustiere.fr/docs/">
     <meta property="og:image" content="https://forge.mustiere.fr/assets/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta property="og:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 27 skills, stack-agnostique.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Documentation — Forge, plugin Claude Code">
-    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration et dépannage.">
+    <meta name="twitter:description" content="Prérequis, installation, concepts du pipeline, référence des 27 skills, configuration et dépannage.">
     <meta name="twitter:image" content="https://forge.mustiere.fr/assets/og.png">
-    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 25 skills, stack-agnostique.">
+    <meta name="twitter:image:alt" content="Forge — le pipeline de développement, de l'idée à la release. 3 tracks symétriques, 27 skills, stack-agnostique.">
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0e12'/><rect x='11' y='11' width='10' height='10' fill='%233fd6f2'/></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,7 +41,7 @@
                     "@type": "TechArticle",
                     "@id": "https://forge.mustiere.fr/docs/#article",
                     "headline": "Documentation du plugin Claude Code Forge",
-                    "description": "Prérequis, installation, concepts du pipeline, référence des 25 skills, configuration des permissions et dépannage du plugin Forge.",
+                    "description": "Prérequis, installation, concepts du pipeline, référence des 27 skills, configuration des permissions et dépannage du plugin Forge.",
                     "url": "https://forge.mustiere.fr/docs/",
                     "inLanguage": "fr-FR",
                     "proficiencyLevel": "Beginner",
@@ -88,7 +88,7 @@
                             "@type": "HowToStep",
                             "position": 3,
                             "name": "Recharger les plugins",
-                            "text": "Exécuter /reload-plugins pour que les 25 skills soient disponibles sous le préfixe /forge:."
+                            "text": "Exécuter /reload-plugins pour que les 27 skills soient disponibles sous le préfixe /forge:."
                         }
                     ]
                 },
@@ -142,7 +142,7 @@
         <p class="doc-header__eyebrow">DOCUMENTATION</p>
         <h1>Installer et utiliser Forge</h1>
         <p class="doc-header__lead">Forge est un plugin Claude Code stack-agnostique. Il découpe le cycle de développement en étapes courtes, chacune produisant un artefact markdown qui alimente la suivante. Cette page couvre l'installation, les
-            concepts, la référence des 25 skills et la configuration.</p>
+            concepts, la référence des 27 skills et la configuration.</p>
     </header>
 
     <div class="doc-body">
@@ -234,7 +234,7 @@
                         </li>
                         <li>
                             <h4>Recharger les plugins</h4>
-                            <p>Rend les 25 skills disponibles dans la session courante.</p>
+                            <p>Rend les 27 skills disponibles dans la session courante.</p>
                             <div class="code">
                                 <pre><code><span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
                             </div>
@@ -267,6 +267,10 @@
 <span class="prompt" aria-hidden="true">❯ </span>/reload-plugins</code></pre>
                     </div>
                     <p>Les versions suivent le SemVer et sont annoncées dans le <a href="https://github.com/gabrielmustiere/forge/blob/main/CHANGELOG.md">CHANGELOG</a> au format Keep a Changelog.</p>
+                    <div class="callout callout--warn">
+                        <p class="callout__title">Passer de Forge 7 à Forge 8</p>
+                        <p>Depuis la 8.0.0, l'atelier d'un projet vit sous <code>forge/</code> et non plus sous <code>docs/</code>. Sur un projet existant, lancez une fois <code>/forge:migrate-forge</code> (ou <code>/forge:migrate-forge --dry-run</code> pour voir le plan d'abord) : les autres skills refusent de travailler tant que l'atelier est sous <code>docs/</code>.</p>
+                    </div>
                 </div>
             </section>
 
@@ -574,6 +578,10 @@ forge/story/044-t-redis-cache/        <span class="comment"># t = évolution tec
                                 <td>La clôture documentaire, en une passe : relève les écarts entre l'intention et le livré, met à jour les documents d'intention <strong>en place</strong> (critères cochés compris) et les docs projet (vision, stack, product-backlog), puis consigne dans <code>report.md</code> ce qui n'a aucune autre place — écarts, non-livré, dette, leçons.</td>
                             </tr>
                             <tr>
+                                <td><code>/forge:user-doc</code></td>
+                                <td><em>Optionnel, track feature</em> — entre <code>sync</code> et <code>commit</code> : rédige la documentation fonctionnelle de la feature livrée pour les utilisateurs du produit, sous <code>documentation/</code>, selon Diataxis (tutoriel, guides pratiques, référence, explications : un type par page). Une matrice de cas numérotés, chacun prouvé par le code, garantit l'exhaustivité ; les captures sont prises dans l'application locale et reproductibles grâce à un manifeste <code>captures.yml</code>.</td>
+                            </tr>
+                            <tr>
                                 <td><code>/forge:commit</code></td>
                                 <td>Vient en dernier pour embarquer d'un coup le code, le <code>report.md</code> et les docs réalignées : lit le diff, regroupe les changements en lots cohérents, propose des messages Conventional Commits en français, demande validation, commit et push.</td>
                             </tr>
@@ -640,6 +648,10 @@ forge/story/044-t-redis-cache/        <span class="comment"># t = évolution tec
                             <tr>
                                 <td><code>/forge:backfill-metadata</code></td>
                                 <td>Reconstruit rétroactivement le <code>metadata.json</code> des stories antérieures depuis l'historique git. N'écrit que des valeurs vraies — jamais de date inventée.</td>
+                            </tr>
+                            <tr>
+                                <td><code>/forge:migrate-forge</code></td>
+                                <td>Migre une fois un projet resté sur l'ancienne convention <code>docs/</code> (Forge 7 et avant) vers <code>forge/</code> : déplacement par <code>git mv</code> pour garder l'historique, chemins réécrits dans les documents déplacés, références restantes (<code>AGENTS.md</code>, règles, CI) proposées une par une. Plan validé avant d'agir, <code>--dry-run</code> pour s'arrêter au plan, aucun commit.</td>
                             </tr>
                             </tbody>
                         </table>
@@ -711,6 +723,9 @@ forge/story/044-t-redis-cache/        <span class="comment"># t = évolution tec
 
                     <h4>Claude demande confirmation à chaque commande</h4>
                     <p>Votre projet n'a pas pré-autorisé son outillage. Voir <a href="#permissions">Permissions et outillage</a>.</p>
+
+                    <h4>Une skill s'arrête et parle d'« ancienne convention <code>docs/</code> »</h4>
+                    <p>Le projet a été cadré avec Forge 7 ou avant : ses stories, sa vision ou sa stack sont encore sous <code>docs/</code>. Lancez <code>/forge:migrate-forge</code>, qui les déplace sous <code>forge/</code> en gardant l'historique git, puis relancez la skill.</p>
 
                     <h4>Le Forge Board n'affiche pas mes stories correctement</h4>
                     <p>Le Board lit le <code>metadata.json</code> de chaque story et ne l'écrit jamais. Sur des stories antérieures à cette convention, le fichier n'existe pas : lancez <code>/forge:backfill-metadata</code> pour le reconstruire depuis

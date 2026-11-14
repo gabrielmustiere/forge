@@ -16,12 +16,12 @@ Les skills sont namespacées par le nom du plugin : `/forge:help`, `/forge:featu
 
 ## Structure du pipeline
 
-Le pipeline compte 25 skills et se lit sur deux axes. La **phase** dit *quand* : quatre phases, dans l'ordre. Le **track** dit *avec quelles skills* : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Le track se choisit à l'entrée de la phase 1 et ne modifie pas les phases traversées.
+Le pipeline compte 27 skills et se lit sur deux axes. La **phase** dit *quand* : quatre phases, dans l'ordre. Le **track** dit *avec quelles skills* : à phase égale, une feature, un refacto et une évolution technique n'appellent pas les mêmes. Le track se choisit à l'entrée de la phase 1 et ne modifie pas les phases traversées.
 
 - **Phase 0 — poser le décor** (une fois pour le projet ; les documents de `forge/` sont vivants, à 4 modes : Création / Enrichir / Éditer / Pivot) : `vision` → `forge/vision.md`, `product-backlog` → `forge/product-backlog.md`, `stack` → `forge/stack.md`, puis `agents-md` → `AGENTS.md` à la racine du dépôt (commandes et conventions du projet, avec un `CLAUDE.md` pont), qui réutilise la stack et la vision.
 - **Phase 1 — cadrer** : selon le track, `feature-interview` (optionnel, → `brief.md`) → `feature-pitch` (→ `pitch.md`) → `feature-plan` (→ `plan.md`) ; ou `refactor-plan` (→ `plan.md`, avec tests de caractérisation) ; ou `tech-plan` (→ `plan.md`, avec métrique cible, baseline et kill switch). Les trois tracks produisent un `plan.md` ; seul le track feature intercale un `pitch.md` fonctionnel en amont.
 - **Phase 2 — implémenter** : `feature-implem`, `refactor-implem` ou `tech-implem`. Étapes courtes, QA du projet après chacune.
-- **Phase 3 — clôturer**, commune aux trois tracks : `review` (verdict, `review.md` si un point reste ouvert) → `sync` (écarts relevés, docs réalignées, → `report.md`) → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. `release` ferme la phase quand on publie une version — pas à chaque story.
+- **Phase 3 — clôturer**, commune aux trois tracks : `review` (verdict, `review.md` si un point reste ouvert) → `sync` (écarts relevés, docs réalignées, → `report.md`) → `user-doc` (optionnel, track feature : documentation fonctionnelle → `documentation/`) → `commit`. Le `commit` vient en dernier et embarque d'un coup le code, le `report.md` et les docs réalignées. `release` ferme la phase quand on publie une version — pas à chaque story.
 
 Les trois tracks : **feature** (valeur utilisateur observable), **refacto** (comportement externe strictement figé, verrou de tests de caractérisation avant toute modification), **tech** (perf, résilience, observabilité, sécu — métrique cible chiffrée, baseline, kill switch). Hors de ce découpage, le **track fast** couvre les bugfixes : moins de 3 fichiers, pas de migration ni d'impact transverse → on code, on passe la QA du stack, puis `/forge:commit`. Pas de pitch pour un typo.
 
@@ -44,6 +44,7 @@ Tous les artefacts vivent à plat dans `forge/story/` au format `NNN-<f|r|t>-<sl
 - `/forge:review` — code review du diff : sécu, qualité, conformité au plan, non-régression.
 - `/forge:commit` — message Conventional Commits en français, commit et push.
 - `/forge:sync` — clôture documentaire : relève les écarts, réaligne les docs d'intention et les docs projet sur le code livré, coche les critères, consigne écarts, dette et leçons dans `report.md`.
+- `/forge:user-doc` — optionnel, track feature : documentation fonctionnelle Diataxis de la feature livrée, cas prouvés par le code, captures prises dans l'app, sous `documentation/`.
 - `/forge:release` — optionnel, quand on publie une version : tag SemVer annoté, `CHANGELOG.md` Keep a Changelog et release GitHub.
 - `/forge:help` — sommaire du pipeline, tracks, skills et artefacts.
 - `/forge:rules` — écrit les règles projet paths-scopées dans `.claude/rules/`.
@@ -54,6 +55,7 @@ Tous les artefacts vivent à plat dans `forge/story/` au format `NNN-<f|r|t>-<sl
 - `/forge:estimate` — chiffre le temps « tout compris » d'une story à facturer, en heures.
 - `/forge:doc-feature` — cartographie une feature existante (legacy) dans `forge/feature-map/`.
 - `/forge:backfill-metadata` — reconstruit le `metadata.json` des stories antérieures depuis git.
+- `/forge:migrate-forge` — migre une fois un projet resté sur l'ancien `docs/` (Forge 7) vers `forge/`, historique git conservé.
 
 ## Forge Board
 
@@ -61,7 +63,7 @@ Projet lié, dans son propre dépôt : https://github.com/gabrielmustiere/forge-
 
 ## Liens
 
-- [Documentation développeur](https://forge.mustiere.fr/docs/) — prérequis, installation pas à pas, concepts, référence des 25 skills, permissions, dépannage
+- [Documentation développeur](https://forge.mustiere.fr/docs/) — prérequis, installation pas à pas, concepts, référence des 27 skills, permissions, dépannage
 - [Dépôt GitHub](https://github.com/gabrielmustiere/forge)
 - [Inventaire complet des skills](https://github.com/gabrielmustiere/forge/blob/main/plugins/forge/SKILLS.md)
 - [Releases](https://github.com/gabrielmustiere/forge/releases)
