@@ -220,6 +220,11 @@ Si `gh` est absent : afficher le contenu de la release et l'URL `https://github.
 
 **Métadonnées de story** : après le tag de version, renseigne `delivery.release` (ex. `v4.3.0`) dans le `metadata.json` des stories couvertes par la release, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`. Le tag peut arriver après le commit : complète un `delivery.commit` déjà présent sans le modifier, rebouge `updated` et append une entrée `type: "Release"`.
 
+> **Ancienne convention `docs/`** : si l'atelier du projet est encore sous `docs/` (garde
+> `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`), ne bloque pas la livraison, mais **saute** cette étape : n'écris aucun
+> `metadata.json` sous `docs/`, et ajoute au résumé une ligne qui oriente vers
+> `/forge:migrate-forge` puis `/forge:backfill-metadata` (qui reconstruit le `delivery` depuis git).
+
 > Prochaine étape : annoncer la release / déployer / `/sync` si applicable.
 
 ## Arguments

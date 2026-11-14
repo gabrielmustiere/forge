@@ -10,6 +10,13 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### 🔧 Technique
+
+- `/forge:commit` et `/forge:release` sur un projet resté sous `docs/` : la livraison n'est pas
+  bloquée, mais l'écriture du `delivery` dans les `metadata.json` est sautée et signalée, avec un
+  renvoi vers `/forge:migrate-forge` puis `/forge:backfill-metadata`. La garde partagée les
+  présentait à tort comme étrangers à l'atelier.
+
 ## [8.0.0] - 2026-11-14 — De docs/ à forge/
 
 ### ✨ Fonctionnel

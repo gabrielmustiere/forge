@@ -43,7 +43,10 @@ Message type :
 
 - **`status`** est en lecture seule : il **signale** la situation en tête du point et oriente vers
   `/forge:migrate-forge`, sans s'arrêter — il lit alors `docs/` pour rendre le point quand même.
-- **`help`**, **`commit`**, **`release`** et **`test-scenario`** ne lisent ni n'écrivent
-  d'artefact de l'atelier : ils ne vérifient rien. `grill`, lui, lit les stories : il applique la
-  garde.
+- **`commit`** et **`release`** livrent du code et des versions : un atelier non migré ne doit pas
+  bloquer une livraison. Ils **ne s'arrêtent pas**, mais sautent l'étape `metadata.json` (le
+  `delivery` des stories) et le signalent dans leur résumé : après `/forge:migrate-forge`,
+  `/forge:backfill-metadata` reconstruit ce `delivery` depuis git. Ils n'écrivent jamais sous `docs/`.
+- **`help`** et **`test-scenario`** ne lisent ni n'écrivent d'artefact de l'atelier : ils ne
+  vérifient rien. `grill`, lui, lit les stories : il applique la garde.
 - **`migrate-forge`** est le seul skill qui écrit sous `docs/` (pour l'en vider) — c'est son objet.

@@ -221,6 +221,11 @@ Si le push échoue malgré le rebase préalable (race avec un autre push entre f
 
 **Métadonnées de story** : après le commit, renseigne `delivery.commit` (SHA court) dans le `metadata.json` des stories livrées, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`, puis rebouge `updated` et append une entrée `type: "Livraison"`. Si `delivery` est absent, crée-le avec `release: null`.
 
+> **Ancienne convention `docs/`** : si l'atelier du projet est encore sous `docs/` (garde
+> `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`), ne bloque pas la livraison, mais **saute** cette étape : n'écris aucun
+> `metadata.json` sous `docs/`, et ajoute au résumé une ligne qui oriente vers
+> `/forge:migrate-forge` puis `/forge:backfill-metadata` (qui reconstruit le `delivery` depuis git).
+
 `/commit` est la **dernière étape de la phase 3 pour une story** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md` et les documents réalignés. Rien ne s'enchaîne après dans la story ; `/release` ferme la phase 3 plus tard, quand on publie une version.
 
 ## Arguments
