@@ -30,7 +30,7 @@ Ce qui rend l'autonomie sûre ici : `sync` n'écrit que du Markdown et du `metad
 Une passe, trois gestes, sur **une** story :
 
 1. **Relever les écarts** entre l'intention (`pitch.md` + `plan.md`, ou `plan.md` seul) et le code livré dans le working tree — en lisant le diff **une seule fois**.
-2. **Réaligner** la doc d'intention de la story (`pitch.md`/`plan.md`), **cocher les critères** dans le document qui les porte, et **remettre à jour** les documents projet de phase 0 qui existent (`product-backlog.md`, `vision.md`, `stack.md`) via leurs modes Enrichir/Éditer — avancement du backlog réconcilié en entier, vision passée section par section.
+2. **Réaligner** la doc d'intention de la story (`pitch.md`/`plan.md`), **cocher les critères** dans le document qui les porte, et **remettre à jour** les documents projet qui existent (`product-backlog.md`, `vision.md`, `stack.md`, `glossaire.md`) via les modes de leurs propriétaires — avancement du backlog réconcilié en entier, vision passée section par section, glossaire aligné sur les libellés que la story a changés.
 3. **Consigner** dans `report.md` ce qui n'a aucune autre maison : les écarts et où ils ont été réalignés, ce qui n'est pas livré, la dette, les leçons.
 
 Ce qu'il ne fait pas, et à qui il renvoie :
@@ -40,6 +40,7 @@ Ce qu'il ne fait pas, et à qui il renvoie :
 - **Re-cadrer** une story → `/forge:feature-plan`, `/forge:refactor-plan`, `/forge:tech-plan`. `sync` réaligne sur ce qui a été livré, il ne conçoit pas.
 - **Livrer** → `/forge:commit`, qui vient après et embarque code, `report.md` et docs réalignées.
 - **Graver une décision ou une règle** → `/forge:adr`, `/forge:rules`. `sync` les **propose** en clôture, il ne les écrit pas.
+- **Créer le glossaire, ou le reprendre en entier** → `/forge:glossary`. `sync` ne fait que la mise à jour propre à la story, selon la passe que `glossary` définit (Phase 5).
 
 `sync` est aussi l'**unique écrivain de `report.md`** (contrat `${CLAUDE_SKILL_DIR}/../../references/skill-boundaries.md` §2).
 
@@ -71,7 +72,7 @@ Le skill **ne demande aucune validation** pour :
 - L'identification et le classement des écarts.
 - La formulation du texte réaligné et du `report.md`.
 - Les `Edit` sur `pitch.md` / `plan.md`, le cochage des critères attestés, l'écriture de `report.md` et du `metadata.json`.
-- La remise à jour de `product-backlog.md`, `vision.md` et `stack.md` quand ils existent (Phase 5) : réconciliation complète de l'avancement du backlog, retouches ciblées en modes Enrichir/Éditer.
+- La remise à jour de `product-backlog.md`, `vision.md`, `stack.md` et `glossaire.md` quand ils existent (Phase 5) : réconciliation complète de l'avancement du backlog, retouches ciblées en modes Enrichir/Éditer, définitions du glossaire touchées par la story.
 - La décision de **ne rien faire** sur un écart cosmétique ou déjà couvert.
 
 Le skill **demande arbitrage** uniquement quand :
@@ -215,12 +216,12 @@ Applique le seau « à appliquer » avec `Edit` sur `pitch.md` / `plan.md`, sans
 
 `- [ ]` → `- [x]` pour chaque critère **attesté** (un test qui le vérifie, un hunk du diff, un résultat consigné par l'implem ou la review). Un critère non atteint reste décoché ; sa raison va au §Non implémenté du report. On ne reformule un critère que si sa règle métier a été réalignée sur une décision tracée — jamais pour le rendre cochable.
 
-### Phase 5 — Remise à jour des documents projet (backlog / vision / stack)
+### Phase 5 — Remise à jour des documents projet (backlog / vision / stack / glossaire)
 
 Une story livrée fait dériver les documents de **phase 0**, pas seulement sa doc d'intention. Et ces documents dérivent aussi entre deux syncs : une story committée depuis, une case cochée à la main sur GitHub, un pointeur de vision devenu une story. `sync` est le seul moment du pipeline où quelqu'un les regarde après une livraison — il les **remet à jour**, il ne se contente pas de vérifier que la story courante les a touchés.
 
-**Règle d'existence.** Pour chacun de `forge/product-backlog.md`, `forge/vision.md` et `forge/stack.md` :
-- **Absent** → saute-le en silence. `sync` ne crée jamais un document de phase 0 : la création appartient au propriétaire (`/product-backlog`, `/vision`, `/stack`).
+**Règle d'existence.** Pour chacun de `forge/product-backlog.md`, `forge/vision.md`, `forge/stack.md` et `forge/glossaire.md` :
+- **Absent** → saute-le en silence. `sync` ne crée jamais un document projet : la création appartient au propriétaire (`/product-backlog`, `/vision`, `/stack`, `/glossary`).
 - **Présent** → la passe ci-dessous est **obligatoire**, même quand la story semble ne rien changer, et le compte rendu porte une ligne pour ce document, qu'il ait bougé ou non (« à jour » est un résultat, pas un oubli).
 
 **Principe commun.** Ce sont des **reflets vivants** de ce que le produit est devenu : ils **suivent** le code livré, ils ne le jugent ni ne le bloquent jamais. Le code livré fait foi — quand un document le contredit, c'est le **document** qui est en retard. Trois gestes, empruntés aux modes des propriétaires : **Enrichir** quand la livraison ajoute, **Éditer** quand elle rend une entrée caduque, **ne rien faire** quand elle reste dans le cadre décrit. Deux natures de contenu, qui ne se traitent pas pareil :
@@ -277,9 +278,13 @@ Regarde si la story a touché un manifeste : `composer.json`/`composer.lock`, `p
 - Nouvelle dépendance structurante, nouveau service, version bumpée, job CI ajouté → **Enrichir** (ajout) ou **Éditer** (version/remplacement), **prouvé par le fichier** (règle de `/stack` : jamais de techno non attestée).
 - Rien de structurant (juste du code applicatif) → ne touche pas `stack.md`, et le compte rendu dit « à jour ».
 
+#### `forge/glossaire.md` — les notions visibles que la story a changées
+
+Applique la **passe de `sync`** définie par `/glossary` : `${CLAUDE_SKILL_DIR}/../glossary/SKILL.md` §Passe de `sync`, plus ses §Règle d'or et §Règles de rédaction, qu'elle reprend. Charge-le au moment d'écrire. En bref : les libellés visibles que le diff ajoute, renomme ou retire (templates, traductions, libellés de statut, de rôle ou de badge, menus) se reportent par `Edit` ciblé, sans question ; les notions de la story comptent comme livrées ; ce qui demanderait un arbitrage part en **Non réaligné**. Story sans libellé visible touché → « à jour ».
+
 #### Application
 
-Applique directement les retouches : elles sont attestées et restent relisibles au `git diff`. Restent soumis à arbitrage : le **Pivot** et la **refonte d'un domaine entier** (backlog) ou d'une couche (stack) — ne les force pas, signale-les et renvoie vers `/forge:product-backlog`, `/forge:vision` ou `/forge:stack` dans le mode adéquat. Pour chaque retouche **rédigée** :
+Applique directement les retouches : elles sont attestées et restent relisibles au `git diff`. Le glossaire suit ses propres règles (sa passe, ci-dessus) : il n'a pas de changelog, seule la date de sa ligne d'en-tête bouge. Restent soumis à arbitrage : le **Pivot** et la **refonte d'un domaine entier** (backlog) ou d'une couche (stack) — ne les force pas, signale-les et renvoie vers `/forge:product-backlog`, `/forge:vision` ou `/forge:stack` dans le mode adéquat. Pour chaque retouche **rédigée** :
 - `Edit` ciblé de la section concernée, structure et titres préservés.
 - Une ligne au **changelog du document, dans son format natif** — table `Date | Nature | Axe/Éléments | Motif` pour `vision.md` et `product-backlog.md`, liste de lignes datées pour `stack.md` — de nature `Enrichir` ou `Éditer`, motif terminé par `sync post-livraison de la story NNN-<f|r|t>-slug`. Ne convertis jamais le format du changelog.
 - La date « dernière mise à jour » du sous-titre rebougée.
@@ -318,6 +323,7 @@ Le compte rendu **remplace** la validation pas-à-pas : il doit permettre de rel
 > - `stack.md` §Données — Redis 7.2 ajouté *(attesté : `docker-compose.yml`)*
 > - `product-backlog.md` — avancement réconcilié : `export-csv` → clôture en cours, `import-clients` cochée (livrée `a1b2c3d`, non reflétée), MVP 4/8, §Couverture recalculée
 > - `vision.md` §Horizons — jalon « reprise des données clients » annoté atteint *(lignes `import-clients`, `dedoublonnage-clients` cochées)*
+> - `glossaire.md` §Cycle de vie — statut « Importé » ajouté aux valeurs de **Statut** *(attesté : traduction `status.imported`)*
 >
 > **Documents projet à jour** — `<document>` : rien à reprendre *(une ligne par document présent et non modifié ; un document absent n'apparaît pas)*
 >

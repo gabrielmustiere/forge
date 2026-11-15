@@ -15,7 +15,7 @@ service : il crée une deuxième source de vérité, et deux sources de vérité
 
 - [1. Les trois invariants](#1-les-trois-invariants)
 - [2. Propriété d'écriture : un artifact, un écrivain](#2-propriété-décriture--un-artifact-un-écrivain)
-- [3. Les quatre exceptions assumées](#3-les-quatre-exceptions-assumées)
+- [3. Les cinq exceptions assumées](#3-les-cinq-exceptions-assumées)
 - [4. Ce qui est une frontière, et ce qui n'en est pas](#4-ce-qui-est-une-frontière-et-ce-qui-nen-est-pas)
 - [5. Invocation : jamais automatique (une exception)](#5-invocation--jamais-automatique-une-exception)
 - [6. Déclarer sa frontière dans un SKILL.md](#6-déclarer-sa-frontière-dans-un-skillmd)
@@ -58,16 +58,17 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `forge/story/<NNN>-*/report.md` | `sync` | `adr`, `rules` |
 | `forge/story/<NNN>-*/estimate.md` | `estimate` | — |
 | `forge/story/<NNN>-*/metadata.json` | **partagé** (voir §3) | Forge Board (lecture seule), `status`, `product-backlog` (avancement) |
-| `forge/vision.md` | `vision` (+ `sync`, voir §3) | `product-backlog`, `feature-pitch`, `agents-md` |
-| `forge/product-backlog.md` | `product-backlog` (+ `sync`, voir §3) | `feature-pitch`, `status` |
+| `forge/vision.md` | `vision` (+ `sync`, + `glossary` pour un renvoi, voir §3) | `product-backlog`, `feature-pitch`, `agents-md`, `glossary` |
+| `forge/product-backlog.md` | `product-backlog` (+ `sync`, + `glossary` pour un renvoi, voir §3) | `feature-pitch`, `status`, `glossary` |
 | `forge/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `agents-md` |
 | `forge/adr/<NNNN>-<slug>.md` + `forge/adr/README.md` | `adr` | tous |
 | `forge/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
-| `documentation/**` (pages Diataxis, `assets/`, index `README.md`) | `user-doc` | humains (utilisateurs du produit) |
+| `documentation/**` (pages Diataxis, `assets/`, index `README.md`) | `user-doc` | humains (utilisateurs du produit), `glossary` |
+| `forge/glossaire.md` | `glossary` (+ `sync`, voir §3) | humains (utilisateurs, nouveaux arrivants, support, direction) |
 | `CHANGELOG.md` + tags de version | `release` | — |
-| Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `user-doc`, `stack` |
+| Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `user-doc`, `glossary`, `stack` |
 | L'historique git (commits, push) | `commit` (+ `release` pour le commit de version) | — |
-| `AGENTS.md` + pont `CLAUDE.md` racine | `agents-md` (+ `rules`, voir §3) | tous |
+| `AGENTS.md` + pont `CLAUDE.md` racine | `agents-md` (+ `rules`, + `glossary` pour un renvoi, voir §3) | tous |
 | `.claude/rules/**` | `rules` | tous (chargées par le harness, pas lues par les skills) |
 
 **Le corollaire le plus important** : un skill qui a besoin d'un artifact qu'il ne possède pas
@@ -77,9 +78,9 @@ est faux ne corrige pas le plan : il remonte à l'utilisateur et propose `/forge
 `[PLAN]`, et c'est `sync` qui réalignera. C'est plus lent d'un tour, et c'est le prix de la
 traçabilité.
 
-## 3. Les quatre exceptions assumées
+## 3. Les cinq exceptions assumées
 
-Quatre artifacts ou familles d'artifacts ont plusieurs écrivains. Ce sont des exceptions **délibérées, encadrées et
+Cinq artifacts ou familles d'artifacts ont plusieurs écrivains. Ce sont des exceptions **délibérées, encadrées et
 documentées** — pas des zones grises.
 
 ### `metadata.json` — un contrat, pas une intention
@@ -94,13 +95,13 @@ autre ; `created` n'est jamais modifié. Le multi-écrivain est sûr ici parce q
 
 ### Les documents projet — `sync` co-écrit, mais n'invente rien
 
-`sync` écrit `vision.md`, `stack.md` et `product-backlog.md`, qui appartiennent à `vision`,
-`stack` et `product-backlog`. C'est la contrepartie assumée de son rôle : une story livrée fait
+`sync` écrit `vision.md`, `stack.md`, `product-backlog.md` et `glossaire.md`, qui appartiennent à
+`vision`, `stack`, `product-backlog` et `glossary`. C'est la contrepartie assumée de son rôle : une story livrée fait
 dériver les documents de phase 0, et personne d'autre n'est là pour le voir. Trois garde-fous
 rendent l'exception sûre :
 
-1. **`sync` n'écrit que via les modes des propriétaires** (Enrichir / Éditer) — il applique leur
-   grammaire, il n'en invente pas une deuxième.
+1. **`sync` n'écrit que via les modes des propriétaires** (Enrichir / Éditer, ou la passe de
+   `sync` que `glossary` définit) — il applique leur grammaire, il n'en invente pas une deuxième.
 2. **Chaque changement est attesté et restitué.** `sync` applique seul les retouches ciblées,
    mais il ne peut écrire que ce qu'un hunk du diff, un fichier lu ou une trace amont (entrée du
    `metadata.json`, finding de review) prouve — et il rend compte de chacune (avant / après / preuve) en clôture, dans un working
@@ -162,7 +163,28 @@ intention n'est ajoutée, retirée ou reformulée. Trois garde-fous :
 Hors de l'atelier (`AGENTS.md`, `.claude/rules/`, CI), chaque réécriture est proposée une par une,
 sur le modèle de `rules` : `Edit` ciblé, jamais de réécriture de fichier.
 
-Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces quatre
+### Les renvois vers le glossaire — `glossary` ajoute un lien, il ne rédige pas
+
+`glossary` écrit `forge/glossaire.md`, qui lui appartient. Mais un glossaire que personne ne trouve
+n'existe pas : à sa création, il pose une ligne de renvoi dans les documents d'entrée, dont trois
+ont un propriétaire (`forge/vision.md`, `forge/product-backlog.md`, `AGENTS.md` — ou le `CLAUDE.md`
+racine quand il n'y a pas d'`AGENTS.md`). L'exception tient parce qu'**un lien n'est pas une
+intention** : il ne dit rien du produit, de son périmètre ni des conventions du projet, il dit
+seulement où lire autre chose. Quatre garde-fous :
+
+1. **Une ligne par document, par `Edit` ciblé**, jamais de réécriture du fichier.
+2. **Ni changelog ni date touchés** : le contenu du document ne change pas, le renvoi n'est pas une
+   évolution qu'un propriétaire aurait à tracer.
+3. **Proposé et validé** avant écriture : la ligne et son emplacement sont montrés pour chaque
+   document.
+4. **À la création seulement** : en mise à jour, `glossary` ne touche à aucun renvoi. Le déplacer,
+   le reformuler ou le retirer appartient au propriétaire du document.
+
+Un pont `CLAUDE.md` réduit à `@AGENTS.md` ne reçoit rien : le renvoi va dans `AGENTS.md`. Pour tout
+le reste de ces documents, c'est leur propriétaire, et `glossary` y renvoie quand il relève une
+incohérence de vocabulaire.
+
+Aucune autre exception n'est admise. Un besoin de co-écriture qui ne rentre pas dans ces cinq
 cas est le signe qu'une frontière est mal placée — c'est le découpage qu'il faut corriger, pas
 le contrat qu'il faut élargir.
 
@@ -214,7 +236,7 @@ une question d'outil.
 |---|---|---|---|
 | **Cadrage** | `vision`, `product-backlog`, `stack`, `feature-interview`, `feature-pitch`, `feature-plan`, `refactor-plan`, `tech-plan`, `estimate`, `adr`, `agents-md`, `doc-feature`, `help` | non | ses documents (§2) |
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
-| **Clôture** | `review`, `sync`, `user-doc`, `backfill-metadata` | non | ses documents (§2) |
+| **Clôture** | `review`, `sync`, `user-doc`, `glossary`, `backfill-metadata` | non | ses documents (§2) |
 | **Maintenance** | `migrate-forge` | **non** — `git mv` prépare l'index, le commit reste à `commit` | déplace l'atelier (§3) |
 | **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
 | **Vérification** | `test-scenario`, `status`, `grill` | non | **rien** — elles observent ou éprouvent, elles ne corrigent pas |

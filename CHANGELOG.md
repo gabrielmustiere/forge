@@ -10,6 +10,38 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Nouveau skill `/forge:glossary` : le glossaire fonctionnel de l'application** — il écrit
+  `forge/glossaire.md` pour les personnes qui ne lisent pas le code : utilisateurs, nouveaux
+  arrivants, support, direction. Une seule règle commande le reste : n'y entre que ce qu'on peut
+  rencontrer à l'écran. Chaque terme est vérifié dans les templates et les traductions, puis
+  défini avec le libellé exact de l'interface, même quand les documents de conception emploient un
+  autre mot. Les noms de code, les références internes, les données jamais affichées, les
+  maquettes et le backlog non livré n'y entrent pas. Une notion en cours de développement est
+  soumise à l'utilisateur, qui choisit de l'inclure, de la marquer « à venir » ou de la retirer.
+- **Un glossaire qui se lit dans l'ordre de l'application** — les sections suivent l'ordre où un
+  utilisateur découvre les notions (rôles, objets, statuts, actions, indicateurs), et se terminent
+  par les menus, relevés dans le code avec leurs conditions de rôle. Les calculs s'expliquent par
+  un exemple chiffré, jamais par une formule, et chaque définition dit qui voit quoi quand cela
+  dépend du rôle.
+- **Mise à jour ciblée** — le skill repart de la date de l'en-tête et relit ce qui a changé depuis
+  (commits, stories livrées, libellés nouveaux), puis n'ajoute, ne corrige ou ne retire que les
+  définitions concernées. Les incohérences de vocabulaire relevées en chemin sont listées avec la
+  correction proposée et le skill qui peut l'appliquer, sans être corrigées d'office.
+- **Un glossaire tenu à jour à chaque clôture** — une fois le glossaire créé, `/forge:sync` le met à
+  jour à la fin de chaque story, comme la vision, le backlog et la stack : les libellés visibles
+  que la story ajoute, renomme ou retire sont reportés sans question, et ce qui demanderait un
+  arbitrage reste signalé dans son compte rendu. `/forge:glossary` sert à le créer et à le
+  reprendre en entier.
+
+### 🔧 Technique
+
+- Contrat de frontières : `forge/glossaire.md` appartient à `glossary`, rangé dans la famille
+  Clôture, et rejoint les documents projet que `sync` co-écrit selon la grammaire du propriétaire.
+  Cinquième exception de co-écriture : à la création seulement, une ligne de renvoi vers le
+  glossaire dans le README, l'`AGENTS.md` (ou le `CLAUDE.md` à défaut), la vision et le backlog,
+  posée par `Edit` ciblé, validée avant écriture, sans toucher leur changelog.
 ## [8.0.1] - 2026-11-14 — Transition v8 consolidée
 
 ### ✨ Fonctionnel
