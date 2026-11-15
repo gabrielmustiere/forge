@@ -10,6 +10,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [8.1.0] - 2026-11-15 — Glossaire & release sans commit
+
 ### ✨ Fonctionnel
 
 - **Nouveau skill `/forge:glossary` : le glossaire fonctionnel de l'application** — il écrit
@@ -45,6 +47,9 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
   `metadata.json` des stories **avant** de committer, et l'embarque dans le même commit. Plus de
   commit « renseigner la livraison » après coup, plus de `metadata.json` modifié qui traîne dans
   le working tree après un push.
+- **Le site présente les 28 skills** — `/forge:glossary` sur la vitrine, dans la documentation et
+  dans `llms.txt`. L'encadré « Un artefact, un seul écrivain » liste désormais toutes les
+  exceptions de co-écriture.
 
 ### 🔧 Technique
 
@@ -745,7 +750,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.0.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.1.0...HEAD
+[8.1.0]: https://github.com/gabrielmustiere/forge/compare/v8.0.1...v8.1.0
 [8.0.1]: https://github.com/gabrielmustiere/forge/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/gabrielmustiere/forge/compare/v7.4.0...v8.0.0
 [7.4.0]: https://github.com/gabrielmustiere/forge/compare/v7.3.0...v7.4.0
