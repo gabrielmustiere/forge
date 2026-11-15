@@ -80,8 +80,8 @@ retrouve les pages d'une feature ou d'une story par une recherche ligne à ligne
 `history`, qui n'est jamais recherché, s'écrit en bloc.
 
 **Bannis** : SHA de commit, numéro de version, nom d'auteur. Ils ont déjà une source de vérité :
-le `delivery` du `metadata.json` de la story pour le commit et la version, `git log` pour
-l'auteur. Avant le commit, le SHA n'existe d'ailleurs pas encore (voir §Traçabilité).
+le `delivery` du `metadata.json` de la story pour la version (et `git log` pour retrouver le
+commit de livraison), `git log` pour l'auteur. Avant le commit, le SHA n'existe d'ailleurs pas encore (voir §Traçabilité).
 
 ## Manifeste de captures
 
@@ -166,8 +166,9 @@ Donc :
   chaque ligne de la page à la livraison qui l'a introduite.
 
 **2. La page pointe vers ses stories, et la story vers son commit et sa version.** Le champ
-`stories` mène à `forge/story/<NNN>-f-<slug>/metadata.json`, dont `delivery.commit` et
-`delivery.release` donnent le commit et le tag de version. La question « depuis quelle version ce
+`stories` mène à `forge/story/<NNN>-f-<slug>/metadata.json` : `delivery.release` donne le tag de
+version, et le commit de livraison se retrouve par `git log` (voir `story-metadata.md` §Livraison
+dans le commit qui livre). La question « depuis quelle version ce
 comportement est-il documenté ? » se résout sans dupliquer l'information.
 
 **3. Les images gardent leur nom.** Une capture reprise réécrit le même fichier : le diff GitHub du

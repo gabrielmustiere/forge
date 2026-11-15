@@ -74,7 +74,7 @@ _(répéter pour chaque domaine)_
 
 ## Backlog priorisé
 
-> Les cases sont **dérivées** de `forge/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery.commit` renseigné) ; les états intermédiaires se lisent sur la ligne « Story ».
+> Les cases sont **dérivées** de `forge/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery` présent) ; les états intermédiaires se lisent sur la ligne « Story ».
 
 ### MVP — Lancement initial · `3/8 livrées`
 
@@ -153,13 +153,13 @@ La ligne d'état reprend **le vocabulaire de `/status`** (tableau signal → ét
 | `Story <dossier>` · **cadrage fonctionnel fait** | `pitch.md` sans `plan.md` | `[ ]` |
 | `Story <dossier>` · **cadrage technique fait** | `plan.md` | `[ ]` |
 | `Story <dossier>` · **implémentation en cours** | working tree touchant le périmètre du plan | `[ ]` |
-| `Story <dossier>` · **clôture en cours** | entrée `Review` ou `Sync` au changelog du `metadata.json` (ou `review.md` / `report.md` présent), `delivery.commit` absent | `[ ]` |
-| `Story <dossier>` · **livrée** [`vX.Y.Z`] | `delivery.commit` renseigné | `[x]` |
+| `Story <dossier>` · **clôture en cours** | entrée `Review` ou `Sync` au changelog du `metadata.json` (ou `review.md` / `report.md` présent), `delivery` absent | `[ ]` |
+| `Story <dossier>` · **livrée** [`vX.Y.Z`] | `delivery` présent | `[x]` |
 
 Règles :
 
-- **La case ne se coche que sur `delivery.commit`.** Une story en revue n'est pas livrée.
-- **Le numéro de version** ne s'affiche que si `delivery.release` existe. Un commit sans tag est un état valide : `**livrée**`, sans version.
+- **La case ne se coche que sur `delivery`.** Une story en revue n'est pas livrée.
+- **Le numéro de version** ne s'affiche que si `delivery.release` existe. Une livraison sans tag est un état valide : `**livrée**`, sans version.
 - **Plusieurs stories pour une ligne** : la ligne d'état affiche **la plus avancée**, et la ligne mentionne les autres dossiers (`Stories 042-f-…, 051-f-…`). La case est cochée dès qu'une story est livrée.
 - **Rien d'inventé** : un état qui ne peut pas être prouvé (métadonnées absentes, dossier illisible) s'écrit `État non déterminé` — ce n'est pas une 8e valeur du catalogue, c'est l'aveu d'une preuve manquante.
 

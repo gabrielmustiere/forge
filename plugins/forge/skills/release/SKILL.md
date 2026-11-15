@@ -1,11 +1,11 @@
 ---
 name: release
-description: Crée une release versionnée bout-en-bout — bump SemVer depuis Conventional Commits, met à jour `CHANGELOG.md` (version titrée, chapitres Fonctionnel/Technique), tag annoté `vX.Y.Z`, push, puis publie sur GitHub via `gh`. Demande validation avant toute action publique.
+description: Crée une release versionnée sans commit de release — bump SemVer depuis Conventional Commits, `CHANGELOG.md` titré (Fonctionnel/Technique) amendé dans le dernier commit local, tag annoté `vX.Y.Z` dessus, push atomique, release GitHub via `gh`.
 user_invocable: true
 disable-model-invocation: true
 model: sonnet
 effort: medium
-argument-hint: "[major|minor|patch] [--no-push] [--draft] [--pre <suffix>]"
+argument-hint: "[major|minor|patch] [--no-push] [--draft] [--pre <suffix>] [--commit]"
 allowed-tools:
   - Read
   - Write
@@ -19,6 +19,10 @@ allowed-tools:
   - Bash(git commit:*)
   - Bash(git describe:*)
   - Bash(git rev-parse:*)
+  - Bash(git fetch:*)
+  - Bash(git rebase:*)
+  - Bash(git branch:*)
+  - Bash(git rev-list:*)
   - Bash(gh release:*)
   - Bash(gh repo:*)
 ---
@@ -27,9 +31,11 @@ allowed-tools:
 
 Tu es un mainteneur rigoureux qui publie des versions traçables. Tu analyses l'historique depuis le dernier tag, détermines le bump SemVer adapté, mets à jour le CHANGELOG, crées le tag annoté et publies la release sur GitHub — chaque étape après validation explicite.
 
+**Une release ne crée pas de commit.** Le CHANGELOG, la version et le `delivery.release` des stories entrent dans le **dernier commit**, encore local, par `git commit --amend` ; le tag pointe sur ce commit, celui de la feature. Le déroulement attendu est donc `/commit --no-push`, puis `/release`, qui pousse le commit et le tag ensemble. Un commit déjà poussé ne s'amende pas : dans ce cas, le skill s'arrête et propose `--commit`, qui retombe sur un commit dédié `chore(release)`.
+
 ## Périmètre du skill
 
-Ce skill **versionne, tagge et publie** uniquement. Il ne commit pas le code applicatif (`/commit`), ne fait pas la code review (`/review`) et ne déploie rien. Il s'arrête au `gh release create`. Le skill modifie et commite **uniquement** `CHANGELOG.md` (et le fichier de version du projet si l'utilisateur en désigne un — voir Phase 4).
+Ce skill **versionne, tagge et publie** uniquement. Il ne produit pas le commit de la feature (`/commit`), ne fait pas la code review (`/review`) et ne déploie rien. Il s'arrête au `gh release create`. Il ajoute au dernier commit **uniquement** `CHANGELOG.md`, les fichiers de version du projet (voir Phase 4) et le `delivery.release` des `metadata.json` — jamais de code, jamais un autre fichier du working tree.
 
 ## Règles
 
@@ -39,10 +45,11 @@ Ce skill **versionne, tagge et publie** uniquement. Il ne commit pas le code app
 4. **Préfixe `v`** systématique : `v1.2.3`, pas `1.2.3`. Convention quasi universelle, et `gh release` la respecte.
 5. **SemVer 2.0.0 strict** : `MAJOR.MINOR.PATCH[-prerelease][+build]`. Pas de `v1.2`, pas de `1.2.3.4`.
 6. **Pas de re-tag** d'une version déjà publiée. Si l'utilisateur veut corriger, créer un nouveau patch.
-7. **Working tree propre** avant de tagger — refuser si `git status` n'est pas clean (ou demander à stash).
-8. **Ne jamais `--force` un tag**. Si un tag local diverge du remote, c'est une anomalie à remonter.
+7. **Working tree propre** avant de commencer — refuser si `git status` n'est pas clean (ou demander à stash). Tout ce que la release amende, c'est elle qui l'écrit.
+8. **Ne jamais `--force` un tag publié**. Si un tag local diverge du remote, c'est une anomalie à remonter. Un tag **jamais poussé** peut être supprimé et recréé localement (`git tag -d`) quand l'amend ou un rebase a déplacé le commit qu'il visait (Phase 6).
 9. **Titre de release obligatoire** — chaque version taggée porte un titre court (2 à 5 mots, le fil rouge produit de la release). Il apparaît à l'identique dans l'en-tête du CHANGELOG, le message du tag annoté et le titre de la release GitHub. Ne jamais tagger sans un titre validé par l'utilisateur.
 10. **CHANGELOG scindé Fonctionnel / Technique** — chaque version répartit ses changements en deux chapitres `✨ Fonctionnel` (perceptible à l'usage) / `🔧 Technique` (interne), un chapitre omis s'il est vide. Le fichier est **montré à l'utilisateur final** dans l'app : rester propre, lisible, sans hash de commit ni jargon superflu.
+11. **N'amender qu'un commit local.** `git commit --amend` seulement si HEAD n'est sur aucune branche distante (`git branch -r --contains HEAD` est vide). Réécrire un commit publié imposerait un push forcé sur la branche principale : jamais.
 
 ## Références à charger
 
@@ -63,7 +70,10 @@ Vérifier :
 
 - **Working tree clean** ? Sinon, demander à l'utilisateur s'il veut stash/commit avant de continuer. Bloquer.
 - **Branche correcte** ? Habituellement `main` ou `master`. Si on est ailleurs, alerter et demander confirmation.
-- **À jour avec le remote** ? `git status` doit indiquer "up to date". Sinon, proposer un `git pull`.
+- **HEAD est-il local ?** `git branch -r --contains HEAD` doit être vide : c'est le commit que la release amendera et taguera.
+  - Vide → mode **amend** (normal).
+  - Non vide (HEAD déjà poussé) → **s'arrêter** : « Le dernier commit est déjà publié, il ne peut plus recevoir la release. Pour la prochaine fois : `/commit --no-push` puis `/release`. Pour publier quand même : `/release --commit`, qui crée un commit dédié `chore(release): vX.Y.Z`. » Avec `--commit`, passer en mode **commit dédié**.
+- **En retard sur le remote ?** `git fetch origin`, puis `git rev-list --count HEAD..origin/<branche>`. Non nul → `git rebase origin/<branche>` (jamais de merge) ; conflit → arrêt, sans résolution automatique.
 - **Commande `gh` disponible** ? `gh --version` — si absente, on pourra créer le tag mais pas la release GitHub (le préciser).
 - **Aucun tag existant** ? On démarre à `v0.1.0` (ou `v1.0.0` si l'utilisateur l'indique).
 
@@ -137,14 +147,33 @@ N'inclure un chapitre que s'il a du contenu ; mettre `✨ Fonctionnel` avant `�
    - **Demander confirmation** avant d'éditer.
    - Si plusieurs candidats, lister et demander.
 
-3. **Commit dédié** :
+   Le projet peut afficher sa version ailleurs (site, documentation, badge) : lis l'`AGENTS.md` (à défaut le `CLAUDE.md`), qui peut lister ces fichiers. Ils suivent la même règle : confirmés, puis amendés avec le reste.
+
+3. **Métadonnées de story** — dans ce même commit, avant de taguer, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`. Les stories couvertes sont celles dont le `metadata.json` porte un `delivery` avec `release: null` et dont le commit de livraison n'est contenu dans aucun tag :
+
+   ```bash
+   # commit de livraison : delivery.commit s'il existe, sinon
+   git log --follow --format=%h -G'"delivery"' -- forge/story/<dossier>/metadata.json | tail -1
+   git tag --contains <sha>     # vide → la story attend cette release
+   ```
+
+   Pour chacune : `delivery.release` = `vX.Y.Z`, `updated` rebougé, entrée `type: "Release"`. Ne touche ni `date` ni `commit`.
+
+   > **Ancienne convention `docs/`** : si l'atelier du projet est encore sous `docs/` (garde
+   > `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`), ne bloque pas la release, mais **saute** cette étape : n'écris aucun
+   > `metadata.json` sous `docs/`, et ajoute au résumé une ligne qui oriente vers
+   > `/forge:migrate-forge` puis `/forge:backfill-metadata` (qui reconstruit le `delivery` depuis git).
+
+4. **Inscrire la release dans le commit** :
 
 ```bash
-git add CHANGELOG.md [autres fichiers de version]
+git add CHANGELOG.md [fichiers de version] [metadata.json des stories couvertes]
+git commit --amend --no-edit                  # mode amend : le message de la feature est conservé
+# ou, avec --commit seulement :
 git commit -m "chore(release): vX.Y.Z"
 ```
 
-Ce commit fait partie de la version qui sera taguée juste après — c'est volontaire (le tag pointe sur le commit qui contient le CHANGELOG correspondant).
+Jamais `--no-verify` : si un hook échoue, corriger le fond ou s'arrêter. Le commit qui en sort est celui que le tag désignera : il contient le code de la feature **et** le CHANGELOG qui l'annonce.
 
 ### Phase 5 — Création du tag annoté
 
@@ -169,16 +198,17 @@ git tag -v vX.Y.Z 2>/dev/null || git show vX.Y.Z --stat
 Demander :
 
 ```
-Tag créé localement : vX.Y.Z
+Tag créé localement : vX.Y.Z (sur <sha> — <message du commit>)
 → Push du commit + du tag sur origin ? (oui / non)
 ```
 
-Si oui :
+Si oui, **en une seule opération atomique** : le commit et le tag arrivent ensemble ou pas du tout, jamais un tag publié sans son commit.
 
 ```bash
-git push origin <branche>
-git push origin vX.Y.Z
+git push --atomic origin <branche> vX.Y.Z
 ```
+
+**Push refusé** (le remote a avancé entre-temps) : `git fetch origin`, `git rebase origin/<branche>` — le rebase change le SHA du commit tagué, donc `git tag -d vX.Y.Z` (tag jamais publié, règle 8), recréer le tag de la Phase 5 sur le nouveau HEAD, puis relancer le push atomique **une seule fois**. Nouvel échec ou conflit → arrêt et remontée.
 
 ⚠️ Ne **jamais** `git push --tags` aveuglément (poussent tous les tags locaux, y compris des brouillons). Toujours pousser le tag explicitement par son nom.
 
@@ -212,18 +242,13 @@ Si `gh` est absent : afficher le contenu de la release et l'URL `https://github.
 
 - Version : `vX.Y.Z` — <Titre de la release>
 - Bump : MINOR
-- Commit release : `abc1234` — chore(release): vX.Y.Z
-- Tag : `vX.Y.Z` (annoté, poussé)
+- Commit tagué : `abc1234` — <message du commit de la feature> (amendé : CHANGELOG, version, N metadata.json) | `chore(release): vX.Y.Z` avec `--commit`
+- Tag : `vX.Y.Z` (annoté, poussé avec le commit)
 - Release GitHub : https://github.com/owner/repo/releases/tag/vX.Y.Z
 - CHANGELOG : N entrées ajoutées (Fonctionnel: 2, Technique: 1)
 ```
 
-**Métadonnées de story** : après le tag de version, renseigne `delivery.release` (ex. `v4.3.0`) dans le `metadata.json` des stories couvertes par la release, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`. Le tag peut arriver après le commit : complète un `delivery.commit` déjà présent sans le modifier, rebouge `updated` et append une entrée `type: "Release"`.
-
-> **Ancienne convention `docs/`** : si l'atelier du projet est encore sous `docs/` (garde
-> `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`), ne bloque pas la livraison, mais **saute** cette étape : n'écris aucun
-> `metadata.json` sous `docs/`, et ajoute au résumé une ligne qui oriente vers
-> `/forge:migrate-forge` puis `/forge:backfill-metadata` (qui reconstruit le `delivery` depuis git).
+Le working tree est propre : les métadonnées sont dans le commit tagué, rien n'attend un commit de plus.
 
 > Prochaine étape : annoncer la release / déployer / `/sync` si applicable.
 
@@ -236,16 +261,18 @@ Si `gh` est absent : afficher le contenu de la release et l'URL `https://github.
 | `minor`         | Forcer un bump mineur.                                                 |
 | `patch`         | Forcer un bump patch.                                                  |
 | `--pre <suff>`  | Créer une pré-release (ex: `--pre rc.1` → `v1.5.0-rc.1`).              |
-| `--no-push`     | Créer tag + commit en local sans pousser (utile pour vérifier avant).  |
+| `--no-push`     | Amender et taguer en local sans pousser (vérifier avant) ; pousser ensuite par `git push --atomic origin <branche> vX.Y.Z`. |
 | `--draft`       | Créer la release GitHub en brouillon (non publiée publiquement).       |
+| `--commit`      | HEAD déjà poussé : créer un commit dédié `chore(release): vX.Y.Z` au lieu d'amender. Sortie de secours, pas le déroulement normal. |
 
 Exemples :
-- `/release` — analyse auto, bump détecté, push + release.
+- `/commit --no-push` puis `/release` — le déroulement normal : bump détecté, release amendée dans le commit de la feature, tag dessus, push atomique, release GitHub.
 - `/release patch` — force un patch (utile si auto-détection donne minor mais qu'on veut publier juste un fix).
 - `/release minor --pre beta.1` — `vX.Y+1.0-beta.1`, marquée pré-release sur GitHub.
 - `/release --no-push --draft` — préparer en local, valider, pousser plus tard.
 
 ## Pièges fréquents
 
-- **Commit oublié non poussé** avant `/release` → le tag pointera sur HEAD local mais le remote ne l'aura pas. La Phase 1 vérifie ça.
+- **Commit de la feature déjà poussé** (`/commit` sans `--no-push`) → il ne peut plus être amendé. La Phase 1 s'arrête et propose `--commit` ; la prochaine fois, `/commit --no-push`.
+- **Plusieurs stories dans la release** : seules les plus récentes sont dans le commit amendé, les autres sont déjà publiées. Ce n'est pas un problème : la release n'amende que le dernier commit, et les `metadata.json` des stories plus anciennes y reçoivent leur `delivery.release` comme les autres.
 - Autres pièges (SemVer, Keep a Changelog) : voir les références chargées en Phase 2-3.

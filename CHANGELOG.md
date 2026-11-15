@@ -34,6 +34,17 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
   que la story ajoute, renomme ou retire sont reportés sans question, et ce qui demanderait un
   arbitrage reste signalé dans son compte rendu. `/forge:glossary` sert à le créer et à le
   reprendre en entier.
+- **Une release sans commit de release** — `/forge:release` n'ajoute plus de commit
+  `chore(release)` : il inscrit le `CHANGELOG.md`, la version et la release des stories dans le
+  dernier commit encore local, par `--amend`, et pose le tag sur ce commit, celui de la feature. Le
+  commit et le tag partent ensemble (`git push --atomic`) : jamais de tag publié sans son commit.
+  Le déroulement devient `/forge:commit --no-push`, puis `/forge:release`. Si le commit est déjà
+  poussé, il n'est plus amendable : la release s'arrête et propose `--commit`, qui retombe sur un
+  commit dédié.
+- **La livraison s'inscrit dans le commit qui livre** — `/forge:commit` écrit la livraison dans le
+  `metadata.json` des stories **avant** de committer, et l'embarque dans le même commit. Plus de
+  commit « renseigner la livraison » après coup, plus de `metadata.json` modifié qui traîne dans
+  le working tree après un push.
 
 ### 🔧 Technique
 
@@ -42,6 +53,16 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
   Cinquième exception de co-écriture : à la création seulement, une ligne de renvoi vers le
   glossaire dans le README, l'`AGENTS.md` (ou le `CLAUDE.md` à défaut), la vision et le backlog,
   posée par `Edit` ciblé, validée avant écriture, sans toucher leur changelog.
+- Métadonnées de story, **schéma v3** : `delivery` vaut `{ date, release }`. Un commit ne pouvant
+  contenir son propre SHA (un `--amend` ou un rebase le changerait), `delivery.commit` n'est plus
+  écrit à la livraison ; le commit se retrouve par
+  `git log --follow --format=%h -G'"delivery"' -- <metadata.json> | tail -1`. Les fichiers v1/v2
+  restent valides : leur `delivery.commit` fait foi, et `/forge:backfill-metadata` continue de
+  l'écrire, puisqu'il désigne un commit passé. La preuve de livraison lue par `product-backlog`,
+  `sync`, `status`, `user-doc` et `glossary` devient « `delivery` présent ».
+- **Forge Board** : une story v3 livrée sans release n'a ni `commit` ni `release` ; un Board qui
+  n'a pas été mis à jour pour lire `delivery.date` l'affiche comme non livrée.
+
 ## [8.0.1] - 2026-11-14 — Transition v8 consolidée
 
 ### ✨ Fonctionnel

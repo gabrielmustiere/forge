@@ -129,8 +129,19 @@ git diff
 
 Générer le message Conventional Commits **et l'utiliser directement**, sans demander validation. Afficher le message exécuté.
 
+**Métadonnées de livraison — avant le commit, dans le commit.** La livraison d'une story s'inscrit dans le commit qui la livre, jamais dans un commit de plus. Avant `git add`, repère les stories que ce commit livre : un dossier `forge/story/NNN-<f|r|t>-<slug>/` présent dans le diff, dont le `metadata.json` porte une entrée `Sync` (la clôture documentaire est passée) et **pas** de `delivery`. Pour chacune, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` :
+
+- crée `delivery` = `{ "date": "<aujourd'hui>", "release": null }` ;
+- rebouge `updated` et append une entrée `type: "Livraison"` (une phrase : ce que la story livre) ;
+- passe le fichier en `version: 3` s'il ne l'est pas, sans toucher un `delivery.commit` existant ;
+- ajoute le fichier au `git add` de ce commit.
+
+N'écris **jamais** `delivery.commit` : un commit ne peut pas contenir son propre SHA, et le rebase de la Phase 4 le changerait de toute façon. Le SHA se retrouve par `git log` (story-metadata §Livraison dans le commit qui livre). Une story déjà dotée d'un `delivery` n'est pas relivrée. Un commit sans story concernée (track fast, chore) ne touche à aucun `metadata.json`. En cas de découpage en plusieurs commits, les métadonnées vont dans le commit qui porte le `report.md` de la story.
+
+Garde le contenu lu de chaque `metadata.json` : si tu t'arrêtes sans committer (arbitrage, hook impossible à corriger), **restaure-le** tel quel, pour qu'aucun `delivery` ne reste dans le working tree d'une story qui n'a pas été livrée.
+
 ```bash
-git add <fichiers pertinents>        # staging sélectif, jamais -A ni .
+git add <fichiers pertinents>        # staging sélectif, jamais -A ni . — metadata.json des stories livrées compris
 git commit -m "<message>"            # HEREDOC pour les messages multi-lignes
 ```
 
@@ -216,20 +227,23 @@ Si le push échoue malgré le rebase préalable (race avec un autre push entre f
 - Message      : <type(scope): description>
 - Fichiers     : N modifiés
 - Sync         : rebase sur origin/<branch> + origin/<default> (ou skip si non applicable)
-- Push         : ✅ (standard | --force-with-lease) | ❌ --no-push
+- Livraison    : <NNN-f-slug>[, …] — delivery inscrit dans le commit | aucune story livrée
+- Push         : ✅ (standard | --force-with-lease) | ❌ --no-push (→ `/release` peut amender ce commit)
 ```
 
-**Métadonnées de story** : après le commit, renseigne `delivery.commit` (SHA court) dans le `metadata.json` des stories livrées, selon `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`, puis rebouge `updated` et append une entrée `type: "Livraison"`. Si `delivery` est absent, crée-le avec `release: null`.
+Rien ne s'écrit après le commit : le working tree est propre, aucun `metadata.json` n'attend d'être commité.
 
 > **Ancienne convention `docs/`** : si l'atelier du projet est encore sous `docs/` (garde
-> `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`), ne bloque pas la livraison, mais **saute** cette étape : n'écris aucun
+> `${CLAUDE_SKILL_DIR}/../../references/legacy-docs.md`), ne bloque pas la livraison, mais **saute** l'étape des métadonnées de livraison (Phase 3) : n'écris aucun
 > `metadata.json` sous `docs/`, et ajoute au résumé une ligne qui oriente vers
 > `/forge:migrate-forge` puis `/forge:backfill-metadata` (qui reconstruit le `delivery` depuis git).
 
-`/commit` est la **dernière étape de la phase 3 pour une story** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md` et les documents réalignés. Rien ne s'enchaîne après dans la story ; `/release` ferme la phase 3 plus tard, quand on publie une version.
+`/commit` est la **dernière étape de la phase 3 pour une story** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md`, les documents réalignés et la livraison inscrite au `metadata.json`. Rien ne s'enchaîne après dans la story.
+
+**Publier une version avec cette livraison** : lancer `/commit --no-push`, puis `/release`. `/release` amende ce commit encore local (CHANGELOG, version, `delivery.release`), le tague et pousse le commit et le tag ensemble. Le tag pointe ainsi sur le commit de la feature, sans commit de release. Un commit déjà poussé ne peut plus être amendé : la release demanderait alors un commit dédié.
 
 ## Arguments
 
 - `/commit` — flux complet autonome : analyse → commit → fetch+rebase → push.
-- `/commit --no-push` — commit + rebase de sync local, **pas** de push.
+- `/commit --no-push` — commit + rebase de sync local, **pas** de push. À utiliser quand une `/release` suit : elle amendera ce commit et le poussera avec son tag.
 - `/commit --amend` — amende le dernier commit local. **Refusé** si ce commit est déjà sur le remote (`git branch --contains HEAD -r` renvoie au moins une réf `origin/*`).

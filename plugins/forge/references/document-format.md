@@ -88,7 +88,7 @@ Règles :
 | Banni | Pourquoi | Où ça vit |
 |---|---|---|
 | `Date : YYYY-MM-DD` | Dupliqué et vite faux | `metadata.json` (`created` / `updated`) |
-| `Commits liés : <SHA>` | Dupliqué et vite faux | `metadata.json` (`delivery.commit`) |
+| `Commits liés : <SHA>` | Dupliqué et vite faux | `git log` (commit de livraison retrouvé depuis le `metadata.json`, voir `story-metadata.md`) |
 | `Stack : symfony` | Le plugin est stack-agnostique | Détection (`references/stacks/_detection.md`) |
 
 Un lien `ADR : forge/adr/<NNNN>-<slug>.md` est en revanche **autorisé en fin de bloc** quand une
@@ -307,7 +307,7 @@ Structure normative, trois lignes dans cet ordre :
   - <capacités> · <parcours> · dép. <dépendances> · Vision : <justification>
 ```
 
-**La case est dérivée, jamais saisie** : elle se coche sur la seule preuve d'un `delivery.commit`
+**La case est dérivée, jamais saisie** : elle se coche sur la seule preuve d'un `delivery`
 dans le `metadata.json` d'une story rattachée (champ `backlog`, cf.
 [`story-metadata.md`](story-metadata.md)). Les états intermédiaires s'écrivent sur la ligne
 d'état, dans un **catalogue fermé** aligné sur le vocabulaire de `/status` — il est défini une

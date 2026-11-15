@@ -53,14 +53,14 @@ partagée `story-metadata.md` reste la seule source de vérité du format. Ici o
 
 | Champ         | Source de reconstruction                                                                                   |
 |---------------|------------------------------------------------------------------------------------------------------------|
-| `version`     | `2` (constante du schéma).                                                                                  |
+| `version`     | `3` (constante du schéma).                                                                                  |
 | `title`       | Le **H1** (`# …`) du document principal : `pitch.md` pour un track `f`, `plan.md` pour `r`/`t`. Nettoyé des marqueurs de guide. Fallback : slug humanisé (voir §Titre). |
 | `created`     | Date du **premier** commit touchant le dossier de la story (`git log --reverse … | head -1`).               |
 | `updated`     | Date du **dernier** commit touchant le dossier de la story (`git log -1`).                                  |
 | `tags`        | **Proposés** par déduction du titre + contenu + track, en kebab-case, puis **validés** par l'utilisateur. Jamais écrits sans validation. |
 | `backlog`     | Slug de la ligne de `forge/product-backlog.md` que la story réalise — **seulement** si le rapprochement est certain (voir §Rattachement backlog). Absent sinon, et **toujours** sur un track `r`/`t`. |
 | `changelog`   | Timeline reconstruite depuis la date d'apparition des artifacts dans git, **jalons fusionnés par date** (les artifacts d'un même commit → une entrée `Création` de cadrage + une entrée `Livraison`, jamais une ligne par fichier). Détail des dates distinctes conservé. |
-| `delivery`    | `commit` = SHA court du commit de livraison **si identifiable avec confiance** ; `release` = plus ancien tag contenant ce commit. Absent si la story n'est pas livrée ou si la livraison n'est pas identifiable de façon fiable. |
+| `delivery`    | `commit` = SHA court du commit de livraison **si identifiable avec confiance**, `date` = sa date ; `release` = plus ancien tag contenant ce commit. Le backfill est le seul à écrire `commit` : il désigne un commit passé (voir `story-metadata.md` §Livraison dans le commit qui livre). Absent si la story n'est pas livrée ou si la livraison n'est pas identifiable de façon fiable. |
 
 ## Règles non négociables
 
@@ -192,7 +192,8 @@ git log --oneline --all --grep="<mots-clés du slug>" | head
 ```
 
 - Si un commit ressort clairement (message qui décrit la feature de la story) → `delivery.commit`
-  = son SHA court, et cherche la release qui l'embarque :
+  = son SHA court, `delivery.date` = sa date (`git log -1 --format=%cs <sha>`), et cherche la
+  release qui l'embarque :
 
   ```bash
   git tag --contains <sha> --sort=v:refname | head -1     # plus ancien tag contenant le commit
@@ -259,11 +260,11 @@ Règles de la boucle de validation :
 ### Phase 4 — Écriture
 
 Sur validation d'une story, **écris** son `metadata.json` (`Write`, JSON indenté 2 espaces,
-`version: 2`), au schéma exact de `story-metadata.md` :
+`version: 3`), au schéma exact de `story-metadata.md` :
 
 ```json
 {
-  "version": 2,
+  "version": 3,
   "title": "…",
   "created": "YYYY-MM-DD",
   "updated": "YYYY-MM-DD",
@@ -272,7 +273,7 @@ Sur validation d'une story, **écris** son `metadata.json` (`Write`, JSON indent
   "changelog": [
     { "date": "YYYY-MM-DD", "type": "Création", "description": "…" }
   ],
-  "delivery": { "release": "vX.Y.Z", "commit": "abc1234" }
+  "delivery": { "date": "YYYY-MM-DD", "release": "vX.Y.Z", "commit": "abc1234" }
 }
 ```
 
@@ -320,7 +321,7 @@ Phase 0 recalcule les cases à partir de ces rattachements).
   (peut être un `.gitkeep` ou un premier `.md`), pas forcément l'ajout du pitch. C'est voulu :
   `created` = naissance de la story dans le repo.
 - **`git tag --contains` vide** : le commit de livraison n'est dans aucune release taguée → la
-  story est livrée mais pas encore releasée. `delivery.commit` seul, `release: null` : c'est valide.
+  story est livrée mais pas encore releasée. `delivery.commit` et `date`, `release: null` : c'est valide.
 - **Slug ≠ thème** : le `--grep` sur le slug peut ne rien remonter (le commit de livraison ne cite
   pas le slug). N'invente pas de livraison ; laisse `delivery` absent.
 - **Rebase/squash** : sur un historique réécrit, la date du « premier commit » peut être plus

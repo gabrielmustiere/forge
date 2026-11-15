@@ -188,7 +188,7 @@ Classe chaque notion retenue :
 
 | État | Preuve | Conduite |
 |---|---|---|
-| **Livré** | code commité ; story avec `delivery.commit` dans son `metadata.json` ; ligne cochée au backlog | entre au glossaire |
+| **Livré** | code commité ; story avec `delivery` dans son `metadata.json` ; ligne cochée au backlog | entre au glossaire |
 | **En cours** | code non commité (`git status`) ; story ouverte sans `delivery` | **à arbitrer** |
 | **Prévu** | ligne de backlog non cochée, aucun code | écarté |
 | **Maquette** | page aux données en dur, prototype, route de démonstration | écarté |
@@ -326,7 +326,8 @@ question**, sauf en mode `--ask` de `sync`, où chaque retouche est validée com
   reprise complète. Ne l'avance donc que si rien d'autre n'a pu changer l'interface depuis. Liste
   les commits qui touchent les fichiers d'interface ou de traduction depuis cette date
   (`git log --since=<date> --format=%h -- <dossiers d'interface>`) et retire ceux qui sont le
-  `delivery.commit` d'une story. S'il en reste, des changements sont passés hors du pipeline et
+  commit de livraison d'une story (retrouvé selon `story-metadata.md` §Livraison dans le commit qui
+  livre). S'il en reste, des changements sont passés hors du pipeline et
   cette passe ne les a pas lus : garde la date telle quelle, et signale en **Non réaligné** qu'une
   reprise par `/forge:glossary` est conseillée. Sinon, avance-la si une définition a bougé.
 - **Ce qui demanderait un arbitrage n'est pas appliqué** : un calcul dont la règle ne se lit pas

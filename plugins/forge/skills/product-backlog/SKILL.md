@@ -61,7 +61,7 @@ Une application a un cycle de vie long. Le backlog est un **document vivant** qu
 5. **Forcer le concret** — chaque capacité s'exprime avec un verbe d'action utilisateur (« importer », « relancer », « consulter », « valider »), pas avec un nom abstrait (« gestion », « pilotage », « supervision »).
 6. **Aligner systématiquement sur la vision** — chaque domaine, capacité et feature du backlog doit pouvoir pointer vers un élément de `forge/vision.md` (problème adressé, audience servie, principe respecté, North Star impactée). Une feature qui ne s'aligne sur rien doit être justifiée ou retirée.
 7. **Pas de compliments creux** — challenge constructif uniquement. Le silence vaut mieux qu'un « bonne idée ! ».
-8. **L'avancement se dérive, il ne se saisit pas.** Une case cochée dit « livré », et sa seule preuve recevable est un `delivery.commit` dans le `metadata.json` d'une story rattachée. Ni la parole de l'utilisateur, ni un ressenti de progression, ni une case cochée à la main dans le fichier ne cochent une case. Un backlog qui affiche un avancement faux est pire qu'un backlog sans avancement du tout.
+8. **L'avancement se dérive, il ne se saisit pas.** Une case cochée dit « livré », et sa seule preuve recevable est un `delivery` dans le `metadata.json` d'une story rattachée — écrit par `/commit` dans le commit qui livre. Ni la parole de l'utilisateur, ni un ressenti de progression, ni une case cochée à la main dans le fichier ne cochent une case. Un backlog qui affiche un avancement faux est pire qu'un backlog sans avancement du tout.
 
 ## Déroulement
 
@@ -96,10 +96,10 @@ Les cases à cocher du backlog sont **dérivées**, jamais saisies : chacune s'a
 **Ce n'est pas un mode**, c'est une étape d'ouverture : elle ne remplace ni Enrichir ni Éditer, et elle ne dispense pas de la règle 1 (rien n'est écrit tant que l'utilisateur n'a pas validé la rédaction de la Phase 6).
 
 1. **Apparier.** Pour chaque `forge/story/*/metadata.json`, lis le champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). C'est **le seul** critère d'appariement : il porte le slug de la ligne d'origine, précisément parce que le slug d'une story a pu être affiné au cadrage. Champ absent → la story n'est rattachée à rien, elle ne coche aucune case. Ne rattrape **jamais** un appariement manquant en comparant des chaînes au jugé.
-2. **Dériver l'état** de chaque ligne appariée : artifacts présents dans le dossier + `delivery`, traduits selon le catalogue fermé de `${CLAUDE_SKILL_DIR}/references/template.md` §États. Case cochée **si et seulement si** `delivery.commit` est renseigné. Plusieurs stories sur une même ligne → l'état affiché est celui de la plus avancée.
+2. **Dériver l'état** de chaque ligne appariée : artifacts présents dans le dossier + `delivery`, traduits selon le catalogue fermé de `${CLAUDE_SKILL_DIR}/references/template.md` §États. Case cochée **si et seulement si** `delivery` est présent. Plusieurs stories sur une même ligne → l'état affiché est celui de la plus avancée.
 3. **Relever les écarts** entre ce que le fichier affiche et ce que les preuves disent :
    - **Case cochée sans preuve** (quelqu'un a coché à la main dans l'éditeur ou sur GitHub — les cases sont cliquables) → à décocher.
-   - **Livraison non reflétée** (`delivery.commit` présent, case vide) → à cocher.
+   - **Livraison non reflétée** (`delivery` présent, case vide) → à cocher.
    - **Story orpheline** : une story `f-` sans champ `backlog` dont le sujet recoupe visiblement le périmètre → ne l'apparie pas d'autorité ; signale-la et propose soit un **Enrichir** (la ligne manque au backlog), soit d'ajouter le rattachement via `/forge:backfill-metadata`.
    - **Ligne fantôme** : un `backlog` pointant un slug qui n'existe plus (ligne retirée, slug renommé) → signale, ne supprime rien.
    - **Compteurs d'horizon** faux → recalculés avec les cases, jamais séparément.

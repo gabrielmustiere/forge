@@ -130,8 +130,9 @@ depuis la racine du projet et échouerait.
 l'écart se note pour la phase 3 :
 
 1. **Le code livré** : le diff de la story. Avant le commit, `git diff HEAD` plus les fichiers non
-   suivis listés par `git status`. Après la livraison, `git show <delivery.commit>` lu dans le
-   `metadata.json`. Le §Périmètre du plan donne la liste des fichiers à parcourir.
+   suivis listés par `git status`. Après la livraison, `git show <commit de livraison>` : le
+   `delivery.commit` du `metadata.json` s'il existe, sinon le commit retrouvé par la commande de
+   `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md` §Livraison dans le commit qui livre. Le §Périmètre du plan donne la liste des fichiers à parcourir.
 2. **`pitch.md`** : critères d'acceptation, règles métier, cas limites, hors périmètre, problème
    et audience (la matière des explications).
 3. **`report.md`** s'il existe : écarts réalignés et non-livré. Un élément non livré ne se
@@ -355,9 +356,8 @@ Vérifie, et corrige avant de clôturer :
 - **`delivery` absent** (cas normal, avant le commit) → rebouge `updated` et ajoute une entrée
   `{ "type": "Documentation", "description": "<n> pages (types), <m> captures, <x>/<y> cas couverts." }`.
 - **`delivery` présent** (story déjà livrée, modes Enrichir ou Rafraîchir après coup) → **ne
-  touche pas** le fichier. Un `metadata.json` modifié ferait croire à `/forge:commit` que le commit
-  de documentation livre la story, et il écraserait `delivery.commit`. La trace vit alors dans le
-  `history` des pages.
+  touche pas** le fichier : la timeline de la story s'arrête à sa livraison. La trace vit alors
+  dans le `history` des pages.
 
 **Compte rendu** :
 

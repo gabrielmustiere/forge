@@ -67,7 +67,7 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `forge/glossaire.md` | `glossary` (+ `sync`, voir §3) | humains (utilisateurs, nouveaux arrivants, support, direction) |
 | `CHANGELOG.md` + tags de version | `release` | — |
 | Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `user-doc`, `glossary`, `stack` |
-| L'historique git (commits, push) | `commit` (+ `release` pour le commit de version) | — |
+| L'historique git (commits, push) | `commit` (+ `release`, qui amende le dernier commit local pour y inscrire la version) | — |
 | `AGENTS.md` + pont `CLAUDE.md` racine | `agents-md` (+ `rules`, + `glossary` pour un renvoi, voir §3) | tous |
 | `.claude/rules/**` | `rules` | tous (chargées par le harness, pas lues par les skills) |
 
@@ -238,7 +238,7 @@ une question d'outil.
 | **Implémentation** | `feature-implem`, `refactor-implem`, `tech-implem` | **non** — le commit appartient à `commit` | le code du projet |
 | **Clôture** | `review`, `sync`, `user-doc`, `glossary`, `backfill-metadata` | non | ses documents (§2) |
 | **Maintenance** | `migrate-forge` | **non** — `git mv` prépare l'index, le commit reste à `commit` | déplace l'atelier (§3) |
-| **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` (release) |
+| **Livraison** | `commit`, `release` | **oui** — c'est son livrable | `CHANGELOG.md` et fichiers de version (release, par amend du dernier commit) |
 | **Vérification** | `test-scenario`, `status`, `grill` | non | **rien** — elles observent ou éprouvent, elles ne corrigent pas |
 
 Trois règles de rédaction des `allowed-tools`, toutes de confort — puisque rien n'y est

@@ -132,7 +132,7 @@ Sinon, **déduis la story toi-même** plutôt que de la demander, dans cet ordre
 
 1. Un dossier `forge/story/*-[frt]-*/` apparaît dans le working tree (`git status --porcelain`) → c'est celui-là.
 2. Un seul dossier de story a été touché par les commits non pushés (`git log @{u}..HEAD --name-only`, ou `git log -5 --name-only` si pas d'upstream) → c'est celui-là.
-3. Sinon, le dossier de plus haut numéro contenant un `plan.md` et dont le `metadata.json` n'a pas de `delivery.commit` — c'est la story dont la clôture est en cours.
+3. Sinon, le dossier de plus haut numéro contenant un `plan.md` et dont le `metadata.json` n'a pas de `delivery` — c'est la story dont la clôture est en cours.
 
 Annonce en une ligne la story retenue et l'indice qui l'a désignée (« story `014-f-export-csv` — dossier modifié dans le working tree »). Ne demande à l'utilisateur de trancher que si **plusieurs** candidats ressortent au même rang, ou si aucun dossier ne contient de `plan.md`.
 
@@ -241,9 +241,9 @@ Format normatif : `${CLAUDE_SKILL_DIR}/../product-backlog/references/template.md
 
 **1. Réconcilier tout l'avancement** — la même procédure que la Phase 0bis de `/product-backlog` (`${CLAUDE_SKILL_DIR}/../product-backlog/SKILL.md`), appliquée **à toutes les lignes**, pas seulement à celle de la story courante :
 - **Apparier** chaque `forge/story/*/metadata.json` à sa ligne par le seul champ `backlog` (schéma : `${CLAUDE_SKILL_DIR}/../../references/story-metadata.md`). Champ absent → story non rattachée : ne devine jamais une ligne par ressemblance de titre.
-- **Dériver l'état** de chaque ligne appariée selon le catalogue fermé du template (les mêmes valeurs que `/status`), puis écrire les trois éléments ensemble, jamais l'un sans les autres : la **case** (`[x]` **si et seulement si** `delivery.commit` est renseigné), la **ligne d'état**, le **compteur** de l'horizon (`n/N livrées`).
-- **La story courante** : `sync` tourne en général **avant** `/commit`, donc sans `delivery.commit` — sa case reste vide et son état devient **clôture en cours**. Ne coche pas « par anticipation » : la passe suivante (prochain `sync` ou `/product-backlog`) cochera sur la preuve.
-- **Corriger les écarts** que les preuves contredisent : case cochée sans `delivery.commit` → décochée ; livraison non reflétée → cochée ; compteur faux → recalculé.
+- **Dériver l'état** de chaque ligne appariée selon le catalogue fermé du template (les mêmes valeurs que `/status`), puis écrire les trois éléments ensemble, jamais l'un sans les autres : la **case** (`[x]` **si et seulement si** `delivery` est présent), la **ligne d'état**, le **compteur** de l'horizon (`n/N livrées`).
+- **La story courante** : `sync` tourne **avant** `/commit`, qui écrit le `delivery` dans le commit de livraison — sa case reste vide et son état devient **clôture en cours**. Ne coche pas « par anticipation » : la passe suivante (prochain `sync` ou `/product-backlog`) cochera sur la preuve.
+- **Corriger les écarts** que les preuves contredisent : case cochée sans `delivery` → décochée ; livraison non reflétée → cochée ; compteur faux → recalculé.
 - **Recalculer la §Couverture** (capacités livrées / planifiées par horizon, parcours supportés) : elle est dérivée des cases, elle bouge avec elles.
 - **Signaler sans corriger** : story `f-` orpheline (sans `backlog`, sujet qui recoupe visiblement une ligne) → proposer `/forge:backfill-metadata` ou un Enrichir ; **ligne fantôme** (un `backlog` qui pointe un slug disparu) → ne rien supprimer.
 

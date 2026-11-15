@@ -89,7 +89,7 @@ L'étape se déduit des artifacts présents, dans cet ordre — le dernier signa
 | `plan.md` + fichiers modifiés couvrant son §Périmètre | **Implémentation en cours** | reprendre l'implem où elle s'est arrêtée |
 | Entrée de changelog `Review` (ou `review.md`) | Revue passée | `/forge:sync` |
 | Entrée de changelog `Sync` (ou `report.md`) | Clôture documentaire faite | `/forge:commit` |
-| `delivery.commit` renseigné | **Livrée** | rien — ou `/forge:release` si des livraisons non taguées s'accumulent |
+| `delivery` présent | **Livrée** | rien — ou `/forge:release` si des livraisons non taguées s'accumulent |
 
 **Fraîcheur**, depuis `updated` comparé à la date du jour :
 
