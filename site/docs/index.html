@@ -587,7 +587,7 @@ forge/story/044-t-redis-cache/        <span class="comment"># t = évolution tec
                             </tr>
                             <tr>
                                 <td><code>/forge:release</code></td>
-                                <td><em>Optionnel, pas à chaque story</em> — ferme la phase quand on publie une version : détermine le bump SemVer depuis les Conventional Commits, met à jour le <code>CHANGELOG.md</code>, la version et les métadonnées des stories <strong>dans le dernier commit, par amend</strong> — pas de commit de release —, pose le tag annoté sur ce commit, pousse commit et tag ensemble et publie la release GitHub via <code>gh</code>. Lancez <code>/forge:commit --no-push</code> avant : un commit déjà poussé ne s'amende plus (<code>--commit</code> crée alors un commit dédié). Demande validation avant toute action publique.</td>
+                                <td><em>Optionnel, pas à chaque story</em> — ferme la phase quand on publie une version : détermine le bump SemVer depuis les Conventional Commits, met à jour le <code>CHANGELOG.md</code>, la version et les métadonnées des stories <strong>dans le dernier commit, par amend</strong> — pas de commit de release —, pose le tag annoté sur ce commit, pousse commit et tag ensemble et publie la release GitHub via <code>gh</code>. Lancez de préférence <code>/forge:commit --no-push</code> avant : un commit déjà poussé ne s'amende plus, et la release continue alors dans un commit dédié <code>chore(release)</code>. Une seule validation couvre tout, push et release GitHub compris ; la commande va ensuite au bout.</td>
                             </tr>
                             </tbody>
                         </table>

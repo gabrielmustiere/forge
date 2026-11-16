@@ -240,7 +240,7 @@ Rien ne s'écrit après le commit : le working tree est propre, aucun `metadata.
 
 `/commit` est la **dernière étape de la phase 3 pour une story** : `review` et `sync` l'ont précédé, si bien que ce commit embarque d'un coup le code, le `report.md`, les documents réalignés et la livraison inscrite au `metadata.json`. Rien ne s'enchaîne après dans la story.
 
-**Publier une version avec cette livraison** : lancer `/commit --no-push`, puis `/release`. `/release` amende ce commit encore local (CHANGELOG, version, `delivery.release`), le tague et pousse le commit et le tag ensemble. Le tag pointe ainsi sur le commit de la feature, sans commit de release. Un commit déjà poussé ne peut plus être amendé : la release demanderait alors un commit dédié.
+**Publier une version avec cette livraison** : lancer `/commit --no-push`, puis `/release`. `/release` amende ce commit encore local (CHANGELOG, version, `delivery.release`), le tague et pousse le commit et le tag ensemble. Le tag pointe ainsi sur le commit de la feature, sans commit de release. Un commit déjà poussé ne peut plus être amendé : la release passe alors d'elle-même par un commit dédié `chore(release)`.
 
 ## Arguments
 

@@ -10,6 +10,17 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **`/forge:release` va au bout en une fois** — quand le dernier commit est déjà poussé, la
+  release ne s'arrête plus en demandant de relancer avec `--commit` : elle passe d'elle-même par
+  un commit dédié `chore(release): vX.Y.Z`, l'annonce dans sa proposition et continue. Toutes les
+  questions sont regroupées dans cette proposition unique (version, titre, CHANGELOG, fichiers de
+  version, stories, mode de commit, push, release GitHub) : un seul « oui », puis le tag, le push
+  atomique et la release GitHub s'enchaînent sans autre arrêt. `/forge:commit --no-push` avant
+  reste le déroulement idéal, pour que le tag pointe sur le commit de la feature ; `--commit`
+  force désormais le commit dédié même sur un commit encore local.
+
 ## [8.1.0] - 2026-11-15 — Glossaire & release sans commit
 
 ### ✨ Fonctionnel
