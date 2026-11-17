@@ -10,6 +10,26 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [8.3.1] - 2026-11-17 — Git, source des versions publiées
+
+### ✨ Fonctionnel
+
+- **Des versions publiées lues dans git** — le standard `documentation/` gagne une section
+  « Versions publiées ». Une page a une nouvelle version publiée à chaque commit où elle est
+  `validee` et où son texte a changé. Les versions sont numérotées de V1 à Vn et suivent la page
+  quand elle est renommée. Tant qu'une page est en relecture, sa dernière version validée reste en
+  ligne. L'outil de lecture reconstruit toute la documentation à partir du dépôt.
+- **Le statut écrit fait foi** — une page validée que l'on modifie repasse à `a-relire` et perd
+  `validee_par` et `validee_le`. L'état calculé « à revalider » et l'empreinte de page
+  disparaissent. Les empreintes de bloc restent, mais ne servent plus qu'à la relecture.
+
+### 🔧 Technique
+
+- Les images sont versionnées dans git, sans LFS ni URL externe, et partent dans le même commit
+  que la page qui les utilise. Le champ `empreinte` est retiré du frontmatter : un outil qui le
+  trouve l'ignore.
+- `/forge:user-doc` et sa référence `page-metadata.md` sont réalignés sur ces règles.
+
 ## [8.3.0] - 2026-11-17 — Standard de documentation utilisateur
 
 ### ✨ Fonctionnel
@@ -803,7 +823,8 @@ _Version entièrement consacrée à **Forge Board** — voir le changelog de [`g
 ### 🔧 Technique
 - **Extraction du plugin `workflow` dans son repo dédié `gabrielmustiere/forge`**, distribué via la marketplace `forge`. L'historique antérieur du plugin reste consultable dans `gabrielmustiere/skills`. Le plugin repart en `2.0.0` pour marquer le nouveau repo dédié.
 
-[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/forge/compare/v8.3.1...HEAD
+[8.3.1]: https://github.com/gabrielmustiere/forge/compare/v8.3.0...v8.3.1
 [8.3.0]: https://github.com/gabrielmustiere/forge/compare/v8.2.0...v8.3.0
 [8.2.0]: https://github.com/gabrielmustiere/forge/compare/v8.1.0...v8.2.0
 [8.1.0]: https://github.com/gabrielmustiere/forge/compare/v8.0.1...v8.1.0
