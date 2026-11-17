@@ -23,15 +23,18 @@
 Diataxis range la documentation selon le **besoin du lecteur**, pas selon le sujet. Une page sert
 un seul besoin.
 
-| Type | Orientation | Le lecteur veut… | Forme | Dossier |
+| Type | Orientation | Le lecteur veut… | Forme | `type:` |
 |---|---|---|---|---|
-| **Tutoriel** | apprentissage | apprendre en faisant, guidé | une leçon | `tutorials/` |
-| **Guide pratique** | tâche | atteindre un objectif précis | une suite d'étapes | `how-to/` |
-| **Référence** | information | vérifier un fait exact | une description sèche, structurée | `reference/` |
-| **Explication** | compréhension | comprendre le pourquoi | un texte de réflexion | `explanation/` |
+| **Tutoriel** | apprentissage | apprendre en faisant, guidé | une leçon | `tutoriel` |
+| **Guide pratique** | tâche | atteindre un objectif précis | une suite d'étapes | `guide` |
+| **Référence** | information | vérifier un fait exact | une description sèche, structurée | `reference` |
+| **Explication** | compréhension | comprendre le pourquoi | un texte de réflexion | `explication` |
 
-Les noms de dossiers restent en anglais (convention Diataxis, stable quelle que soit la langue du
-projet). Les titres et le contenu sont dans la langue du pitch.
+Le type se déclare dans le frontmatter, avec les valeurs du standard
+([`documentation-standard.md`](../../../references/documentation-standard.md)). Il ne décide pas du
+dossier : les pages se rangent selon l'organisation du projet (par thème, par module), et un même
+dossier enchaîne d'ordinaire Comprendre, Faire, puis Référence. Les titres et le contenu sont dans
+la langue du pitch.
 
 ## Boussole
 

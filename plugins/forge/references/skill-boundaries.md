@@ -63,7 +63,7 @@ Et ce n'est pas qu'une affaire de principe : `allowed-tools` **ne restreint tech
 | `forge/stack.md` | `stack` (+ `sync`, voir §3) | tous les skills techniques, `agents-md` |
 | `forge/adr/<NNNN>-<slug>.md` + `forge/adr/README.md` | `adr` | tous |
 | `forge/feature-map/<NNN>-<slug>/overview.md` | `doc-feature` | — |
-| `documentation/**` (pages Diataxis, `assets/`, index `README.md`) | `user-doc` | humains (utilisateurs du produit), `glossary` |
+| `documentation/**` (pages au standard `documentation-standard.md`, `img/`, racine `index.md`) | `user-doc` ; hors forge, l'outil de relecture du projet (décisions de relecture, champs de validation, `_relecture/`) | humains (utilisateurs du produit), outils de lecture, `glossary` |
 | `forge/glossaire.md` | `glossary` (+ `sync`, voir §3) | humains (utilisateurs, nouveaux arrivants, support, direction) |
 | `CHANGELOG.md` + tags de version | `release` | — |
 | Le code du projet (`src/`, tests, config, migrations…) | les trois `*-implem` | `review`, `sync`, `doc-feature`, `user-doc`, `glossary`, `stack` |

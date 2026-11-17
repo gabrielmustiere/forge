@@ -10,6 +10,44 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+### ✨ Fonctionnel
+
+- **Un standard pour le dossier `documentation/`** — nouvelle référence partagée
+  `references/documentation-standard.md` (version 1), le contrat entre `/forge:user-doc`, le projet
+  et les outils de lecture et de relecture. Frontmatter au maximum : `title`, `description`, `type`
+  (`explication`, `guide`, `reference`, `tutoriel`, `sommaire`), `public`, `ordre`, `statut`. La
+  hiérarchie est celle des dossiers, chacun avec son `index.md`, et l'ordre de lecture un champ
+  `ordre:` : plus de fichier de navigation propre à un outil. Le nom du produit et ses profils de
+  lecteurs sont dans l'en-tête de `documentation/index.md`, avec `standard: 1`. Aucune navigation
+  n'est écrite dans les pages (fil d'Ariane, page suivante, sommaires, pages par profil) :
+  l'outil de lecture la calcule, comme l'historique, tiré de git. Ce que le standard laisse au
+  projet (organisation, gabarits, moyen de capture) va dans `documentation/_conventions.md`.
+- **Une relecture bloc par bloc, tracée dans le dépôt** — statuts `brouillon`, `a-relire`,
+  `a-reprendre`, `validee`, et « à revalider » calculé par empreinte. Chaque bloc (paragraphe,
+  liste, capture, encadré…) a son empreinte ; une relecture laisse une trace
+  `documentation/_relecture/<page>.yml` (validé, modifié, refusé, annoté), non publiée, et la
+  relecture suivante ne redemande une décision que sur les blocs changés.
+- **`/forge:user-doc` écrit au standard** — les pages se rangent dans l'organisation du projet
+  (dossier, `ordre`, `public` proposés au plan), les images dans `img/`, et chaque page part
+  `a-relire`. Les captures passent par le moyen que déclare le projet (des specs Playwright, par
+  exemple), le manifeste `captures.yml` restant le moyen par défaut.
+- **`/forge:user-doc --theme <dossier>`** — documente une zone de l'application sans story, à
+  partir du code livré, du glossaire et des pages déjà présentes : la voie pour une documentation
+  écrite après coup.
+- **`/forge:user-doc --reprendre [page]`** — traite les demandes de réécriture de la relecture :
+  retrouve chaque bloc annoté par son empreinte, vérifie l'annotation contre le code, réécrit le
+  bloc seul, note `reprise: faite` et renvoie la page `a-relire`.
+
+### 🔧 Technique
+
+- **Changement de format** : `created`, `updated` et `history` disparaissent du frontmatter (git
+  les donne), les dossiers par type (`tutorials/`, `how-to/`…), `assets/<feature>/` et l'index
+  `README.md` à marqueur aussi. Sur une documentation à l'ancien format, `/forge:user-doc`
+  s'arrête et propose une migration à cadrer par `/forge:tech-plan` plutôt que de mélanger les
+  deux formats.
+- Contrat de frontières : `documentation/**` reste écrit par `user-doc`, et, hors forge, par
+  l'outil de relecture du projet pour les décisions et la validation.
+
 ## [8.2.0] - 2026-11-16 — Release en une seule validation
 
 ### ✨ Fonctionnel

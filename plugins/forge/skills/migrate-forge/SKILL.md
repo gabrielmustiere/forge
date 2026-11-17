@@ -172,8 +172,9 @@ Présente un bloc unique :
 Pour les fichiers **à ranger**, propose une destination par fichier, sans l'imposer :
 `documentation/` si la page s'adresse aux utilisateurs du produit, un dossier existant du projet,
 ou les laisser où ils sont (`docs/` reste alors en place). Note qu'à partir de cette migration,
-`documentation/` est écrit par `/forge:user-doc` : un fichier qu'on y range à la main devient un
-voisin de ses pages.
+`documentation/` est écrit par `/forge:user-doc`, au standard
+(`references/documentation-standard.md`) : un fichier qu'on y range à la main doit le suivre, ou
+porter un nom préfixé de `_` pour ne pas être publié.
 
 `--dry-run` : rends le plan et arrête-toi.
 
