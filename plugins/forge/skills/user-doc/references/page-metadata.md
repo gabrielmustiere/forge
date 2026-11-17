@@ -110,9 +110,9 @@ selon les conventions du projet, puis lance la commande de régénération qu'el
 2. Ajoute la story à `stories` si elle n'y est pas (pas de story en modes Thème et Reprendre).
 3. Mets à jour `cases` (ajouts et retraits).
 4. Statut : une page **créée** est `a-relire` ; une page `a-reprendre` dont toutes les demandes
-   sont traitées repasse à `a-relire` ; une page `validee` garde son statut et ses champs de
-   validation (elle devient d'elle-même « à revalider ») ; une page `brouillon` ou `a-relire`
-   garde le sien.
+   sont traitées repasse à `a-relire` ; une page `validee` repasse à `a-relire` et perd
+   `validee_par` et `validee_le` (sa dernière version validée reste en ligne, standard §Versions
+   publiées) ; une page `brouillon` ou `a-relire` garde le sien.
 5. Applique les changements de contenu par `Edit` ciblé.
 
 Une page que la passe ne modifie pas n'est pas touchée. Le manifeste, s'il existe, est mis à jour à
@@ -130,7 +130,7 @@ pages. Donc :
   la page, et chaque commit pointe vers le code qu'elle décrit ;
 - sur GitHub, l'historique d'un fichier (« History ») donne la même chose, et « Blame » relie
   chaque ligne de la page à la livraison qui l'a introduite ;
-- l'outil de lecture affiche cet historique sous la page (standard, §Navigation calculée).
+- l'outil de lecture en tire les versions publiées de la page (standard, §Versions publiées).
 
 **2. La page pointe vers ses stories, et la story vers son commit et sa version.** Le champ
 `stories` mène à `forge/story/<NNN>-f-<slug>/metadata.json` : `delivery.release` donne le tag de

@@ -18,6 +18,7 @@ standard ne fixe pas appartient au projet, qui le décrit dans `documentation/_c
 - [Frontmatter d'une page](#frontmatter-dune-page)
 - [Frontmatter de la racine](#frontmatter-de-la-racine)
 - [Statuts](#statuts)
+- [Versions publiées](#versions-publiées)
 - [Blocs et empreintes](#blocs-et-empreintes)
 - [Trace de relecture](#trace-de-relecture)
 - [Navigation calculée](#navigation-calculée)
@@ -35,6 +36,9 @@ standard ne fixe pas appartient au projet, qui le décrit dans `documentation/_c
    des fichiers de données, jamais dans un fichier JavaScript ou de configuration d'outil.
 4. **Rien de propre à un outil.** Ni `sidebars.js`, ni `mkdocs.yml`, ni champ réservé à un
    générateur de site. Un outil traduit le standard dans son format, au moment de publier.
+5. **Git est la source de vérité.** L'état d'une page à un commit se lit dans son en-tête à ce
+   commit, sans calcul. Toute la documentation, avec toutes les versions publiées de toutes les
+   pages et leurs images, se reconstruit depuis le seul dépôt (§Versions publiées).
 
 ## Arborescence
 
@@ -63,7 +67,8 @@ documentation/
 - **Préfixe `_`** : un fichier ou un dossier dont le nom commence par `_` n'est jamais publié, à
   quelque niveau qu'il soit.
 - **Les images** vont dans un dossier `img/`, celui du dossier de la page ou d'un dossier parent.
-  Elles se référencent en relatif (`![…](../img/nom.png)`).
+  Elles se référencent en relatif (`![…](../img/nom.png)`). Elles sont versionnées dans git, ni
+  LFS ni URL externe, et entrent dans le même commit que la page qui les utilise.
 
 ## Frontmatter d'une page
 
@@ -96,7 +101,7 @@ cases: [C01, C02, C05]
 | `avant_de_lire` | non | Des identifiants de pages à lire d'abord. |
 | `et_ensuite` | non | Un identifiant de page, qui remplace la page suivante calculée. |
 | `features`, `stories`, `cases` | non | La traçabilité vers le pipeline forge, écrite par `/forge:user-doc` (voir sa référence `page-metadata.md`). Une page écrite hors d'une story ne les a pas. |
-| `validee_par`, `validee_le`, `empreinte` | si `validee` | Écrits par la validation (outil de relecture ou commande du projet), jamais à la main : le nom du relecteur, la date `AAAA-MM-JJ`, l'empreinte de la page au moment de la validation. |
+| `validee_par`, `validee_le` | si `validee` | Écrits avec `statut: validee` par qui valide (outil de relecture, commande du projet, personne) : son nom, la date `AAAA-MM-JJ`. Retirés quand la page quitte `validee`. |
 
 **Les types** suivent Diátaxis, plus un type de navigation :
 
@@ -113,8 +118,9 @@ ligne, en notation `[a, b]`. Une recherche ligne à ligne (`^stories:.*042-f-`) 
 retrouver les pages.
 
 **Champs interdits** : tout champ propre à un générateur de site (`sidebar_label`,
-`sidebar_position`, `pagination_prev`, `slug`…), et tout historique (`created`, `updated`,
-`history`) : git le donne, et l'outil de lecture l'affiche.
+`sidebar_position`, `pagination_prev`, `slug`…), tout historique (`created`, `updated`,
+`history`) et tout numéro de version : git les donne, et l'outil de lecture les affiche. Le champ
+`empreinte`, retiré du standard, n'a plus de sens : un outil l'ignore.
 
 ## Frontmatter de la racine
 
@@ -151,13 +157,36 @@ Un projet qui ne distingue pas ses lecteurs déclare un seul profil (`tous: { li
 | Statut | Écrit par | Sens |
 |---|---|---|
 | `brouillon` | le producteur | En cours d'écriture. Pas proposé à la relecture. |
-| `a-relire` | le producteur | Écrite, elle attend sa relecture. Statut d'une page nouvelle, et d'une page reprise. |
+| `a-relire` | le producteur | Écrite, elle attend sa relecture. Statut d'une page nouvelle, d'une page reprise, et d'une page validée que l'on modifie. |
 | `a-reprendre` | la relecture | Relue, avec des demandes de réécriture que le producteur doit traiter. |
-| `validee` | la relecture | Relue et validée, avec `validee_par`, `validee_le` et `empreinte`. |
-| *à revalider* | — | **Calculé, jamais écrit** : la page est `validee`, mais son empreinte ne correspond plus. |
+| `validee` | la validation | Validée, avec `validee_par` et `validee_le`. |
 
-Le producteur ne passe jamais une page à `validee`, et ne touche pas au statut d'une page validée
-qu'il modifie : elle devient d'elle-même « à revalider ».
+**Le statut écrit fait foi.** Une page est validée à un commit si son en-tête y porte
+`statut: validee`, quel que soit le circuit qui l'a écrit : outil de relecture, commande de secours
+du projet, ou personne. Aucun outil ne calcule un autre état.
+
+**Une page validée que l'on modifie repasse à `a-relire`**, et perd ses champs de validation. Sa
+dernière version validée reste en ligne jusqu'à la validation suivante (§Versions publiées). Le
+producteur n'écrit jamais `validee`.
+
+## Versions publiées
+
+**Une version publiée** d'une page est un commit où la page est `validee` et dont le texte lu
+diffère de celui de la version publiée précédente. Le texte lu est le corps de la page, sans
+en-tête ni commentaires HTML, espaces consécutifs réduits à un seul, espaces de début et de fin
+retirés.
+
+- Les commits où la page n'est pas `validee` (`brouillon`, `a-relire`, `a-reprendre`, allers-retours
+  de relecture) ne sont pas des versions.
+- Un changement d'en-tête seul (statut, profils, ordre) ne crée pas de version.
+- Les versions se numérotent dans l'ordre de git, de V1 à Vn, et suivent la page à travers ses
+  renommages (`git log --follow`).
+- **La version en ligne** est la dernière, Vn. Une page qui n'est plus `validee` au commit publié
+  reste lisible dans sa dernière version publiée. Une page jamais validée n'est pas publiée.
+- Chaque version se lit avec les images de son propre commit.
+
+Un outil de lecture régénère ainsi toute la documentation, versions comprises, à partir du seul
+dépôt : rien de ce qu'il publie n'existe ailleurs que dans git.
 
 ## Blocs et empreintes
 
@@ -171,8 +200,8 @@ texte normalisé : espaces consécutifs réduits à un seul, espaces de début e
 blocs au texte identique ont la même empreinte : c'est ce qui permet de reconnaître un bloc
 inchangé quand la page bouge autour de lui.
 
-**L'empreinte d'une page** est le condensat, dans l'ordre, des empreintes de ses blocs et de ses
-champs `type`, `public`, `avant_de_lire`, `et_ensuite` et `titre_court`.
+Les empreintes ne servent qu'à la relecture (§Trace de relecture). Une page n'a pas d'empreinte :
+ce qui a changé depuis sa validation se lit dans git.
 
 ## Trace de relecture
 
@@ -225,7 +254,7 @@ de `ordre` et du frontmatter :
 - le sommaire d'un dossier (ses pages et sous-dossiers, avec leur `description`) ;
 - les pages par profil (celles dont `public` contient le profil, dans l'ordre de lecture) ;
 - l'état de la documentation (les pages par statut) ;
-- l'historique d'une page (les commits git qui l'ont modifiée).
+- les versions publiées d'une page (§Versions publiées).
 
 Un `index.md` de dossier contient donc un texte de présentation, et **pas** la liste de ses pages.
 
@@ -236,7 +265,9 @@ Un `index.md` de dossier contient donc un texte de présentation, et **pas** la 
 - Ce moyen est **déclaré par le projet** dans `_conventions.md` (specs Playwright, script…). À
   défaut, c'est le manifeste `captures.yml` de `/forge:user-doc`, rangé à côté des images
   (`img/captures.yml`).
-- Une image reprise **garde son nom** : le diff GitHub montre alors l'avant et l'après.
+- Une image reprise **garde son nom** : le diff GitHub montre alors l'avant et l'après, et chaque
+  version publiée de la page lit l'image de son propre commit. Elle part dans le même commit que
+  la page qui l'utilise.
 - Le texte alternatif décrit ce que montre l'image, pour qui ne la voit pas.
 
 ## Ce qui appartient au projet

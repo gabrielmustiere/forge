@@ -51,8 +51,8 @@ et métadonnées de traçabilité. Trois entrées :
 **Ce qu'il ne fait pas** :
 
 - Il ne valide pas une page : la validation appartient à la relecture (un outil de relecture, ou la
-  commande de secours du projet). Il n'écrit jamais `validee`, `validee_par`, `validee_le` ni
-  `empreinte`, et dans `_relecture/` il ne note que `reprise: faite`.
+  commande de secours du projet). Il n'écrit jamais `validee`, `validee_par` ni `validee_le`, et
+  dans `_relecture/` il ne note que `reprise: faite`.
 - Il n'écrit aucune navigation dans les pages (fil d'Ariane, page suivante, liste des pages d'un
   dossier, pages par profil) : l'outil de lecture la calcule (standard §Navigation calculée).
 
@@ -86,7 +86,9 @@ documentation part alors dans son propre commit. Les entrées Thème et Reprendr
 pipeline** : elles ne touchent à aucune story, et leurs pages partent dans un commit de
 documentation.
 
-**Place dans la relecture** : une page écrite ou réécrite part `a-relire`. Le projet la fait
+**Place dans la relecture** : une page écrite ou réécrite part `a-relire`, y compris une page
+`validee` qu'il modifie : sa dernière version validée reste en ligne jusqu'à la validation suivante
+(standard §Versions publiées). Le projet la fait
 relire (par un outil de relecture qui ouvre une PR, ou par sa commande de secours). Une relecture
 qui annote des blocs met la page `a-reprendre` ; `/user-doc --reprendre` la traite et la renvoie
 `a-relire`.
@@ -464,7 +466,7 @@ Vérifie, et corrige avant de clôturer :
 ## Documentation — <titre de la feature ou du dossier>
 
 Mode : <Création | Enrichir | Rafraîchir | Thème> · <Story : forge/story/<NNN>-f-<slug>/ | Dossier : documentation/<dossier>/>
-Pages : <n> créées, <n> modifiées, toutes a-relire ou à revalider  (tutoriel <0|1> · guides <n> · référence <n> · explications <n>)
+Pages : <n> créées, <n> modifiées, toutes a-relire  (tutoriel <0|1> · guides <n> · référence <n> · explications <n>)
 Captures : <n> prises, <n> reprises, <n> à faire
 Couverture : <x>/<y> cas · exclus : <IDs et raisons>
 Écarts arbitrés : <liste, ou « aucun »>
